@@ -1,0 +1,6 @@
+package com.devalr.home
+
+import androidx.lifecycle.ViewModel
+
+class HomeViewModel: ViewModel() {
+}
