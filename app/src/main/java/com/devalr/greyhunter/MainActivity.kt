@@ -8,40 +8,32 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.composable
 import com.devalr.framework.theme.GreyHunterTheme
+import androidx.navigation.compose.NavHost
+import com.devalr.home.HomeScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*setContent {
+        setContent {
             GreyHunterTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    /*val navController = rememberNavController()
+                    val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = if (sharedPref.getBoolean("CITY_SELECTED", false)) {
-                            NavScreen.DayWeather.route
-                        } else {
-                            NavScreen.CitySelection.route
-                        }
+                        startDestination = NavScreen.Home.route
                     ) {
-                        composable(NavScreen.DayWeather.route) {
-                            WeatherScreen {
-                                navController.navigate(NavScreen.CitySelection.route)
-                            }
+                        composable(NavScreen.Home.route) {
+                            HomeScreen()
                         }
-                        composable(NavScreen.CitySelection.route) {
-                            CitySelectorScreen {
-                                sharedPref.edit().putBoolean("CITY_SELECTED", true).apply()
-                                navController.navigate(NavScreen.DayWeather.route)
-                            }
-                        }
-                    }*/
+                    }
                 }
             }
-        }*/
+        }
     }
 }

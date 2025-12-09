@@ -8,9 +8,7 @@ plugins {
 
 android {
     namespace = "com.devalr.data"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 28
@@ -43,8 +41,7 @@ android {
 dependencies {
     // Koin
     implementation(libs.koin.android)
-    // Ktor
-    implementation(libs.bundles.ktor)
+
     // Room components
     implementation(libs.androidx.room.runtime)
     kapt(libs.androidx.room.compiler)
