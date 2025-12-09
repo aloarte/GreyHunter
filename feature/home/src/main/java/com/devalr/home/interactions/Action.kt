@@ -1,3 +1,7 @@
 package com.devalr.home.interactions
 
-sealed class Action
+sealed interface Action {
+    data object OnAppear : Action
+    data object OnStartPainting : Action
+    data class OnOpenProjectDetail(val projectId: Int) : Action
+}
