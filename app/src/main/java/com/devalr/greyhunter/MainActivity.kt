@@ -13,7 +13,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.devalr.framework.theme.GreyHunterTheme
+import com.devalr.greyhunter.navigation.NavArguments.MINI_ID
+import com.devalr.greyhunter.navigation.NavArguments.PROJECT_ID
+import com.devalr.greyhunter.navigation.NavScreen
 import com.devalr.home.HomeScreen
+import com.devalr.minidetail.MiniatureDetailScreen
 import com.devalr.projectdetail.ProjectDetailScreen
 
 class MainActivity : ComponentActivity() {
@@ -38,13 +42,24 @@ class MainActivity : ComponentActivity() {
 
                         composable(
                             route = "${NavScreen.ProjectDetail.route}/{projectId}",
-                            arguments = listOf(navArgument("projectId") { type = NavType.IntType }
-                            )) { backStackEntry ->
-                            val projectId = backStackEntry.arguments?.getInt("projectId") ?: 0
+                            arguments = listOf(navArgument(PROJECT_ID) { type = NavType.IntType })
+                        ) { backStackEntry ->
+                            val projectId = backStackEntry.arguments?.getInt(PROJECT_ID) ?: 0
 
                             ProjectDetailScreen(projectId = projectId) { miniatureId ->
-                                navController.navigate("mini/$miniatureId")
+                                navController.navigate("${NavScreen.MiniDetail.route}/$miniatureId")
                             }
+                        }
+
+                        composable(
+                            route = "${NavScreen.MiniDetail.route}/{miniatureId}",
+                            arguments = listOf(navArgument(MINI_ID) {
+                                type = NavType.IntType
+                            })
+                        ) { backStackEntry ->
+                            val miniatureId = backStackEntry.arguments?.getInt(MINI_ID) ?: 0
+
+                            MiniatureDetailScreen(miniatureId = miniatureId)
                         }
                     }
                 }

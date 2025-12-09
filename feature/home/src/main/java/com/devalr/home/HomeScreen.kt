@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import com.devalr.framework.components.GHTab
 import com.devalr.framework.components.LoadingIndicator
 import com.devalr.home.components.AppTitle
 import com.devalr.home.components.GamificationMessage
@@ -40,6 +41,7 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
+            GHTab()
         }
     ) { innerPadding ->
         Column(

@@ -1,4 +1,4 @@
-package com.devalr.projectdetail
+package com.devalr.minidetail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,16 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import com.devalr.framework.components.GHButton
 import com.devalr.framework.components.GHTab
-import com.devalr.projectdetail.interactions.Action.OnAppear
+import com.devalr.minidetail.interactions.Action.OnAppear
 import org.koin.compose.koinInject
 
 @Composable
-fun ProjectDetailScreen(
-    viewModel: ProjectDetailViewModel = koinInject(),
-    projectId: Int,
-    onNavigateToMiniature: (Int) -> Unit
+fun MiniatureDetailScreen(
+    viewModel: MiniatureDetailViewModel = koinInject(),
+    miniatureId: Int
 ) {
     viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
@@ -30,7 +28,7 @@ fun ProjectDetailScreen(
 
     Scaffold(
         topBar = {
-            GHTab(projectName = "Proyecto 1")
+            GHTab(projectName = "Proyecto 1", miniName = "Mini name")
         }
     ) { innerPadding ->
         Column(
@@ -38,10 +36,7 @@ fun ProjectDetailScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            Text("Opened $projectId")
-            GHButton(text = "Open miniature detail") {
-                onNavigateToMiniature(22)
-            }
+            Text("Opened $miniatureId")
         }
     }
 

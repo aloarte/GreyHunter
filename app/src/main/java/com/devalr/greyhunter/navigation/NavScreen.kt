@@ -1,4 +1,4 @@
-package com.devalr.greyhunter
+package com.devalr.greyhunter.navigation
 
 sealed class NavScreen(val route: String) {
     data object Home : NavScreen("Home")
