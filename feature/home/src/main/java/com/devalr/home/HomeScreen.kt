@@ -15,15 +15,24 @@ import com.devalr.home.components.ProjectsCarousel
 import com.devalr.home.components.StartPaint
 import com.devalr.home.interactions.Action.OnAppear
 import com.devalr.home.interactions.Action.OnStartPainting
+import com.devalr.home.interactions.Event.LaunchStartPaintModal
+import com.devalr.home.interactions.Event.NavigateToProject
 import org.koin.compose.koinInject
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = koinInject()
+    viewModel: HomeViewModel = koinInject(),
+    onNavigateToProject: (Int) -> Unit
 ) {
     val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
+            when (event) {
+                LaunchStartPaintModal ->  onNavigateToProject(33)
+                    //TODO()
+                is NavigateToProject -> onNavigateToProject(event.projectId)
+            }
+
 
         }
     }

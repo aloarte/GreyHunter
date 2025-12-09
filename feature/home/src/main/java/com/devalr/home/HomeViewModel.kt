@@ -7,6 +7,8 @@ import com.devalr.home.interactions.Action.OnAppear
 import com.devalr.home.interactions.Action.OnOpenProjectDetail
 import com.devalr.home.interactions.Action.OnStartPainting
 import com.devalr.home.interactions.Event
+import com.devalr.home.interactions.Event.LaunchStartPaintModal
+import com.devalr.home.interactions.Event.NavigateToProject
 import com.devalr.home.interactions.State
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -14,7 +16,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel : BaseViewModel<State, Action, Event>(initialState = State()) {
 
     override fun onAction(action: Action) {
-        when(action){
+        when (action) {
             is OnAppear -> {
                 viewModelScope.launch {
                     updateState { copy(projectsLoaded = false) }
@@ -24,8 +26,9 @@ class HomeViewModel : BaseViewModel<State, Action, Event>(initialState = State()
 
                 }
             }
-            is OnOpenProjectDetail -> TODO()
-            is OnStartPainting -> TODO()
+
+            is OnOpenProjectDetail -> sendEvent(NavigateToProject(projectId = action.projectId))
+            is OnStartPainting -> sendEvent(LaunchStartPaintModal)
         }
     }
 }

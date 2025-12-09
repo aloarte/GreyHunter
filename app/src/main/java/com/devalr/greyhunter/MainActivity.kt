@@ -1,6 +1,5 @@
 package com.devalr.greyhunter
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,11 +7,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.compose.composable
-import com.devalr.framework.theme.GreyHunterTheme
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.home.HomeScreen
+import com.devalr.projectdetail.ProjectDetailScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +31,20 @@ class MainActivity : ComponentActivity() {
                         startDestination = NavScreen.Home.route
                     ) {
                         composable(NavScreen.Home.route) {
-                            HomeScreen()
+                            HomeScreen { projectId ->
+                                navController.navigate("${NavScreen.ProjectDetail.route}/$projectId")
+                            }
+                        }
+
+                        composable(
+                            route = "${NavScreen.ProjectDetail.route}/{projectId}",
+                            arguments = listOf(navArgument("projectId") { type = NavType.IntType }
+                            )) { backStackEntry ->
+                            val projectId = backStackEntry.arguments?.getInt("projectId") ?: 0
+
+                            ProjectDetailScreen(projectId = projectId) { miniatureId ->
+                                navController.navigate("mini/$miniatureId")
+                            }
                         }
                     }
                 }
