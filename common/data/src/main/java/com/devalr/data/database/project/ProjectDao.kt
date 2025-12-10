@@ -14,7 +14,7 @@ interface ProjectDao {
     suspend fun insertProject(project: ProjectEntity): Long
 
     @Update
-    suspend fun updateProject(project: ProjectEntity)
+    suspend fun updateProject(project: ProjectEntity): Int
 
     @Query("DELETE FROM projects WHERE id = :projectId")
     suspend fun deleteProject(projectId: Long)

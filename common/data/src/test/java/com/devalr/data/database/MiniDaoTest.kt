@@ -99,7 +99,7 @@ class MiniDaoTest {
                     currentMini.copy(
                         name = NEW_MINI_NAME,
                         completionPercentage = 1.0f,
-                        isPrepared = true
+                        isPrimed = true
                     )
                 )
             } ?: fail("Miniature not found initially")
@@ -108,7 +108,7 @@ class MiniDaoTest {
             miniatureDao.getMiniatureById(miniId).first()?.let { updatedMini ->
                 assertEquals(NEW_MINI_NAME, updatedMini.name)
                 assertEquals(1.0f, updatedMini.completionPercentage)
-                assertTrue(updatedMini.isPrepared)
+                assertTrue(updatedMini.isPrimed)
             } ?: fail("Miniature not found after update")
         }
 
@@ -120,7 +120,11 @@ class MiniDaoTest {
                 ProjectEntity(name = PROJECT_NAME, completionPercentage = 0.0f)
             )
             val miniId = miniatureDao.insertMiniature(
-                MiniatureEntity(projectId = projectId, name = MINI_NAME, completionPercentage = 0.0f)
+                MiniatureEntity(
+                    projectId = projectId,
+                    name = MINI_NAME,
+                    completionPercentage = 0.0f
+                )
             )
 
             // WHEN

@@ -14,7 +14,7 @@ interface MiniatureDao {
     suspend fun insertMiniature(miniature: MiniatureEntity): Long
 
     @Update
-    suspend fun updateMiniature(miniature: MiniatureEntity)
+    suspend fun updateMiniature(miniature: MiniatureEntity) : Int
 
     @Query("DELETE FROM miniatures WHERE id = :miniatureId")
     suspend fun deleteMiniature(miniatureId: Long)

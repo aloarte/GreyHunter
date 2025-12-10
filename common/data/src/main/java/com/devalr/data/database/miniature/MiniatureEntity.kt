@@ -23,10 +23,11 @@ data class MiniatureEntity(
     val id: Long = 0,
     val projectId: Long,
     val name: String,
-    val completionPercentage: Float,
+    val completionPercentage: Float = 0f,
     val imageUri: String? = null,
-    val isPrepared: Boolean = false,
+    val isAssembled: Boolean = false,
+    val isPrimed: Boolean = false,
     val isBaseColored: Boolean = false,
-    val hasDetails: Boolean = false,
-    val isBased: Boolean = false
+    val isDetailed: Boolean = false,
+    val baseIsFinished: Boolean = false
 )
