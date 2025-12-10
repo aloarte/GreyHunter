@@ -1,0 +1,140 @@
+package com.devalr.domain.repository
+
+import com.devalr.data.database.miniature.MiniatureDao
+import com.devalr.data.database.miniature.MiniatureEntity
+import com.devalr.domain.MiniatureRepositoryImpl
+import com.devalr.domain.TestData.MINI_1_ID
+import com.devalr.domain.TestData.PROJECT_ID
+import com.devalr.domain.TestData.mini1Bo
+import com.devalr.domain.TestData.mini1Entity
+import com.devalr.domain.TestData.mini2Bo
+import com.devalr.domain.TestData.mini2Entity
+import com.devalr.domain.mappers.Mapper
+import com.devalr.domain.model.MiniatureBo
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.verify
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
+
+class MiniatureRepositoryImplTest {
+
+    private val miniatureDao: MiniatureDao = mockk()
+    private val mapper: Mapper<MiniatureEntity, MiniatureBo> = mockk()
+
+    private lateinit var repository: MiniatureRepositoryImpl
+
+    @Before
+    fun setUp() {
+        repository = MiniatureRepositoryImpl(miniatureDao, mapper)
+        every { mapper.transform(mini1Entity) } returns mini1Bo
+        every { mapper.transform(mini2Entity) } returns mini2Bo
+        every { mapper.transformReverse(mini1Bo) } returns mini1Entity
+        every { mapper.transformReverse(mini2Bo) } returns mini2Entity
+    }
+
+    @Test
+    fun `GIVEN miniature WHEN addMiniature is THEN miniature is inserted on database`() = runTest {
+        // GIVEN
+        coEvery { miniatureDao.insertMiniature(mini1Entity.copy(id = 0)) } returns MINI_1_ID
+
+        // WHEN
+        val result = repository.addMiniature(mini1Bo)
+
+        // THEN
+        verify(exactly = 1) { mapper.transformReverse(mini1Bo) }
+        coVerify(exactly = 1) { miniatureDao.insertMiniature(mini1Entity.copy(id = 0)) }
+        assertEquals(MINI_1_ID, result)
+    }
+
+    @Test
+    fun `GIVEN miniature inserted WHEN getMiniatureById is called THEN miniature is returned`() =
+        runTest {
+            // GIVEN
+            coEvery { miniatureDao.getMiniatureById(MINI_1_ID) } returns flowOf(mini1Entity)
+
+            // WHEN
+            val resultFlow = repository.getMiniature(MINI_1_ID)
+            val resultBo = resultFlow.first()
+
+            // THEN
+            coVerify(exactly = 1) { miniatureDao.getMiniatureById(MINI_1_ID) }
+            verify(exactly = 1) { mapper.transform(mini1Entity) }
+            assertEquals(mini1Bo, resultBo)
+        }
+
+    @Test
+    fun `GIVEN list of miniatures inserted WHEN getMiniaturesFromProject is called THEN returns mapped list flow`() =
+        runTest {
+            // GIVEN
+            coEvery { miniatureDao.getMiniaturesByProject(PROJECT_ID) } returns flowOf(
+                listOf(
+                    mini1Entity,
+                    mini2Entity
+                )
+            )
+
+            // WHEN
+            val resultFlow = repository.getMiniaturesFromProject(PROJECT_ID)
+            val resultList = resultFlow.first()
+
+            // THEN
+            coVerify(exactly = 1) { miniatureDao.getMiniaturesByProject(PROJECT_ID) }
+            verify(exactly = 2) { mapper.transform(any()) }
+            assertEquals(2, resultList.size)
+            assertEquals(mini1Bo, resultList[0])
+            assertEquals(mini2Bo, resultList[1])
+        }
+
+    @Test
+    fun `GIVEN miniature inserted WHEN updateMiniature is called and update the miniature THEN returns 1 row affected`() =
+        runTest {
+            // GIVEN
+            coEvery { miniatureDao.updateMiniature(mini1Entity) } returns 1
+
+            // WHEN
+            val result = repository.updateMiniature(mini1Bo)
+
+            // THEN
+            verify(exactly = 1) { mapper.transformReverse(mini1Bo) }
+            coVerify(exactly = 1) { miniatureDao.updateMiniature(mini1Entity) }
+            assertTrue(result)
+        }
+
+    @Test
+    fun `GIVEN miniature inserted WHEN updateMiniature is called and don't update the miniature THEN returns 0 row affected`() =
+        runTest {
+            // GIVEN
+            coEvery { miniatureDao.updateMiniature(mini1Entity) } returns 0
+
+            // WHEN
+            val result = repository.updateMiniature(mini1Bo)
+
+            // THEN
+            verify(exactly = 1) { mapper.transformReverse(mini1Bo) }
+            coVerify(exactly = 1) { miniatureDao.updateMiniature(mini1Entity) }
+            assertFalse(result)
+        }
+
+    @Test
+    fun `WHEN deleteMiniature is called THEN call remove in database`() = runTest {
+        // GIVEN
+        coEvery { miniatureDao.deleteMiniature(MINI_1_ID) } just Runs
+
+        //  GIVEN & WHEN
+        repository.deleteMiniature(MINI_1_ID)
+
+        // THEN
+        coVerify(exactly = 1) { miniatureDao.deleteMiniature(MINI_1_ID) }
+    }
+}

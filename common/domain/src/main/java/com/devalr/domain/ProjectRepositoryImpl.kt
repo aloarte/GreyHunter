@@ -5,9 +5,10 @@ import com.devalr.data.database.project.ProjectDao
 import com.devalr.domain.mappers.Mapper
 import com.devalr.domain.model.ProjectBo
 import com.devalr.domain.model.ProjectEntityData
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 
 class ProjectRepositoryImpl(
     private val projectDao: ProjectDao,
@@ -32,20 +33,28 @@ class ProjectRepositoryImpl(
         return projectDao.insertProject(projectEntityData.projectEntity)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun getProject(projectId: Long): Flow<ProjectBo> =
-        projectDao.getProjectById(projectId).map { projectEntity ->
-            val miniatureEntityList = miniatureDao.getMiniatureById(projectEntity.id)
-            projectDatabaseMapper.transform(
-                ProjectEntityData(
-                    projectEntity = projectEntity,
-                    miniatureEntities = miniatureEntityList.toList()
-                )
-            )
+        projectDao.getProjectById(projectId)
+            .flatMapLatest { projectEntity ->
+                // Return empty flow if the project is not found
+                if (projectEntity == null) {
+                    return@flatMapLatest kotlinx.coroutines.flow.emptyFlow()
+                }
+                miniatureDao.getMiniaturesByProject(projectEntity.id)
+                    .map { miniatureList ->
+                        projectDatabaseMapper.transform(
+                            ProjectEntityData(
+                                projectEntity = projectEntity,
+                                miniatureEntities = miniatureList
+                            )
+                        )
+                    }
+            }
 
-        }
 
     override suspend fun updateProject(project: ProjectBo): Boolean {
-        return projectDao.updateProject(projectDatabaseMapper.transformReverse(project).projectEntity) > 1
+        return projectDao.updateProject(projectDatabaseMapper.transformReverse(project).projectEntity) > 0
     }
 
     override suspend fun deleteProject(projectId: Long) {
