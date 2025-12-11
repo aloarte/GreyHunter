@@ -32,10 +32,6 @@ private val repositoriesModules = module {
     }
 }
 
-private val usecasesModules = module {
-
-}
-
 private val mapperModules = module {
     factory<Mapper<MiniatureEntity, MiniatureBo>>(named("MiniatureMapper")) {
         MiniatureMapper()
@@ -48,5 +44,5 @@ private val mapperModules = module {
 
 
 val domainModules = module {
-    includes(mapperModules, usecasesModules, repositoriesModules, dataModules)
+    includes(mapperModules, repositoriesModules, dataModules)
 }

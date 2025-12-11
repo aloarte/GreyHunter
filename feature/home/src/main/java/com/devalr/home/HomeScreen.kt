@@ -10,10 +10,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.devalr.framework.components.GHTab
 import com.devalr.framework.components.LoadingIndicator
-import com.devalr.home.components.AppTitle
-import com.devalr.home.components.GamificationMessage
-import com.devalr.home.components.ProjectsCarousel
-import com.devalr.home.components.StartPaint
+import com.devalr.home.components.screen.AppTitle
+import com.devalr.home.components.screen.GamificationMessage
+import com.devalr.home.components.screen.ProjectsCarousel
+import com.devalr.home.components.screen.StartPaint
 import com.devalr.home.interactions.Action.OnAppear
 import com.devalr.home.interactions.Action.OnStartPainting
 import com.devalr.home.interactions.Event.LaunchStartPaintModal

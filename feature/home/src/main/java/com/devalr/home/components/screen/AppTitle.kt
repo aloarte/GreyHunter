@@ -1,10 +1,9 @@
-package com.devalr.home.components
+package com.devalr.home.components.screen
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun ProjectsCarousel() {
-    Text("ProjectsCarousel")
-
+fun AppTitle() {
+    Text("Grey hunter")
 }

@@ -1,4 +1,4 @@
-package com.devalr.home.components
+package com.devalr.home.components.screen
 
 import androidx.compose.runtime.Composable
 import com.devalr.framework.components.GHButton
