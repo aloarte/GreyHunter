@@ -25,14 +25,19 @@ import com.devalr.framework.components.GHText
 import com.devalr.framework.components.TextType
 
 @Composable
-fun ProjectCard(modifier: Modifier = Modifier, projectBo: ProjectBo) {
+fun ProjectCard(
+    modifier: Modifier = Modifier,
+    projectBo: ProjectBo,
+    onProjectClicked: (Long) -> Unit
+) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val cardWidth = screenWidth * 0.70f
     Card(
-        modifier
+        modifier = modifier
             .width(cardWidth)
-            .aspectRatio(1.6f)
+            .aspectRatio(1.6f),
+        onClick = { onProjectClicked(projectBo.id) }
     ) {
         Column(
             modifier = Modifier
@@ -43,7 +48,7 @@ fun ProjectCard(modifier: Modifier = Modifier, projectBo: ProjectBo) {
         ) {
 
             GHText(text = projectBo.name, type = TextType.Title)
-            projectBo.imageUri?.let{
+            projectBo.imageUri?.let {
                 GHImage(imageUri = projectBo.imageUri)
             }
             GHText(text = "${projectBo.minis.size} Miniatures", type = TextType.LabelM)
@@ -67,13 +72,15 @@ private fun ProjectCardPreviewInHorizontalRow() {
         item {
             ProjectCard(
                 modifier = Modifier.fillMaxSize(),
-                projectBo = hierotekCircleProject
+                projectBo = hierotekCircleProject,
+                onProjectClicked = {}
             )
         }
         item {
             ProjectCard(
                 modifier = Modifier.fillMaxSize(),
-                projectBo = stormlightArchiveProject
+                projectBo = stormlightArchiveProject,
+                onProjectClicked = {}
             )
         }
     }
@@ -91,13 +98,15 @@ private fun ProjectCardPreviewInVerticalColumn() {
         item {
             ProjectCard(
                 modifier = Modifier.fillMaxSize(),
-                projectBo = hierotekCircleProject
+                projectBo = hierotekCircleProject,
+                onProjectClicked = {}
             )
         }
         item {
             ProjectCard(
                 modifier = Modifier.fillMaxSize(),
-                projectBo = stormlightArchiveProject
+                projectBo = stormlightArchiveProject,
+                onProjectClicked = {}
             )
         }
     }

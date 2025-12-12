@@ -95,9 +95,4 @@ object TestData {
         miniatureEntities = listOf(mini1Entity, mini2Entity)
     )
 
-    val projectEntityDataEmptyMiniatures = ProjectEntityData(
-        projectEntity = projectEntity,
-        miniatureEntities = emptyList()
-    )
-
 }

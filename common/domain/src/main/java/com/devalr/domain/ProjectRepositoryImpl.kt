@@ -1,13 +1,16 @@
 package com.devalr.domain
 
 import com.devalr.data.database.miniature.MiniatureDao
+import com.devalr.data.database.miniature.MiniatureEntity
 import com.devalr.data.database.project.ProjectDao
 import com.devalr.domain.mappers.Mapper
 import com.devalr.domain.model.ProjectBo
 import com.devalr.domain.model.ProjectEntityData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 class ProjectRepositoryImpl(
@@ -16,15 +19,27 @@ class ProjectRepositoryImpl(
     private val projectDatabaseMapper: Mapper<ProjectEntityData, ProjectBo>
 ) : ProjectRepository {
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun getAllProjects(): Flow<List<ProjectBo>> =
-        projectDao.getAllProjects().map { projectEntityList ->
-            projectEntityList.map { projectEntity ->
-                projectDatabaseMapper.transform(
-                    ProjectEntityData(
-                        projectEntity = projectEntity,
-                        miniatureEntities = emptyList()
+        projectDao.getAllProjects().flatMapLatest { projectEntities ->
+            if (projectEntities.isEmpty()) {
+                return@flatMapLatest flowOf(emptyList())
+            }
+
+            val miniatureFlows: List<Flow<List<MiniatureEntity>>> = projectEntities.map { project ->
+                miniatureDao.getMiniaturesByProject(project.id)
+            }
+
+            combine(miniatureFlows) { arrayOfMiniatureLists ->
+                projectEntities.mapIndexed { index, project ->
+                    val miniatures = arrayOfMiniatureLists[index]
+                    projectDatabaseMapper.transform(
+                        ProjectEntityData(
+                            projectEntity = project,
+                            miniatureEntities = miniatures
+                        )
                     )
-                )
+                }
             }
         }
 

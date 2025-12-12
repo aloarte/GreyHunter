@@ -15,6 +15,7 @@ import com.devalr.home.components.screen.GamificationMessage
 import com.devalr.home.components.screen.ProjectsCarousel
 import com.devalr.home.components.screen.StartPaint
 import com.devalr.home.interactions.Action.OnAppear
+import com.devalr.home.interactions.Action.OnOpenProjectDetail
 import com.devalr.home.interactions.Action.OnStartPainting
 import com.devalr.home.interactions.Event.LaunchStartPaintModal
 import com.devalr.home.interactions.Event.NavigateToProject
@@ -23,18 +24,15 @@ import org.koin.compose.koinInject
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = koinInject(),
-    onNavigateToProject: (Int) -> Unit
+    onNavigateToProject: (Long) -> Unit
 ) {
     val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                LaunchStartPaintModal ->  onNavigateToProject(33)
-                    //TODO()
+                LaunchStartPaintModal -> TODO()
                 is NavigateToProject -> onNavigateToProject(event.projectId)
             }
-
-
         }
     }
     LaunchedEffect(true) { viewModel.onAction(OnAppear) }
@@ -52,7 +50,9 @@ fun HomeScreen(
             AppTitle()
             if (state.projectsLoaded) {
                 GamificationMessage()
-                ProjectsCarousel()
+                ProjectsCarousel(state.projects) { projectId ->
+                    viewModel.onAction(OnOpenProjectDetail(projectId = projectId))
+                }
             } else {
                 LoadingIndicator()
             }

@@ -10,7 +10,6 @@ import com.devalr.domain.TestData.mini2Entity
 import com.devalr.domain.TestData.projectBo
 import com.devalr.domain.TestData.projectEntity
 import com.devalr.domain.TestData.projectEntityData
-import com.devalr.domain.TestData.projectEntityDataEmptyMiniatures
 import com.devalr.domain.mappers.Mapper
 import com.devalr.domain.model.ProjectBo
 import com.devalr.domain.model.ProjectEntityData
@@ -70,8 +69,6 @@ class ProjectRepositoryTest {
             coEvery { projectDao.getProjectById(PROJECT_ID) } returns flowOf(projectEntity)
             coEvery { miniatureDao.getMiniaturesByProject(PROJECT_ID) } returns
                     flowOf(listOf(mini1Entity, mini2Entity))
-            coEvery { miniatureDao.getMiniaturesByProject(PROJECT_ID) } returns
-                    flowOf(listOf(mini1Entity, mini2Entity))
 
             // WHEN
             val resultFlow = repository.getProject(PROJECT_ID)
@@ -90,7 +87,10 @@ class ProjectRepositoryTest {
         runTest {
             // GIVEN
             coEvery { projectDao.getAllProjects() } returns flowOf(listOf(projectEntity))
-            every { mapper.transform(projectEntityDataEmptyMiniatures) } returns projectBo
+            coEvery { miniatureDao.getMiniaturesByProject(projectEntity.id) } returns flowOf(
+                listOf(mini1Entity, mini2Entity)
+            )
+            every { mapper.transform(projectEntityData) } returns projectBo
 
             // WHEN
             val resultFlow = repository.getAllProjects()
@@ -98,8 +98,9 @@ class ProjectRepositoryTest {
 
             // THEN
             coVerify(exactly = 1) { projectDao.getAllProjects() }
-            verify(exactly = 1) { mapper.transform(projectEntityDataEmptyMiniatures) }
-            assertEquals(1, resultList.size)
+            coVerify(exactly = 1)  { miniatureDao.getMiniaturesByProject(PROJECT_ID) }
+            verify(exactly = 1) { mapper.transform(projectEntityData) }
+            assertEquals(2, projectBo.minis.size)
             assertEquals(projectBo, resultList[0])
         }
 
