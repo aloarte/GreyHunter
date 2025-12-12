@@ -2,6 +2,8 @@ package com.devalr.home.components.screen
 
 import androidx.compose.runtime.Composable
 import com.devalr.domain.model.ProjectBo
+import com.devalr.domain.model.helpers.hierotekCircleProject
+import com.devalr.domain.model.helpers.stormlightArchiveProject
 import com.devalr.framework.components.HorizontalCarousel
 import com.devalr.home.components.cards.ProjectCard
 
@@ -9,8 +11,10 @@ import com.devalr.home.components.cards.ProjectCard
 fun ProjectsCarousel() {
     HorizontalCarousel(
         items = listOf(
-            ProjectBo(name = "Project 1"),
-            ProjectBo(name = "Project 1")
+            hierotekCircleProject,
+            hierotekCircleProject,
+            stormlightArchiveProject,
+            hierotekCircleProject
         )
     ) { item ->
         ProjectCard(projectBo = item)

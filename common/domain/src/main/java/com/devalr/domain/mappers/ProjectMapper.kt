@@ -23,6 +23,7 @@ class ProjectMapper(val miniatureMapper: Mapper<MiniatureEntity, MiniatureBo>) :
         projectEntity = ProjectEntity(
             id = data.id,
             name = data.name,
+            description = data.description,
             imageUri = data.imageUri,
             completionPercentage = data.percentage
         ),

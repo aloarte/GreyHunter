@@ -21,8 +21,8 @@ fun <T> HorizontalCarousel(
     Column(modifier = modifier) {
         HorizontalPager(
             state = pagerState,
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            pageSpacing = 8.dp,
+            contentPadding = PaddingValues(horizontal = 50.dp),
+            pageSpacing = 1.dp,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)

@@ -1,6 +1,7 @@
 package com.devalr.home.components.cards
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.ProjectBo
+import com.devalr.domain.model.helpers.hierotekCircleProject
+import com.devalr.domain.model.helpers.stormlightArchiveProject
 import com.devalr.framework.components.GHImage
 import com.devalr.framework.components.GHProgressBar
 import com.devalr.framework.components.GHText
@@ -34,13 +37,19 @@ fun ProjectCard(modifier: Modifier = Modifier, projectBo: ProjectBo) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(vertical = 10.dp, horizontal = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            //GHImage(imageUri = projectBo.imageUri)
+
             GHText(text = projectBo.name, type = TextType.Title)
-            GHText(text = "${projectBo.minis.size} Miniatures", type = TextType.LabelL)
-            GHText(text = "This is a project of the Necron Hierotek Circle for Killteam games.", type = TextType.Description)
+            projectBo.imageUri?.let{
+                GHImage(imageUri = projectBo.imageUri)
+            }
+            GHText(text = "${projectBo.minis.size} Miniatures", type = TextType.LabelM)
+            projectBo.description?.let { description ->
+                GHText(text = description, type = TextType.Description, singleLane = true)
+            }
             GHProgressBar(percentage = projectBo.percentage)
         }
     }
@@ -53,18 +62,18 @@ private fun ProjectCardPreviewInHorizontalRow() {
         modifier = Modifier
             .fillMaxSize()
             .padding(10.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+        horizontalArrangement = spacedBy(10.dp)
     ) {
         item {
             ProjectCard(
                 modifier = Modifier.fillMaxSize(),
-                projectBo = ProjectBo(name = "Hierotek Circle", percentage = 0.8f)
+                projectBo = hierotekCircleProject
             )
         }
         item {
             ProjectCard(
                 modifier = Modifier.fillMaxSize(),
-                projectBo = ProjectBo(name = "Hierotek Circle")
+                projectBo = stormlightArchiveProject
             )
         }
     }
@@ -77,18 +86,18 @@ private fun ProjectCardPreviewInVerticalColumn() {
         modifier = Modifier
             .fillMaxSize()
             .padding(10.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = spacedBy(10.dp)
     ) {
         item {
             ProjectCard(
                 modifier = Modifier.fillMaxSize(),
-                projectBo = ProjectBo(name = "Hierotek Circle")
+                projectBo = hierotekCircleProject
             )
         }
         item {
             ProjectCard(
                 modifier = Modifier.fillMaxSize(),
-                projectBo = ProjectBo(name = "Hierotek Circle")
+                projectBo = stormlightArchiveProject
             )
         }
     }
