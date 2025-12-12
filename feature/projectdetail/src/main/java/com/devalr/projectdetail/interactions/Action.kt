@@ -1,5 +1,5 @@
 package com.devalr.projectdetail.interactions
 
 sealed interface Action {
-    data object OnAppear : Action
+    data class OnAppear(val projectId: Long) : Action
 }

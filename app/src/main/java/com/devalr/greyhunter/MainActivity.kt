@@ -42,9 +42,9 @@ class MainActivity : ComponentActivity() {
 
                         composable(
                             route = "${NavScreen.ProjectDetail.route}/{projectId}",
-                            arguments = listOf(navArgument(PROJECT_ID) { type = NavType.IntType })
+                            arguments = listOf(navArgument(PROJECT_ID) { type = NavType.LongType })
                         ) { backStackEntry ->
-                            val projectId = backStackEntry.arguments?.getInt(PROJECT_ID) ?: 0
+                            val projectId = backStackEntry.arguments?.getLong(PROJECT_ID) ?: 0
 
                             ProjectDetailScreen(projectId = projectId) { miniatureId ->
                                 navController.navigate("${NavScreen.MiniDetail.route}/$miniatureId")

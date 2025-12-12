@@ -1,0 +1,142 @@
+package com.devalr.home
+
+
+import com.devalr.domain.ProjectRepository
+import com.devalr.domain.model.ProjectBo
+import com.devalr.home.interactions.Action
+import com.devalr.home.interactions.Action.OnOpenProjectDetail
+import com.devalr.home.interactions.Action.OnStartPainting
+import com.devalr.home.interactions.Event
+import com.devalr.home.interactions.Event.LaunchStartPaintModal
+import com.devalr.home.interactions.Event.NavigateToProject
+import io.mockk.coEvery
+import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
+
+@OptIn(ExperimentalCoroutinesApi::class)
+class HomeViewModelTest {
+
+    private val repository: ProjectRepository = mockk()
+    private lateinit var viewModel: HomeViewModel
+    private val testDispatcher = StandardTestDispatcher()
+
+    private val projects = listOf(
+        ProjectBo(
+            id = 1,
+            name = "Project 1",
+            percentage = 0.5f,
+            imageUri = null,
+            minis = emptyList()
+        ),
+        ProjectBo(
+            id = 2,
+            name = "Project 2",
+            percentage = 1.0f,
+            imageUri = null,
+            minis = emptyList()
+        )
+    )
+
+    @Before
+    fun setUp() {
+        Dispatchers.setMain(testDispatcher)
+        viewModel = HomeViewModel(repository)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+
+    @Test
+    fun `GIVEN projects exist WHEN OnAppear is triggered THEN state updates with project list`() =
+        runTest {
+            // GIVEN
+            coEvery { repository.getAllProjects() } returns flowOf(projects)
+
+            // WHEN
+            viewModel.onAction(Action.OnAppear)
+            advanceUntilIdle()
+
+            // THEN
+            val state = viewModel.uiState.value
+            assertTrue(state.projectsLoaded)
+            assertEquals(projects, state.projects)
+            assertNull(state.error)
+        }
+
+    @Test
+    fun `GIVEN repository error WHEN OnAppear is triggered THEN state updates with error message`() =
+        runTest {
+            // GIVEN
+            val errorMessage = "Error loading from database"
+            coEvery { repository.getAllProjects() } returns flow {
+                throw Exception(errorMessage)
+            }
+
+            // WHEN
+            viewModel.onAction(Action.OnAppear)
+            advanceUntilIdle()
+
+            // THEN
+            val state = viewModel.uiState.value
+            assertEquals(errorMessage, state.error)
+        }
+
+    @Test
+    fun `GIVEN user clicks project detail WHEN OnOpenProjectDetail is triggered THEN NavigateToProject event is sent`() =
+        runTest {
+            // GIVEN
+            val projectId = 5L
+            val events = mutableListOf<Event>()
+
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
+
+            // WHEN
+            viewModel.onAction(OnOpenProjectDetail(projectId))
+            advanceUntilIdle()
+
+            // THEN
+            assertEquals(1, events.size)
+            assertTrue(events.first() is NavigateToProject)
+            assertEquals(projectId, (events.first() as NavigateToProject).projectId)
+            job.cancel()
+        }
+
+    @Test
+    fun `GIVEN user clicks start painting WHEN OnStartPainting is triggered THEN LaunchStartPaintModal event is sent`() =
+        runTest {
+            // GIVEN
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
+
+            // WHEN
+            viewModel.onAction(OnStartPainting)
+            advanceUntilIdle()
+
+            // THEN
+            assertEquals(1, events.size)
+            assertEquals(LaunchStartPaintModal, events.first())
+            job.cancel()
+        }
+}

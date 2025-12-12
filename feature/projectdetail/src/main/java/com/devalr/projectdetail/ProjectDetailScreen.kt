@@ -17,20 +17,20 @@ import org.koin.compose.koinInject
 @Composable
 fun ProjectDetailScreen(
     viewModel: ProjectDetailViewModel = koinInject(),
-    projectId: Int,
+    projectId: Long,
     onNavigateToMiniature: (Int) -> Unit
 ) {
-    viewModel.uiState.collectAsState().value
+    val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
 
         }
     }
-    LaunchedEffect(true) { viewModel.onAction(OnAppear) }
+    LaunchedEffect(true) { viewModel.onAction(OnAppear(projectId = projectId)) }
 
     Scaffold(
         topBar = {
-            GHTab(projectName = "Proyecto 1")
+            GHTab(projectName = state.project?.name)
         }
     ) { innerPadding ->
         Column(
@@ -38,7 +38,8 @@ fun ProjectDetailScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            Text("Opened $projectId")
+            Text("Opened ${state.project?.name}")
+            Text("Opened ${state.project?.minis?.size}")
             GHButton(text = "Open miniature detail") {
                 onNavigateToMiniature(22)
             }

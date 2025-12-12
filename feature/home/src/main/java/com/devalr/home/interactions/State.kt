@@ -4,5 +4,6 @@ import com.devalr.domain.model.ProjectBo
 
 data class State(
     val projectsLoaded: Boolean = false,
-    val projects: List<ProjectBo> = emptyList()
+    val projects: List<ProjectBo> = emptyList(),
+    val error: String? = null
 )
