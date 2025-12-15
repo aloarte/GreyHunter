@@ -19,7 +19,7 @@ import com.devalr.domain.model.ProjectBo
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.stormlightArchiveProject
 import com.devalr.framework.components.GHImage
-import com.devalr.framework.components.GHProgressBar
+import com.devalr.framework.components.progress.GHProgressBar
 import com.devalr.framework.components.GHText
 import com.devalr.framework.components.TextType
 import com.devalr.framework.components.cards.getCardWidth

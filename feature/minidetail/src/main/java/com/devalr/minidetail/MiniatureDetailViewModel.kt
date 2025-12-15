@@ -1,23 +1,48 @@
 package com.devalr.minidetail
 
 import androidx.lifecycle.viewModelScope
+import com.devalr.domain.MiniatureRepository
+import com.devalr.domain.ProjectRepository
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.minidetail.interactions.Action
+import com.devalr.minidetail.interactions.Action.OnAppear
 import com.devalr.minidetail.interactions.Event
 import com.devalr.minidetail.interactions.State
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class MiniatureDetailViewModel : BaseViewModel<State, Action, Event>(initialState = State()) {
+class MiniatureDetailViewModel(
+    val miniatureRepository: MiniatureRepository,
+    val projectRepository: ProjectRepository
+) :
+    BaseViewModel<State, Action, Event>(initialState = State()) {
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onAction(action: Action) {
         when (action) {
-            is Action.OnAppear -> {
+            is OnAppear -> {
                 viewModelScope.launch {
-                    updateState { copy(miniatureLoaded = false) }
-                    // TODO: Call database and retrieve miniatures list
-                    delay(1000)
-                    updateState { copy(miniatureLoaded = true) }
+                    miniatureRepository.getMiniature(action.miniatureId)
+                        .flatMapLatest { miniature ->
+                            projectRepository.getProject(miniature.projectId).map { project ->
+                                Pair(miniature, project)
+                            }
+                        }
+                        .catch { error ->
+                            updateState { copy(error = error.message) }
+                        }.collect { (miniature, project) ->
+                            updateState {
+                                copy(
+                                    miniatureLoaded = true,
+                                    miniature = miniature,
+                                    parentProject = project,
+                                    error = null
+                                )
+                            }
+                        }
                 }
             }
         }

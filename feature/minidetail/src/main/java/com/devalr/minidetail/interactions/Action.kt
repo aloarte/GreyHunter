@@ -1,5 +1,5 @@
 package com.devalr.minidetail.interactions
 
 sealed interface Action {
-    data object OnAppear : Action
+    data class OnAppear(val miniatureId: Long) : Action
 }

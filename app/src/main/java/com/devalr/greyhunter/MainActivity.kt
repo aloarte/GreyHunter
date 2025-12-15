@@ -79,10 +79,10 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = "${NavScreen.MiniDetail.route}/{miniatureId}",
                             arguments = listOf(navArgument(MINI_ID) {
-                                type = NavType.IntType
+                                type = NavType.LongType
                             })
                         ) { backStackEntry ->
-                            val miniatureId = backStackEntry.arguments?.getInt(MINI_ID) ?: 0
+                            val miniatureId = backStackEntry.arguments?.getLong(MINI_ID) ?: 0
 
                             MiniatureDetailScreen(miniatureId = miniatureId)
                         }

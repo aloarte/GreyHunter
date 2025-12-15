@@ -26,13 +26,11 @@ fun ProjectsCarousel(
             )
 
             is AddProject -> AddCard(
-                type = CardType.Miniature,
+                type = CardType.Project,
                 onCreate = onCreateProject
             )
         }
-
     }
-
 }
 
 @Preview(showBackground = true)

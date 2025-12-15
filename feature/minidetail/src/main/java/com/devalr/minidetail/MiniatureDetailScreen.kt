@@ -16,19 +16,19 @@ import org.koin.compose.koinInject
 @Composable
 fun MiniatureDetailScreen(
     viewModel: MiniatureDetailViewModel = koinInject(),
-    miniatureId: Int
+    miniatureId: Long
 ) {
-    viewModel.uiState.collectAsState().value
+    val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
 
         }
     }
-    LaunchedEffect(true) { viewModel.onAction(OnAppear) }
+    LaunchedEffect(true) { viewModel.onAction(OnAppear(miniatureId)) }
 
     Scaffold(
         topBar = {
-            GHTab(projectName = "Proyecto 1", miniName = "Mini name")
+            GHTab(projectName = state.parentProject?.name, miniName =  state.miniature?.name)
         }
     ) { innerPadding ->
         Column(
