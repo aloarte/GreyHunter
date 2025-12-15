@@ -15,7 +15,7 @@ import com.devalr.home.components.screen.GamificationMessage
 import com.devalr.home.components.screen.ProjectsCarousel
 import com.devalr.home.components.screen.StartPaint
 import com.devalr.home.interactions.Action.OnAppear
-import com.devalr.home.interactions.Action.OnCreateNewProject
+import com.devalr.home.interactions.Action.OnAddProject
 import com.devalr.home.interactions.Action.OnOpenProjectDetail
 import com.devalr.home.interactions.Action.OnStartPainting
 import com.devalr.home.interactions.Event.LaunchStartPaintModal
@@ -61,7 +61,7 @@ fun HomeScreen(
                         viewModel.onAction(OnOpenProjectDetail(projectId = projectId))
                     },
                     onCreateProject = {
-                        viewModel.onAction(OnCreateNewProject)
+                        viewModel.onAction(OnAddProject)
                     }
                 )
             } else {

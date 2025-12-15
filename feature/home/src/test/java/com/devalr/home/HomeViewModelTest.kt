@@ -3,12 +3,17 @@ package com.devalr.home
 
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.ProjectBo
-import com.devalr.home.interactions.Action
+import com.devalr.home.interactions.Action.OnAddProject
+import com.devalr.home.interactions.Action.OnAppear
 import com.devalr.home.interactions.Action.OnOpenProjectDetail
 import com.devalr.home.interactions.Action.OnStartPainting
 import com.devalr.home.interactions.Event
 import com.devalr.home.interactions.Event.LaunchStartPaintModal
+import com.devalr.home.interactions.Event.NavigateToAddProject
 import com.devalr.home.interactions.Event.NavigateToProject
+import com.devalr.home.model.ProjectVo
+import com.devalr.home.model.ProjectVo.AddProject
+import com.devalr.home.model.ProjectVo.ProjectItem
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -71,13 +76,18 @@ class HomeViewModelTest {
             coEvery { repository.getAllProjects() } returns flowOf(projects)
 
             // WHEN
-            viewModel.onAction(Action.OnAppear)
+            viewModel.onAction(OnAppear)
             advanceUntilIdle()
 
             // THEN
+            val expectedProjects: List<ProjectVo> = listOf(
+                ProjectItem(projects[0]),
+                ProjectItem(projects[1]),
+                AddProject
+            )
             val state = viewModel.uiState.value
             assertTrue(state.projectsLoaded)
-            assertEquals(projects, state.projects)
+            assertEquals(expectedProjects, state.projects)
             assertNull(state.error)
         }
 
@@ -91,7 +101,7 @@ class HomeViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(Action.OnAppear)
+            viewModel.onAction(OnAppear)
             advanceUntilIdle()
 
             // THEN
@@ -139,4 +149,24 @@ class HomeViewModelTest {
             assertEquals(LaunchStartPaintModal, events.first())
             job.cancel()
         }
+
+    @Test
+    fun `GIVEN user clicks add project WHEN OnAddProject is triggered THEN NavigateToAddProject event is sent`() =
+        runTest {
+            // GIVEN
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
+
+            // WHEN
+            viewModel.onAction(OnAddProject)
+            advanceUntilIdle()
+
+            // THEN
+            assertEquals(1, events.size)
+            assertEquals(NavigateToAddProject, events.first())
+            job.cancel()
+        }
+
 }

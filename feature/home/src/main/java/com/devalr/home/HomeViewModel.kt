@@ -5,10 +5,12 @@ import com.devalr.domain.ProjectRepository
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.home.interactions.Action
 import com.devalr.home.interactions.Action.OnAppear
+import com.devalr.home.interactions.Action.OnAddProject
 import com.devalr.home.interactions.Action.OnOpenProjectDetail
 import com.devalr.home.interactions.Action.OnStartPainting
 import com.devalr.home.interactions.Event
 import com.devalr.home.interactions.Event.LaunchStartPaintModal
+import com.devalr.home.interactions.Event.NavigateToAddProject
 import com.devalr.home.interactions.Event.NavigateToProject
 import com.devalr.home.interactions.State
 import com.devalr.home.model.ProjectVo
@@ -35,6 +37,7 @@ class HomeViewModel(
 
             is OnOpenProjectDetail -> sendEvent(NavigateToProject(projectId = action.projectId))
             is OnStartPainting -> sendEvent(LaunchStartPaintModal)
+            OnAddProject -> sendEvent(NavigateToAddProject)
         }
     }
 
@@ -45,7 +48,8 @@ class HomeViewModel(
                     updateState { copy(error = error.message) }
                 }
                 .collect { projectList ->
-                    val voProjects: MutableList<ProjectVo> = projectList.map { ProjectItem(it) }.toMutableList()
+                    val voProjects: MutableList<ProjectVo> =
+                        projectList.map { ProjectItem(it) }.toMutableList()
                     voProjects.add(AddProject)
                     updateState {
                         copy(

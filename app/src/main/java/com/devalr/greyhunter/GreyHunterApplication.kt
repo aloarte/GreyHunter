@@ -1,6 +1,7 @@
 package com.devalr.greyhunter
 
 import android.app.Application
+import com.devalr.createproject.di.featureAddProjectModules
 import com.devalr.greyhunter.di.appModule
 import com.devalr.home.di.featureHomeModules
 import com.devalr.minidetail.di.featureMiniDetailModules
@@ -23,7 +24,8 @@ class GreyHunterApplication : Application() {
                 appModule,
                 featureHomeModules,
                 featureProjectDetailModules,
-                featureMiniDetailModules
+                featureMiniDetailModules,
+                featureAddProjectModules
             )
         }
     }
