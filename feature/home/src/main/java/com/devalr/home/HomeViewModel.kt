@@ -11,6 +11,9 @@ import com.devalr.home.interactions.Event
 import com.devalr.home.interactions.Event.LaunchStartPaintModal
 import com.devalr.home.interactions.Event.NavigateToProject
 import com.devalr.home.interactions.State
+import com.devalr.home.model.ProjectVo
+import com.devalr.home.model.ProjectVo.AddProject
+import com.devalr.home.model.ProjectVo.ProjectItem
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
@@ -42,10 +45,12 @@ class HomeViewModel(
                     updateState { copy(error = error.message) }
                 }
                 .collect { projectList ->
+                    val voProjects: MutableList<ProjectVo> = projectList.map { ProjectItem(it) }.toMutableList()
+                    voProjects.add(AddProject)
                     updateState {
                         copy(
                             projectsLoaded = true,
-                            projects = projectList,
+                            projects = voProjects,
                             error = null
                         )
                     }

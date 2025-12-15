@@ -13,7 +13,6 @@ import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.ProjectBo
@@ -30,12 +29,9 @@ fun ProjectCard(
     projectBo: ProjectBo,
     onProjectClicked: (Long) -> Unit
 ) {
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
-    val cardWidth = screenWidth * 0.70f
     Card(
         modifier = modifier
-            .width(cardWidth)
+            .width(getCardWidth())
             .aspectRatio(1.6f),
         onClick = { onProjectClicked(projectBo.id) }
     ) {

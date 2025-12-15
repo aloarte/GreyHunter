@@ -1,15 +1,51 @@
 package com.devalr.home.components.screen
 
 import androidx.compose.runtime.Composable
-import com.devalr.domain.model.ProjectBo
+import androidx.compose.ui.tooling.preview.Preview
+import com.devalr.domain.model.helpers.hierotekCircleProject
+import com.devalr.domain.model.helpers.stormlightArchiveProject
 import com.devalr.framework.components.HorizontalCarousel
+import com.devalr.home.components.cards.AddProjectCard
 import com.devalr.home.components.cards.ProjectCard
+import com.devalr.home.model.ProjectVo
+import com.devalr.home.model.ProjectVo.AddProject
+import com.devalr.home.model.ProjectVo.ProjectItem
 
 @Composable
-fun ProjectsCarousel(projects: List<ProjectBo>, onProjectClicked: (Long) -> Unit) {
+fun ProjectsCarousel(
+    projects: List<ProjectVo>,
+    onProjectClicked: (Long) -> Unit,
+    onCreateProject: () -> Unit
+) {
     HorizontalCarousel(items = projects) { item ->
-        ProjectCard(projectBo = item, onProjectClicked = onProjectClicked)
+        when (item) {
+            is ProjectItem -> ProjectCard(
+                projectBo = item.project,
+                onProjectClicked = onProjectClicked
+            )
+
+            is AddProject -> AddProjectCard(onCreateProject = onCreateProject)
+        }
 
     }
+
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ProjectsCarouselPreview() {
+    ProjectsCarousel(
+        projects = listOf(
+            ProjectItem(hierotekCircleProject),
+            ProjectItem(stormlightArchiveProject),
+            AddProject
+        ),
+        onCreateProject = {
+            // Do nothing
+        },
+        onProjectClicked = {
+            // Do nothing
+        }
+    )
 
 }

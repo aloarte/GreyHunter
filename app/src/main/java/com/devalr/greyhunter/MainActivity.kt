@@ -35,9 +35,13 @@ class MainActivity : ComponentActivity() {
                         startDestination = NavScreen.Home.route
                     ) {
                         composable(NavScreen.Home.route) {
-                            HomeScreen { projectId ->
-                                navController.navigate("${NavScreen.ProjectDetail.route}/$projectId")
-                            }
+                            HomeScreen(
+                                onNavigateToProject = { projectId ->
+                                    navController.navigate("${NavScreen.ProjectDetail.route}/$projectId")
+                                },
+                                onNavigateToAddProject = {
+                                    navController.navigate(NavScreen.AddProject.route)
+                                })
                         }
 
                         composable(

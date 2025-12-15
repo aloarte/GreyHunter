@@ -1,9 +1,9 @@
 package com.devalr.home.interactions
 
-import com.devalr.domain.model.ProjectBo
+import com.devalr.home.model.ProjectVo
 
 data class State(
     val projectsLoaded: Boolean = false,
-    val projects: List<ProjectBo> = emptyList(),
+    val projects: List<ProjectVo> = emptyList(),
     val error: String? = null
 )
