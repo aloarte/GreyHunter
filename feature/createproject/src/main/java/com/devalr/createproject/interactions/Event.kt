@@ -1,3 +1,5 @@
 package com.devalr.createproject.interactions
 
-sealed interface Event
+sealed interface Event {
+    data object OnAddedSuccessfully : Event
+}

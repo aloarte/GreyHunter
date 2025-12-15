@@ -39,6 +39,7 @@ fun ProjectDetailScreen(
                 .padding(innerPadding)
         ) {
             Text("Opened ${state.project?.name}")
+            Text("Opened ${state.project?.description}")
             Text("Opened ${state.project?.minis?.size}")
             GHButton(text = "Open miniature detail") {
                 onNavigateToMiniature(22)

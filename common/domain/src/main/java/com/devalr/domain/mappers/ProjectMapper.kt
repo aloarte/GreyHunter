@@ -11,6 +11,7 @@ class ProjectMapper(val miniatureMapper: Mapper<MiniatureEntity, MiniatureBo>) :
 
     override fun transform(data: ProjectEntityData): ProjectBo = ProjectBo(
         id = data.projectEntity.id,
+        description = data.projectEntity.description,
         name = data.projectEntity.name,
         imageUri = data.projectEntity.imageUri,
         percentage = data.projectEntity.completionPercentage,

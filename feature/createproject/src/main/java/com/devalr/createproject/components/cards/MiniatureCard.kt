@@ -1,4 +1,4 @@
-package com.devalr.home.components.cards
+package com.devalr.createproject.components.cards
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.spacedBy
@@ -15,27 +15,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.devalr.domain.model.ProjectBo
-import com.devalr.domain.model.helpers.hierotekCircleProject
-import com.devalr.domain.model.helpers.stormlightArchiveProject
+import com.devalr.domain.model.MiniatureBo
+import com.devalr.domain.model.helpers.deathmark
+import com.devalr.domain.model.helpers.technomancer
 import com.devalr.framework.components.GHImage
-import com.devalr.framework.components.GHProgressBar
 import com.devalr.framework.components.GHText
 import com.devalr.framework.components.TextType
 import com.devalr.framework.components.cards.getCardWidth
 import com.devalr.framework.enum.CardType
 
 @Composable
-fun ProjectCard(
+fun MiniatureCard(
     modifier: Modifier = Modifier,
-    projectBo: ProjectBo,
-    onProjectClicked: (Long) -> Unit
+    miniatureBo: MiniatureBo
 ) {
     Card(
         modifier = modifier
-            .width(getCardWidth(CardType.Project))
+            .width(getCardWidth(CardType.Miniature))
             .aspectRatio(1.6f),
-        onClick = { onProjectClicked(projectBo.id) }
     ) {
         Column(
             modifier = Modifier
@@ -44,23 +41,18 @@ fun ProjectCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
+            GHText(text = miniatureBo.name, type = TextType.Title)
+            miniatureBo.imageUri?.let {
+                GHImage(imageUri = miniatureBo.imageUri)
+            }
 
-            GHText(text = projectBo.name, type = TextType.Title)
-            projectBo.imageUri?.let {
-                GHImage(imageUri = projectBo.imageUri)
-            }
-            GHText(text = "${projectBo.minis.size} Miniatures", type = TextType.LabelM)
-            projectBo.description?.let { description ->
-                GHText(text = description, type = TextType.Description, singleLane = true)
-            }
-            GHProgressBar(percentage = projectBo.percentage)
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun ProjectCardPreviewInHorizontalRow() {
+private fun MiniatureCardPreviewInHorizontalRow() {
     LazyRow(
         modifier = Modifier
             .fillMaxSize()
@@ -68,17 +60,15 @@ private fun ProjectCardPreviewInHorizontalRow() {
         horizontalArrangement = spacedBy(10.dp)
     ) {
         item {
-            ProjectCard(
+            MiniatureCard(
                 modifier = Modifier.fillMaxSize(),
-                projectBo = hierotekCircleProject,
-                onProjectClicked = {}
+                miniatureBo = technomancer
             )
         }
         item {
-            ProjectCard(
+            MiniatureCard(
                 modifier = Modifier.fillMaxSize(),
-                projectBo = stormlightArchiveProject,
-                onProjectClicked = {}
+                miniatureBo = deathmark
             )
         }
     }
@@ -86,7 +76,7 @@ private fun ProjectCardPreviewInHorizontalRow() {
 
 @Preview(showBackground = true)
 @Composable
-private fun ProjectCardPreviewInVerticalColumn() {
+private fun MiniatureCardPreviewInVerticalColumn() {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -94,17 +84,15 @@ private fun ProjectCardPreviewInVerticalColumn() {
         verticalArrangement = spacedBy(10.dp)
     ) {
         item {
-            ProjectCard(
+            MiniatureCard(
                 modifier = Modifier.fillMaxSize(),
-                projectBo = hierotekCircleProject,
-                onProjectClicked = {}
+                miniatureBo = technomancer
             )
         }
         item {
-            ProjectCard(
+            MiniatureCard(
                 modifier = Modifier.fillMaxSize(),
-                projectBo = stormlightArchiveProject,
-                onProjectClicked = {}
+                miniatureBo = deathmark
             )
         }
     }

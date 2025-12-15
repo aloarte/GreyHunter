@@ -1,4 +1,4 @@
-package com.devalr.home.components.cards
+package com.devalr.framework.components.cards
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -20,14 +20,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.framework.components.GHText
 import com.devalr.framework.components.TextType
+import com.devalr.framework.enum.CardType
+
 
 @Composable
-fun AddProjectCard(modifier: Modifier = Modifier, onCreateProject: () -> Unit) {
+fun AddCard(modifier: Modifier = Modifier, type: CardType, onCreate: () -> Unit) {
     Card(
         modifier = modifier
-            .width(getCardWidth())
+            .width(getCardWidth(type))
             .aspectRatio(1.6f),
-        onClick = { onCreateProject() }
+        onClick = { onCreate() }
     ) {
         Column(
             modifier = Modifier
@@ -50,9 +52,12 @@ fun AddProjectCard(modifier: Modifier = Modifier, onCreateProject: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-private fun AddProjectCardPreview() {
+private fun AddCardPreview() {
     Column(modifier = Modifier.fillMaxSize()) {
-        AddProjectCard {
+        AddCard(type = CardType.Project) {
+            // Do nothing
+        }
+        AddCard(type = CardType.Miniature) {
             // Do nothing
         }
     }

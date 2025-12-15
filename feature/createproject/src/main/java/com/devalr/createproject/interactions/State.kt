@@ -1,6 +1,16 @@
 package com.devalr.createproject.interactions
 
+import com.devalr.createproject.model.MiniatureVo
 
+
+enum class ErrorType{
+    EmptyTitle,
+    AddDatabase,
+    ImageImport
+}
 data class State(
-    val projectName: String? = null
+    val projectMinis: List<MiniatureVo>? = null,
+    val projectName: String? = null,
+    val projectDescription: String? = null,
+    val errorType: ErrorType? = null
 )

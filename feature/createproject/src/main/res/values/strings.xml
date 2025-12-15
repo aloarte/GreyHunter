@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Errors -->
+    <string name="error_add_profile_empty_name">Profile name cannot be empty</string>
+
+    <!-- Buttons -->
+    <string name="button_add_project">Add project</string>
+
+    <!-- Labels -->
+    <string name="label_project_name">Project name</string>
+    <string name="label_project_description">Project description</string>
+
+
+</resources>
