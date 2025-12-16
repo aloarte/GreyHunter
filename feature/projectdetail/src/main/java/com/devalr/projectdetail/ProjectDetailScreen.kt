@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
+import com.devalr.framework.components.GHButton
 import com.devalr.framework.components.GHTab
 import com.devalr.framework.components.GHText
 import com.devalr.framework.components.LoadingIndicator
@@ -33,7 +34,9 @@ import org.koin.compose.koinInject
 fun ProjectDetailScreen(
     viewModel: ProjectDetailViewModel = koinInject(),
     projectId: Long,
-    onNavigateToMiniature: (Long) -> Unit
+    onNavigateToMiniature: (Long) -> Unit,
+    onCreteMiniature: () -> Unit
+
 ) {
     val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
@@ -62,8 +65,12 @@ fun ProjectDetailScreen(
                 state.project.description?.let { description ->
                     GHText(text = description, type = TextType.Description)
                 }
-                GHProgressBar(percentage = state.project.percentage)
-                ProjectMiniatures(miniatures = state.project.minis, onNavigateToMiniature)
+                GHProgressBar(percentage = state.project.progress)
+                ProjectMiniatures(
+                    miniatures = state.project.minis,
+                    onNavigateToMiniature = onNavigateToMiniature,
+                    onCreteMiniature = onCreteMiniature
+                )
             } else {
                 LoadingIndicator()
             }
@@ -73,12 +80,19 @@ fun ProjectDetailScreen(
 }
 
 @Composable
-fun ProjectMiniatures(miniatures: List<MiniatureBo>, onNavigateToMiniature: (Long) -> Unit) {
+fun ProjectMiniatures(
+    miniatures: List<MiniatureBo>,
+    onNavigateToMiniature: (Long) -> Unit,
+    onCreteMiniature: () -> Unit
+) {
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        item {
+            GHButton(text = "+", onClick = onCreteMiniature)
+        }
         items(miniatures) { miniature ->
             Box(
                 modifier = Modifier

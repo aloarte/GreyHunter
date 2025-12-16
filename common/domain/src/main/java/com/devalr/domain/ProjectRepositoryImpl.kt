@@ -9,6 +9,7 @@ import com.devalr.domain.model.ProjectEntityData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -68,9 +69,20 @@ class ProjectRepositoryImpl(
             }
 
 
-    override suspend fun updateProject(project: ProjectBo): Boolean {
-        return projectDao.updateProject(projectDatabaseMapper.transformReverse(project).projectEntity) > 0
-    }
+    override suspend fun updateProject(project: ProjectBo): Boolean =
+        projectDao.updateProject(projectDatabaseMapper.transformReverse(project).projectEntity) > 0
+
+
+    override suspend fun updateProjectProgress(projectId: Long): Boolean =
+        getProject(projectId).firstOrNull()?.let { project ->
+            val newProgress: Float = if (project.minis.isNotEmpty()) {
+                project.minis.map { it.percentage }.average().toFloat()
+            } else {
+                0f
+            }
+            updateProject(project.copy(progress = newProgress))
+        } ?: false
+
 
     override suspend fun deleteProject(projectId: Long) {
         projectDao.deleteProject(projectId)

@@ -45,14 +45,14 @@ class HomeViewModelTest {
         ProjectBo(
             id = 1,
             name = "Project 1",
-            percentage = 0.5f,
+            progress = 0.5f,
             imageUri = null,
             minis = emptyList()
         ),
         ProjectBo(
             id = 2,
             name = "Project 2",
-            percentage = 1.0f,
+            progress = 1.0f,
             imageUri = null,
             minis = emptyList()
         )

@@ -65,7 +65,7 @@ val hierotekCircleProject = ProjectBo(
     id = HIEROTEK_PROJECT_ID,
     name = "Hierotek Circle Killteam",
     description = "This is a project of the Necron Hierotek Circle for Killteam games.",
-    percentage = 0.68f,
+    progress = 0.68f,
     minis = listOf(technomancer, chronomancer, deathmark, immortal)
 )
 
@@ -104,7 +104,7 @@ val stormlightArchiveProject = ProjectBo(
     imageUri = "sampleUri",
     name = "Stormlight Archive RPG minis",
     description = "Miniatures of the TRPG of Stormlight Archive series. This minis came mounted.",
-    percentage = 0.36f,
+    progress = 0.36f,
     minis = listOf(parshendi, alethi)
 )
 

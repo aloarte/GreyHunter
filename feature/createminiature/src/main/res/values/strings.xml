@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Errors -->
+    <string name="error_add_miniature_empty_name">Profile name cannot be empty</string>
+
+    <!-- Buttons -->
+    <string name="button_add_miniature">Add miniature</string>
+
+    <!-- Labels -->
+    <string name="label_miniature_name">Miniature name</string>
+    <string name="label_miniature_description">Miniature description</string>
+
+
+</resources>

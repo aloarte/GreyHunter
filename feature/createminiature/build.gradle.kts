@@ -1,20 +1,18 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
 
 android {
-    namespace = "com.devalr.greyhunter"
+    namespace = "com.devalr.createminiature"
     compileSdk = 36
+
     defaultConfig {
-        applicationId = "com.devalr.greyhunter"
         minSdk = 28
-        targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -33,26 +31,35 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
 }
 
 dependencies {
-    implementation(project(":feature:home"))
-    implementation(project(":feature:minidetail"))
-    implementation(project(":feature:projectdetail"))
-    implementation(project(":feature:createproject"))
-    implementation(project(":feature:createminiature"))
+    //Inner dependencies
+    implementation(project(":common:domain"))
     implementation(project(":common:framework"))
+    // Koin
     implementation(libs.koin.android)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.nav)
+    //Compose
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+    //Android
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.navigation.compose)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.androidx.ui.graphics.android)
+    //Testing
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

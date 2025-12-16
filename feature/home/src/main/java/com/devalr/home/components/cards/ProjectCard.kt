@@ -53,7 +53,7 @@ fun ProjectCard(
             projectBo.description?.let { description ->
                 GHText(text = description, type = TextType.Description, singleLane = true)
             }
-            GHProgressBar(percentage = projectBo.percentage)
+            GHProgressBar(percentage = projectBo.progress)
         }
     }
 }

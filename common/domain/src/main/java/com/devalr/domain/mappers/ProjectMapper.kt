@@ -14,7 +14,7 @@ class ProjectMapper(val miniatureMapper: Mapper<MiniatureEntity, MiniatureBo>) :
         description = data.projectEntity.description,
         name = data.projectEntity.name,
         imageUri = data.projectEntity.imageUri,
-        percentage = data.projectEntity.completionPercentage,
+        progress = data.projectEntity.completionPercentage,
         minis = data.miniatureEntities.map { miniatureEntity ->
             miniatureMapper.transform(miniatureEntity)
         }
@@ -26,7 +26,7 @@ class ProjectMapper(val miniatureMapper: Mapper<MiniatureEntity, MiniatureBo>) :
             name = data.name,
             description = data.description,
             imageUri = data.imageUri,
-            completionPercentage = data.percentage
+            completionPercentage = data.progress
         ),
         miniatureEntities = data.minis.map { miniatureBo ->
             miniatureMapper.transformReverse(miniatureBo)

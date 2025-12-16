@@ -79,7 +79,7 @@ object TestData {
         id = PROJECT_ID,
         name = PROJECT_NAME,
         imageUri = null,
-        percentage = PROJECT_COMPLETION_PERCENTAGE,
+        progress = PROJECT_COMPLETION_PERCENTAGE,
         minis = listOf(mini1Bo, mini2Bo)
     )
 

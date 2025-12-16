@@ -53,7 +53,7 @@ class ProjectMapperTest {
         assertEquals(ID, bo.id)
         assertEquals(NAME, bo.name)
         assertEquals(IMAGE_URI, bo.imageUri)
-        assertEquals(PERCENTAGE, bo.percentage, 0.0f)
+        assertEquals(PERCENTAGE, bo.progress, 0.0f)
         assertEquals(2, bo.minis.size)
         assertEquals(mini1Bo, bo.minis[0])
         assertEquals(mini2Bo, bo.minis[1])
@@ -65,7 +65,7 @@ class ProjectMapperTest {
             id = ID,
             name = NAME,
             imageUri = IMAGE_URI,
-            percentage = PERCENTAGE,
+            progress = PERCENTAGE,
             minis = listOf(mini1Bo, mini2Bo)
         )
         every { miniatureMapper.transformReverse(mini1Bo) } returns mini1Entity

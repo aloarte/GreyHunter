@@ -33,7 +33,7 @@ class ProjectDetailViewModelTest {
     private val project = ProjectBo(
         id = projectId,
         name = "Hierotek Circle",
-        percentage = 0.5f,
+        progress = 0.5f,
         imageUri = null,
         minis = emptyList()
     )

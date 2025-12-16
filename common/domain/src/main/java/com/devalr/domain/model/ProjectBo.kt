@@ -5,6 +5,6 @@ data class ProjectBo(
     val name: String,
     val description: String? = null,
     val imageUri: String? = null,
-    val percentage: Float = 0f,
+    val progress: Float = 0f,
     val minis: List<MiniatureBo> = emptyList()
 )
