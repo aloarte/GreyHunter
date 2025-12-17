@@ -39,22 +39,16 @@ jobs:
       - name: Calculate Kover Coverage and Generate Badge
         id: coverage_badge
         run: |
-          COVERAGE_NUMBER=$(awk -v RS='</tr>' '/<td class="name">all classes<\/td>/{
-              for(i=1; i<=4; i++) {
-                  match($0, /<span class="percent">\s*([0-9]+\.[0-9]+)%/);
-                  $0 = substr($0, RSTART + RLENGTH);
-              }
-              print substr(FILENAME, RSTART, RLENGTH);
-          }' build/reports/kover/html/index.html | grep -oP '\d+\.\d+')
-
+          COVERAGE_NUMBER=$(grep -oP '(?s)<td class="name">all classes</td>.*?<span class="percent">\s*(\d+\.\d+)%.*?<span class="percent">\s*(\d+\.\d+)%.*?<span class="percent">\s*(\d+\.\d+)%.*?<span class="percent">\s*(\K\d+\.\d+)' build/reports/kover/html/index.html)
+          
           if [ -z "$COVERAGE_NUMBER" ]; then
-            echo "Coverage percentage not found in index.html. Defaulting to 0."
-            COVERAGE_NUMBER="0"
+          echo "Coverage percentage not found in index.html. Defaulting to 0."
+          COVERAGE_NUMBER="0"
           fi
-
+          
           COVERAGE_INT=$(printf "%.0f" "$COVERAGE_NUMBER")
           echo "Calculated Line Coverage from HTML: $COVERAGE_INT%"
-
+        
           BADGE_URL="https://img.shields.io/badge/coverage-$COVERAGE_INT%25-brightgreen"
           mkdir -p badges
           curl -s -o badges/kover.svg "$BADGE_URL"
