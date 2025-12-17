@@ -30,6 +30,7 @@ subprojects {
                     classes("*.BuildConfig")
                     classes("*_Impl")
                     classes("*.framework.theme.*")
+                    classes("*.navigation.*")
                     classes("*.domain.model.helpers.*")
                     classes("**/*_Impl")
 
@@ -48,6 +49,7 @@ extensions.configure<KoverProjectExtension> {
                 classes("*.di.*")
                 classes("*.BuildConfig")
                 classes("*_Impl")
+                classes("*.navigation.*")
                 classes("*.framework.theme.*")
                 classes("*.domain.model.helpers.*")
                 classes("**/*_Impl")
