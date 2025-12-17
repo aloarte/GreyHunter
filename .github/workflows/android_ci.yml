@@ -36,6 +36,9 @@ jobs:
           name: coverage-report
           path: build/reports/kover
 
+      - name: Install xmllint
+        run: sudo apt-get update && sudo apt-get install -y libxml2-utils
+
       - name: Calculate Kover Coverage and Generate Badge
         id: coverage_badge
         run: |
