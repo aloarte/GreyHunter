@@ -39,7 +39,7 @@
             path: build/reports/kover/html
 
         - name: Generate Kover Coverage Badge
-          uses: tj-actions/kover-badge@v10
+          uses: tj-actions/kover-badge-action@v10
           with:
             kover-report-path: build/reports/kover/report.xml
             badge-path: badges/kover.svg
