@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Errors -->
+
+    <!-- Buttons -->
+
+    <!-- Labels -->
+    <string name="label_miniature_assembled">Assembled</string>
+    <string name="label_miniature_primed">Primed</string>
+    <string name="label_miniature_base_colored">Base Colored</string>
+    <string name="label_miniature_details">Details</string>
+    <string name="label_miniature_base">Base Finished</string>
+</resources>

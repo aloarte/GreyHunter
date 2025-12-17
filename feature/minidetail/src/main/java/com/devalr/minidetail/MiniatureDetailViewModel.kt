@@ -65,6 +65,8 @@ class MiniatureDetailViewModel(
                     } else {
                         updateState { copy(error = ErrorType.CompletePreviousSteps) }
                     }
+                } ?: run {
+                    updateState { copy(error = ErrorType.EmptyMiniature) }
                 }
             }
         }

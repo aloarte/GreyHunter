@@ -5,7 +5,8 @@ import com.devalr.domain.model.ProjectBo
 
 enum class ErrorType{
     RetrievingDatabase,
-    CompletePreviousSteps
+    CompletePreviousSteps,
+    EmptyMiniature
 }
 data class State(
     val miniatureLoaded: Boolean = false,
