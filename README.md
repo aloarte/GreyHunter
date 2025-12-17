@@ -1,3 +1,5 @@
 # GreyHunter
 
-[![Coverage](https://github.com/aloarte/GreyHunter/blob/master/badges/jacoco.svg)](https://github.com/aloarte/GreyHunter/blob/master/badges/jacoco.svg)
+[![Coverage](https://github.com/aloarte/GreyHunter/blob/main/badges/kover.svg)](https://github.com/aloarte/GreyHunter/blob/main/badges/kover.svg)
+
+
