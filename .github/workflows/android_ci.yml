@@ -38,17 +38,23 @@ jobs:
           name: coverage-report
           path: build/reports/kover/html
 
-      - name: Read Kover coverage percentage
-        id: kover
-        uses: anvari1313/kover-coverage-badge-action@v1.1.2
-        with:
-          kover-report-path: './build/reports/kover/report.xml'
-
-      - name: Generate Coverage Badge
-        uses: tj-actions/coverage-badge@v10
-        with:
-          value: ${{ steps.kover.outputs.coverage }}
-          filename: badges/kover.svg
+      - name: Calculate Kover Coverage and Generate Badge
+        id: coverage_badge
+        run: |
+          COVERAGE_PERCENTAGE=$(grep -oP '<counter type="LINE".*?value="\K[^"]+' build/reports/kover/report.xml)
+          
+          if [ -z "$COVERAGE_PERCENTAGE" ]; then
+            COVERAGE_PERCENTAGE="N/A"
+          fi
+          
+          COVERAGE_INT=$(printf "%.0f" "$COVERAGE_PERCENTAGE")
+          echo "Calculated Coverage: $COVERAGE_INT%"
+          
+          echo "COVERAGE=$COVERAGE_INT" >> "$GITHUB_ENV"
+          BADGE_URL="https://img.shields.io/badge/coverage-$COVERAGE_INT%25-brightgreen"
+          
+          mkdir -p badges
+          curl -s -o badges/kover.svg "$BADGE_URL"
 
       - name: Commit and push badge
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/feature/ci_kover'
