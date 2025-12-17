@@ -41,18 +41,17 @@ jobs:
       - name: Calculate Kover Coverage and Generate Badge
         id: coverage_badge
         run: |
-          COVERAGE_PERCENTAGE=$(grep -oP '<counter type="LINE".*?value="\K[^"]+' build/reports/kover/report.xml)
-          
+          COVERAGE_PERCENTAGE=$(awk -F'"' '/<counter type="LINE"/ {for(i=1;i<=NF;i++) if($i=="value") print $(i+1)}' build/reports/kover/report.xml)
+
           if [ -z "$COVERAGE_PERCENTAGE" ]; then
-            COVERAGE_PERCENTAGE="N/A"
+            echo "Coverage percentage not found. Defaulting to 0."
+            COVERAGE_PERCENTAGE="0"
           fi
-          
+
           COVERAGE_INT=$(printf "%.0f" "$COVERAGE_PERCENTAGE")
           echo "Calculated Coverage: $COVERAGE_INT%"
-          
-          echo "COVERAGE=$COVERAGE_INT" >> "$GITHUB_ENV"
+
           BADGE_URL="https://img.shields.io/badge/coverage-$COVERAGE_INT%25-brightgreen"
-          
           mkdir -p badges
           curl -s -o badges/kover.svg "$BADGE_URL"
 
