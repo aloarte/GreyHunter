@@ -3,9 +3,14 @@ package com.devalr.minidetail
 import androidx.lifecycle.viewModelScope
 import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.ProjectRepository
+import com.devalr.domain.extension.isMilestoneAchievable
+import com.devalr.domain.extension.recalculateProgress
+import com.devalr.domain.extension.toggle
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.minidetail.interactions.Action
 import com.devalr.minidetail.interactions.Action.OnAppear
+import com.devalr.minidetail.interactions.Action.OnMilestone
+import com.devalr.minidetail.interactions.ErrorType
 import com.devalr.minidetail.interactions.Event
 import com.devalr.minidetail.interactions.State
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,7 +37,7 @@ class MiniatureDetailViewModel(
                             }
                         }
                         .catch { error ->
-                            updateState { copy(error = error.message) }
+                            updateState { copy(error = ErrorType.RetrievingDatabase) }
                         }.collect { (miniature, project) ->
                             updateState {
                                 copy(
@@ -43,6 +48,23 @@ class MiniatureDetailViewModel(
                                 )
                             }
                         }
+                }
+            }
+
+            is OnMilestone -> {
+                uiState.value.miniature?.let {
+                    if (it.completion.isMilestoneAchievable(action.type, action.enable)) {
+                        val updatedMiniature =
+                            it.copy(completion = it.completion.toggle(action.type))
+                                .recalculateProgress()
+                        viewModelScope.launch {
+                            miniatureRepository.updateMiniature(updatedMiniature)
+                            updateState { copy(miniature = updatedMiniature) }
+                            projectRepository.updateProjectProgress(updatedMiniature.projectId)
+                        }
+                    } else {
+                        updateState { copy(error = ErrorType.CompletePreviousSteps) }
+                    }
                 }
             }
         }
