@@ -29,19 +29,17 @@ jobs:
       - name: Run Tests and Generate Kover Report
         run: ./gradlew clean testDebugUnitTest koverXmlReport koverHtmlReport
 
-      - name: List Kover Reports for debugging
-        run: ls -R build/reports/kover
 
-      - name: Upload HTML Report
+      - name: Upload Report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: build/reports/kover/html
+          path: build/reports/kover
 
       - name: Calculate Kover Coverage and Generate Badge
         id: coverage_badge
         run: |
-          COVERAGE_PERCENTAGE=$(awk -F'"' '/<counter type="LINE"/ {for(i=1;i<=NF;i++) if($i=="value") print $(i+1)}' build/reports/kover/report.xml)
+          COVERAGE_PERCENTAGE=$(xmllint --xpath 'string(//counter[@type="LINE"]/@value)' build/reports/kover/report.xml)
 
           if [ -z "$COVERAGE_PERCENTAGE" ]; then
             echo "Coverage percentage not found. Defaulting to 0."
@@ -54,6 +52,7 @@ jobs:
           BADGE_URL="https://img.shields.io/badge/coverage-$COVERAGE_INT%25-brightgreen"
           mkdir -p badges
           curl -s -o badges/kover.svg "$BADGE_URL"
+
 
       - name: Commit and push badge
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/feature/ci_kover'
