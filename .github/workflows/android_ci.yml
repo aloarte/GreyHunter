@@ -44,18 +44,33 @@ jobs:
       - name: Install xmllint
         run: sudo apt-get update && sudo apt-get install -y libxml2-utils
 
-      - name: Extract coverage from Kover XML
+      - name: Extract global LINE coverage from Kover XML
         id: coverage
         run: |
-          LINE_COVERAGE=$(xmllint --xpath "string(//counter[@type='LINE']/@covered div //counter[@type='LINE']/@missed + 0)" build/reports/kover/report.xml)
-
-          COVERED=$(xmllint --xpath "string(//counter[@type='LINE']/@covered)" build/reports/kover/report.xml)
-          MISSED=$(xmllint --xpath "string(//counter[@type='LINE']/@missed)" build/reports/kover/report.xml)
-
-          TOTAL=$((COVERED + MISSED))
-          PERCENT=$(awk "BEGIN { printf \"%.0f\", ($COVERED/$TOTAL)*100 }")
-
-          echo "coverage=$PERCENT" >> $GITHUB_OUTPUT
+          XML=build/reports/kover/report.xml
+      
+          xmllint --xpath "//counter[@type='LINE']" $XML \
+            | sed 's/></>\n</g' \
+            | awk '
+              /missed=/ {
+                match($0, /missed="([0-9]+)"/, m)
+                match($0, /covered="([0-9]+)"/, c)
+                missed += m[1]
+                covered += c[1]
+              }
+              END {
+                total = missed + covered
+                if (total > 0)
+                  printf "%.0f\n", (covered / total) * 100
+                else
+                  print "0"
+              }
+            ' > coverage.txt
+      
+          COVERAGE=$(cat coverage.txt)
+          echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
+      
+          echo "Global LINE coverage: $COVERAGE%"
 
       - name: Generate coverage badge JSON
         run: |
@@ -73,3 +88,10 @@ jobs:
         run: |
           echo "=== coverage.json ==="
           cat badges/coverage.json || echo "coverage.json NOT FOUND"
+
+      - name: Commit and push coverage badge
+        if: github.ref == 'refs/heads/main'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update coverage badge"
+          file_pattern: badges/coverage.json
