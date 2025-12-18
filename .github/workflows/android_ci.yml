@@ -29,17 +29,11 @@ jobs:
       - name: Run Tests and Generate Kover Report
         run: ./gradlew clean testDebugUnitTest koverXmlReport koverHtmlReport
 
-
       - name: Upload Report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: build/reports/kover
-
-      - name: Debug Kover reports
-        run: |
-          echo "=== Kover reports ==="
-          find . -name "report.xml"
+          path: build/reports/kover/html
 
       - name: Install xmllint
         run: sudo apt-get update && sudo apt-get install -y libxml2-utils
@@ -90,7 +84,7 @@ jobs:
           cat badges/coverage.json || echo "coverage.json NOT FOUND"
 
       - name: Commit and push coverage badge
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: update coverage badge"
