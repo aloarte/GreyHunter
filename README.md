@@ -1,5 +1,6 @@
 # GreyHunter
 
-[![Coverage](https://github.com/aloarte/GreyHunter/blob/main/badges/kover.svg)](https://github.com/aloarte/GreyHunter/blob/main/badges/kover.svg)
+![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/aloarte/GreyHunter/main/badges/coverage.json)
+
 
 
