@@ -35,17 +35,17 @@ fun GHImage(
         error = painterResource(R.drawable.error_image),
         fallback = painterResource(R.drawable.add_image),
         contentDescription = "",
-        contentScale = ContentScale.Fit,
+        contentScale = ContentScale.Crop,
         modifier = modifier
             .size(size)
             .clip(RoundedCornerShape(borderRadius))
-                then (
+            .then(
                 if (onImageClick != null) {
                     Modifier.clickable { onImageClick.invoke() }
                 } else {
                     Modifier
                 }
-                )
+            )
     )
 }
 

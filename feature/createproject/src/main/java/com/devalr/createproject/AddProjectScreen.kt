@@ -7,21 +7,29 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.devalr.createproject.interactions.Action.OnAddProject
 import com.devalr.createproject.interactions.Action.OnAppear
 import com.devalr.createproject.interactions.Action.OnDescriptionChanged
+import com.devalr.createproject.interactions.Action.OnImageChanged
 import com.devalr.createproject.interactions.Action.OnNameChanged
 import com.devalr.createproject.interactions.Event.OnAddedSuccessfully
 import com.devalr.framework.components.GHButton
+import com.devalr.framework.components.GHImage
 import com.devalr.framework.components.add.AddItemDescription
 import com.devalr.framework.components.add.AddItemName
+import com.devalr.framework.components.dialog.ImagePickerDialog
 import org.koin.compose.koinInject
 
 @Composable
 fun AddProjectScreen(viewModel: AddProjectViewModel = koinInject(), onBackPressed: () -> Unit) {
+    var showImageSourceDialog by remember { mutableStateOf(false) }
     val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -31,6 +39,14 @@ fun AddProjectScreen(viewModel: AddProjectViewModel = koinInject(), onBackPresse
         }
     }
     LaunchedEffect(true) { viewModel.onAction(OnAppear) }
+
+    if (showImageSourceDialog) {
+        ImagePickerDialog(
+            onCloseDialog = { showImageSourceDialog = false },
+            onImageChanged = {
+                viewModel.onAction(OnImageChanged(it))
+            })
+    }
 
     Scaffold(
         topBar = {
@@ -42,6 +58,7 @@ fun AddProjectScreen(viewModel: AddProjectViewModel = koinInject(), onBackPresse
                 .padding(innerPadding)
                 .padding(all = 10.dp)
         ) {
+            GHImage(imageUri = state.projectImage, size = 100.dp) { showImageSourceDialog = true }
             AddItemName(
                 name = state.projectName,
                 label = stringResource(R.string.label_project_name)

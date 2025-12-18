@@ -67,6 +67,7 @@ fun ProjectDetailScreen(
         ) {
 
             if (state.projectLoaded && state.project != null) {
+                GHImage(imageUri = state.project.imageUri, size = 100.dp)
                 GHText(text = state.project.name, type = TextType.Title)
                 state.project.description?.let { description ->
                     GHText(text = description, type = TextType.Description)

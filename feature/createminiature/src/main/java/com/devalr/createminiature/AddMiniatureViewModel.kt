@@ -2,7 +2,7 @@ package com.devalr.createminiature
 
 import android.app.Application
 import android.content.Intent
-import androidx.compose.animation.core.copy
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.devalr.createminiature.interactions.Action
 import com.devalr.createminiature.interactions.Action.OnAddMiniature
@@ -31,8 +31,10 @@ class AddMiniatureViewModel(
             is OnNameChanged -> updateState { copy(miniatureName = action.name) }
             is OnImageChanged -> {
                 try {
-                    val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    application.contentResolver.takePersistableUriPermission(action.imageUri, flags)
+                    if (!action.imageUri.toString().contains(".fileprovider")) {
+                        val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        application.contentResolver.takePersistableUriPermission(action.imageUri, flags)
+                    }
                     updateState { copy(miniatureImage = action.imageUri.toString()) }
 
                 } catch (e: SecurityException) {
