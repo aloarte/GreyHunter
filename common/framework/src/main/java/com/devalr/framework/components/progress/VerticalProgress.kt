@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun VerticalProgress(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     progress: Float,
     spectrum: List<Color> = listOf(Color.Red, Color.Yellow, Color.Green),
 ) {

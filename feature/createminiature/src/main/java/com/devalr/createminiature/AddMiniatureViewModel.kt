@@ -1,5 +1,8 @@
 package com.devalr.createminiature
 
+import android.app.Application
+import android.content.Intent
+import androidx.compose.animation.core.copy
 import androidx.lifecycle.viewModelScope
 import com.devalr.createminiature.interactions.Action
 import com.devalr.createminiature.interactions.Action.OnAddMiniature
@@ -17,6 +20,7 @@ import com.devalr.framework.base.BaseViewModel
 import kotlinx.coroutines.launch
 
 class AddMiniatureViewModel(
+    private val application: Application,
     val miniatureRepository: MiniatureRepository,
     val projectRepository: ProjectRepository
 ) :
@@ -25,7 +29,16 @@ class AddMiniatureViewModel(
         when (action) {
             is OnAppear -> updateState { copy(projectId = action.projectId) }
             is OnNameChanged -> updateState { copy(miniatureName = action.name) }
-            is OnImageChanged -> {}/* updateState {copy(projectName = action.image) }*/
+            is OnImageChanged -> {
+                try {
+                    val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    application.contentResolver.takePersistableUriPermission(action.imageUri, flags)
+                    updateState { copy(miniatureImage = action.imageUri.toString()) }
+
+                } catch (e: SecurityException) {
+                    e.printStackTrace()
+                }
+            }
             is OnAddMiniature -> addMiniature()
         }
     }
@@ -43,7 +56,8 @@ class AddMiniatureViewModel(
 
             val miniature = MiniatureBo(
                 projectId = projectId,
-                name = miniatureName
+                name = miniatureName,
+                imageUri = miniatureImage
             )
 
             viewModelScope.launch {

@@ -27,11 +27,6 @@ fun AddItemDescription(
 }
 
 @Composable
-fun AddItemImage() {
-
-}
-
-@Composable
 fun AddItemName(
     name: String?, label: String,
     onNameChange: (String) -> Unit

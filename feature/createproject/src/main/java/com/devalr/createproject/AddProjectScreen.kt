@@ -17,7 +17,6 @@ import com.devalr.createproject.interactions.Action.OnNameChanged
 import com.devalr.createproject.interactions.Event.OnAddedSuccessfully
 import com.devalr.framework.components.GHButton
 import com.devalr.framework.components.add.AddItemDescription
-import com.devalr.framework.components.add.AddItemImage
 import com.devalr.framework.components.add.AddItemName
 import org.koin.compose.koinInject
 
@@ -49,7 +48,6 @@ fun AddProjectScreen(viewModel: AddProjectViewModel = koinInject(), onBackPresse
             ) {
                 viewModel.onAction(OnNameChanged(it))
             }
-            AddItemImage()
             AddItemDescription(
                 description = state.projectDescription,
                 label = stringResource(R.string.label_project_description)

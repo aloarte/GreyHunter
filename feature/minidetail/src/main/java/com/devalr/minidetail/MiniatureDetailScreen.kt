@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.devalr.framework.components.GHImage
 import com.devalr.framework.components.GHTab
 import com.devalr.framework.components.LoadingIndicator
 import com.devalr.minidetail.components.MiniatureMilestones
@@ -42,6 +44,7 @@ fun MiniatureDetailScreen(
             Text("Opened $miniatureId")
 
             if (state.miniatureLoaded && state.miniature != null) {
+                GHImage(imageUri = state.miniature.imageUri, size = 300.dp)
                 MiniatureMilestones(state.miniature.completion) { type, enabled ->
                     viewModel.onAction(OnMilestone(type = type, enable = enabled))
                 }

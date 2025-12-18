@@ -47,7 +47,7 @@ fun ProjectCard(
 
             GHText(text = projectBo.name, type = TextType.Title)
             projectBo.imageUri?.let {
-                GHImage(imageUri = projectBo.imageUri)
+                GHImage(imageUri = projectBo.imageUri, size = 100.dp)
             }
             GHText(text = "${projectBo.minis.size} Miniatures", type = TextType.LabelM)
             projectBo.description?.let { description ->
