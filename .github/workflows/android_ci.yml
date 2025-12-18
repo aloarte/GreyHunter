@@ -2,7 +2,7 @@ name: Android CI & Coverage Badge
 
 on:
   push:
-    branches: [ "main", "feature/ci_kover" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -68,20 +68,38 @@ jobs:
 
       - name: Generate coverage badge JSON
         run: |
+          COVERAGE=${{ steps.coverage.outputs.coverage }}
+
+          # Clamp 0–100
+          if [ "$COVERAGE" -lt 0 ]; then COVERAGE=0; fi
+          if [ "$COVERAGE" -gt 100 ]; then COVERAGE=100; fi
+
+          if [ "$COVERAGE" -lt 50 ]; then
+            # Red -> Yellow
+            R=$((224 + (223 - 224) * COVERAGE / 50))
+            G=$(( 93 + (179 -  93) * COVERAGE / 50))
+            B=$(( 68 + ( 23 -  68) * COVERAGE / 50))
+          else
+            # Yellow -> Green
+            R=$((223 + ( 76 - 223) * (COVERAGE - 50) / 50))
+            G=$((179 + (193 - 179) * (COVERAGE - 50) / 50))
+            B=$(( 23 + ( 17 -  23) * (COVERAGE - 50) / 50))
+          fi
+
+          COLOR=$(printf "#%02x%02x%02x" $R $G $B)
+
           mkdir -p badges
           cat <<EOF > badges/coverage.json
           {
             "schemaVersion": 1,
             "label": "coverage",
-            "message": "${{ steps.coverage.outputs.coverage }}%",
-            "color": "brightgreen"
+            "message": "${COVERAGE}%",
+            "color": "${COLOR}"
           }
           EOF
 
-      - name: Debug coverage.json
-        run: |
-          echo "=== coverage.json ==="
-          cat badges/coverage.json || echo "coverage.json NOT FOUND"
+          echo "Coverage: $COVERAGE%"
+          echo "Badge color: $COLOR"
 
       - name: Commit and push coverage badge
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
