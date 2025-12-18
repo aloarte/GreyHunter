@@ -67,3 +67,9 @@ jobs:
             "message": "${{ steps.coverage.outputs.coverage }}%",
             "color": "brightgreen"
           }
+          EOF
+
+      - name: Debug coverage.json
+        run: |
+          echo "=== coverage.json ==="
+          cat badges/coverage.json || echo "coverage.json NOT FOUND"
