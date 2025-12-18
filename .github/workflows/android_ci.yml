@@ -27,8 +27,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run Tests and Generate Kover Report
-        run: ./gradlew clean testDebugUnitTest koverXmlReport koverHtmlReport
-
+        run: ./gradlew clean testDebugUnitTest koverMergedXmlReport koverMergedHtmlReport
 
       - name: Upload Report
         uses: actions/upload-artifact@v4
@@ -44,13 +43,13 @@ jobs:
       - name: Install xmllint
         run: sudo apt-get update && sudo apt-get install -y libxml2-utils
 
-      - name: Extract coverage from Kover XML
+      - name: Extract coverage from Kover merged XML
         id: coverage
         run: |
-          LINE_COVERAGE=$(xmllint --xpath "string(//counter[@type='LINE']/@covered div //counter[@type='LINE']/@missed + 0)" build/reports/kover/merged/xml/report.xml)
+          REPORT_PATH="build/reports/kover/merged/xml/report.xml"
 
-          COVERED=$(xmllint --xpath "string(//counter[@type='LINE']/@covered)" build/reports/kover/merged/xml/report.xml)
-          MISSED=$(xmllint --xpath "string(//counter[@type='LINE']/@missed)" build/reports/kover/merged/xml/report.xml)
+          COVERED=$(xmllint --xpath "string(//counter[@type='LINE']/@covered)" "$REPORT_PATH")
+          MISSED=$(xmllint --xpath "string(//counter[@type='LINE']/@missed)" "$REPORT_PATH")
 
           TOTAL=$((COVERED + MISSED))
           PERCENT=$(awk "BEGIN { printf \"%.0f\", ($COVERED/$TOTAL)*100 }")
