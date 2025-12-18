@@ -36,16 +36,21 @@ jobs:
           name: coverage-report
           path: build/reports/kover
 
+      - name: Debug Kover reports
+        run: |
+          echo "=== Kover reports ==="
+          find . -name "report.xml"
+
       - name: Install xmllint
         run: sudo apt-get update && sudo apt-get install -y libxml2-utils
 
       - name: Extract coverage from Kover XML
         id: coverage
         run: |
-          LINE_COVERAGE=$(xmllint --xpath "string(//counter[@type='LINE']/@covered div //counter[@type='LINE']/@missed + 0)" build/reports/kover/xml/report.xml)
+          LINE_COVERAGE=$(xmllint --xpath "string(//counter[@type='LINE']/@covered div //counter[@type='LINE']/@missed + 0)" build/reports/kover/merged/xml/report.xml)
 
-          COVERED=$(xmllint --xpath "string(//counter[@type='LINE']/@covered)" build/reports/kover/xml/report.xml)
-          MISSED=$(xmllint --xpath "string(//counter[@type='LINE']/@missed)" build/reports/kover/xml/report.xml)
+          COVERED=$(xmllint --xpath "string(//counter[@type='LINE']/@covered)" build/reports/kover/merged/xml/report.xml)
+          MISSED=$(xmllint --xpath "string(//counter[@type='LINE']/@missed)" build/reports/kover/merged/xml/report.xml)
 
           TOTAL=$((COVERED + MISSED))
           PERCENT=$(awk "BEGIN { printf \"%.0f\", ($COVERED/$TOTAL)*100 }")
