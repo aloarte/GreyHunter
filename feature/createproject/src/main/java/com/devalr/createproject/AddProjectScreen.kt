@@ -24,12 +24,12 @@ import com.devalr.framework.components.GHButton
 import com.devalr.framework.components.GHImage
 import com.devalr.framework.components.add.AddItemDescription
 import com.devalr.framework.components.add.AddItemName
-import com.devalr.framework.components.dialog.ImagePickerDialog
+import com.devalr.framework.components.bottomsheet.ImagePickerHandler
 import org.koin.compose.koinInject
 
 @Composable
 fun AddProjectScreen(viewModel: AddProjectViewModel = koinInject(), onBackPressed: () -> Unit) {
-    var showImageSourceDialog by remember { mutableStateOf(false) }
+    var showImagePicker by remember { mutableStateOf(false) }
     val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -40,12 +40,17 @@ fun AddProjectScreen(viewModel: AddProjectViewModel = koinInject(), onBackPresse
     }
     LaunchedEffect(true) { viewModel.onAction(OnAppear) }
 
-    if (showImageSourceDialog) {
-        ImagePickerDialog(
-            onCloseDialog = { showImageSourceDialog = false },
-            onImageChanged = {
-                viewModel.onAction(OnImageChanged(it))
-            })
+    if (showImagePicker) {
+        ImagePickerHandler(
+            show = true,
+            onImageChanged = { uri ->
+                viewModel.onAction(OnImageChanged(uri))
+                showImagePicker = false
+            },
+            onDismiss = {
+                showImagePicker = false
+            }
+        )
     }
 
     Scaffold(
@@ -58,7 +63,7 @@ fun AddProjectScreen(viewModel: AddProjectViewModel = koinInject(), onBackPresse
                 .padding(innerPadding)
                 .padding(all = 10.dp)
         ) {
-            GHImage(imageUri = state.projectImage, size = 100.dp) { showImageSourceDialog = true }
+            GHImage(imageUri = state.projectImage, size = 100.dp) { showImagePicker = true }
             AddItemName(
                 name = state.projectName,
                 label = stringResource(R.string.label_project_name)

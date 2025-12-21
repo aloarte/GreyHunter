@@ -1,4 +1,4 @@
-package com.devalr.framework.components.dialog
+package com.devalr.framework.components.bottomsheet
 
 import android.content.Context
 import android.net.Uri

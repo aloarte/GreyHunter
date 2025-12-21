@@ -1,6 +1,5 @@
 package com.devalr.createminiature
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,15 +19,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.devalr.createminiature.interactions.Action
 import com.devalr.createminiature.interactions.Action.OnAddMiniature
 import com.devalr.createminiature.interactions.Action.OnAppear
+import com.devalr.createminiature.interactions.Action.OnImageChanged
 import com.devalr.createminiature.interactions.Action.OnNameChanged
 import com.devalr.createminiature.interactions.Event.OnAddedSuccessfully
 import com.devalr.framework.components.GHButton
 import com.devalr.framework.components.GHImage
 import com.devalr.framework.components.add.AddItemName
-import com.devalr.framework.components.dialog.ImagePickerDialog
+import com.devalr.framework.components.bottomsheet.ImagePickerHandler
 import org.koin.compose.koinInject
 
 @Composable
@@ -37,7 +36,7 @@ fun AddMiniatureScreen(
     projectId: Long,
     onBackPressed: () -> Unit
 ) {
-    var showImageSourceDialog by remember { mutableStateOf(false) }
+    var showImagePicker by remember { mutableStateOf(false) }
     val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -48,13 +47,17 @@ fun AddMiniatureScreen(
     }
     LaunchedEffect(true) { viewModel.onAction(OnAppear(projectId)) }
 
-    if (showImageSourceDialog) {
-        ImagePickerDialog(
-            onCloseDialog = { showImageSourceDialog = false },
-            onImageChanged = {
-                Log.d("ALRALR","onimagechanged")
-                viewModel.onAction(Action.OnImageChanged(it))
-            })
+    if (showImagePicker) {
+        ImagePickerHandler(
+            show = true,
+            onImageChanged = { uri ->
+                viewModel.onAction(OnImageChanged(uri))
+                showImagePicker = false
+            },
+            onDismiss = {
+                showImagePicker = false
+            }
+        )
     }
 
     Scaffold(
@@ -68,7 +71,7 @@ fun AddMiniatureScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            GHImage(imageUri = state.miniatureImage, size = 100.dp) { showImageSourceDialog = true }
+            GHImage(imageUri = state.miniatureImage, size = 100.dp) { showImagePicker = true }
             Spacer(modifier = Modifier.height(10.dp))
             AddItemName(
                 name = state.miniatureName,

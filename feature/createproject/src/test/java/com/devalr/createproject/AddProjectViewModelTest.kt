@@ -1,7 +1,12 @@
 package com.devalr.createproject
 
+import android.app.Application
+import android.content.ContentResolver
+import android.content.Intent
+import android.net.Uri
 import com.devalr.createproject.interactions.Action.OnAddProject
 import com.devalr.createproject.interactions.Action.OnDescriptionChanged
+import com.devalr.createproject.interactions.Action.OnImageChanged
 import com.devalr.createproject.interactions.Action.OnNameChanged
 import com.devalr.createproject.interactions.ErrorType
 import com.devalr.createproject.interactions.Event
@@ -10,7 +15,10 @@ import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.ProjectBo
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -28,7 +36,8 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AddProjectViewModelTest {
-
+    private val application: Application = mockk(relaxed = true)
+    private val contentResolver: ContentResolver = mockk(relaxed = true)
     private val repository: ProjectRepository = mockk()
     private lateinit var viewModel: AddProjectViewModel
     private val testDispatcher = StandardTestDispatcher()
@@ -43,7 +52,9 @@ class AddProjectViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        viewModel = AddProjectViewModel(repository)
+        every { application.contentResolver } returns contentResolver
+        mockkStatic(Uri::class)
+        viewModel = AddProjectViewModel(application, repository)
     }
 
     @After
@@ -134,5 +145,50 @@ class AddProjectViewModelTest {
             assertEquals(0, events.size)
             assertNull(events.firstOrNull())
             job.cancel()
+        }
+
+
+    @Test
+    fun `GIVEN a gallery URI WHEN OnImageChanged is triggered THEN persistable permission is taken`() =
+        runTest {
+            // GIVEN
+            val galleryUriString =
+                "content://com.android.providers.media.documents/document/image%3A123"
+            val galleryUri: Uri = mockk()
+            every { Uri.parse(galleryUriString) } returns galleryUri
+            every { galleryUri.toString() } returns galleryUriString
+            // WHEN
+            viewModel.onAction(OnImageChanged(galleryUri))
+
+            // THEN
+            verify(exactly = 1) {
+                contentResolver.takePersistableUriPermission(
+                    galleryUri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            }
+            val state = viewModel.uiState.value
+            assertEquals(galleryUriString, state.projectImage)
+        }
+
+    @Test
+    fun `GIVEN a camera URI WHEN OnImageChanged is triggered THEN persistable permission is NOT taken`() =
+        runTest {
+            // GIVEN
+            val cameraUriString =
+                "content://com.devalr.greyhunter.fileprovider/shared_images/photo.jpg"
+            val cameraUri: Uri = mockk()
+            every { Uri.parse(cameraUriString) } returns cameraUri
+            every { cameraUri.toString() } returns cameraUriString
+
+            // WHEN
+            viewModel.onAction(OnImageChanged(cameraUri))
+
+            // THEN
+            verify(exactly = 0) {
+                contentResolver.takePersistableUriPermission(any(), any())
+            }
+            val state = viewModel.uiState.value
+            assertEquals(cameraUriString, state.projectImage)
         }
 }
