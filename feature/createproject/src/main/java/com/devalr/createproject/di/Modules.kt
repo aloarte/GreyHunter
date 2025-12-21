@@ -1,11 +1,12 @@
 package com.devalr.createproject.di
 
 import com.devalr.createproject.AddProjectViewModel
-import org.koin.dsl.module
 import com.devalr.domain.di.domainModules
+import org.koin.dsl.module
+
 private val viewModelModules = module {
     factory {
-        AddProjectViewModel(get())
+        AddProjectViewModel(get(), get())
     }
 }
 

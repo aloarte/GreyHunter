@@ -1,5 +1,7 @@
 package com.devalr.createproject
 
+import android.app.Application
+import android.content.Intent
 import androidx.lifecycle.viewModelScope
 import com.devalr.createproject.interactions.Action
 import com.devalr.createproject.interactions.Action.OnAddProject
@@ -16,14 +18,32 @@ import com.devalr.domain.model.ProjectBo
 import com.devalr.framework.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class AddProjectViewModel(val projectRepository: ProjectRepository) :
+class AddProjectViewModel(
+    private val application: Application,
+    val projectRepository: ProjectRepository
+) :
     BaseViewModel<State, Action, Event>(initialState = State()) {
     override fun onAction(action: Action) {
         when (action) {
             OnAppear -> {}
             is OnNameChanged -> updateState { copy(projectName = action.name) }
             is OnDescriptionChanged -> updateState { copy(projectDescription = action.description) }
-            is OnImageChanged -> {}/* updateState {copy(projectName = action.image) }*/
+            is OnImageChanged -> {
+                try {
+                    if (!action.imageUri.toString().contains(".fileprovider")) {
+                        val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        application.contentResolver.takePersistableUriPermission(
+                            action.imageUri,
+                            flags
+                        )
+                    }
+                    updateState { copy(projectImage = action.imageUri.toString()) }
+
+                } catch (e: SecurityException) {
+                    e.printStackTrace()
+                }
+            }
+
             is OnAddProject -> addProject()
         }
     }
@@ -37,7 +57,8 @@ class AddProjectViewModel(val projectRepository: ProjectRepository) :
 
             val projectBo = ProjectBo(
                 name = projectName,
-                description = projectDescription
+                description = projectDescription,
+                imageUri = projectImage
             )
 
             viewModelScope.launch {

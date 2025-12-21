@@ -1,15 +1,19 @@
 package com.devalr.projectdetail
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
@@ -18,9 +22,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.framework.components.GHButton
+import com.devalr.framework.components.GHImage
 import com.devalr.framework.components.GHTab
 import com.devalr.framework.components.GHText
 import com.devalr.framework.components.LoadingIndicator
@@ -61,6 +67,7 @@ fun ProjectDetailScreen(
         ) {
 
             if (state.projectLoaded && state.project != null) {
+                GHImage(imageUri = state.project.imageUri, size = 100.dp)
                 GHText(text = state.project.name, type = TextType.Title)
                 state.project.description?.let { description ->
                     GHText(text = description, type = TextType.Description)
@@ -97,14 +104,22 @@ fun ProjectMiniatures(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(40.dp)
+                    .background(Color.Gray)
+                    .height(60.dp)
                     .clickable { onNavigateToMiniature(miniature.id) }
             ) {
-
-                VerticalProgress(
-                    modifier = Modifier.align(Alignment.CenterStart),
-                    progress = miniature.percentage
-                )
+                Row(modifier = Modifier.align(Alignment.CenterStart)) {
+                    VerticalProgress(progress = miniature.percentage)
+                    Spacer(modifier = Modifier.width(5.dp))
+                    miniature.imageUri?.let {
+                        GHImage(
+                            modifier = Modifier.padding(2.dp),
+                            imageUri = it,
+                            size = 60.dp,
+                            borderRadius = 6.dp
+                        )
+                    }
+                }
                 GHText(
                     modifier = Modifier
                         .fillMaxHeight()

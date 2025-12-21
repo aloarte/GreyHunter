@@ -43,7 +43,7 @@ fun MiniatureCard(
         ) {
             GHText(text = miniatureBo.name, type = TextType.Title)
             miniatureBo.imageUri?.let {
-                GHImage(imageUri = miniatureBo.imageUri)
+                GHImage(imageUri = miniatureBo.imageUri, size = 100.dp)
             }
 
         }
