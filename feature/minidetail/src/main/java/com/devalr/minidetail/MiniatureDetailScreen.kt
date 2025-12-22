@@ -10,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.devalr.domain.model.CompletionProportionsBo
 import com.devalr.framework.components.GHImage
 import com.devalr.framework.components.GHTab
 import com.devalr.framework.components.LoadingIndicator
@@ -45,7 +46,7 @@ fun MiniatureDetailScreen(
 
             if (state.miniatureLoaded && state.miniature != null) {
                 GHImage(imageUri = state.miniature.imageUri, size = 300.dp)
-                MiniatureMilestones(state.miniature.completion) { type, enabled ->
+                MiniatureMilestones(completion = state.miniature.completion, proportions = CompletionProportionsBo()) { type, enabled ->
                     viewModel.onAction(OnMilestone(type = type, enable = enabled))
                 }
             } else {
