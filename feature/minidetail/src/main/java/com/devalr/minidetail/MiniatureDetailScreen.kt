@@ -31,7 +31,7 @@ fun MiniatureDetailScreen(
     ) { innerPadding ->
 
         if (state.miniatureLoaded && state.miniature != null) {
-            MiniatureDetailScreenContent(miniature = state.miniature) { type, enabled ->
+            MiniatureDetailScreenContent(innerPadding = innerPadding, miniature = state.miniature) { type, enabled ->
                 viewModel.onAction(OnMilestone(type = type, enable = enabled))
             }
         } else {

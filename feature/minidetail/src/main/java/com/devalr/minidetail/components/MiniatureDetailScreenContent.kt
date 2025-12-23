@@ -1,5 +1,6 @@
 package com.devalr.minidetail.components
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -25,12 +26,14 @@ import com.devalr.minidetail.R
 
 @Composable
 fun MiniatureDetailScreenContent(
+    innerPadding : PaddingValues = PaddingValues(0.dp),
     miniature: MiniatureBo,
     onMilestone: (MilestoneType, Boolean) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
+            .padding(innerPadding)
             .padding(40.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -50,7 +53,7 @@ fun MiniatureDetailScreenContent(
         item { Spacer(modifier = Modifier.height(20.dp)) }
         item {
             GHText(
-                text = stringResource(R.string.label_milestones),
+                text = getMiniatureDescriptionMessage(),
                 lineHeight = 14.sp,
                 type = TextType.LabelS
             )
@@ -74,6 +77,9 @@ fun MiniatureDetailScreenContent(
 }
 
 @Composable
+private fun getMiniatureDescriptionMessage(): String = stringResource(R.string.label_milestones_description)
+
+@Composable
 private fun getMiniatureProgressMessage(progress: Float): String {
     val res = when (progress) {
         0f -> R.string.label_miniature_progress_gamification_0
@@ -92,7 +98,7 @@ private fun MiniatureDetailScreenContentPreviewDarkMode() {
     GreyHunterTheme(darkTheme = true) {
         MiniatureDetailScreenContent(
             miniature = MiniatureBo(
-                name = "",
+                name = "Mini name",
                 completion = MiniCompletionBo(isAssembled = true, isPrimed = true),
                 projectId = 1L,
                 percentage = 1f
@@ -110,7 +116,7 @@ private fun MiniatureDetailScreenContentPreviewLightMode() {
     GreyHunterTheme(darkTheme = false) {
         MiniatureDetailScreenContent(
             miniature = MiniatureBo(
-                name = "",
+                name = "Mini name",
                 completion = MiniCompletionBo(isAssembled = true, isPrimed = true),
                 projectId = 1L,
                 percentage = 0.5f
