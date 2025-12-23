@@ -5,9 +5,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 
 enum class TextType {
@@ -21,6 +23,8 @@ fun GHText(
     textColor: Color = MaterialTheme.colorScheme.onSurface,
     textAlign: TextAlign? = null,
     singleLane: Boolean = false,
+    italic: Boolean = false,
+    lineHeight: TextUnit = TextUnit.Unspecified,
     type: TextType
 ) {
     Text(
@@ -29,7 +33,9 @@ fun GHText(
         color = textColor,
         textAlign = textAlign,
         fontWeight = getTextWeight(type),
+        lineHeight = lineHeight,
         fontSize = getTextSize(type),
+        fontStyle = if (italic) FontStyle.Italic else FontStyle.Normal,
         maxLines = if (singleLane) 1 else Int.MAX_VALUE,
         overflow = TextOverflow.Ellipsis
     )
