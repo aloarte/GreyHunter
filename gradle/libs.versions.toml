@@ -30,12 +30,14 @@ constraintlayout = "2.0.1"
 uiGraphicsAndroid = "1.7.2"
 foundationLayoutAndroid = "1.7.2"
 uiAndroid = "1.7.2"
+accompanist = "0.34.0"
 
 [libraries]
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core = { module = "androidx.test:core", version.ref = "core" }
 androidx-junit-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "junitKtx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+accompanist = { module = "com.google.accompanist:accompanist-systemuicontroller" , version.ref = "accompanist" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
