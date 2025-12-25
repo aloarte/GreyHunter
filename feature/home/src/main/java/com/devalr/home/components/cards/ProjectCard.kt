@@ -1,5 +1,6 @@
 package com.devalr.home.components.cards
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,11 +22,12 @@ import com.devalr.domain.model.ProjectBo
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.stormlightArchiveProject
 import com.devalr.framework.components.GHImage
-import com.devalr.framework.components.progress.GHProgressBar
 import com.devalr.framework.components.GHText
 import com.devalr.framework.components.TextType
 import com.devalr.framework.components.cards.getCardWidth
+import com.devalr.framework.components.progress.GHProgressBar
 import com.devalr.framework.enum.CardType
+import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
 fun ProjectCard(
@@ -35,11 +39,13 @@ fun ProjectCard(
         modifier = modifier
             .width(getCardWidth(CardType.Project))
             .aspectRatio(1.6f),
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
         onClick = { onProjectClicked(projectBo.id) }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface)
                 .padding(vertical = 10.dp, horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
@@ -61,25 +67,27 @@ fun ProjectCard(
 @Preview(showBackground = true)
 @Composable
 private fun ProjectCardPreviewInHorizontalRow() {
-    LazyRow(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp),
-        horizontalArrangement = spacedBy(10.dp)
-    ) {
-        item {
-            ProjectCard(
-                modifier = Modifier.fillMaxSize(),
-                projectBo = hierotekCircleProject,
-                onProjectClicked = {}
-            )
-        }
-        item {
-            ProjectCard(
-                modifier = Modifier.fillMaxSize(),
-                projectBo = stormlightArchiveProject,
-                onProjectClicked = {}
-            )
+    GreyHunterTheme(darkTheme = true) {
+        LazyRow(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(10.dp),
+            horizontalArrangement = spacedBy(10.dp)
+        ) {
+            item {
+                ProjectCard(
+                    modifier = Modifier.fillMaxSize(),
+                    projectBo = hierotekCircleProject,
+                    onProjectClicked = {}
+                )
+            }
+            item {
+                ProjectCard(
+                    modifier = Modifier.fillMaxSize(),
+                    projectBo = stormlightArchiveProject,
+                    onProjectClicked = {}
+                )
+            }
         }
     }
 }
@@ -87,25 +95,28 @@ private fun ProjectCardPreviewInHorizontalRow() {
 @Preview(showBackground = true)
 @Composable
 private fun ProjectCardPreviewInVerticalColumn() {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp),
-        verticalArrangement = spacedBy(10.dp)
-    ) {
-        item {
-            ProjectCard(
-                modifier = Modifier.fillMaxSize(),
-                projectBo = hierotekCircleProject,
-                onProjectClicked = {}
-            )
-        }
-        item {
-            ProjectCard(
-                modifier = Modifier.fillMaxSize(),
-                projectBo = stormlightArchiveProject,
-                onProjectClicked = {}
-            )
+    GreyHunterTheme {
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(10.dp),
+            verticalArrangement = spacedBy(10.dp)
+        ) {
+            item {
+                ProjectCard(
+                    modifier = Modifier.fillMaxSize(),
+                    projectBo = hierotekCircleProject,
+                    onProjectClicked = {}
+                )
+            }
+            item {
+                ProjectCard(
+                    modifier = Modifier.fillMaxSize(),
+                    projectBo = stormlightArchiveProject,
+                    onProjectClicked = {}
+                )
+            }
         }
     }
 }

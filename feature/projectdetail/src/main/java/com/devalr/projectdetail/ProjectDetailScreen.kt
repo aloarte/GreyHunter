@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.framework.components.GHButton
 import com.devalr.framework.components.GHImage
-import com.devalr.framework.components.GHTab
 import com.devalr.framework.components.GHText
 import com.devalr.framework.components.LoadingIndicator
 import com.devalr.framework.components.TextType
@@ -54,7 +53,7 @@ fun ProjectDetailScreen(
 
     Scaffold(
         topBar = {
-            GHTab(projectName = state.project?.name)
+            //GHTab(projectName = state.project?.name)
         }
     ) { innerPadding ->
         Column(
