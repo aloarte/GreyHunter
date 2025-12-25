@@ -5,17 +5,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,8 +26,8 @@ import com.devalr.framework.components.GHImage
 import com.devalr.framework.components.GHText
 import com.devalr.framework.components.LoadingIndicator
 import com.devalr.framework.components.TextType
-import com.devalr.framework.components.progress.GHProgressBar
 import com.devalr.framework.components.progress.VerticalProgress
+import com.devalr.projectdetail.components.ProjectDetailScreenContent
 import com.devalr.projectdetail.interactions.Action.OnAppear
 import org.koin.compose.koinInject
 
@@ -40,7 +36,7 @@ fun ProjectDetailScreen(
     viewModel: ProjectDetailViewModel = koinInject(),
     projectId: Long,
     onNavigateToMiniature: (Long) -> Unit,
-    onCreteMiniature: () -> Unit
+    onCreateMiniature: () -> Unit
 
 ) {
     val state = viewModel.uiState.collectAsState().value
@@ -52,88 +48,20 @@ fun ProjectDetailScreen(
     LaunchedEffect(true) { viewModel.onAction(OnAppear(projectId = projectId)) }
 
     Scaffold(
-        topBar = {
-            //GHTab(projectName = state.project?.name)
-        }
+        topBar = { }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-
-            if (state.projectLoaded && state.project != null) {
-                GHImage(imageUri = state.project.imageUri, size = 100.dp)
-                GHText(text = state.project.name, type = TextType.Title)
-                state.project.description?.let { description ->
-                    GHText(text = description, type = TextType.Description)
-                }
-                GHProgressBar(percentage = state.project.progress)
-                ProjectMiniatures(
-                    miniatures = state.project.minis,
-                    onNavigateToMiniature = onNavigateToMiniature,
-                    onCreteMiniature = onCreteMiniature
-                )
-            } else {
-                LoadingIndicator()
-            }
+        if (state.projectLoaded && state.project != null) {
+            ProjectDetailScreenContent(
+                innerPadding = innerPadding,
+                project = state.project,
+                onNavigateToMiniature = onNavigateToMiniature,
+                onCreateMiniature = onCreateMiniature,
+                onBackPressed = {},
+                onEditPressed = {}
+            )
+        } else {
+            LoadingIndicator()
         }
     }
 
-}
-
-@Composable
-fun ProjectMiniatures(
-    miniatures: List<MiniatureBo>,
-    onNavigateToMiniature: (Long) -> Unit,
-    onCreteMiniature: () -> Unit
-) {
-    LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        item {
-            GHButton(text = "+", onClick = onCreteMiniature)
-        }
-        items(miniatures) { miniature ->
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Gray)
-                    .height(60.dp)
-                    .clickable { onNavigateToMiniature(miniature.id) }
-            ) {
-                Row(modifier = Modifier.align(Alignment.CenterStart)) {
-                    VerticalProgress(progress = miniature.percentage)
-                    Spacer(modifier = Modifier.width(5.dp))
-                    miniature.imageUri?.let {
-                        GHImage(
-                            modifier = Modifier.padding(2.dp),
-                            imageUri = it,
-                            size = 60.dp,
-                            borderRadius = 6.dp
-                        )
-                    }
-                }
-                GHText(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .align(Alignment.Center),
-                    text = miniature.name,
-                    type = TextType.LabelM
-                )
-                GHText(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .align(Alignment.CenterEnd),
-                    text = "${miniature.percentage}% completed",
-                    type = TextType.LabelM
-                )
-            }
-        }
-    }
 }

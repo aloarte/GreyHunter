@@ -1,4 +1,4 @@
-package com.devalr.minidetail.components
+package com.devalr.projectdetail.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,22 +17,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.devalr.domain.enum.MilestoneType
-import com.devalr.domain.model.CompletionProportionsBo
-import com.devalr.domain.model.MiniCompletionBo
-import com.devalr.domain.model.MiniatureBo
+import com.devalr.domain.model.ProjectBo
 import com.devalr.framework.components.GHImage
+import com.devalr.framework.components.GHText
+import com.devalr.framework.components.TextType
 import com.devalr.framework.components.detail.TopButtons
+import com.devalr.framework.components.progress.GHProgressBar
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
-fun MiniatureDetailScreenContent(
+fun ProjectDetailScreenContent(
     modifier: Modifier = Modifier,
     innerPadding: PaddingValues = PaddingValues(0.dp),
-    miniature: MiniatureBo,
+    project: ProjectBo,
+    onNavigateToMiniature: (Long) -> Unit,
+    onCreateMiniature: () -> Unit,
     onBackPressed: () -> Unit,
-    onEditPressed: () -> Unit,
-    onMilestone: (MilestoneType, Boolean) -> Unit
+    onEditPressed: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -46,7 +47,7 @@ fun MiniatureDetailScreenContent(
                 .fillMaxWidth()
                 .height(300.dp),
             borderRadius = 0.dp,
-            imageUri = miniature.imageUri,
+            imageUri = project.imageUri,
             size = 160.dp
         )
 
@@ -78,21 +79,22 @@ fun MiniatureDetailScreenContent(
                         .background(MaterialTheme.colorScheme.surface)
                         .padding(20.dp)
                 ) {
+
                     LazyColumn {
-                        item { MiniatureInfo(miniature) }
-                        item {
-                            MiniatureMilestones(
-                                completion = miniature.completion,
-                                proportions = CompletionProportionsBo(
-                                    assembled = 0.2f,
-                                    primed = 0.2f,
-                                    baseColored = 0.3f,
-                                    detailed = 0.2f,
-                                    base = 0.1f
-                                )
-                            ) { type, enabled ->
-                                onMilestone(type, enabled)
+                        item { GHText(text = project.name, type = TextType.Title) }
+                        project.description?.let { description ->
+                            item {
+                                GHText(text = description, type = TextType.Description)
                             }
+                        }
+
+                        item { GHProgressBar(percentage = project.progress) }
+                        item {
+                            ProjectMiniatures(
+                                miniatures = project.minis,
+                                onNavigateToMiniature = onNavigateToMiniature,
+                                onCreateMiniature = onCreateMiniature
+                            )
                         }
                     }
                 }
@@ -101,46 +103,19 @@ fun MiniatureDetailScreenContent(
     }
 }
 
-
-@Preview(showBackground = true)
+@Preview
 @Composable
-private fun MiniatureDetailScreenContentPreviewDarkMode() {
-    GreyHunterTheme(darkTheme = true) {
-        MiniatureDetailScreenContent(
-            miniature = MiniatureBo(
-                name = "Mini name",
-                completion = MiniCompletionBo(isAssembled = true, isPrimed = true),
-                projectId = 1L,
-                percentage = 1f
-            ),
-            onBackPressed = {
-                // Do nothing
-            },
-            onMilestone = { _, _ ->
-                // Do nothing
-            },
-            onEditPressed = {
-                // Do nothing
-            }
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun MiniatureDetailScreenContentPreviewLightMode() {
+private fun ProjectDetailScreenContentPreviewLightTheme() {
     GreyHunterTheme(darkTheme = false) {
-        MiniatureDetailScreenContent(
-            miniature = MiniatureBo(
-                name = "Mini name",
-                completion = MiniCompletionBo(isAssembled = true, isPrimed = true),
-                projectId = 1L,
-                percentage = 0.5f
-            ),
-            onBackPressed = {
+        ProjectDetailScreenContent(
+            project = ProjectBo(name = "Project Name"),
+            onNavigateToMiniature = {
                 // Do nothing
             },
-            onMilestone = { _, _ ->
+            onCreateMiniature = {
+                // Do nothing
+            },
+            onBackPressed = {
                 // Do nothing
             },
             onEditPressed = {

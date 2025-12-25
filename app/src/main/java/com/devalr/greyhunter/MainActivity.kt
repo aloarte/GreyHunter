@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Down
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Up
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -91,7 +90,7 @@ class MainActivity : ComponentActivity() {
                                 onNavigateToMiniature = { miniatureId ->
                                     navController.navigate("${NavScreen.MiniDetail.route}/$miniatureId")
                                 },
-                                onCreteMiniature = {
+                                onCreateMiniature = {
                                     navController.navigate("${NavScreen.AddMiniature.route}/$projectId")
                                 }
                             )

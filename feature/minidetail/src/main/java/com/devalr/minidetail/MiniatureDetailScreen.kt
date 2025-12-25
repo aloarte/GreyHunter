@@ -39,7 +39,6 @@ fun MiniatureDetailScreen(
             )
         } else {
             LoadingIndicator()
-
         }
     }
 }
