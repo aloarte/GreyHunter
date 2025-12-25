@@ -19,12 +19,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.devalr.framework.theme.GreyHunterTheme
+import com.devalr.framework.theme.ProgressGreen
+import com.devalr.framework.theme.ProgressRed
+import com.devalr.framework.theme.ProgressYellow
 
 @Composable
 fun GHProgressBar(
     percentage: Float,
     modifier: Modifier = Modifier,
-    spectrum: List<Color> = listOf(Color.Red, Color.Yellow, Color.Green),
+    spectrum: List<Color> = listOf(ProgressRed, ProgressYellow, ProgressGreen),
     height: Dp = 10.dp,
     backgroundColor: Color = Color.LightGray.copy(alpha = 0.3f)
 ) {
@@ -72,11 +76,25 @@ private fun ProgressBarPreviewCustomColors() {
 
 @Preview(showBackground = true)
 @Composable
-private fun ProgressBarPreviewDefaultColors() {
-    Column(Modifier.padding(10.dp), verticalArrangement = spacedBy(1.dp)) {
-        for (i in 0..10) {
-            GHProgressBar(percentage = i / 10f)
+private fun ProgressBarPreviewDefaultColorsDarkTheme() {
+    GreyHunterTheme(darkTheme = true) {
+        Column(Modifier.padding(10.dp), verticalArrangement = spacedBy(1.dp)) {
+            for (i in 0..10) {
+                GHProgressBar(percentage = i / 10f)
+            }
         }
     }
 }
 
+
+@Preview(showBackground = true)
+@Composable
+private fun ProgressBarPreviewDefaultColorsLightTheme() {
+    GreyHunterTheme(darkTheme = false) {
+        Column(Modifier.padding(10.dp), verticalArrangement = spacedBy(1.dp)) {
+            for (i in 0..10) {
+                GHProgressBar(percentage = i / 10f)
+            }
+        }
+    }
+}

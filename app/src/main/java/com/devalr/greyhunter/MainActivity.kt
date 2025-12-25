@@ -9,7 +9,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,12 +26,22 @@ import com.devalr.greyhunter.navigation.NavScreen
 import com.devalr.home.HomeScreen
 import com.devalr.minidetail.MiniatureDetailScreen
 import com.devalr.projectdetail.ProjectDetailScreen
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             GreyHunterTheme {
+                val systemUiController = rememberSystemUiController()
+
+                SideEffect {
+                    systemUiController.setSystemBarsColor(
+                        color = Color.Transparent,
+                        darkIcons = true
+                    )
+                }
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
@@ -78,7 +90,7 @@ class MainActivity : ComponentActivity() {
                                 onNavigateToMiniature = { miniatureId ->
                                     navController.navigate("${NavScreen.MiniDetail.route}/$miniatureId")
                                 },
-                                onCreteMiniature = {
+                                onCreateMiniature = {
                                     navController.navigate("${NavScreen.AddMiniature.route}/$projectId")
                                 }
                             )

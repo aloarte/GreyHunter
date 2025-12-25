@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import com.devalr.framework.components.GHTab
 import com.devalr.framework.components.LoadingIndicator
 import com.devalr.home.components.screen.AppTitle
 import com.devalr.home.components.screen.GamificationMessage
@@ -43,9 +42,7 @@ fun HomeScreen(
     LaunchedEffect(true) { viewModel.onAction(OnAppear) }
 
     Scaffold(
-        topBar = {
-            GHTab()
-        }
+        topBar = {}
     ) { innerPadding ->
         Column(
             modifier = Modifier
