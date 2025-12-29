@@ -47,7 +47,7 @@ fun ProjectDetailScreen(
                     viewModel.onAction(Action.OnBackPressed)
                 },
                 onEditPressed = {
-                    viewModel.onAction(Action.OnNavigateToEditMiniature(projectId = projectId))
+                    viewModel.onAction(Action.OnNavigateToEditProject(projectId = projectId))
                 }
             )
         } else {

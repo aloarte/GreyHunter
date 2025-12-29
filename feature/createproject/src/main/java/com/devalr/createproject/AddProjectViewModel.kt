@@ -2,6 +2,7 @@ package com.devalr.createproject
 
 import android.app.Application
 import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.devalr.createproject.interactions.Action
 import com.devalr.createproject.interactions.Action.OnAddProject
@@ -29,22 +30,7 @@ class AddProjectViewModel(
             is OnAppear -> onLoadScreen(projectId = action.projectId)
             is OnNameChanged -> updateState { copy(projectName = action.name) }
             is OnDescriptionChanged -> updateState { copy(projectDescription = action.description) }
-            is OnImageChanged -> {
-                try {
-                    if (!action.imageUri.toString().contains(".fileprovider")) {
-                        val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                        application.contentResolver.takePersistableUriPermission(
-                            action.imageUri,
-                            flags
-                        )
-                    }
-                    updateState { copy(projectImage = action.imageUri.toString()) }
-
-                } catch (e: SecurityException) {
-                    e.printStackTrace()
-                }
-            }
-
+            is OnImageChanged -> updateImage(action.imageUri)
             is OnAddProject -> addEditProject()
         }
     }
@@ -68,6 +54,23 @@ class AddProjectViewModel(
             }
         }
     }
+
+    private fun updateImage(imageUri: Uri) {
+        try {
+            if (!imageUri.toString().contains(".fileprovider")) {
+                val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                application.contentResolver.takePersistableUriPermission(
+                    imageUri,
+                    flags
+                )
+            }
+            updateState { copy(projectImage = imageUri.toString()) }
+
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+        }
+    }
+
 
     private fun addEditProject() {
         with(uiState.value) {

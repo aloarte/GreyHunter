@@ -7,8 +7,13 @@ import com.devalr.domain.model.MiniCompletionBo
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
 import com.devalr.minidetail.interactions.Action.OnAppear
+import com.devalr.minidetail.interactions.Action.OnBackPressed
 import com.devalr.minidetail.interactions.Action.OnMilestone
+import com.devalr.minidetail.interactions.Action.OnNavigateToEditMiniature
 import com.devalr.minidetail.interactions.ErrorType
+import com.devalr.minidetail.interactions.Event
+import com.devalr.minidetail.interactions.Event.NavigateBack
+import com.devalr.minidetail.interactions.Event.NavigateToEditMiniature
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -16,7 +21,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -182,5 +189,43 @@ class MiniatureDetailViewModelTest {
             // THEN
             val currentState = viewModel.uiState.value
             assertEquals(ErrorType.EmptyMiniature, currentState.error)
+        }
+
+    @Test
+    fun `WHEN OnBackPressed is triggered THEN NavigateBack event is raised`() =
+        runTest {
+            // GIVEN
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
+
+            // WHEN
+            viewModel.onAction(OnBackPressed)
+            advanceUntilIdle()
+
+            // THEN
+            assertEquals(1, events.size)
+            assertEquals(NavigateBack, events.first())
+            job.cancel()
+        }
+
+    @Test
+    fun `WHEN OnNavigateToEditMiniature is triggered THEN NavigateToEditMiniature event is raised`() =
+        runTest {
+            // GIVEN
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
+
+            // WHEN
+            viewModel.onAction(OnNavigateToEditMiniature(miniatureId = miniId, projectId = projectId))
+            advanceUntilIdle()
+
+            // THEN
+            assertEquals(1, events.size)
+            assertEquals(NavigateToEditMiniature(miniatureId = miniId, projectId = projectId), events.first())
+            job.cancel()
         }
 }

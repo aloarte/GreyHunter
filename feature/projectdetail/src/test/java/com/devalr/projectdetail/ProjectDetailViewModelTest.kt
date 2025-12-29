@@ -5,13 +5,20 @@ import org.junit.Test
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.ProjectBo
 import com.devalr.projectdetail.interactions.Action.OnAppear
+import com.devalr.projectdetail.interactions.Action.OnBackPressed
+import com.devalr.projectdetail.interactions.Action.OnNavigateToEditProject
+import com.devalr.projectdetail.interactions.Event
+import com.devalr.projectdetail.interactions.Event.NavigateBack
+import com.devalr.projectdetail.interactions.Event.NavigateToEditProject
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -81,4 +88,43 @@ class ProjectDetailViewModelTest {
         val currentState = viewModel.uiState.value
         assertEquals(errorMessage, currentState.error)
     }
+
+
+    @Test
+    fun `WHEN OnBackPressed is triggered THEN NavigateBack event is raised`() =
+        runTest {
+            // GIVEN
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
+
+            // WHEN
+            viewModel.onAction(OnBackPressed)
+            advanceUntilIdle()
+
+            // THEN
+            assertEquals(1, events.size)
+            assertEquals(NavigateBack, events.first())
+            job.cancel()
+        }
+
+    @Test
+    fun `WHEN OnNavigateToEditProject is triggered THEN NavigateToEditProject event is raised`() =
+        runTest {
+            // GIVEN
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
+
+            // WHEN
+            viewModel.onAction(OnNavigateToEditProject(projectId = projectId))
+            advanceUntilIdle()
+
+            // THEN
+            assertEquals(1, events.size)
+            assertEquals(NavigateToEditProject(projectId = projectId), events.first())
+            job.cancel()
+        }
 }
