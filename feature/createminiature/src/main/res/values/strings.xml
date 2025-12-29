@@ -5,6 +5,8 @@
 
     <!-- Buttons -->
     <string name="button_add_miniature">Add miniature</string>
+    <string name="button_edit_miniature">Edit miniature</string>
+
 
     <!-- Labels -->
     <string name="label_miniature_name">Miniature name</string>
