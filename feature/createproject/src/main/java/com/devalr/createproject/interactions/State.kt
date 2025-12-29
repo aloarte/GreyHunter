@@ -1,12 +1,15 @@
 package com.devalr.createproject.interactions
 
 import com.devalr.createproject.model.MiniatureVo
+import com.devalr.domain.model.ProjectBo
 
 
 enum class ErrorType {
     EmptyTitle,
     AddDatabase,
-    ImageImport
+    BadId,
+    ImageImport,
+    EditDatabase
 }
 
 data class State(
@@ -14,5 +17,7 @@ data class State(
     val projectName: String? = null,
     val projectDescription: String? = null,
     val errorType: ErrorType? = null,
-    val projectImage: String? = null
+    val projectImage: String? = null,
+    val projectToUpdate: ProjectBo? = null,
+    val editMode: Boolean = false
 )

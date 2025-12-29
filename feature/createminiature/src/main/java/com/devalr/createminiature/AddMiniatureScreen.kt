@@ -34,6 +34,7 @@ import org.koin.compose.koinInject
 fun AddMiniatureScreen(
     viewModel: AddMiniatureViewModel = koinInject(),
     projectId: Long,
+    miniatureId: Long,
     onBackPressed: () -> Unit
 ) {
     var showImagePicker by remember { mutableStateOf(false) }
@@ -45,8 +46,7 @@ fun AddMiniatureScreen(
             }
         }
     }
-    LaunchedEffect(true) { viewModel.onAction(OnAppear(projectId)) }
-
+    LaunchedEffect(true) { viewModel.onAction(OnAppear(miniatureId = miniatureId, projectId = projectId)) }
     if (showImagePicker) {
         ImagePickerHandler(
             show = true,
@@ -80,9 +80,10 @@ fun AddMiniatureScreen(
                 viewModel.onAction(OnNameChanged(it))
             }
             Spacer(modifier = Modifier.height(10.dp))
+
             GHButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.button_add_miniature)
+                text = stringResource(if(state.editMode) R.string.button_edit_miniature else R.string.button_add_miniature  )
             ) {
                 viewModel.onAction(OnAddMiniature)
             }

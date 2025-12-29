@@ -28,7 +28,10 @@ import com.devalr.framework.components.bottomsheet.ImagePickerHandler
 import org.koin.compose.koinInject
 
 @Composable
-fun AddProjectScreen(viewModel: AddProjectViewModel = koinInject(), onBackPressed: () -> Unit) {
+fun AddProjectScreen(
+    viewModel: AddProjectViewModel = koinInject(),
+    projectId:Long,
+    onBackPressed: () -> Unit) {
     var showImagePicker by remember { mutableStateOf(false) }
     val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
@@ -38,7 +41,7 @@ fun AddProjectScreen(viewModel: AddProjectViewModel = koinInject(), onBackPresse
             }
         }
     }
-    LaunchedEffect(true) { viewModel.onAction(OnAppear) }
+    LaunchedEffect(true) { viewModel.onAction(OnAppear(projectId)) }
 
     if (showImagePicker) {
         ImagePickerHandler(
@@ -76,7 +79,7 @@ fun AddProjectScreen(viewModel: AddProjectViewModel = koinInject(), onBackPresse
             ) {
                 viewModel.onAction(OnDescriptionChanged(it))
             }
-            GHButton(text = stringResource(R.string.button_add_project)) {
+            GHButton(text = if(state.editMode) stringResource(R.string.button_edit_project) else stringResource(R.string.button_add_project)) {
                 viewModel.onAction(OnAddProject)
             }
         }
