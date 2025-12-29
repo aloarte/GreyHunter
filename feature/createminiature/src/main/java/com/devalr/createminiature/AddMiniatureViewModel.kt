@@ -28,10 +28,9 @@ class AddMiniatureViewModel(
     override fun onAction(action: Action) {
         when (action) {
             is OnAppear -> onLoadScreen(
-                miniatureId = action.miniatureId,
-                projectId = action.projectId
+                projectId = action.projectId,
+                miniatureId = action.miniatureId
             )
-
             is OnNameChanged -> updateState { copy(miniatureName = action.name) }
             is OnImageChanged -> {
                 try {

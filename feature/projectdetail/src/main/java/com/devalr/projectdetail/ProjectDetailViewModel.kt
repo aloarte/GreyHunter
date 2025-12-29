@@ -5,7 +5,11 @@ import com.devalr.domain.ProjectRepository
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.projectdetail.interactions.Action
 import com.devalr.projectdetail.interactions.Action.OnAppear
+import com.devalr.projectdetail.interactions.Action.OnBackPressed
+import com.devalr.projectdetail.interactions.Action.OnNavigateToEditMiniature
 import com.devalr.projectdetail.interactions.Event
+import com.devalr.projectdetail.interactions.Event.NavigateBack
+import com.devalr.projectdetail.interactions.Event.NavigateToEditProject
 import com.devalr.projectdetail.interactions.State
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -17,6 +21,8 @@ class ProjectDetailViewModel(
     override fun onAction(action: Action) {
         when (action) {
             is OnAppear -> observeProject(action.projectId)
+            OnBackPressed -> sendEvent(NavigateBack)
+            is OnNavigateToEditMiniature -> sendEvent(NavigateToEditProject(action.projectId))
         }
     }
 

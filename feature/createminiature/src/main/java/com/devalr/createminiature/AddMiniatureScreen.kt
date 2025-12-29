@@ -46,8 +46,7 @@ fun AddMiniatureScreen(
             }
         }
     }
-    LaunchedEffect(true) { viewModel.onAction(OnAppear(projectId, miniatureId)) }
-
+    LaunchedEffect(true) { viewModel.onAction(OnAppear(miniatureId = miniatureId, projectId = projectId)) }
     if (showImagePicker) {
         ImagePickerHandler(
             show = true,

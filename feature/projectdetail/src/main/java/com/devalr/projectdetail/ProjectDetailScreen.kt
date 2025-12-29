@@ -6,7 +6,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import com.devalr.framework.components.LoadingIndicator
 import com.devalr.projectdetail.components.ProjectDetailScreenContent
+import com.devalr.projectdetail.interactions.Action
 import com.devalr.projectdetail.interactions.Action.OnAppear
+import com.devalr.projectdetail.interactions.Event.NavigateBack
+import com.devalr.projectdetail.interactions.Event.NavigateToEditProject
 import org.koin.compose.koinInject
 
 @Composable
@@ -15,12 +18,17 @@ fun ProjectDetailScreen(
     projectId: Long,
     onNavigateToMiniature: (Long) -> Unit,
     onCreateMiniature: () -> Unit,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    onEditProject: (Long) -> Unit
 
 ) {
     val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
+            when (event) {
+                NavigateBack -> onBackPressed()
+                is NavigateToEditProject -> onEditProject(event.projectId)
+            }
 
         }
     }
@@ -35,8 +43,12 @@ fun ProjectDetailScreen(
                 project = state.project,
                 onNavigateToMiniature = onNavigateToMiniature,
                 onCreateMiniature = onCreateMiniature,
-                onBackPressed = {},
-                onEditPressed = {}
+                onBackPressed = {
+                    viewModel.onAction(Action.OnBackPressed)
+                },
+                onEditPressed = {
+                    viewModel.onAction(Action.OnNavigateToEditMiniature(projectId = projectId))
+                }
             )
         } else {
             LoadingIndicator()

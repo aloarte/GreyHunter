@@ -5,6 +5,7 @@
 
     <!-- Buttons -->
     <string name="button_add_project">Add project</string>
+    <string name="button_edit_project">Edit project</string>
 
     <!-- Labels -->
     <string name="label_project_name">Project name</string>

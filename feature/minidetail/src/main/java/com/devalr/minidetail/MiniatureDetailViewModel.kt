@@ -76,8 +76,8 @@ class MiniatureDetailViewModel(
             OnBackPressed -> sendEvent(NavigateBack)
             is OnNavigateToEditMiniature -> sendEvent(
                 NavigateToEditMiniature(
-                    action.miniatureId,
-                    action.projectId
+                    miniatureId = action.miniatureId,
+                    projectId = action.projectId
                 )
             )
         }

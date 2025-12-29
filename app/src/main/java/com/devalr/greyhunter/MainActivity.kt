@@ -62,7 +62,8 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(
-                            route = NavScreen.AddProject.route,
+                            route = "${NavScreen.AddProject.route}/{projectId}",
+                            arguments = listOf(navArgument(PROJECT_ID) { type = NavType.LongType }),
                             enterTransition = {
                                 slideIntoContainer(
                                     towards = Up,
@@ -75,8 +76,11 @@ class MainActivity : ComponentActivity() {
                                     animationSpec = tween(500)
                                 )
                             }
-                        ) {
-                            AddProjectScreen(onBackPressed = { navController.popBackStack() })
+                        ) { backStackEntry ->
+                            val projectId = backStackEntry.arguments?.getLong(PROJECT_ID) ?: 0
+                            AddProjectScreen(
+                                projectId = projectId,
+                                onBackPressed = { navController.popBackStack() })
                         }
 
                         composable(
@@ -93,7 +97,11 @@ class MainActivity : ComponentActivity() {
                                 onCreateMiniature = {
                                     navController.navigate("${NavScreen.AddMiniature.route}/$projectId")
                                 },
-                                onBackPressed = { navController.popBackStack() }
+                                onBackPressed = { navController.popBackStack() },
+                                onEditProject = { projectId ->
+                                    navController.navigate("${NavScreen.AddProject.route}/$projectId")
+
+                                }
                             )
                         }
 
@@ -111,7 +119,7 @@ class MainActivity : ComponentActivity() {
                             }
                         ) { backStackEntry ->
                             val projectId = backStackEntry.arguments?.getLong(PROJECT_ID) ?: -1
-                            val miniatureId = backStackEntry.arguments?.getLong(PROJECT_ID) ?: -1
+                            val miniatureId = backStackEntry.arguments?.getLong(MINI_ID) ?: -1
                             AddMiniatureScreen(
                                 projectId = projectId,
                                 miniatureId = miniatureId,

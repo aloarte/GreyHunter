@@ -49,8 +49,8 @@ fun MiniatureDetailScreen(
                 onEditPressed = {
                     viewModel.onAction(
                         OnNavigateToEditMiniature(
-                            state.miniature.id,
-                            state.miniature.projectId
+                            miniatureId = state.miniature.id,
+                            projectId = state.miniature.projectId
                         )
                     )
                 },
