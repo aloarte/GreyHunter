@@ -46,6 +46,7 @@ fun MiniatureDetailScreenContent(
                 .fillMaxWidth()
                 .height(300.dp),
             borderRadius = 0.dp,
+            showMessage = true,
             imageUri = miniature.imageUri,
             size = 160.dp
         )

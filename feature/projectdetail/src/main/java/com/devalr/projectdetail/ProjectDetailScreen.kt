@@ -6,8 +6,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import com.devalr.framework.components.LoadingIndicator
 import com.devalr.projectdetail.components.ProjectDetailScreenContent
-import com.devalr.projectdetail.interactions.Action
 import com.devalr.projectdetail.interactions.Action.OnAppear
+import com.devalr.projectdetail.interactions.Action.OnBackPressed
+import com.devalr.projectdetail.interactions.Action.OnNavigateToEditProject
 import com.devalr.projectdetail.interactions.Event.NavigateBack
 import com.devalr.projectdetail.interactions.Event.NavigateToEditProject
 import org.koin.compose.koinInject
@@ -44,15 +45,14 @@ fun ProjectDetailScreen(
                 onNavigateToMiniature = onNavigateToMiniature,
                 onCreateMiniature = onCreateMiniature,
                 onBackPressed = {
-                    viewModel.onAction(Action.OnBackPressed)
+                    viewModel.onAction(OnBackPressed)
                 },
                 onEditPressed = {
-                    viewModel.onAction(Action.OnNavigateToEditProject(projectId = projectId))
+                    viewModel.onAction(OnNavigateToEditProject(projectId = projectId))
                 }
             )
         } else {
             LoadingIndicator()
         }
     }
-
 }
