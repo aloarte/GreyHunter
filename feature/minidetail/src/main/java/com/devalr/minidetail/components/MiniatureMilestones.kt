@@ -48,7 +48,7 @@ fun MiniatureMilestones(
         modifier = modifier
             .background(MaterialTheme.colorScheme.surface)
             .fillMaxWidth()
-            .padding(20.dp)
+            .padding(10.dp)
             .height(400.dp)
     ) {
         GHText(
