@@ -28,7 +28,7 @@ fun MiniatureInfo(miniature: MiniatureBo) {
     Column(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface)
-            .padding(horizontal = 20.dp, vertical = 10.dp),
+            .padding(horizontal = 10.dp, vertical = 10.dp),
         horizontalAlignment = Alignment.Start
     ) {
         Row(

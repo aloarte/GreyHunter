@@ -1,13 +1,17 @@
 package com.devalr.projectdetail.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -17,9 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
 import com.devalr.framework.components.GHImage
 import com.devalr.framework.components.GHText
+import com.devalr.framework.components.GHVerticalShape
 import com.devalr.framework.components.TextType
 import com.devalr.framework.components.detail.TopButtons
 import com.devalr.framework.components.progress.GHProgressBar
@@ -46,6 +52,7 @@ fun ProjectDetailScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp),
+            showMessage = true,
             borderRadius = 0.dp,
             imageUri = project.imageUri,
             size = 160.dp
@@ -81,14 +88,7 @@ fun ProjectDetailScreenContent(
                 ) {
 
                     LazyColumn {
-                        item { GHText(text = project.name, type = TextType.Title) }
-                        project.description?.let { description ->
-                            item {
-                                GHText(text = description, type = TextType.Description)
-                            }
-                        }
-
-                        item { GHProgressBar(percentage = project.progress) }
+                        item { ProjectInfo(project) }
                         item {
                             ProjectMiniatures(
                                 miniatures = project.minis,
@@ -108,7 +108,17 @@ fun ProjectDetailScreenContent(
 private fun ProjectDetailScreenContentPreviewLightTheme() {
     GreyHunterTheme(darkTheme = false) {
         ProjectDetailScreenContent(
-            project = ProjectBo(name = "Project Name"),
+            project = ProjectBo(
+                name = "Project Name",
+                description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In congue neque at diam sollicitudin, ac aliquet felis imperdiet. In a convallis felis, ac elementum diam. Morbi pretium ante sed tellus tincidunt interdum. Suspendisse at sem congue, pretium nibh quis, elementum arcu.",
+                progress = 0.3f,
+                minis = listOf(
+                    MiniatureBo(id = 1, name = "Mini 1", projectId = 1, percentage = 1.0f),
+                    MiniatureBo(id = 2, name = "Mini 2", projectId = 1, percentage = 0.5f),
+                    MiniatureBo(id = 3, name = "Mini 2", projectId = 1, percentage = 0.2f),
+                    MiniatureBo(id = 3, name = "Mini 2", projectId = 1, percentage = 0.0f)
+                )
+            ),
             onNavigateToMiniature = {
                 // Do nothing
             },

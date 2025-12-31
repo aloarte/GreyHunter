@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate("${NavScreen.ProjectDetail.route}/$projectId")
                                 },
                                 onNavigateToAddProject = {
-                                    navController.navigate(NavScreen.AddProject.route)
+                                    navController.navigate("${NavScreen.AddProject.route}/0")
                                 })
                         }
 
@@ -95,7 +95,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate("${NavScreen.MiniDetail.route}/$miniatureId")
                                 },
                                 onCreateMiniature = {
-                                    navController.navigate("${NavScreen.AddMiniature.route}/$projectId")
+                                    navController.navigate("${NavScreen.AddMiniature.route}/$projectId/0")
                                 },
                                 onBackPressed = { navController.popBackStack() },
                                 onEditProject = { projectId ->

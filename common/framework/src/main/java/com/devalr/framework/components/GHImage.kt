@@ -26,12 +26,14 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.devalr.framework.R
+import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
 fun GHImage(
     modifier: Modifier = Modifier,
     imageUri: String?,
     size: Dp,
+    showMessage: Boolean = false,
     borderRadius: Dp = 20.dp,
     onImageClick: (() -> Unit)? = null
 ) {
@@ -72,22 +74,32 @@ fun GHImage(
             Column(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .size(80.dp),
+                    .size(size),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 Icon(imageVector = Icons.Default.Create, contentDescription = "")
-                GHText(text = "Add a picture", type = TextType.LabelM)
+                if (showMessage) GHText(text = "Add a picture", type = TextType.LabelM)
 
             }
         }
-
-
     }
 }
 
 @Preview
 @Composable
 private fun GHImagePreview() {
-    GHImage(imageUri = null, size = 200.dp)
+    GreyHunterTheme {
+        GHImage(imageUri = null, size = 80.dp, showMessage = true)
+    }
 }
+
+
+@Preview
+@Composable
+private fun GHImageWithoutMessagePreview() {
+    GreyHunterTheme {
+        GHImage(imageUri = null, size = 80.dp, showMessage = false)
+    }
+}
+
