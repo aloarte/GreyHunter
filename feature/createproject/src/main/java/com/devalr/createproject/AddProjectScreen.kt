@@ -30,7 +30,7 @@ import org.koin.compose.koinInject
 @Composable
 fun AddProjectScreen(
     viewModel: AddProjectViewModel = koinInject(),
-    projectId:Long,
+    projectId:Long?,
     onBackPressed: () -> Unit) {
     var showImagePicker by remember { mutableStateOf(false) }
     val state = viewModel.uiState.collectAsState().value

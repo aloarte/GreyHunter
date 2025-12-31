@@ -29,9 +29,10 @@ class AddMiniatureViewModel(
     override fun onAction(action: Action) {
         when (action) {
             is OnAppear -> onLoadScreen(
-                projectId = action.projectId,
-                miniatureId = action.miniatureId
+                miniatureId = action.miniatureId,
+                projectId = action.projectId
             )
+
             is OnNameChanged -> updateState { copy(miniatureName = action.name) }
             is OnImageChanged -> updateImage(action.imageUri)
             is OnAddMiniature -> addEditMiniature()
@@ -54,8 +55,8 @@ class AddMiniatureViewModel(
         }
     }
 
-    private fun onLoadScreen(miniatureId: Long, projectId: Long) {
-        if (miniatureId > 0) {
+    private fun onLoadScreen(projectId: Long, miniatureId: Long?) {
+        if (miniatureId != null) {
             viewModelScope.launch {
                 miniatureRepository.getMiniature(miniatureId)
                     .catch {
