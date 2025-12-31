@@ -87,7 +87,7 @@ class AddMiniatureViewModelTest {
     fun `GIVEN a projectId and empty miniId WHEN OnAppear is triggered THEN state updates with projectId`() =
         runTest {
             // GIVEN & WHEN
-            viewModel.onAction(OnAppear(projectId = PROJECT_ID, miniatureId = -1))
+            viewModel.onAction(OnAppear(projectId = PROJECT_ID))
             advanceUntilIdle()
 
             // THEN
