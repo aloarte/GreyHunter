@@ -1,5 +1,11 @@
 package com.devalr.greyhunter.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -21,10 +27,29 @@ import com.devalr.projectdetail.ProjectDetailScreen
 @Composable
 fun NavHost() {
     val backStack = remember { mutableStateListOf<Any>(Home) }
+    val addScreenAnimation = NavDisplay.transitionSpec {
+        slideInVertically(
+            initialOffsetY = { it },
+            animationSpec = tween(300)
+        ) togetherWith ExitTransition.KeepUntilTransitionsFinished
+    } + NavDisplay.popTransitionSpec {
+        EnterTransition.None togetherWith
+                slideOutVertically(
+                    targetOffsetY = { it },
+                    animationSpec = tween(300)
+                )
+    } + NavDisplay.predictivePopTransitionSpec {
+        EnterTransition.None togetherWith
+                slideOutVertically(
+                    targetOffsetY = { it },
+                    animationSpec = tween(300)
+                )
+    }
 
     NavDisplay(
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },
+
         entryProvider = { key ->
             when (key) {
                 is Home -> NavEntry(key) {
@@ -58,19 +83,30 @@ fun NavHost() {
                         miniatureId = key.miniatureId,
                         onBackPressed = { backStack.removeLastOrNull() },
                         onEditMiniaturePressed = { miniatureId, projectId ->
-                            backStack.add(AddMiniature(projectId = projectId, miniatureId = miniatureId))
+                            backStack.add(
+                                AddMiniature(
+                                    projectId = projectId,
+                                    miniatureId = miniatureId
+                                )
+                            )
                         }
                     )
                 }
 
-                is AddProject -> NavEntry(key) {
+                is AddProject -> NavEntry(
+                    metadata = addScreenAnimation,
+                    key = key
+                ) {
                     AddProjectScreen(
                         projectId = key.projectId,
                         onBackPressed = { backStack.removeLastOrNull() }
                     )
                 }
 
-                is AddMiniature -> NavEntry(key) {
+                is AddMiniature -> NavEntry(
+                    metadata = addScreenAnimation,
+                    key = key
+                ) {
                     AddMiniatureScreen(
                         projectId = key.projectId,
                         miniatureId = key.miniatureId,
