@@ -3,7 +3,7 @@ package com.devalr.createproject.interactions
 import android.net.Uri
 
 sealed interface Action {
-    data class OnAppear(val projectId: Long = -1L) : Action
+    data class OnAppear(val projectId: Long? = null) : Action
     data class OnNameChanged(val name: String) : Action
     data class OnDescriptionChanged(val description: String) : Action
     data class OnImageChanged(val imageUri: Uri) : Action

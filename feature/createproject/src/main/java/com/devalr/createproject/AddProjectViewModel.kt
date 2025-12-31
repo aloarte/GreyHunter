@@ -35,8 +35,8 @@ class AddProjectViewModel(
         }
     }
 
-    private fun onLoadScreen(projectId: Long) {
-        if (projectId > 0) {
+    private fun onLoadScreen(projectId: Long?) {
+        projectId?.let {
             viewModelScope.launch {
                 projectRepository.getProject(projectId)
                     .catch { updateState { copy(errorType = ErrorType.BadId) } }
