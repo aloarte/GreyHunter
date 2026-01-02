@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 
 enum class TextType {
-    Title, Description, LabelXs, LabelS, LabelM, LabelL, Featured, UltraFeatured
+    Title, Description, LabelXs, LabelS, LabelMBold, LabelM, LabelL, Featured, UltraFeatured
 }
 
 @Composable
@@ -48,6 +48,7 @@ private fun getTextSize(type: TextType) = when (type) {
     TextType.Description -> 12.sp
     TextType.LabelXs -> 8.sp
     TextType.LabelS -> 10.sp
+    TextType.LabelMBold,
     TextType.LabelM -> 12.sp
     TextType.LabelL -> 14.sp
 }
@@ -60,5 +61,6 @@ private fun getTextWeight(type: TextType) = when (type) {
     TextType.LabelXs -> FontWeight.Light
     TextType.LabelS -> FontWeight.Light
     TextType.LabelM -> FontWeight.Light
+    TextType.LabelMBold -> FontWeight.Medium
     TextType.LabelL -> FontWeight.Light
 }

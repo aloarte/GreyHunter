@@ -25,7 +25,7 @@ fun GHButton(
         enabled = enabled,
         shape = RoundedCornerShape(30),
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onPrimary
         ),
         onClick = onClick

@@ -22,6 +22,7 @@ fun GreyHunterTheme(
 
 private val DarkColorScheme =darkColorScheme(
     primary = HunterGreen,
+    surfaceVariant = HunterGreen,
     onPrimary = TextDark,
     background = DarkGray,
     onBackground = TextLight,
@@ -31,6 +32,7 @@ private val DarkColorScheme =darkColorScheme(
 
 private val LightColorScheme = lightColorScheme(
     primary = HunterGreen,
+    surfaceVariant = HunterGreenLight,
     background = WhiteGray,
     onBackground = TextDark,
     surface = LightGray,
