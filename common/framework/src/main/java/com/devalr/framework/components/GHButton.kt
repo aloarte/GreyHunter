@@ -14,9 +14,15 @@ import androidx.compose.ui.unit.dp
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
-fun GHButton(modifier: Modifier = Modifier, text: String, onClick: () -> Unit) {
+fun GHButton(
+    modifier: Modifier = Modifier,
+    text: String,
+    enabled: Boolean = true,
+    onClick: () -> Unit
+) {
     Button(
         modifier = modifier.height(50.dp),
+        enabled = enabled,
         shape = RoundedCornerShape(30),
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,

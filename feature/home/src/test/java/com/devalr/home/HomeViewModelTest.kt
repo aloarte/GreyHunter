@@ -8,7 +8,7 @@ import com.devalr.home.interactions.Action.OnAppear
 import com.devalr.home.interactions.Action.OnOpenProjectDetail
 import com.devalr.home.interactions.Action.OnStartPainting
 import com.devalr.home.interactions.Event
-import com.devalr.home.interactions.Event.LaunchStartPaintModal
+import com.devalr.home.interactions.Event.NavigateStartPaint
 import com.devalr.home.interactions.Event.NavigateToAddProject
 import com.devalr.home.interactions.Event.NavigateToProject
 import com.devalr.home.model.ProjectVo
@@ -146,7 +146,7 @@ class HomeViewModelTest {
 
             // THEN
             assertEquals(1, events.size)
-            assertEquals(LaunchStartPaintModal, events.first())
+            assertEquals(NavigateStartPaint, events.first())
             job.cancel()
         }
 

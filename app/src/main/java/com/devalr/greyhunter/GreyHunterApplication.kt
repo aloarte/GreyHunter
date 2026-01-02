@@ -7,6 +7,7 @@ import com.devalr.greyhunter.di.appModule
 import com.devalr.home.di.featureHomeModules
 import com.devalr.minidetail.di.featureMiniDetailModules
 import com.devalr.projectdetail.di.featureProjectDetailModules
+import com.devalr.startpainting.di.featureStartPaintingModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -27,7 +28,8 @@ class GreyHunterApplication : Application() {
                 featureProjectDetailModules,
                 featureMiniDetailModules,
                 featureAddProjectModules,
-                featureAddMiniatureModules
+                featureAddMiniatureModules,
+                featureStartPaintingModules
             )
         }
     }

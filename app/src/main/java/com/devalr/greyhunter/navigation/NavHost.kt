@@ -19,9 +19,11 @@ import com.devalr.greyhunter.navigation.NavScreen.Home
 import com.devalr.greyhunter.navigation.NavScreen.MiniDetail
 import com.devalr.greyhunter.navigation.NavScreen.ProjectDetail
 import com.devalr.greyhunter.navigation.NavScreen.Settings
+import com.devalr.greyhunter.navigation.NavScreen.StartPainting
 import com.devalr.home.HomeScreen
 import com.devalr.minidetail.MiniatureDetailScreen
 import com.devalr.projectdetail.ProjectDetailScreen
+import com.devalr.startpainting.StartPaintingScreen
 
 
 @Composable
@@ -56,6 +58,9 @@ fun NavHost() {
                     HomeScreen(
                         onNavigateToProject = { projectId ->
                             backStack.add(ProjectDetail(projectId = projectId))
+                        },
+                        onNavigateToStartPainting = {
+                            backStack.add(StartPainting)
                         },
                         onNavigateToAddProject = {
                             backStack.add(AddProject())
@@ -110,6 +115,12 @@ fun NavHost() {
                     AddMiniatureScreen(
                         projectId = key.projectId,
                         miniatureId = key.miniatureId,
+                        onBackPressed = { backStack.removeLastOrNull() }
+                    )
+                }
+
+                is StartPainting -> NavEntry(key) {
+                    StartPaintingScreen(
                         onBackPressed = { backStack.removeLastOrNull() }
                     )
                 }
