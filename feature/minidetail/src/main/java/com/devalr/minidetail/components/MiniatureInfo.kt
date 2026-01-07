@@ -45,17 +45,22 @@ fun MiniatureInfo(miniature: MiniatureBo, onlyUpdate: Boolean) {
             GHText(text = "${(miniature.percentage * 100).toInt()}%", type = TextType.Featured)
         }
         Spacer(modifier = Modifier.height(20.dp))
-        if(onlyUpdate){
-            Row(verticalAlignment = Alignment.CenterVertically) {
+        if (onlyUpdate) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 GHVerticalShape(color = ProgressYellow, height = 50.dp)
-                Spacer(modifier = Modifier.width(10.dp))
                 GHText(
+                    modifier = Modifier.fillMaxWidth(0.9f),
                     text = stringResource(R.string.label_miniature_update),
                     type = TextType.Description
                 )
+                GHVerticalShape(color = ProgressYellow, height = 50.dp)
             }
 
-        }else{
+        } else {
             GHText(
                 text = getMiniatureProgressMessage(progress = miniature.percentage),
                 type = TextType.Description,

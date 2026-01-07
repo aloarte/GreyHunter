@@ -17,6 +17,6 @@
     <string name="label_miniature_progress_gamification_100">Battle-ready and glorious! A masterpiece for your collection. Congratulations!</string>
     <string name="label_miniature_progress_gamification_error">Oops its seems that your progress has any kind of error.</string>
     <string name="label_milestones_description">Mark the milestones you have reached in painting your miniature. Each milestone contributes to the total progress of the miniature and its sized based on the preferences of the app.</string>
-    <string name="label_miniature_update">Please, update the painting progress of your miniature.</string>
+    <string name="label_miniature_update">Please, update the painting progress of your miniature to continue.</string>
     <string name="label_save_continue">Save and continue</string>
 </resources>

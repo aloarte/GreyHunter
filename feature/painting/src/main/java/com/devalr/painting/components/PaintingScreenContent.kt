@@ -51,13 +51,16 @@ fun PaintingScreenContent(
     }
 
     PreloadMiniatureImages(miniatures)
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .padding(innerPadding)
+    ) {
         Column(
             modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(innerPadding)
                 .padding(40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
