@@ -16,6 +16,7 @@ import org.koin.compose.koinInject
 @Composable
 fun StartPaintingScreen(
     viewModel: StartPaintingViewModel = koinInject(),
+    onNavigateToPaintMinis:(List<Long>)->Unit,
     onBackPressed: () -> Unit
 
 ) {
@@ -24,8 +25,7 @@ fun StartPaintingScreen(
         viewModel.events.collect { event ->
             when (event) {
                 NavigateBack -> onBackPressed()
-                is NavigatePaintMiniatures -> {
-                }
+                is NavigatePaintMiniatures -> onNavigateToPaintMinis(event.miniatures)
             }
 
         }

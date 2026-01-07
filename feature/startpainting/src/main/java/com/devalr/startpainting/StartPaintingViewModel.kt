@@ -68,7 +68,7 @@ class StartPaintingViewModel(
             val miniatureBoList = selectedMiniatures.map { miniatureVo ->
                 miniatureVoMapper.transformReverse(miniatureVo)
             }
-            sendEvent(NavigatePaintMiniatures(miniatureBoList))
+            sendEvent(NavigatePaintMiniatures(miniatureBoList.map { it.id }))
 
         } else {
             //TODO: Show error, this shouldn't happen

@@ -17,6 +17,7 @@ import com.devalr.framework.theme.GreyHunterTheme
 fun GHButton(
     modifier: Modifier = Modifier,
     text: String,
+    invertColors: Boolean = false,
     enabled: Boolean = true,
     onClick: () -> Unit
 ) {
@@ -25,8 +26,8 @@ fun GHButton(
         enabled = enabled,
         shape = RoundedCornerShape(30),
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = MaterialTheme.colorScheme.onPrimary
+            containerColor = if (invertColors) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = if (invertColors) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.onPrimary
         ),
         onClick = onClick
     ) {

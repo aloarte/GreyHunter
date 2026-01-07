@@ -46,7 +46,6 @@ fun StartPaintingMiniatureCard(
     onMiniatureSelected: (StartPaintMiniatureVo) -> Unit
 ) {
     val scale = remember { Animatable(1f) }
-
     LaunchedEffect(key1 = miniature.isSelected) {
         if (miniature.isSelected) {
             scale.animateTo(
@@ -67,7 +66,6 @@ fun StartPaintingMiniatureCard(
             .clip(RoundedCornerShape(5.dp))
             .clickable { onMiniatureSelected(miniature) }) {
 
-
         GHImage(
             modifier = Modifier.fillMaxSize(),
             borderRadius = 0.dp,
@@ -76,7 +74,6 @@ fun StartPaintingMiniatureCard(
         )
 
         if (miniature.isSelected) {
-
             Box(
                 modifier = Modifier
                     .fillMaxSize()

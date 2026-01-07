@@ -17,11 +17,13 @@ import com.devalr.greyhunter.navigation.NavScreen.AddMiniature
 import com.devalr.greyhunter.navigation.NavScreen.AddProject
 import com.devalr.greyhunter.navigation.NavScreen.Home
 import com.devalr.greyhunter.navigation.NavScreen.MiniDetail
+import com.devalr.greyhunter.navigation.NavScreen.Painting
 import com.devalr.greyhunter.navigation.NavScreen.ProjectDetail
 import com.devalr.greyhunter.navigation.NavScreen.Settings
 import com.devalr.greyhunter.navigation.NavScreen.StartPainting
 import com.devalr.home.HomeScreen
 import com.devalr.minidetail.MiniatureDetailScreen
+import com.devalr.painting.PaintingScreen
 import com.devalr.projectdetail.ProjectDetailScreen
 import com.devalr.startpainting.StartPaintingScreen
 
@@ -121,6 +123,14 @@ fun NavHost() {
 
                 is StartPainting -> NavEntry(key) {
                     StartPaintingScreen(
+                        onBackPressed = { backStack.removeLastOrNull() },
+                        onNavigateToPaintMinis = { backStack.add(Painting(minisIds = it)) }
+                    )
+                }
+
+                is Painting -> NavEntry(key) {
+                    PaintingScreen(
+                        minisIds = key.minisIds,
                         onBackPressed = { backStack.removeLastOrNull() }
                     )
                 }
