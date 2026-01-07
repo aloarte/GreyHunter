@@ -6,7 +6,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import com.devalr.framework.components.LoadingIndicator
 import com.devalr.painting.components.PaintingScreenContent
-import com.devalr.painting.interactions.Action
+import com.devalr.painting.interactions.Action.OnAppear
 import com.devalr.painting.interactions.Event.NavigateBack
 import org.koin.compose.koinInject
 
@@ -26,7 +26,8 @@ fun PaintingScreen(
 
         }
     }
-    LaunchedEffect(true) { viewModel.onAction(Action.OnAppear(minisIds)) }
+    LaunchedEffect(true) { viewModel.onAction(OnAppear(minisIds)) }
+
 
     Scaffold(
         topBar = { }

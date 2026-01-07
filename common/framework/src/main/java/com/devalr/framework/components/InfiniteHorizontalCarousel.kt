@@ -1,5 +1,7 @@
 package com.devalr.framework.components
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.pager.HorizontalPager
@@ -29,16 +31,23 @@ fun <T> InfiniteHorizontalCarousel(
         initialPage = 1,
         pageCount = { augmentedMiniatures.size }
     )
+
     LaunchedEffect(Unit) {
         while (true) {
-            delay(8000)
+            delay(5000)
             val current = pagerState.settledPage
             val target = if (current == lastIndex - 1) {
                 lastIndex
             } else {
                 current + 1
             }
-            pagerState.animateScrollToPage(target)
+            pagerState.animateScrollToPage(
+                page = target,
+                animationSpec = tween(
+                    durationMillis = 1200,
+                    easing = FastOutSlowInEasing
+                )
+            )
         }
     }
 
