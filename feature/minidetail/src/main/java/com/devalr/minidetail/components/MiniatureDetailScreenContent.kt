@@ -15,25 +15,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.enum.MilestoneType
 import com.devalr.domain.model.CompletionProportionsBo
-import com.devalr.domain.model.MiniCompletionBo
 import com.devalr.domain.model.MiniatureBo
+import com.devalr.domain.model.helpers.chronomancer
+import com.devalr.framework.components.GHButton
 import com.devalr.framework.components.GHImage
 import com.devalr.framework.components.detail.TopButtons
 import com.devalr.framework.theme.GreyHunterTheme
+import com.devalr.minidetail.R
 
 @Composable
 fun MiniatureDetailScreenContent(
     modifier: Modifier = Modifier,
     innerPadding: PaddingValues = PaddingValues(0.dp),
+    onlyUpdate: Boolean,
     miniature: MiniatureBo,
     onBackPressed: () -> Unit,
     onEditPressed: () -> Unit,
     onMilestone: (MilestoneType, Boolean) -> Unit
 ) {
+    val saveAndContinueLabel = stringResource(R.string.label_save_continue)
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -50,15 +55,16 @@ fun MiniatureDetailScreenContent(
             imageUri = miniature.imageUri,
             size = 160.dp
         )
-
-        TopButtons(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.TopCenter)
-                .padding(16.dp),
-            onBackPressed = onBackPressed,
-            onEditPressed = onEditPressed
-        )
+        if (onlyUpdate.not()) {
+            TopButtons(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.TopCenter)
+                    .padding(16.dp),
+                onBackPressed = onBackPressed,
+                onEditPressed = onEditPressed
+            )
+        }
 
         LazyColumn(
             modifier = Modifier
@@ -79,8 +85,8 @@ fun MiniatureDetailScreenContent(
                         .background(MaterialTheme.colorScheme.surface)
                         .padding(20.dp)
                 ) {
-                    LazyColumn {
-                        item { MiniatureInfo(miniature) }
+                    LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
+                        item { MiniatureInfo(miniature = miniature, onlyUpdate = onlyUpdate) }
                         item {
                             MiniatureMilestones(
                                 completion = miniature.completion,
@@ -93,6 +99,13 @@ fun MiniatureDetailScreenContent(
                                 )
                             ) { type, enabled ->
                                 onMilestone(type, enabled)
+                            }
+                        }
+                        if (onlyUpdate) {
+                            item {
+                                GHButton(text = saveAndContinueLabel) {
+                                    onBackPressed()
+                                }
                             }
                         }
                     }
@@ -108,12 +121,8 @@ fun MiniatureDetailScreenContent(
 private fun MiniatureDetailScreenContentPreviewDarkMode() {
     GreyHunterTheme(darkTheme = true) {
         MiniatureDetailScreenContent(
-            miniature = MiniatureBo(
-                name = "Mini name",
-                completion = MiniCompletionBo(isAssembled = true, isPrimed = true),
-                projectId = 1L,
-                percentage = 1f
-            ),
+            miniature = chronomancer,
+            onlyUpdate = false,
             onBackPressed = {
                 // Do nothing
             },
@@ -132,12 +141,49 @@ private fun MiniatureDetailScreenContentPreviewDarkMode() {
 private fun MiniatureDetailScreenContentPreviewLightMode() {
     GreyHunterTheme(darkTheme = false) {
         MiniatureDetailScreenContent(
-            miniature = MiniatureBo(
-                name = "Mini name",
-                completion = MiniCompletionBo(isAssembled = true, isPrimed = true),
-                projectId = 1L,
-                percentage = 0.5f
-            ),
+            miniature = chronomancer,
+            onlyUpdate = false,
+            onBackPressed = {
+                // Do nothing
+            },
+            onMilestone = { _, _ ->
+                // Do nothing
+            },
+            onEditPressed = {
+                // Do nothing
+            }
+        )
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+private fun MiniatureDetailScreenContentPreviewOnlyUpdateLightMode() {
+    GreyHunterTheme(darkTheme = false) {
+        MiniatureDetailScreenContent(
+            miniature = chronomancer,
+            onlyUpdate = true,
+            onBackPressed = {
+                // Do nothing
+            },
+            onMilestone = { _, _ ->
+                // Do nothing
+            },
+            onEditPressed = {
+                // Do nothing
+            }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MiniatureDetailScreenContentPreviewOnlyUpdateDarkMode() {
+    GreyHunterTheme(darkTheme = true) {
+        MiniatureDetailScreenContent(
+            miniature = chronomancer,
+            onlyUpdate = true,
             onBackPressed = {
                 // Do nothing
             },

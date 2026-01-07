@@ -17,14 +17,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
+import com.devalr.domain.model.helpers.chronomancer
 import com.devalr.framework.components.GHText
 import com.devalr.framework.components.GHVerticalShape
 import com.devalr.framework.components.TextType
 import com.devalr.framework.theme.GreyHunterTheme
+import com.devalr.framework.theme.ProgressYellow
 import com.devalr.minidetail.R
 
 @Composable
-fun MiniatureInfo(miniature: MiniatureBo) {
+fun MiniatureInfo(miniature: MiniatureBo, onlyUpdate: Boolean) {
     Column(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface)
@@ -39,16 +41,27 @@ fun MiniatureInfo(miniature: MiniatureBo) {
                 GHVerticalShape()
                 Spacer(modifier = Modifier.width(10.dp))
                 GHText(text = miniature.name, type = TextType.Featured)
-
             }
             GHText(text = "${(miniature.percentage * 100).toInt()}%", type = TextType.Featured)
         }
         Spacer(modifier = Modifier.height(20.dp))
-        GHText(
-            text = getMiniatureProgressMessage(progress = miniature.percentage),
-            type = TextType.Description,
-            italic = true
-        )
+        if(onlyUpdate){
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                GHVerticalShape(color = ProgressYellow, height = 50.dp)
+                Spacer(modifier = Modifier.width(10.dp))
+                GHText(
+                    text = stringResource(R.string.label_miniature_update),
+                    type = TextType.Description
+                )
+            }
+
+        }else{
+            GHText(
+                text = getMiniatureProgressMessage(progress = miniature.percentage),
+                type = TextType.Description,
+                italic = true
+            )
+        }
     }
 }
 
@@ -70,11 +83,8 @@ private fun getMiniatureProgressMessage(progress: Float): String {
 private fun MiniatureInfoPreviewDarkTheme() {
     GreyHunterTheme(darkTheme = true) {
         MiniatureInfo(
-            miniature = MiniatureBo(
-                name = "Chronomancer",
-                projectId = 1,
-                percentage = 0.45f
-            )
+            miniature = chronomancer,
+            onlyUpdate = false
         )
     }
 }
@@ -84,11 +94,30 @@ private fun MiniatureInfoPreviewDarkTheme() {
 private fun MiniatureInfoPreviewLightTheme() {
     GreyHunterTheme(darkTheme = false) {
         MiniatureInfo(
-            miniature = MiniatureBo(
-                name = "Chronomancer",
-                projectId = 1,
-                percentage = 1.0f
-            )
+            miniature = chronomancer,
+            onlyUpdate = false
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun MiniatureInfoOnlyUpdatePreviewDarkTheme() {
+    GreyHunterTheme(darkTheme = true) {
+        MiniatureInfo(
+            miniature = chronomancer,
+            onlyUpdate = true
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun MiniatureInfoOnlyUpdatePreviewLightTheme() {
+    GreyHunterTheme(darkTheme = false) {
+        MiniatureInfo(
+            miniature = chronomancer,
+            onlyUpdate = true
         )
     }
 }

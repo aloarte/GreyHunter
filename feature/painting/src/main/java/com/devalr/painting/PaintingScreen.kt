@@ -7,14 +7,18 @@ import androidx.compose.runtime.collectAsState
 import com.devalr.framework.components.LoadingIndicator
 import com.devalr.painting.components.PaintingScreenContent
 import com.devalr.painting.interactions.Action.OnAppear
+import com.devalr.painting.interactions.Action.OnBackPressed
+import com.devalr.painting.interactions.Action.OnDonePainting
 import com.devalr.painting.interactions.Event.NavigateBack
+import com.devalr.painting.interactions.Event.NavigateToUpdateMiniatures
 import org.koin.compose.koinInject
 
 @Composable
 fun PaintingScreen(
     viewModel: PaintingViewModel = koinInject(),
     minisIds: List<Long>,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    onNavigateToUpdateMiniatures: (List<Long>) -> Unit
 
 ) {
     val state = viewModel.uiState.collectAsState().value
@@ -22,6 +26,7 @@ fun PaintingScreen(
         viewModel.events.collect { event ->
             when (event) {
                 NavigateBack -> onBackPressed()
+                is NavigateToUpdateMiniatures -> onNavigateToUpdateMiniatures(event.miniatureIds)
             }
 
         }
@@ -37,9 +42,9 @@ fun PaintingScreen(
                 PaintingScreenContent(
                     innerPadding = innerPadding,
                     miniatures = state.miniatures,
-                    onBackPressed = onBackPressed
+                    onBackPressed = { viewModel.onAction(OnBackPressed) },
+                    onDonePaintingPressed = { viewModel.onAction(OnDonePainting(minisIds)) }
                 )
-
             } else {
                 //TODO: Display error
             }

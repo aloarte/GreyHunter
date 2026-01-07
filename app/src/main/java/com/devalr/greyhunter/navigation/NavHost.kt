@@ -52,8 +52,12 @@ fun NavHost() {
 
     NavDisplay(
         backStack = backStack,
-        onBack = { backStack.removeLastOrNull() },
-
+        onBack = {
+            val topEntry = backStack.lastOrNull()
+            if (topEntry !is MiniDetail || !topEntry.onlyUpdate) {
+                backStack.removeLastOrNull()
+            }
+        },
         entryProvider = { key ->
             when (key) {
                 is Home -> NavEntry(key) {
@@ -88,6 +92,7 @@ fun NavHost() {
                 is MiniDetail -> NavEntry(key) {
                     MiniatureDetailScreen(
                         miniatureId = key.miniatureId,
+                        onlyUpdate = key.onlyUpdate,
                         onBackPressed = { backStack.removeLastOrNull() },
                         onEditMiniaturePressed = { miniatureId, projectId ->
                             backStack.add(
@@ -131,7 +136,23 @@ fun NavHost() {
                 is Painting -> NavEntry(key) {
                     PaintingScreen(
                         minisIds = key.minisIds,
-                        onBackPressed = { backStack.removeLastOrNull() }
+                        onBackPressed = { backStack.removeLastOrNull() },
+                        onNavigateToUpdateMiniatures = { miniaturesToUpdate ->
+                            val homeIndex = backStack.indexOfFirst { it is Home }
+                            if (homeIndex >= 0) {
+                                backStack.subList(homeIndex + 1, backStack.size).clear()
+                            } else {
+                                backStack.clear()
+                            }
+                            miniaturesToUpdate.forEach { miniatureId ->
+                                backStack.add(
+                                    MiniDetail(
+                                        miniatureId = miniatureId,
+                                        onlyUpdate = true
+                                    )
+                                )
+                            }
+                        }
                     )
                 }
 

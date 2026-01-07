@@ -9,15 +9,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun GHVerticalShape() {
+fun GHVerticalShape(color: Color = MaterialTheme.colorScheme.primary, height: Dp = 30.dp) {
     Box(
         modifier = Modifier
-            .height(30.dp)
+            .height(height)
             .width(4.dp)
             .clip(RoundedCornerShape(10.dp))
-            .background(MaterialTheme.colorScheme.primary)
+            .background(color)
     )
 }
