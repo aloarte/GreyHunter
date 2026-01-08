@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.helpers.chronomancer
 import com.devalr.framework.components.GHText
-import com.devalr.framework.components.GHVerticalShape
 import com.devalr.framework.components.TextType
+import com.devalr.framework.components.markedtext.MarkedText
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.framework.theme.ProgressYellow
 import com.devalr.minidetail.R
@@ -37,29 +36,17 @@ fun MiniatureInfo(miniature: MiniatureBo, onlyUpdate: Boolean) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                GHVerticalShape()
-                Spacer(modifier = Modifier.width(10.dp))
-                GHText(text = miniature.name, type = TextType.Featured)
-            }
+            MarkedText(title = true, text = miniature.name)
             GHText(text = "${(miniature.percentage * 100).toInt()}%", type = TextType.Featured)
         }
         Spacer(modifier = Modifier.height(20.dp))
         if (onlyUpdate) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                GHVerticalShape(color = ProgressYellow, height = 50.dp)
-                GHText(
-                    modifier = Modifier.fillMaxWidth(0.9f),
-                    text = stringResource(R.string.label_miniature_update),
-                    type = TextType.Description
-                )
-                GHVerticalShape(color = ProgressYellow, height = 50.dp)
-            }
-
+            MarkedText(
+                text = stringResource(R.string.label_miniature_update),
+                color = ProgressYellow,
+                doubleBars = true,
+                barsSize = 50.dp
+            )
         } else {
             GHText(
                 text = getMiniatureProgressMessage(progress = miniature.percentage),

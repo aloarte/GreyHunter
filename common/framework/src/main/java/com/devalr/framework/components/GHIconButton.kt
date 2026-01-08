@@ -21,21 +21,27 @@ import androidx.compose.ui.unit.dp
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
-fun GHIconButton(modifier: Modifier = Modifier, icon: ImageVector, onButtonClicked: () -> Unit) {
+fun GHIconButton(
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    icon: ImageVector,
+    onButtonClicked: () -> Unit
+) {
     Box(
         modifier = modifier
             .size(35.dp)
             .shadow(elevation = 6.dp, shape = CircleShape)
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.surface)
-            .clickable { onButtonClicked() },
+            .clickable(enabled = enabled) { onButtonClicked() },
         contentAlignment = Alignment.Center
     ) {
         Icon(
             modifier = Modifier.size(20.dp),
             imageVector = icon,
             contentDescription = "Atrás",
-            tint = MaterialTheme.colorScheme.onSurface
+            tint = if (enabled) MaterialTheme.colorScheme.onSurface
+            else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
         )
     }
 }
@@ -70,6 +76,48 @@ private fun GHIconButtonPreviewLightTheme() {
                 .size(100.dp)
         ) {
             GHIconButton(
+                modifier = Modifier.align(Alignment.Center),
+                icon = Icons.Default.Edit,
+                onButtonClicked = {
+                    // Do nothing
+                }
+            )
+        }
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun GHIconButtonPreviewDisabledDarkTheme() {
+    GreyHunterTheme(darkTheme = true) {
+        Box(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .size(100.dp)
+        ) {
+            GHIconButton(
+                enabled = false,
+                modifier = Modifier.align(Alignment.Center),
+                icon = Icons.Default.ArrowBack,
+                onButtonClicked = {
+                    // Do nothing
+                }
+            )
+        }
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun GHIconButtonPreviewDisabledLightTheme() {
+    GreyHunterTheme(darkTheme = false) {
+        Box(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .size(100.dp)
+        ) {
+            GHIconButton(
+                enabled = false,
                 modifier = Modifier.align(Alignment.Center),
                 icon = Icons.Default.Edit,
                 onButtonClicked = {

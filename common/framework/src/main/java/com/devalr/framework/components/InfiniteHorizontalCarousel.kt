@@ -73,9 +73,7 @@ fun <T> InfiniteHorizontalCarousel(
 
     HorizontalPager(
         state = pagerState,
-        modifier = modifier
-            .fillMaxWidth()
-            .height(300.dp),
+        modifier = modifier,
         userScrollEnabled = userScrollEnabled
     ) { page ->
         content(augmentedMiniatures[page])

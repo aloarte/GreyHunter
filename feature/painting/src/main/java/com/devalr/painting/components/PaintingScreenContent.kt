@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,8 +31,11 @@ import com.devalr.domain.model.helpers.immortal
 import com.devalr.domain.model.helpers.technomancer
 import com.devalr.framework.components.GHButton
 import com.devalr.framework.components.GHText
+import com.devalr.framework.components.ScreenSize
 import com.devalr.framework.components.TextType
 import com.devalr.framework.components.detail.TopButtons
+import com.devalr.framework.components.getScreenSize
+import com.devalr.framework.components.markedtext.MarkedText
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.painting.R
 import kotlinx.coroutines.delay
@@ -42,11 +47,14 @@ fun PaintingScreenContent(
     onBackPressed: () -> Unit,
     onDonePaintingPressed: () -> Unit
 ) {
-    var seconds by remember { mutableStateOf(0) }
+    var seconds by remember { mutableIntStateOf(0) }
+    var timerStopped by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         while (true) {
             delay(1000L)
-            seconds++
+            if (timerStopped.not()) {
+                seconds++
+            }
         }
     }
 
@@ -61,27 +69,42 @@ fun PaintingScreenContent(
             modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxSize()
-                .padding(40.dp),
+                .padding(
+                    horizontal = if (getScreenSize() == ScreenSize.SMALL) 20.dp else 40.dp,
+                    vertical = 40.dp
+                ),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            GHText(
-                text = stringResource(R.string.painting_title, miniatures.size),
-                type = TextType.Featured
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            GHText(text = formatSecondsToHHMMSS(seconds), type = TextType.Featured)
-            Spacer(modifier = Modifier.height(20.dp))
-            GHText(
+            MarkedText(
                 text = stringResource(R.string.painting_message),
-                type = TextType.Description
+                color = MaterialTheme.colorScheme.background,
+                barsSize = 50.dp
             )
             PaintingMinisCarousel(miniatures = miniatures)
-            GHButton(
-                text = stringResource(R.string.btn_stop_painting),
-                invertColors = true,
-                onClick = onDonePaintingPressed
+            Spacer(modifier = Modifier.height(10.dp))
+            GHText(
+                text = formatSecondsToHHMMSS(seconds),
+                type = if (getScreenSize() == ScreenSize.SMALL) TextType.Featured else TextType.UltraFeatured
             )
+            Spacer(modifier = Modifier.height(30.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                GHButton(
+                    text = if (timerStopped) stringResource(R.string.btn_resume_timer)
+                    else stringResource(R.string.btn_stop_timer),
+                    invertColors = true,
+                    onClick = { timerStopped = !timerStopped }
+                )
+                GHButton(
+                    text = stringResource(R.string.btn_stop_painting),
+                    invertColors = true,
+                    onClick = onDonePaintingPressed
+                )
+            }
+
         }
         TopButtons(
             modifier = Modifier

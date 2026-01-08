@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,8 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.ProjectBo
 import com.devalr.framework.components.GHText
-import com.devalr.framework.components.GHVerticalShape
 import com.devalr.framework.components.TextType
+import com.devalr.framework.components.markedtext.MarkedText
 import com.devalr.framework.components.progress.GHProgressBar
 import com.devalr.framework.theme.GreyHunterTheme
 
@@ -35,12 +34,10 @@ fun ProjectInfo(project: ProjectBo) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                GHVerticalShape()
-                Spacer(modifier = Modifier.width(10.dp))
-                GHText(text = project.name, type = TextType.Featured)
-
-            }
+            MarkedText(
+                text = project.name,
+                title = true
+            )
             GHText(text = "${(project.progress * 100).toInt()}%", type = TextType.Featured)
         }
         project.description?.let { description ->

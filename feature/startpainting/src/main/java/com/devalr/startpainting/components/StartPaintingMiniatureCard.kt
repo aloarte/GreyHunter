@@ -33,7 +33,6 @@ import com.devalr.framework.components.GHImage
 import com.devalr.framework.components.GHText
 import com.devalr.framework.components.TextType
 import com.devalr.framework.theme.GreyHunterTheme
-import com.devalr.framework.theme.ProgressYellow
 import com.devalr.startpainting.model.StartPaintMiniatureVo
 import com.devalr.startpainting.model.helpers.chronomancerVo
 import com.devalr.startpainting.model.helpers.technomancerVo
@@ -42,7 +41,7 @@ import com.devalr.startpainting.model.helpers.technomancerVo
 fun StartPaintingMiniatureCard(
     modifier: Modifier = Modifier,
     miniature: StartPaintMiniatureVo,
-    size: Dp = 120.dp,
+    size: Dp = 125.dp,
     onMiniatureSelected: (StartPaintMiniatureVo) -> Unit
 ) {
     val scale = remember { Animatable(1f) }

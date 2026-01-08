@@ -1,12 +1,11 @@
 package com.devalr.startpainting.components
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,89 +15,93 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
+import com.devalr.framework.components.GHIconButton
 import com.devalr.framework.components.GHText
 import com.devalr.framework.components.HorizontalCarousel
+import com.devalr.framework.components.ScreenSize
 import com.devalr.framework.components.TextType
-import com.devalr.framework.components.cards.getCardWidth
-import com.devalr.framework.enum.CardType
+import com.devalr.framework.components.getScreenSize
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.startpainting.model.StartPaintMiniatureVo
 import com.devalr.startpainting.model.StartPaintProjectVo
 import com.devalr.startpainting.model.helpers.hierotekCircleProjectVo
 import com.devalr.startpainting.model.helpers.stormlightArchiveProjectVo
+import kotlinx.coroutines.launch
+
+
 
 @Composable
 fun StartPantingProjectsCarousel(
+    modifier: Modifier = Modifier,
     projects: List<StartPaintProjectVo>,
     onMiniatureSelected: (StartPaintMiniatureVo) -> Unit
 ) {
-    HorizontalCarousel(
-        items = projects,
-        height = 500.dp,
-        modifier = Modifier
+    val pagerState = rememberPagerState { projects.size }
+    val scope = rememberCoroutineScope()
+    Box(
+        modifier = modifier
             .fillMaxWidth()
-            .height(IntrinsicSize.Min)
-    ) { item ->
-        StartPaintingProjectCard(projectBo = item, onMiniatureSelected = onMiniatureSelected)
+            .height(400.dp)
+    ) {
+        HorizontalCarousel(
+            items = projects,
+            height = calculateHeight(getScreenSize()),
+            pagerState = pagerState,
+            neighborDisplayMargin = 0.dp,
+            modifier = Modifier.fillMaxSize()
+        ) { item ->
+            StartPaintingProjectCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(calculateHeight(getScreenSize())),
+                projectBo = item,
+                onMiniatureSelected = onMiniatureSelected
+            )
+        }
 
+        GHIconButton(
+            enabled = pagerState.currentPage > 0,
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .padding(8.dp),
+            icon = Icons.Default.KeyboardArrowLeft,
+            onButtonClicked = {
+                scope.launch {
+                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                }
+            })
+        GHIconButton(
+            enabled = pagerState.currentPage < projects.lastIndex,
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(8.dp),
+            icon = Icons.Default.KeyboardArrowRight,
+            onButtonClicked = {
+                scope.launch {
+                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                }
+            })
     }
 }
 
 @Composable
-fun StartPaintingProjectCard(
-    modifier: Modifier = Modifier,
-    projectBo: StartPaintProjectVo,
-    onMiniatureSelected: (StartPaintMiniatureVo) -> Unit
-) {
-    Card(
-        modifier = modifier
-            .width(getCardWidth(CardType.StartPaintProject))
-            .fillMaxHeight(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(vertical = 10.dp, horizontal = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceEvenly
-        ) {
-            GHText(text = projectBo.name, type = TextType.Title)
-            if (projectBo.minis.isEmpty()) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    GHText(text = "No hay miniaturas en este proyecto", type = TextType.Description)
-                }
-            } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    contentPadding = PaddingValues(0.dp)
-                ) {
-                    items(projectBo.minis) { miniature ->
-                        StartPaintingMiniatureCard(
-                            miniature = miniature,
-                            onMiniatureSelected = onMiniatureSelected
-                        )
-                    }
-                }
-            }
-        }
-    }
+private fun calculateHeight(screenSize: ScreenSize) = when(screenSize){
+    ScreenSize.SMALL -> 300.dp
+    ScreenSize.MEDIUM -> 600.dp
+    else -> 600.dp
 }
 
 @Preview(showBackground = true)

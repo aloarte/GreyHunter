@@ -2,6 +2,8 @@ package com.devalr.painting.components
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,7 +18,9 @@ import com.devalr.framework.theme.GreyHunterTheme
 @Composable
 fun PaintingMinisCarousel(miniatures: List<MiniatureBo>) {
     InfiniteHorizontalCarousel(
-        modifier = Modifier.padding(vertical = 10.dp),
+        modifier = Modifier.padding(vertical = 10.dp)
+            .fillMaxWidth()
+            .height(200.dp),
         animationSpec = tween(
             durationMillis = 1200,
             easing = FastOutSlowInEasing

@@ -28,7 +28,7 @@ class StartPaintingViewModel(
 
     override fun onAction(action: Action) {
         when (action) {
-            is OnAppear -> observeSettings()
+            is OnAppear -> loadProjects()
             OnBackPressed -> sendEvent(NavigateBack)
             is OnStartPainting -> startPainting()
             is OnSelectMiniature -> selectMiniature(miniature = action.miniature)
@@ -75,23 +75,24 @@ class StartPaintingViewModel(
         }
     }
 
-    private fun observeSettings() {
+    private fun loadProjects() {
         viewModelScope.launch {
             projectRepository.getAllProjects()
                 .catch {
 
                 }
-                .collect {
+                .collect { projects ->
                     updateState {
                         copy(
-                            projectList = it.map { projectBo ->
-                                projectVoMapper.transform(projectBo)
-                            },
+                            projectList = projects
+                                .filter { it.minis.isNotEmpty() }
+                                .map { projectBo ->
+                                    projectVoMapper.transform(projectBo)
+                                },
                             projectsLoaded = true
                         )
                     }
                 }
-
         }
     }
 }

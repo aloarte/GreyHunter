@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -23,17 +24,18 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun <T> HorizontalCarousel(
-    items: List<T>,
     modifier: Modifier = Modifier,
+    items: List<T>,
+    pagerState: PagerState = rememberPagerState(pageCount = { items.size }),
     dots: Boolean = false,
+    neighborDisplayMargin: Dp = 50.dp,
     height: Dp = 200.dp,
     content: @Composable (T) -> Unit
 ) {
-    val pagerState = rememberPagerState(pageCount = { items.size })
     Column(modifier = modifier) {
         HorizontalPager(
             state = pagerState,
-            contentPadding = PaddingValues(horizontal = 50.dp),
+            contentPadding = PaddingValues(horizontal = neighborDisplayMargin),
             pageSpacing = 1.dp,
             modifier = Modifier
                 .fillMaxWidth()

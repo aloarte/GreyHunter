@@ -2,7 +2,9 @@ package com.devalr.painting.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -12,7 +14,9 @@ import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.helpers.technomancer
 import com.devalr.framework.components.GHImage
 import com.devalr.framework.components.GHText
+import com.devalr.framework.components.ScreenSize
 import com.devalr.framework.components.TextType
+import com.devalr.framework.components.getScreenSize
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
@@ -22,12 +26,20 @@ fun PaintingMiniCard(miniature: MiniatureBo) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        GHText(text = miniature.name, type = TextType.Title)
+        GHText(text = miniature.name, type = TextType.LabelL)
+        Spacer(modifier = Modifier.height(10.dp))
         GHImage(
             imageUri = miniature.imageUri,
-            size = 280.dp
+            size = calculateHeight(getScreenSize())
         )
     }
+}
+
+@Composable
+private fun calculateHeight(screenSize: ScreenSize) = when (screenSize) {
+    ScreenSize.SMALL -> 150.dp
+    ScreenSize.MEDIUM -> 250.dp
+    else -> 300.dp
 }
 
 @Preview(showBackground = true)
