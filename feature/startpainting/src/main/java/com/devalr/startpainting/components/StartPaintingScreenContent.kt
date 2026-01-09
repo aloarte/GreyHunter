@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.framework.components.GHButton
@@ -20,6 +21,7 @@ import com.devalr.framework.components.TextType
 import com.devalr.framework.components.detail.TopButtons
 import com.devalr.framework.components.getScreenSize
 import com.devalr.framework.theme.GreyHunterTheme
+import com.devalr.startpainting.R
 import com.devalr.startpainting.model.StartPaintMiniatureVo
 import com.devalr.startpainting.model.StartPaintProjectVo
 import com.devalr.startpainting.model.helpers.hierotekCircleProjectVo
@@ -36,9 +38,11 @@ fun StartPaintingScreenContent(
     onMiniatureSelected: (StartPaintMiniatureVo) -> Unit
 ) {
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .padding(innerPadding)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -46,13 +50,13 @@ fun StartPaintingScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             GHText(
-                text = "Start painting miniatures",
+                text = stringResource(R.string.start_painting_title),
                 type = TextType.Title
             )
             Spacer(modifier = Modifier.height(10.dp))
             if (getScreenSize() != ScreenSize.SMALL) {
                 GHText(
-                    text = "Browse from your projects and pick the miniature or miniatures. Then, click the button to start the timer and start with your art.",
+                    text = stringResource(R.string.start_painting_message),
                     type = TextType.Description
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -67,7 +71,7 @@ fun StartPaintingScreenContent(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 60.dp),
-            text = "Start Painting",
+            text = stringResource(R.string.btn_start_painting),
             enabled = buttonEnabled
         ) {
             onStartPainting()
@@ -84,8 +88,31 @@ fun StartPaintingScreenContent(
 
 @Preview(showBackground = true)
 @Composable
-private fun StartPaintingContentScreenPreview() {
+private fun StartPaintingContentScreenLightModePreview() {
     GreyHunterTheme(darkTheme = false) {
+        StartPaintingScreenContent(
+            buttonEnabled = true,
+            projectList = listOf(
+                hierotekCircleProjectVo,
+                stormlightArchiveProjectVo
+            ),
+            onBackPressed = {
+                // Do nothing
+            },
+            onMiniatureSelected = {
+                // Do nothing
+            },
+            onStartPainting = {
+                // Do nothing
+            }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun StartPaintingContentScreenDarkModePreview() {
+    GreyHunterTheme(darkTheme = true) {
         StartPaintingScreenContent(
             buttonEnabled = true,
             projectList = listOf(

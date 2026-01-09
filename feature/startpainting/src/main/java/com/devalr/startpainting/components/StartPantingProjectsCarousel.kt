@@ -1,27 +1,14 @@
 package com.devalr.startpainting.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -29,10 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.framework.components.GHIconButton
-import com.devalr.framework.components.GHText
 import com.devalr.framework.components.HorizontalCarousel
 import com.devalr.framework.components.ScreenSize
-import com.devalr.framework.components.TextType
 import com.devalr.framework.components.getScreenSize
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.startpainting.model.StartPaintMiniatureVo
@@ -40,7 +25,6 @@ import com.devalr.startpainting.model.StartPaintProjectVo
 import com.devalr.startpainting.model.helpers.hierotekCircleProjectVo
 import com.devalr.startpainting.model.helpers.stormlightArchiveProjectVo
 import kotlinx.coroutines.launch
-
 
 
 @Composable
@@ -98,7 +82,7 @@ fun StartPantingProjectsCarousel(
 }
 
 @Composable
-private fun calculateHeight(screenSize: ScreenSize) = when(screenSize){
+private fun calculateHeight(screenSize: ScreenSize) = when (screenSize) {
     ScreenSize.SMALL -> 300.dp
     ScreenSize.MEDIUM -> 600.dp
     else -> 600.dp

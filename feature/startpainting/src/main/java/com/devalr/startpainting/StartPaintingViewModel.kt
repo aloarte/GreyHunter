@@ -11,6 +11,7 @@ import com.devalr.startpainting.interactions.Action.OnAppear
 import com.devalr.startpainting.interactions.Action.OnBackPressed
 import com.devalr.startpainting.interactions.Action.OnSelectMiniature
 import com.devalr.startpainting.interactions.Action.OnStartPainting
+import com.devalr.startpainting.interactions.ErrorType
 import com.devalr.startpainting.interactions.Event
 import com.devalr.startpainting.interactions.Event.NavigateBack
 import com.devalr.startpainting.interactions.Event.NavigatePaintMiniatures
@@ -30,8 +31,27 @@ class StartPaintingViewModel(
         when (action) {
             is OnAppear -> loadProjects()
             OnBackPressed -> sendEvent(NavigateBack)
-            is OnStartPainting -> startPainting()
             is OnSelectMiniature -> selectMiniature(miniature = action.miniature)
+            is OnStartPainting -> startPainting()
+        }
+    }
+
+    private fun loadProjects() {
+        viewModelScope.launch {
+            projectRepository.getAllProjects()
+                .catch { updateState { copy(error = ErrorType.RetrievingDatabase) } }
+                .collect { projects ->
+                    updateState {
+                        copy(
+                            projectList = projects
+                                .filter { it.minis.isNotEmpty() }
+                                .map { projectBo ->
+                                    projectVoMapper.transform(projectBo)
+                                },
+                            projectsLoaded = true
+                        )
+                    }
+                }
         }
     }
 
@@ -71,28 +91,8 @@ class StartPaintingViewModel(
             sendEvent(NavigatePaintMiniatures(miniatureBoList.map { it.id }))
 
         } else {
-            //TODO: Show error, this shouldn't happen
+            updateState { copy(error = ErrorType.NoMinisToPaint) }
         }
     }
 
-    private fun loadProjects() {
-        viewModelScope.launch {
-            projectRepository.getAllProjects()
-                .catch {
-
-                }
-                .collect { projects ->
-                    updateState {
-                        copy(
-                            projectList = projects
-                                .filter { it.minis.isNotEmpty() }
-                                .map { projectBo ->
-                                    projectVoMapper.transform(projectBo)
-                                },
-                            projectsLoaded = true
-                        )
-                    }
-                }
-        }
-    }
 }
