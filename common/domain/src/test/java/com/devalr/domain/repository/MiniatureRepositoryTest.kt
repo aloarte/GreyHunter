@@ -27,7 +27,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class MiniatureRepositoryImplTest {
+class MiniatureRepositoryTest {
 
     private val miniatureDao: MiniatureDao = mockk()
     private val mapper: Mapper<MiniatureEntity, MiniatureBo> = mockk()
@@ -78,10 +78,7 @@ class MiniatureRepositoryImplTest {
         runTest {
             // GIVEN
             coEvery { miniatureDao.getMiniaturesByProject(PROJECT_ID) } returns flowOf(
-                listOf(
-                    mini1Entity,
-                    mini2Entity
-                )
+                listOf(mini1Entity, mini2Entity)
             )
 
             // WHEN
@@ -90,6 +87,26 @@ class MiniatureRepositoryImplTest {
 
             // THEN
             coVerify(exactly = 1) { miniatureDao.getMiniaturesByProject(PROJECT_ID) }
+            verify(exactly = 2) { mapper.transform(any()) }
+            assertEquals(2, resultList.size)
+            assertEquals(mini1Bo, resultList[0])
+            assertEquals(mini2Bo, resultList[1])
+        }
+
+    @Test
+    fun `GIVEN list of miniatures inserted WHEN getMiniatures is called THEN returns list flow`() =
+        runTest {
+            // GIVEN
+            coEvery { miniatureDao.getMiniaturesByIds(listOf(mini1Bo.id, mini2Bo.id)) } returns flowOf(
+                listOf(mini1Entity, mini2Entity)
+            )
+
+            // WHEN
+            val resultFlow = repository.getMiniatures(listOf(mini1Bo.id, mini2Bo.id))
+            val resultList = resultFlow.first()
+
+            // THEN
+            coVerify(exactly = 1) { miniatureDao.getMiniaturesByIds(listOf(mini1Bo.id, mini2Bo.id)) }
             verify(exactly = 2) { mapper.transform(any()) }
             assertEquals(2, resultList.size)
             assertEquals(mini1Bo, resultList[0])
