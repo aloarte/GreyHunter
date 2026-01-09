@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Errors -->
+
+    <!-- Buttons -->
+    <string name="btn_stop_painting">Done painting</string>
+    <string name="btn_stop_timer">Stop timer</string>
+    <string name="btn_resume_timer">Resume timer</string>
+
+    <!-- Labels -->
+    <string name="painting_title">Painting %s miniatures</string>
+    <string name="painting_message">Take your time and paint the miniatures. Enjoy the journey.</string>
+</resources>

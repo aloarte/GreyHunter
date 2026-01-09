@@ -3,7 +3,7 @@ package com.devalr.framework.theme
 import androidx.compose.ui.graphics.Color
 
 val HunterGreen = Color(0xFF1F5F3B)
-
+val HunterGreenLight = Color(0xFF4F8F6A)
 val LightGray = Color(0xFFF7F9F9)
 val WhiteGray = Color(0xFFFFFFFF)
 val DarkGray = Color(0xFF1A1C1C)

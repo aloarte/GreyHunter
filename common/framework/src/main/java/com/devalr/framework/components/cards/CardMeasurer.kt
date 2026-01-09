@@ -10,6 +10,7 @@ import com.devalr.framework.enum.CardType
 @Composable
 fun getCardWidth(type: CardType): Dp {
     val screenWidthPercentage = when (type) {
+        CardType.StartPaintProject -> 1.0f
         CardType.Project -> 0.70f
         CardType.Miniature -> 0.40f
     }

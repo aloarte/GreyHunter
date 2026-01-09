@@ -18,6 +18,7 @@ import org.koin.compose.koinInject
 fun MiniatureDetailScreen(
     viewModel: MiniatureDetailViewModel = koinInject(),
     miniatureId: Long,
+    onlyUpdate: Boolean,
     onBackPressed: () -> Unit,
     onEditMiniaturePressed: (Long, Long) -> Unit
 ) {
@@ -42,6 +43,7 @@ fun MiniatureDetailScreen(
         if (state.miniatureLoaded && state.miniature != null && state.parentProject != null) {
             MiniatureDetailScreenContent(
                 innerPadding = innerPadding,
+                onlyUpdate = onlyUpdate,
                 miniature = state.miniature,
                 onBackPressed = {
                     viewModel.onAction(OnBackPressed)

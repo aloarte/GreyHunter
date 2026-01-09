@@ -20,12 +20,14 @@ import com.devalr.framework.theme.GreyHunterTheme
 fun TopButtons(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
-    onEditPressed: () -> Unit
+    onEditPressed: (() -> Unit)? = null
 ) {
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         GHIconButton(icon = Icons.Default.ArrowBack, onButtonClicked = onBackPressed)
-        Spacer(modifier = Modifier.width(10.dp))
-        GHIconButton(icon = Icons.Default.Edit, onButtonClicked = onEditPressed)
+        if (onEditPressed!=null) {
+            Spacer(modifier = Modifier.width(10.dp))
+            GHIconButton(icon = Icons.Default.Edit, onButtonClicked = onEditPressed)
+        }
 
     }
 }
@@ -58,5 +60,16 @@ private fun TopButtonsPreviewDarkMode() {
             }
         )
     }
+}
 
+@Preview(showBackground = true)
+@Composable
+private fun TopButtonsPreviewOnlyBack() {
+    GreyHunterTheme(darkTheme = false) {
+        TopButtons(
+            onBackPressed = {
+                // Do nothing
+            }
+        )
+    }
 }

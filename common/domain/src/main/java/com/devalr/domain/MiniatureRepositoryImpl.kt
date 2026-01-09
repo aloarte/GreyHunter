@@ -21,6 +21,12 @@ class MiniatureRepositoryImpl(
             miniatureDatabaseMapper.transform(entity)
         }
 
+    override suspend fun getMiniatures(miniaturesId: List<Long>): Flow<List<MiniatureBo>> =
+        miniatureDao.getMiniaturesByIds(miniaturesId).map { entityList ->
+            entityList.map { entity ->
+                miniatureDatabaseMapper.transform(entity)
+            }
+        }
 
     override suspend fun getMiniaturesFromProject(projectId: Long): Flow<List<MiniatureBo>> =
         miniatureDao.getMiniaturesByProject(projectId)

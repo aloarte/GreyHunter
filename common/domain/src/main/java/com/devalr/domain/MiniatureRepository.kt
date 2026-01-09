@@ -9,6 +9,8 @@ interface MiniatureRepository {
 
     suspend fun getMiniature(miniatureId: Long): Flow<MiniatureBo>
 
+    suspend fun getMiniatures(miniaturesId: List<Long>): Flow<List<MiniatureBo>>
+
     suspend fun getMiniaturesFromProject(projectId: Long): Flow<List<MiniatureBo>>
 
     suspend fun updateMiniature(miniature: MiniatureBo): Boolean

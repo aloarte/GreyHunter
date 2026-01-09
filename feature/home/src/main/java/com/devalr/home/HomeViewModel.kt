@@ -9,7 +9,7 @@ import com.devalr.home.interactions.Action.OnAddProject
 import com.devalr.home.interactions.Action.OnOpenProjectDetail
 import com.devalr.home.interactions.Action.OnStartPainting
 import com.devalr.home.interactions.Event
-import com.devalr.home.interactions.Event.LaunchStartPaintModal
+import com.devalr.home.interactions.Event.NavigateStartPaint
 import com.devalr.home.interactions.Event.NavigateToAddProject
 import com.devalr.home.interactions.Event.NavigateToProject
 import com.devalr.home.interactions.State
@@ -36,7 +36,7 @@ class HomeViewModel(
             }
 
             is OnOpenProjectDetail -> sendEvent(NavigateToProject(projectId = action.projectId))
-            is OnStartPainting -> sendEvent(LaunchStartPaintModal)
+            is OnStartPainting -> sendEvent(NavigateStartPaint)
             OnAddProject -> sendEvent(NavigateToAddProject)
         }
     }

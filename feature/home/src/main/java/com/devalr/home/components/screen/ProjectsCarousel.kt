@@ -18,7 +18,7 @@ fun ProjectsCarousel(
     onProjectClicked: (Long) -> Unit,
     onCreateProject: () -> Unit
 ) {
-    HorizontalCarousel(items = projects) { item ->
+    HorizontalCarousel(items = projects, dots = true) { item ->
         when (item) {
             is ProjectItem -> ProjectCard(
                 projectBo = item.project,
@@ -49,5 +49,4 @@ private fun ProjectsCarouselPreview() {
             // Do nothing
         }
     )
-
 }

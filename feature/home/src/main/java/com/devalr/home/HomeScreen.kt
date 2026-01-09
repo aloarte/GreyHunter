@@ -17,7 +17,7 @@ import com.devalr.home.interactions.Action.OnAppear
 import com.devalr.home.interactions.Action.OnAddProject
 import com.devalr.home.interactions.Action.OnOpenProjectDetail
 import com.devalr.home.interactions.Action.OnStartPainting
-import com.devalr.home.interactions.Event.LaunchStartPaintModal
+import com.devalr.home.interactions.Event.NavigateStartPaint
 import com.devalr.home.interactions.Event.NavigateToAddProject
 import com.devalr.home.interactions.Event.NavigateToProject
 import org.koin.compose.koinInject
@@ -26,14 +26,15 @@ import org.koin.compose.koinInject
 fun HomeScreen(
     viewModel: HomeViewModel = koinInject(),
     onNavigateToProject: (Long) -> Unit,
-    onNavigateToAddProject: () -> Unit
+    onNavigateToAddProject: () -> Unit,
+    onNavigateToStartPainting: () -> Unit
 
 ) {
     val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                LaunchStartPaintModal -> TODO()
+                NavigateStartPaint -> onNavigateToStartPainting()
                 is NavigateToProject -> onNavigateToProject(event.projectId)
                 is NavigateToAddProject -> onNavigateToAddProject()
             }

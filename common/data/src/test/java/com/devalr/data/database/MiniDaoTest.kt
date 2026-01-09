@@ -142,7 +142,6 @@ class MiniDaoTest {
             val projectId = projectDao.insertProject(
                 ProjectEntity(name = PROJECT_NAME, completionPercentage = 0.0f)
             )
-
             val minisToInsert = listOf("Warrior 1", "Warrior 2", "Warrior 3")
             minisToInsert.forEach { name ->
                 miniatureDao.insertMiniature(
@@ -152,6 +151,27 @@ class MiniDaoTest {
 
             // WHEN
             val projectMinis = miniatureDao.getMiniaturesByProject(projectId).first()
+
+            // THEN
+            assertEquals(3, projectMinis.size)
+        }
+
+    @Test
+    fun `GIVEN multiple miniatures WHEN querying by ids THEN returns all miniatures`() =
+        runBlocking {
+            // GIVEN
+            val projectId = projectDao.insertProject(
+                ProjectEntity(name = PROJECT_NAME, completionPercentage = 0.0f)
+            )
+            val minisToInsert = listOf("Warrior 1", "Warrior 2", "Warrior 3")
+            minisToInsert.forEach { name ->
+                miniatureDao.insertMiniature(
+                    MiniatureEntity(projectId = projectId, name = name, completionPercentage = 0.0f)
+                )
+            }
+
+            // WHEN
+            val projectMinis = miniatureDao.getMiniaturesByIds(listOf(1, 2, 3)).first()
 
             // THEN
             assertEquals(3, projectMinis.size)
