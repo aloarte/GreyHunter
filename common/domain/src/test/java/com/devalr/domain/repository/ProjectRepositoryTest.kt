@@ -1,6 +1,5 @@
 package com.devalr.domain.repository
 
-
 import com.devalr.data.database.miniature.MiniatureDao
 import com.devalr.data.database.project.ProjectDao
 import com.devalr.domain.ProjectRepositoryImpl
@@ -28,6 +27,9 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneId
 
 class ProjectRepositoryTest {
 
@@ -37,12 +39,16 @@ class ProjectRepositoryTest {
 
     private val mapper: Mapper<ProjectEntityData, ProjectBo> = mockk()
 
+    private val fixedClock = Clock.fixed(Instant.parse("2022-01-01T00:00:00Z"), ZoneId.of("UTC"))
+
+    private val date = 1640995200000L
+
     private lateinit var repository: ProjectRepositoryImpl
 
 
     @Before
     fun setUp() {
-        repository = ProjectRepositoryImpl(projectDao, miniatureDao, mapper)
+        repository = ProjectRepositoryImpl(projectDao, miniatureDao, mapper, fixedClock)
         every { mapper.transform(projectEntityData) } returns projectBo
         every { mapper.transformReverse(projectBo) } returns projectEntityData
     }
@@ -76,7 +82,7 @@ class ProjectRepositoryTest {
 
             // THEN
             coVerify(exactly = 1) { projectDao.getProjectById(PROJECT_ID) }
-            coVerify(exactly = 1)  { miniatureDao.getMiniaturesByProject(PROJECT_ID) }
+            coVerify(exactly = 1) { miniatureDao.getMiniaturesByProject(PROJECT_ID) }
             verify(exactly = 1) { mapper.transform(projectEntityData) }
             assertEquals(projectBo, resultBo)
             assertEquals(2, projectBo.minis.size)
@@ -98,7 +104,7 @@ class ProjectRepositoryTest {
 
             // THEN
             coVerify(exactly = 1) { projectDao.getAllProjects() }
-            coVerify(exactly = 1)  { miniatureDao.getMiniaturesByProject(PROJECT_ID) }
+            coVerify(exactly = 1) { miniatureDao.getMiniaturesByProject(PROJECT_ID) }
             verify(exactly = 1) { mapper.transform(projectEntityData) }
             assertEquals(2, projectBo.minis.size)
             assertEquals(projectBo, resultList[0])
@@ -108,14 +114,14 @@ class ProjectRepositoryTest {
     fun `GIVEN project inserted WHEN updateProject is called and updates the project THEN returns true`() =
         runTest {
             // GIVEN
-            coEvery { projectDao.updateProject(projectEntity) } returns 1
+            coEvery { projectDao.updateProject(projectEntity.copy(lastUpdate = date)) } returns 1
 
             // WHEN
             val result = repository.updateProject(projectBo)
 
             // THEN
             verify(exactly = 1) { mapper.transformReverse(projectBo) }
-            coVerify(exactly = 1) { projectDao.updateProject(projectEntity) }
+            coVerify(exactly = 1) { projectDao.updateProject(projectEntity.copy(lastUpdate = date)) }
             assertTrue(result)
         }
 
@@ -123,14 +129,14 @@ class ProjectRepositoryTest {
     fun `GIVEN project inserted WHEN updateProject is called and does not update the project THEN returns false`() =
         runTest {
             // GIVEN
-            coEvery { projectDao.updateProject(projectEntity) } returns 0
+            coEvery { projectDao.updateProject(projectEntity.copy(lastUpdate = date)) } returns 0
 
             // WHEN
             val result = repository.updateProject(projectBo)
 
             // THEN
             verify(exactly = 1) { mapper.transformReverse(projectBo) }
-            coVerify(exactly = 1) { projectDao.updateProject(projectEntity) }
+            coVerify(exactly = 1) { projectDao.updateProject(projectEntity.copy(lastUpdate = date)) }
             assertFalse(result)
         }
 

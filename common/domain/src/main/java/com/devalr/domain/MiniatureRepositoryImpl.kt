@@ -6,10 +6,12 @@ import com.devalr.domain.mappers.Mapper
 import com.devalr.domain.model.MiniatureBo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.Clock
 
 class MiniatureRepositoryImpl(
     private val miniatureDao: MiniatureDao,
-    private val miniatureDatabaseMapper: Mapper<MiniatureEntity, MiniatureBo>
+    private val miniatureDatabaseMapper: Mapper<MiniatureEntity, MiniatureBo>,
+    private val clock: Clock = Clock.systemDefaultZone()
 ) : MiniatureRepository {
     override suspend fun addMiniature(miniature: MiniatureBo): Long {
         val entityMiniature = miniatureDatabaseMapper.transformReverse(miniature)
@@ -45,11 +47,10 @@ class MiniatureRepositoryImpl(
                 }
             }
 
-
     override suspend fun updateMiniature(miniature: MiniatureBo): Boolean {
         val entity = miniatureDatabaseMapper.transformReverse(miniature)
         val rowsAffected =
-            miniatureDao.updateMiniature(entity.copy(lastUpdate = System.currentTimeMillis()))
+            miniatureDao.updateMiniature(entity.copy(lastUpdate = clock.millis()))
         return rowsAffected > 0
     }
 

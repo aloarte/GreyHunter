@@ -15,11 +15,13 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import java.time.Clock
 
 class ProjectRepositoryImpl(
     private val projectDao: ProjectDao,
     private val miniatureDao: MiniatureDao,
-    private val projectDatabaseMapper: Mapper<ProjectEntityData, ProjectBo>
+    private val projectDatabaseMapper: Mapper<ProjectEntityData, ProjectBo>,
+    private val clock: Clock = Clock.systemDefaultZone()
 ) : ProjectRepository {
 
     override suspend fun getAllProjects(): Flow<List<ProjectBo>> =
@@ -84,7 +86,7 @@ class ProjectRepositoryImpl(
 
     override suspend fun updateProject(project: ProjectBo, avoidLastUpdate: Boolean): Boolean {
         val entity = projectDatabaseMapper.transformReverse(project).projectEntity
-        return projectDao.updateProject(entity.copy(lastUpdate = if (avoidLastUpdate) 0 else System.currentTimeMillis())) > 0
+        return projectDao.updateProject(entity.copy(lastUpdate = if (avoidLastUpdate) 0 else clock.millis())) > 0
 
     }
 
