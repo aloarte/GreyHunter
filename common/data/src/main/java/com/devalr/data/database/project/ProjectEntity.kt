@@ -10,5 +10,6 @@ data class ProjectEntity(
     val name: String,
     val description: String? = null,
     val imageUri: String? = null,
-    val completionPercentage: Float
+    val completionPercentage: Float,
+    val lastUpdate: Long? = null
 )

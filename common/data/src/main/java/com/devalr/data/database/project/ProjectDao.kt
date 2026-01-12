@@ -24,4 +24,7 @@ interface ProjectDao {
 
     @Query("SELECT * FROM projects WHERE id = :id")
     fun getProjectById(id: Long): Flow<ProjectEntity>
+
+    @Query("SELECT * FROM projects WHERE lastUpdate > 0 ORDER BY lastUpdate DESC LIMIT 1")
+    fun getLastUpdatedProject(): Flow<ProjectEntity?>
 }

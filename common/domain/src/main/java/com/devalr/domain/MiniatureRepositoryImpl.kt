@@ -16,9 +16,18 @@ class MiniatureRepositoryImpl(
         return miniatureDao.insertMiniature(entityMiniature.copy(id = 0))
     }
 
-    override suspend fun getMiniature(miniatureId: Long): Flow<MiniatureBo> =
+    override suspend fun getMiniature(miniatureId: Long): Flow<MiniatureBo?> =
         miniatureDao.getMiniatureById(miniatureId).map { entity ->
             miniatureDatabaseMapper.transform(entity)
+        }
+
+    override suspend fun getLastUpdatedMiniature(): Flow<MiniatureBo?> =
+        miniatureDao.getLastUpdatedMiniature().map { entity ->
+            if (entity == null) {
+                null
+            } else {
+                miniatureDatabaseMapper.transform(entity)
+            }
         }
 
     override suspend fun getMiniatures(miniaturesId: List<Long>): Flow<List<MiniatureBo>> =
@@ -39,7 +48,8 @@ class MiniatureRepositoryImpl(
 
     override suspend fun updateMiniature(miniature: MiniatureBo): Boolean {
         val entity = miniatureDatabaseMapper.transformReverse(miniature)
-        val rowsAffected = miniatureDao.updateMiniature(entity)
+        val rowsAffected =
+            miniatureDao.updateMiniature(entity.copy(lastUpdate = System.currentTimeMillis()))
         return rowsAffected > 0
     }
 

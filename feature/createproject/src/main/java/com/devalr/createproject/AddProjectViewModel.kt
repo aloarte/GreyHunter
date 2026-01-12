@@ -41,6 +41,7 @@ class AddProjectViewModel(
                 projectRepository.getProject(projectId)
                     .catch { updateState { copy(errorType = ErrorType.BadId) } }
                     .collect {
+                        if (it == null) return@collect
                         updateState {
                             copy(
                                 projectDescription = it.description,
