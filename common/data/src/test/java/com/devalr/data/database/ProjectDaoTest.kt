@@ -9,6 +9,7 @@ import com.devalr.data.database.miniature.MiniatureEntity
 import com.devalr.data.database.project.ProjectDao
 import com.devalr.data.database.project.ProjectEntity
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -33,6 +34,10 @@ class ProjectDaoTest {
     companion object {
         private const val PROJECT_NAME = "Hierotek Circle"
         private const val NEW_PROJECT_NAME = "Cannoptek Circle"
+
+        private val latestProject = ProjectEntity(name = PROJECT_NAME, completionPercentage = 0.5f, lastUpdate = 5000L)
+        private val notUpdatedProject = ProjectEntity(name = PROJECT_NAME, completionPercentage = 0.5f, lastUpdate = 0L)
+        private val notLatestProject = ProjectEntity(name = PROJECT_NAME, completionPercentage = 0.5f, lastUpdate = 4000L)
     }
 
 
@@ -73,7 +78,7 @@ class ProjectDaoTest {
         }
 
     @Test
-    fun `GIVEN a created project WHEN project us updated THEN database gets the new result`() =
+    fun `GIVEN a created project WHEN project is updated THEN database gets the new result`() =
         runBlocking {
             // GIVEN
             val projectId = projectDao.insertProject(
@@ -81,15 +86,15 @@ class ProjectDaoTest {
             )
 
             // WHEN
-            projectDao.getProjectById(projectId).first()?.let {
+            projectDao.getProjectById(projectId).firstOrNull()?.let {
                 projectDao.updateProject(it.copy(name = NEW_PROJECT_NAME))
             } ?: run {
                 fail("Project not found")
             }
             // THEN
-            projectDao.getProjectById(projectId).first()?.let {
-                assertEquals(NEW_PROJECT_NAME, it.name) // new value
-                assertEquals(0.5f, it.completionPercentage) // old value
+            projectDao.getProjectById(projectId).firstOrNull()?.let {
+                assertEquals(NEW_PROJECT_NAME, it.name)
+                assertEquals(0.5f, it.completionPercentage)
             } ?: run {
                 fail("Project not found")
             }
@@ -116,5 +121,35 @@ class ProjectDaoTest {
             // THEN
             assertNull(projectDao.getProjectById(projectId).first())
             assertNull(miniatureDao.getMiniatureById(miniatureId = miniId).first())
+        }
+
+    @Test
+    fun `GIVEN multiple projects WHEN requesting last updated THEN returns the one with highest timestamp ignoring zeros`() =
+        runBlocking {
+            // GIVEN
+            projectDao.insertProject(latestProject)
+            projectDao.insertProject(notUpdatedProject)
+            projectDao.insertProject(notLatestProject)
+
+            // WHEN
+            val result = projectDao.getLastUpdatedProject().firstOrNull()
+
+            // THEN
+            assertNotNull(result)
+            assertEquals(latestProject.name, result?.name)
+            assertEquals(latestProject.lastUpdate, result?.lastUpdate)
+        }
+
+    @Test
+    fun `GIVEN only projects with zero timestamp WHEN requesting last updated THEN returns null`() =
+        runBlocking {
+            // GIVEN
+            projectDao.insertProject(notUpdatedProject)
+
+            // WHEN
+            val result = projectDao.getLastUpdatedProject().firstOrNull()
+
+            // THEN
+            assertNull(result)
         }
 }
