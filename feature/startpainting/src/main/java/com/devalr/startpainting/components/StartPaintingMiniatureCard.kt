@@ -91,7 +91,8 @@ fun StartPaintingMiniatureCard(
         ) {
             GHText(
                 text = miniature.name,
-                type = TextType.LabelMBold
+                type = TextType.LabelMBold,
+                textColor = Color.White
             )
 
         }

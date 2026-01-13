@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
@@ -26,7 +27,7 @@ fun PaintingMiniCard(miniature: MiniatureBo) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        GHText(text = miniature.name, type = TextType.LabelL)
+        GHText(text = miniature.name, type = TextType.LabelL, textColor = Color.White)
         Spacer(modifier = Modifier.height(10.dp))
         GHImage(
             imageUri = miniature.imageUri,

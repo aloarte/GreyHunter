@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -78,6 +79,7 @@ fun PaintingScreenContent(
         ) {
             MarkedText(
                 text = stringResource(R.string.painting_message),
+                textColor = Color.White,
                 color = MaterialTheme.colorScheme.background,
                 barsSize = 50.dp
             )
@@ -85,7 +87,8 @@ fun PaintingScreenContent(
             Spacer(modifier = Modifier.height(10.dp))
             GHText(
                 text = formatSecondsToHHMMSS(seconds),
-                type = if (getScreenSize() == ScreenSize.SMALL) TextType.Featured else TextType.UltraFeatured
+                type = if (getScreenSize() == ScreenSize.SMALL) TextType.Featured else TextType.UltraFeatured,
+                textColor = Color.White
             )
             Spacer(modifier = Modifier.height(30.dp))
             Row(

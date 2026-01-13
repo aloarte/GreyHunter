@@ -25,6 +25,7 @@ import com.devalr.framework.theme.ProgressYellow
 @Composable
 fun MarkedText(
     text: String,
+    textColor: Color =  MaterialTheme.colorScheme.onSurface,
     title: Boolean = false,
     fillSpace: Boolean = false,
     color: Color = MaterialTheme.colorScheme.primary,
@@ -45,6 +46,7 @@ fun MarkedText(
                 } else Modifier
             ),
             textAlign = TextAlign.Start,
+            textColor = textColor,
             text = text,
             type = if (title) TextType.Featured else TextType.Description
         )

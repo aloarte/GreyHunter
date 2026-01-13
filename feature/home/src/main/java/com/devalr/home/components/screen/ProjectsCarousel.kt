@@ -1,10 +1,18 @@
 package com.devalr.home.components.screen
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.stormlightArchiveProject
+import com.devalr.framework.components.GHText
 import com.devalr.framework.components.HorizontalCarousel
+import com.devalr.framework.components.TextType
 import com.devalr.framework.components.cards.AddCard
 import com.devalr.framework.enum.CardType
 import com.devalr.home.components.cards.ProjectCard
@@ -18,19 +26,28 @@ fun ProjectsCarousel(
     onProjectClicked: (Long) -> Unit,
     onCreateProject: () -> Unit
 ) {
-    HorizontalCarousel(items = projects, dots = true) { item ->
-        when (item) {
-            is ProjectItem -> ProjectCard(
-                projectBo = item.project,
-                onProjectClicked = onProjectClicked
-            )
+    Column {
+        GHText(
+            modifier = Modifier.padding(horizontal = 20.dp),
+            text = "Projects",
+            type = TextType.Title
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        HorizontalCarousel(items = projects, dots = true) { item ->
+            when (item) {
+                is ProjectItem -> ProjectCard(
+                    project = item.project,
+                    onProjectClicked = onProjectClicked
+                )
 
-            is AddProject -> AddCard(
-                type = CardType.Project,
-                onCreate = onCreateProject
-            )
+                is AddProject -> AddCard(
+                    type = CardType.Project,
+                    onCreate = onCreateProject
+                )
+            }
         }
     }
+
 }
 
 @Preview(showBackground = true)

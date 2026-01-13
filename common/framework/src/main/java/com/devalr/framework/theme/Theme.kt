@@ -32,7 +32,7 @@ private val DarkColorScheme =darkColorScheme(
 
 private val LightColorScheme = lightColorScheme(
     primary = HunterGreen,
-    surfaceVariant = HunterGreenLight,
+    surfaceVariant = HunterGreen/*HunterGreenLight*/,
     background = WhiteGray,
     onBackground = TextDark,
     surface = LightGray,
