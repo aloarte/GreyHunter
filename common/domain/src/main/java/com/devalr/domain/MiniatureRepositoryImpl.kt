@@ -23,11 +23,9 @@ class MiniatureRepositoryImpl(
             miniatureDatabaseMapper.transform(entity)
         }
 
-    override suspend fun getLastUpdatedMiniature(): Flow<MiniatureBo?> =
-        miniatureDao.getLastUpdatedMiniature().map { entity ->
-            if (entity == null) {
-                null
-            } else {
+    override suspend fun getLastUpdatedMiniatures(miniatureNumber:Int): Flow<List<MiniatureBo>> =
+        miniatureDao.getLastUpdatedMiniatures(miniatureNumber).map { entityList ->
+            entityList.map { entity ->
                 miniatureDatabaseMapper.transform(entity)
             }
         }

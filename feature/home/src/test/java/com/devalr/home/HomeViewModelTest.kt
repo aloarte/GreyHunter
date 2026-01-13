@@ -104,8 +104,8 @@ class HomeViewModelTest {
             val state = viewModel.uiState.value
             assertTrue(state.loaded)
             assertEquals(expectedProjects, state.projects)
-            assertEquals(miniature, state.lastUpdatedMini)
-            assertEquals(projects[1], state.lastUpdatedProject)
+            assertEquals(miniature, state.lastUpdatedMinis)
+            assertEquals(projects[1], state.almostDoneProjects)
             assertNull(state.error)
         }
 
@@ -133,8 +133,8 @@ class HomeViewModelTest {
             val state = viewModel.uiState.value
             assertTrue(state.loaded)
             assertEquals(expectedProjects, state.projects)
-            assertNull(state.lastUpdatedMini)
-            assertNull(state.lastUpdatedProject)
+            assertNull(state.lastUpdatedMinis)
+            assertNull(state.almostDoneProjects)
             assertNull(state.error)
         }
 

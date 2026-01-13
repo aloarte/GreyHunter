@@ -7,7 +7,7 @@ import com.devalr.home.model.ProjectVo
 data class State(
     val loaded: Boolean = false,
     val projects: List<ProjectVo> = emptyList(),
-    val lastUpdatedProject : ProjectBo? = null,
-    val lastUpdatedMini : MiniatureBo? = null,
+    val almostDoneProjects: List<ProjectBo> = emptyList(),
+    val lastUpdatedMinis: List<MiniatureBo> = emptyList(),
     val error: String? = null
 )

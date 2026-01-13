@@ -10,10 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.devalr.framework.components.LoadingIndicator
 import com.devalr.home.components.screen.AppTitle
-import com.devalr.home.components.screen.GamificationMessage
-import com.devalr.home.components.screen.LastUpdated
-import com.devalr.home.components.screen.ProjectsCarousel
-import com.devalr.home.components.screen.StartPaint
+import com.devalr.home.components.screen.HomeScreenContent
 import com.devalr.home.interactions.Action.OnAddProject
 import com.devalr.home.interactions.Action.OnAppear
 import com.devalr.home.interactions.Action.OnOpenMiniatureDetail
@@ -54,36 +51,28 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            AppTitle()
             if (state.loaded) {
-                ProjectsCarousel(
+                HomeScreenContent(
                     projects = state.projects,
-                    onProjectClicked = { projectId ->
+                    almostDoneProjects = state.almostDoneProjects,
+                    lastUpdatedMinis = state.lastUpdatedMinis,
+                    onOpenProjectDetail = { projectId ->
                         viewModel.onAction(OnOpenProjectDetail(projectId = projectId))
                     },
-                    onCreateProject = {
-                        viewModel.onAction(OnAddProject)
-                    }
-                )
-                GamificationMessage()
-                LastUpdated(
-                    project = state.lastUpdatedProject,
-                    miniature = state.lastUpdatedMini,
-                    onProjectClicked = {
-                        viewModel.onAction(OnOpenProjectDetail(projectId = it))
+                    onOpenMiniatureDetail = { miniatureId ->
+                        viewModel.onAction(OnOpenMiniatureDetail(miniatureId = miniatureId))
                     },
-                    onMiniatureClicked = {
-                        viewModel.onAction(OnOpenMiniatureDetail(miniatureId = it))
+                    onAddProject = {
+                        viewModel.onAction(OnAddProject)
+                    },
+                    onStartPainting = {
+                        viewModel.onAction(OnStartPainting)
                     }
                 )
-
             } else {
+                AppTitle()
                 LoadingIndicator()
-            }
-            StartPaint {
-                viewModel.onAction(OnStartPainting)
             }
         }
     }
-
 }

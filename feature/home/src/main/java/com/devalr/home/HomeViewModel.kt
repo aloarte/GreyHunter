@@ -42,17 +42,17 @@ class HomeViewModel(
         viewModelScope.launch {
             combine(
                 projectRepository.getAllProjects(),
-                projectRepository.getLastUpdatedProject(),
-                miniatureRepository.getLastUpdatedMiniature()
-            ) { projects, lastProject, lastMini ->
+                projectRepository.getAlmostDoneProjects(),
+                miniatureRepository.getLastUpdatedMiniatures()
+            ) { projects, almostDoneProjects, lastMinis ->
                 val voProjects: MutableList<ProjectVo> =
                     projects.map { ProjectItem(it) }.toMutableList()
                 voProjects.add(AddProject)
 
                 uiState.value.copy(
                     projects = voProjects,
-                    lastUpdatedProject = lastProject,
-                    lastUpdatedMini = lastMini,
+                    almostDoneProjects = almostDoneProjects,
+                    lastUpdatedMinis = lastMinis,
                     loaded = true,
                     error = null
                 )

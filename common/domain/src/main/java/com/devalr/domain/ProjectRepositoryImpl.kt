@@ -79,6 +79,19 @@ class ProjectRepositoryImpl(
                 }
         }
 
+    override suspend fun getAlmostDoneProjects(projectsNumber: Int): Flow<List<ProjectBo>> =
+        projectDao.getAlmostDoneProjects(projectsNumber).map { projectList ->
+            projectList.map {
+                projectDatabaseMapper.transform(
+                    ProjectEntityData(
+                        projectEntity = it,
+                        miniatureEntities = emptyList()
+                    )
+                )
+            }
+        }
+
+
     override suspend fun addProject(project: ProjectBo): Long {
         val projectEntityData = projectDatabaseMapper.transformReverse(project)
         return projectDao.insertProject(projectEntityData.projectEntity)

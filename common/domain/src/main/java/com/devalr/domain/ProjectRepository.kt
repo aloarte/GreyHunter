@@ -11,6 +11,8 @@ interface ProjectRepository {
 
     suspend fun getLastUpdatedProject(): Flow<ProjectBo?>
 
+    suspend fun getAlmostDoneProjects(projectsNumber:Int = 2): Flow<List<ProjectBo>>
+
     suspend fun addProject(project: ProjectBo): Long
 
     suspend fun updateProject(project: ProjectBo, avoidLastUpdate: Boolean = false): Boolean

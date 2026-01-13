@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.helpers.deathmark
 import com.devalr.domain.model.helpers.immortal
-import com.devalr.framework.components.GHImage
 import com.devalr.framework.components.GHText
 import com.devalr.framework.components.TextType
 import com.devalr.framework.components.cards.getCardWidth
@@ -58,7 +57,11 @@ fun MiniatureCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                GHText(modifier = Modifier.fillMaxWidth(0.70f),text = miniature.name, type = TextType.Title)
+                GHText(
+                    modifier = Modifier.fillMaxWidth(0.70f),
+                    text = miniature.name,
+                    type = TextType.Title
+                )
                 CircularProgressIndicator(
                     progress = { miniature.percentage },
                     modifier = Modifier.size(30.dp),
@@ -78,6 +81,7 @@ private fun MiniatureCardPreviewInHorizontalRow() {
         LazyRow(
             modifier = Modifier
                 .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
                 .padding(10.dp),
             horizontalArrangement = spacedBy(10.dp)
         ) {
@@ -103,10 +107,10 @@ private fun MiniatureCardPreviewInHorizontalRow() {
 @Composable
 private fun MiniatureCardPreviewInVerticalColumn() {
     GreyHunterTheme {
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
                 .padding(10.dp),
             verticalArrangement = spacedBy(10.dp)
         ) {

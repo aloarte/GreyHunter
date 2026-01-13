@@ -40,7 +40,7 @@ fun ProjectCard(
         modifier = modifier
             .width(getCardWidth(cardType))
             .aspectRatio(1.6f),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
         onClick = { onProjectClicked(project.id) }
     ) {
         Column(
@@ -72,6 +72,7 @@ private fun ProjectCardPreviewInHorizontalRow() {
         LazyRow(
             modifier = Modifier
                 .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
                 .padding(10.dp),
             horizontalArrangement = spacedBy(10.dp)
         ) {
@@ -97,10 +98,10 @@ private fun ProjectCardPreviewInHorizontalRow() {
 @Composable
 private fun ProjectCardPreviewInVerticalColumn() {
     GreyHunterTheme {
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
                 .padding(10.dp),
             verticalArrangement = spacedBy(10.dp)
         ) {
