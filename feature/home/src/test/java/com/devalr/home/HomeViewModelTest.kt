@@ -42,7 +42,6 @@ class HomeViewModelTest {
 
     private val projectRepository: ProjectRepository = mockk()
     private val miniatureRepository: MiniatureRepository = mockk()
-
     private lateinit var viewModel: HomeViewModel
     private val testDispatcher = StandardTestDispatcher()
 
@@ -85,8 +84,8 @@ class HomeViewModelTest {
         runTest {
             // GIVEN
             coEvery { projectRepository.getAllProjects() } returns flowOf(projects)
-            coEvery { projectRepository.getLastUpdatedProject() } returns flowOf(projects[1])
-            coEvery { miniatureRepository.getLastUpdatedMiniature() } returns flowOf(miniature)
+            coEvery { projectRepository.getAlmostDoneProjects() } returns flowOf(listOf(projects[1]))
+            coEvery { miniatureRepository.getLastUpdatedMiniatures() } returns flowOf(listOf(miniature))
 
             // WHEN
             viewModel.onAction(OnAppear)
@@ -94,8 +93,8 @@ class HomeViewModelTest {
 
             // THEN
             coVerify(exactly = 1) { projectRepository.getAllProjects() }
-            coVerify(exactly = 1) { projectRepository.getLastUpdatedProject() }
-            coVerify(exactly = 1) { miniatureRepository.getLastUpdatedMiniature() }
+            coVerify(exactly = 1) { projectRepository.getAlmostDoneProjects() }
+            coVerify(exactly = 1) { miniatureRepository.getLastUpdatedMiniatures() }
             val expectedProjects: List<ProjectVo> = listOf(
                 ProjectItem(projects[0]),
                 ProjectItem(projects[1]),
@@ -104,8 +103,8 @@ class HomeViewModelTest {
             val state = viewModel.uiState.value
             assertTrue(state.loaded)
             assertEquals(expectedProjects, state.projects)
-            assertEquals(miniature, state.lastUpdatedMinis)
-            assertEquals(projects[1], state.almostDoneProjects)
+            assertEquals(listOf(miniature), state.lastUpdatedMinis)
+            assertEquals(listOf(projects[1]), state.almostDoneProjects)
             assertNull(state.error)
         }
 
@@ -114,8 +113,8 @@ class HomeViewModelTest {
         runTest {
             // GIVEN
             coEvery { projectRepository.getAllProjects() } returns flowOf(projects)
-            coEvery { projectRepository.getLastUpdatedProject() } returns flowOf(null)
-            coEvery { miniatureRepository.getLastUpdatedMiniature() } returns flowOf(null)
+            coEvery { projectRepository.getAlmostDoneProjects() } returns flowOf(emptyList())
+            coEvery { miniatureRepository.getLastUpdatedMiniatures() } returns flowOf(emptyList())
 
             // WHEN
             viewModel.onAction(OnAppear)
@@ -123,8 +122,8 @@ class HomeViewModelTest {
 
             // THEN
             coVerify(exactly = 1) { projectRepository.getAllProjects() }
-            coVerify(exactly = 1) { projectRepository.getLastUpdatedProject() }
-            coVerify(exactly = 1) { miniatureRepository.getLastUpdatedMiniature() }
+            coVerify(exactly = 1) { projectRepository.getAlmostDoneProjects() }
+            coVerify(exactly = 1) { miniatureRepository.getLastUpdatedMiniatures() }
             val expectedProjects: List<ProjectVo> = listOf(
                 ProjectItem(projects[0]),
                 ProjectItem(projects[1]),
@@ -133,8 +132,8 @@ class HomeViewModelTest {
             val state = viewModel.uiState.value
             assertTrue(state.loaded)
             assertEquals(expectedProjects, state.projects)
-            assertNull(state.lastUpdatedMinis)
-            assertNull(state.almostDoneProjects)
+            assertEquals(emptyList<MiniatureBo>(),state.lastUpdatedMinis)
+            assertEquals(emptyList<ProjectBo>(),state.almostDoneProjects)
             assertNull(state.error)
         }
 
@@ -147,10 +146,10 @@ class HomeViewModelTest {
             coEvery { projectRepository.getAllProjects() } returns flow {
                 throw Exception(errorMessage)
             }
-            coEvery { projectRepository.getLastUpdatedProject() } returns flow {
+            coEvery { projectRepository.getAlmostDoneProjects() } returns flow {
                 throw Exception(errorMessage)
             }
-            coEvery { miniatureRepository.getLastUpdatedMiniature() } returns flow {
+            coEvery { miniatureRepository.getLastUpdatedMiniatures() } returns flow {
                 throw Exception(errorMessage)
             }
 

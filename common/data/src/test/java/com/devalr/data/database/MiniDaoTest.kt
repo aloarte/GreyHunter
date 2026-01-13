@@ -207,12 +207,13 @@ class MiniDaoTest {
             miniatureDao.insertMiniature(miniNotUpdated)
 
             // WHEN
-            val result = miniatureDao.getLastUpdatedMiniature().firstOrNull()
+            val result = miniatureDao.getLastUpdatedMiniatures(2).firstOrNull()
 
             // THEN
             assertNotNull(result)
-            assertEquals("Latest", result?.name)
-            assertEquals(5000L, result?.lastUpdate)
+            assertEquals(2, result?.size)
+            assertEquals(miniNew.copy(id = 2), result?.get(0))
+            assertEquals(miniOld.copy(id = 1), result?.get(1))
         }
 
     @Test
@@ -225,9 +226,10 @@ class MiniDaoTest {
             miniatureDao.insertMiniature(miniNotUpdated)
 
             // WHEN
-            val result = miniatureDao.getLastUpdatedMiniature().firstOrNull()
+            val result = miniatureDao.getLastUpdatedMiniatures(2).firstOrNull()
 
             // THEN
-            assertNull(result)
+            assertEquals(emptyList<MiniatureEntity>(), result)
+
         }
 }
