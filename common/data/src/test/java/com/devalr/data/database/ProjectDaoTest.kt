@@ -27,19 +27,18 @@ class ProjectDaoTest {
 
     private lateinit var db: GreyHunterDatabase
     private lateinit var projectDao: ProjectDao
-
     private lateinit var miniatureDao: MiniatureDao
-
 
     companion object {
         private const val PROJECT_NAME = "Hierotek Circle"
         private const val NEW_PROJECT_NAME = "Cannoptek Circle"
-
-        private val latestProject = ProjectEntity(name = PROJECT_NAME, completionPercentage = 0.5f, lastUpdate = 5000L)
-        private val notUpdatedProject = ProjectEntity(name = PROJECT_NAME, completionPercentage = 0.5f, lastUpdate = 0L)
-        private val notLatestProject = ProjectEntity(name = PROJECT_NAME, completionPercentage = 0.5f, lastUpdate = 4000L)
+        private val latestProject =
+            ProjectEntity(name = PROJECT_NAME, completionPercentage = 0.4f, lastUpdate = 5000L)
+        private val notUpdatedProject =
+            ProjectEntity(name = PROJECT_NAME, completionPercentage = 1f, lastUpdate = 0L)
+        private val notLatestProject =
+            ProjectEntity(name = PROJECT_NAME, completionPercentage = 0.81f, lastUpdate = 4000L)
     }
-
 
     @Before
     fun createDb() {
@@ -47,7 +46,6 @@ class ProjectDaoTest {
         db = Room.inMemoryDatabaseBuilder(
             context, GreyHunterDatabase::class.java
         ).build()
-
         projectDao = db.projectDao()
         miniatureDao = db.miniatureDao()
     }
@@ -151,5 +149,34 @@ class ProjectDaoTest {
 
             // THEN
             assertNull(result)
+        }
+
+    @Test
+    fun `GIVEN different progressed projects WHEN requesting almost done projects THEN returns almost done`() =
+        runBlocking {
+            // GIVEN
+            projectDao.insertProject(notUpdatedProject)
+            projectDao.insertProject(notLatestProject)
+            projectDao.insertProject(latestProject)
+
+            // WHEN
+            val result = projectDao.getAlmostDoneProjects(1).firstOrNull()
+
+            // THEN
+            assertEquals(notLatestProject.copy(id = 2), result?.first())
+        }
+
+    @Test
+    fun `GIVEN progressed projects that doesn't match condition WHEN requesting almost done projects THEN returns empty list`() =
+        runBlocking {
+            // GIVEN
+            projectDao.insertProject(notUpdatedProject)
+            projectDao.insertProject(latestProject)
+
+            // WHEN
+            val result = projectDao.getAlmostDoneProjects(1).firstOrNull()
+
+            // THEN
+            assertEquals(emptyList<ProjectEntity>(), result)
         }
 }
