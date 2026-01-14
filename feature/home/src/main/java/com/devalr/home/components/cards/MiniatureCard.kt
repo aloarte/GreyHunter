@@ -3,45 +3,47 @@ package com.devalr.home.components.cards
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.spacedBy
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.devalr.domain.model.ProjectBo
-import com.devalr.domain.model.helpers.hierotekCircleProject
-import com.devalr.domain.model.helpers.stormlightArchiveProject
-import com.devalr.framework.components.GHImage
+import com.devalr.domain.model.MiniatureBo
+import com.devalr.domain.model.helpers.deathmark
+import com.devalr.domain.model.helpers.immortal
 import com.devalr.framework.components.GHText
 import com.devalr.framework.components.TextType
 import com.devalr.framework.components.cards.getCardWidth
-import com.devalr.framework.components.progress.GHProgressBar
 import com.devalr.framework.enum.CardType
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
-fun ProjectCard(
+fun MiniatureCard(
     modifier: Modifier = Modifier,
-    project: ProjectBo,
-    cardType: CardType = CardType.Project,
-    onProjectClicked: (Long) -> Unit
+    miniature: MiniatureBo,
+    onMiniatureClicked: (Long) -> Unit
 ) {
     Card(
         modifier = modifier
-            .width(getCardWidth(cardType))
+            .width(getCardWidth(CardType.LastUpdated))
             .aspectRatio(1.6f),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
-        onClick = { onProjectClicked(project.id) }
+        onClick = { onMiniatureClicked(miniature.id) }
     ) {
         Column(
             modifier = Modifier
@@ -51,23 +53,41 @@ fun ProjectCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-
-            if (cardType == CardType.Project && project.imageUri != null) {
-                GHImage(imageUri = project.imageUri, size = 60.dp, borderRadius = 10.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                GHText(
+                    modifier = Modifier.fillMaxWidth(0.70f),
+                    text = miniature.name,
+                    type = TextType.Title
+                )
+                Box(
+                    modifier = Modifier.size(40.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    GHText(
+                        text = "${(miniature.percentage * 100).toInt()}%",
+                        type = TextType.LabelS,
+                        singleLane = true
+                    )
+                    CircularProgressIndicator(
+                        progress = { miniature.percentage },
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.primary,
+                        trackColor = MaterialTheme.colorScheme.outlineVariant,
+                        strokeWidth = 3.dp
+                    )
+                }
             }
-            GHText(text = project.name, type = TextType.Title)
-            if(cardType == CardType.Project) GHText(text = "${project.minis.size} Miniatures", type = TextType.LabelM)
-            project.description?.let { description ->
-                GHText(text = description, type = TextType.Description, singleLane = true)
-            }
-            GHProgressBar(percentage = project.progress)
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun ProjectCardPreviewInHorizontalRow() {
+private fun MiniatureCardPreviewInHorizontalRow() {
     GreyHunterTheme(darkTheme = true) {
         LazyRow(
             modifier = Modifier
@@ -77,17 +97,17 @@ private fun ProjectCardPreviewInHorizontalRow() {
             horizontalArrangement = spacedBy(10.dp)
         ) {
             item {
-                ProjectCard(
+                MiniatureCard(
                     modifier = Modifier.fillMaxSize(),
-                    project = hierotekCircleProject,
-                    onProjectClicked = {}
+                    miniature = immortal,
+                    onMiniatureClicked = {}
                 )
             }
             item {
-                ProjectCard(
+                MiniatureCard(
                     modifier = Modifier.fillMaxSize(),
-                    project = stormlightArchiveProject,
-                    onProjectClicked = {}
+                    miniature = deathmark,
+                    onMiniatureClicked = {}
                 )
             }
         }
@@ -96,7 +116,7 @@ private fun ProjectCardPreviewInHorizontalRow() {
 
 @Preview(showBackground = true)
 @Composable
-private fun ProjectCardPreviewInVerticalColumn() {
+private fun MiniatureCardPreviewInVerticalColumn() {
     GreyHunterTheme {
         LazyColumn(
             modifier = Modifier
@@ -106,17 +126,17 @@ private fun ProjectCardPreviewInVerticalColumn() {
             verticalArrangement = spacedBy(10.dp)
         ) {
             item {
-                ProjectCard(
+                MiniatureCard(
                     modifier = Modifier.fillMaxSize(),
-                    project = hierotekCircleProject,
-                    onProjectClicked = {}
+                    miniature = immortal,
+                    onMiniatureClicked = {}
                 )
             }
             item {
-                ProjectCard(
+                MiniatureCard(
                     modifier = Modifier.fillMaxSize(),
-                    project = stormlightArchiveProject,
-                    onProjectClicked = {}
+                    miniature = deathmark,
+                    onMiniatureClicked = {}
                 )
             }
         }

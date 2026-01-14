@@ -9,7 +9,7 @@ import com.devalr.data.database.project.ProjectEntity
 
 @Database(
     entities = [ProjectEntity::class, MiniatureEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class GreyHunterDatabase : RoomDatabase() {

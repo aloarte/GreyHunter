@@ -27,15 +27,17 @@ private val DarkColorScheme =darkColorScheme(
     background = DarkGray,
     onBackground = TextLight,
     surface = DarkSurface,
-    onSurface = TextLight
+    onSurface = TextLight,
+    outlineVariant = ProgressTrackDark
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = HunterGreen,
-    surfaceVariant = HunterGreenLight,
+    surfaceVariant = HunterGreen/*HunterGreenLight*/,
     background = WhiteGray,
     onBackground = TextDark,
     surface = LightGray,
-    onSurface = TextDark
+    onSurface = TextDark,
+    outlineVariant = ProgressTrackLight
 )
 

@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -83,17 +84,24 @@ fun StartPaintingMiniatureCard(
         Row(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .fillMaxWidth()
+                .padding(horizontal = 10.dp, vertical = 5.dp)
                 .height(30.dp)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(5.dp),
-            horizontalArrangement = Arrangement.Center
         ) {
-            GHText(
-                text = miniature.name,
-                type = TextType.LabelMBold
-            )
-
+            Row(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                GHText(
+                    modifier = Modifier.padding(horizontal = 10.dp),
+                    text = miniature.name,
+                    textAlign = TextAlign.Center,
+                    type = TextType.LabelSBold,
+                    textColor = Color.White
+                )
+            }
         }
 
         if (miniature.isSelected) {
@@ -107,7 +115,6 @@ fun StartPaintingMiniatureCard(
                 contentDescription = ""
             )
         }
-
     }
 }
 

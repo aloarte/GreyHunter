@@ -25,6 +25,9 @@ interface MiniatureDao {
     @Query("SELECT * FROM miniatures WHERE id = :miniatureId")
     fun getMiniatureById(miniatureId: Long): Flow<MiniatureEntity>
 
+    @Query("SELECT * FROM miniatures WHERE lastUpdate > 0 ORDER BY lastUpdate DESC LIMIT :miniatureNumber")
+    fun getLastUpdatedMiniatures(miniatureNumber:Int): Flow<List<MiniatureEntity>>
+
     @Query("SELECT * FROM miniatures WHERE id IN (:miniatureIds)")
     fun getMiniaturesByIds(miniatureIds: List<Long>): Flow<List<MiniatureEntity>>
 }

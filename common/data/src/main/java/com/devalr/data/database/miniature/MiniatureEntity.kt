@@ -29,5 +29,6 @@ data class MiniatureEntity(
     val isPrimed: Boolean = false,
     val isBaseColored: Boolean = false,
     val isDetailed: Boolean = false,
-    val baseIsFinished: Boolean = false
+    val baseIsFinished: Boolean = false,
+    val lastUpdate: Long? = null
 )

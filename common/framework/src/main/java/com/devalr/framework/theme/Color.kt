@@ -15,3 +15,6 @@ val TextLight = Color(0xFFE1E6E5)
 val ProgressRed = Color(0xFFE57373)
 val ProgressYellow = Color(0xFFFFD600)
 val ProgressGreen = Color(0xFF76FF03)
+
+val ProgressTrackLight = Color(0xFFE3E7E6)
+val ProgressTrackDark = Color(0xFF3A3F3F)

@@ -24,4 +24,10 @@ interface ProjectDao {
 
     @Query("SELECT * FROM projects WHERE id = :id")
     fun getProjectById(id: Long): Flow<ProjectEntity>
+
+    @Query("SELECT * FROM projects WHERE lastUpdate > 0 ORDER BY lastUpdate DESC LIMIT 1")
+    fun getLastUpdatedProject(): Flow<ProjectEntity?>
+
+    @Query("SELECT * FROM projects WHERE completionPercentage > 0.8 AND completionPercentage < 1 ORDER BY completionPercentage DESC LIMIT :projectNumber")
+    fun getAlmostDoneProjects(projectNumber:Int): Flow<List<ProjectEntity>>
 }

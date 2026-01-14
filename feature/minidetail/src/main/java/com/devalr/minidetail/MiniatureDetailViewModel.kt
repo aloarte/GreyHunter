@@ -19,6 +19,7 @@ import com.devalr.minidetail.interactions.Event.NavigateToEditMiniature
 import com.devalr.minidetail.interactions.State
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -35,9 +36,11 @@ class MiniatureDetailViewModel(
                 viewModelScope.launch {
                     miniatureRepository.getMiniature(action.miniatureId)
                         .flatMapLatest { miniature ->
-                            projectRepository.getProject(miniature.projectId).map { project ->
-                                Pair(miniature, project)
-                            }
+                            miniature?.let{
+                                projectRepository.getProject(miniature.projectId).map { project ->
+                                    Pair(miniature, project)
+                                }
+                            } ?: emptyFlow()
                         }
                         .catch { error ->
                             updateState { copy(error = ErrorType.RetrievingDatabase) }

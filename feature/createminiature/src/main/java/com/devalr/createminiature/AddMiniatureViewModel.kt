@@ -63,6 +63,7 @@ class AddMiniatureViewModel(
                         updateState { copy(errorType = ErrorType.BadId) }
                     }
                     .collect {
+                        if(it == null ) return@collect
                         updateState {
                             copy(
                                 projectId = it.projectId,
@@ -112,7 +113,7 @@ class AddMiniatureViewModel(
         viewModelScope.launch {
             val miniatureAdded = miniatureRepository.addMiniature(miniature) > 0
             if (miniatureAdded) {
-                val projectUpdated = projectRepository.updateProjectProgress(projectId = projectId)
+                val projectUpdated = projectRepository.updateProjectProgress(projectId = projectId, avoidLastUpdate = true)
                 updateState { copy(errorType = if (projectUpdated) null else ErrorType.ErrorUpdatingProgress) }
                 sendEvent(OnAddedSuccessfully)
 

@@ -65,12 +65,16 @@ fun NavHost() {
                         onNavigateToProject = { projectId ->
                             backStack.add(ProjectDetail(projectId = projectId))
                         },
+                        onNavigateToMiniature = { miniatureId ->
+                            backStack.add(MiniDetail(miniatureId = miniatureId))
+                        },
                         onNavigateToStartPainting = {
                             backStack.add(StartPainting)
                         },
                         onNavigateToAddProject = {
                             backStack.add(AddProject())
-                        })
+                        }
+                    )
                 }
 
                 is ProjectDetail -> NavEntry(key) {

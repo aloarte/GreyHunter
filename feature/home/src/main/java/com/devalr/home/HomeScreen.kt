@@ -10,15 +10,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.devalr.framework.components.LoadingIndicator
 import com.devalr.home.components.screen.AppTitle
-import com.devalr.home.components.screen.GamificationMessage
-import com.devalr.home.components.screen.ProjectsCarousel
-import com.devalr.home.components.screen.StartPaint
-import com.devalr.home.interactions.Action.OnAppear
+import com.devalr.home.components.screen.HomeScreenContent
 import com.devalr.home.interactions.Action.OnAddProject
+import com.devalr.home.interactions.Action.OnAppear
+import com.devalr.home.interactions.Action.OnOpenMiniatureDetail
 import com.devalr.home.interactions.Action.OnOpenProjectDetail
 import com.devalr.home.interactions.Action.OnStartPainting
 import com.devalr.home.interactions.Event.NavigateStartPaint
 import com.devalr.home.interactions.Event.NavigateToAddProject
+import com.devalr.home.interactions.Event.NavigateToMiniature
 import com.devalr.home.interactions.Event.NavigateToProject
 import org.koin.compose.koinInject
 
@@ -26,9 +26,9 @@ import org.koin.compose.koinInject
 fun HomeScreen(
     viewModel: HomeViewModel = koinInject(),
     onNavigateToProject: (Long) -> Unit,
+    onNavigateToMiniature: (Long) -> Unit,
     onNavigateToAddProject: () -> Unit,
     onNavigateToStartPainting: () -> Unit
-
 ) {
     val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
@@ -37,6 +37,7 @@ fun HomeScreen(
                 NavigateStartPaint -> onNavigateToStartPainting()
                 is NavigateToProject -> onNavigateToProject(event.projectId)
                 is NavigateToAddProject -> onNavigateToAddProject()
+                is NavigateToMiniature -> onNavigateToMiniature(event.miniatureId)
             }
         }
     }
@@ -50,25 +51,28 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            AppTitle()
-            if (state.projectsLoaded) {
-                GamificationMessage()
-                ProjectsCarousel(
+            if (state.loaded) {
+                HomeScreenContent(
                     projects = state.projects,
-                    onProjectClicked = { projectId ->
+                    almostDoneProjects = state.almostDoneProjects,
+                    lastUpdatedMinis = state.lastUpdatedMinis,
+                    onOpenProjectDetail = { projectId ->
                         viewModel.onAction(OnOpenProjectDetail(projectId = projectId))
                     },
-                    onCreateProject = {
+                    onOpenMiniatureDetail = { miniatureId ->
+                        viewModel.onAction(OnOpenMiniatureDetail(miniatureId = miniatureId))
+                    },
+                    onAddProject = {
                         viewModel.onAction(OnAddProject)
+                    },
+                    onStartPainting = {
+                        viewModel.onAction(OnStartPainting)
                     }
                 )
             } else {
+                AppTitle()
                 LoadingIndicator()
-            }
-            StartPaint {
-                viewModel.onAction(OnStartPainting)
             }
         }
     }
-
 }

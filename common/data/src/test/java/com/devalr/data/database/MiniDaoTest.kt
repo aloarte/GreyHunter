@@ -9,6 +9,7 @@ import com.devalr.data.database.miniature.MiniatureEntity
 import com.devalr.data.database.project.ProjectDao
 import com.devalr.data.database.project.ProjectEntity
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -32,6 +33,23 @@ class MiniDaoTest {
         private const val PROJECT_NAME = "Necron Army"
         private const val MINI_NAME = "Overlord"
         private const val NEW_MINI_NAME = "Plasmancer"
+
+        private val miniOld = MiniatureEntity(
+            projectId = 1,
+            name = "Old",
+            lastUpdate = 1000L
+        )
+        private val miniNew = MiniatureEntity(
+            projectId = 1,
+            name = "Latest",
+            lastUpdate = 5000L
+        )
+
+        private val miniNotUpdated = MiniatureEntity(
+            projectId = 1,
+            name = "Invalid",
+            lastUpdate = 0L
+        )
     }
 
     @Before
@@ -94,7 +112,7 @@ class MiniDaoTest {
             )
 
             // WHEN
-            miniatureDao.getMiniatureById(miniId).first()?.let { currentMini ->
+            miniatureDao.getMiniatureById(miniId).firstOrNull()?.let { currentMini ->
                 miniatureDao.updateMiniature(
                     currentMini.copy(
                         name = NEW_MINI_NAME,
@@ -105,7 +123,7 @@ class MiniDaoTest {
             } ?: fail("Miniature not found initially")
 
             // THEN
-            miniatureDao.getMiniatureById(miniId).first()?.let { updatedMini ->
+            miniatureDao.getMiniatureById(miniId).firstOrNull()?.let { updatedMini ->
                 assertEquals(NEW_MINI_NAME, updatedMini.name)
                 assertEquals(1.0f, updatedMini.completionPercentage)
                 assertTrue(updatedMini.isPrimed)
@@ -175,5 +193,43 @@ class MiniDaoTest {
 
             // THEN
             assertEquals(3, projectMinis.size)
+        }
+
+    @Test
+    fun `GIVEN multiple miniatures WHEN requesting last updated THEN returns the one with highest timestamp ignoring zeros`() =
+        runBlocking {
+            // GIVEN
+            projectDao.insertProject(
+                ProjectEntity(name = PROJECT_NAME, completionPercentage = 0.0f)
+            )
+            miniatureDao.insertMiniature(miniOld)
+            miniatureDao.insertMiniature(miniNew)
+            miniatureDao.insertMiniature(miniNotUpdated)
+
+            // WHEN
+            val result = miniatureDao.getLastUpdatedMiniatures(2).firstOrNull()
+
+            // THEN
+            assertNotNull(result)
+            assertEquals(2, result?.size)
+            assertEquals(miniNew.copy(id = 2), result?.get(0))
+            assertEquals(miniOld.copy(id = 1), result?.get(1))
+        }
+
+    @Test
+    fun `GIVEN only miniatures with zero timestamp WHEN requesting last updated THEN returns null`() =
+        runBlocking {
+            // GIVEN
+            projectDao.insertProject(
+                ProjectEntity(name = PROJECT_NAME, completionPercentage = 0.0f)
+            )
+            miniatureDao.insertMiniature(miniNotUpdated)
+
+            // WHEN
+            val result = miniatureDao.getLastUpdatedMiniatures(2).firstOrNull()
+
+            // THEN
+            assertEquals(emptyList<MiniatureEntity>(), result)
+
         }
 }

@@ -1,7 +1,9 @@
 package com.devalr.home
 
 
+import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.ProjectRepository
+import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
 import com.devalr.home.interactions.Action.OnAddProject
 import com.devalr.home.interactions.Action.OnAppear
@@ -15,6 +17,7 @@ import com.devalr.home.model.ProjectVo
 import com.devalr.home.model.ProjectVo.AddProject
 import com.devalr.home.model.ProjectVo.ProjectItem
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -37,7 +40,8 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModelTest {
 
-    private val repository: ProjectRepository = mockk()
+    private val projectRepository: ProjectRepository = mockk()
+    private val miniatureRepository: MiniatureRepository = mockk()
     private lateinit var viewModel: HomeViewModel
     private val testDispatcher = StandardTestDispatcher()
 
@@ -57,11 +61,17 @@ class HomeViewModelTest {
             minis = emptyList()
         )
     )
+    private val miniature = MiniatureBo(
+        id = 1,
+        projectId = 1,
+        name = "Miniature 1",
+        imageUri = null
+    )
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        viewModel = HomeViewModel(repository)
+        viewModel = HomeViewModel(projectRepository, miniatureRepository)
     }
 
     @After
@@ -70,33 +80,76 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `GIVEN projects exist WHEN OnAppear is triggered THEN state updates with project list`() =
+    fun `GIVEN projects exist WHEN OnAppear is triggered THEN state updates with project list and last updated items`() =
         runTest {
             // GIVEN
-            coEvery { repository.getAllProjects() } returns flowOf(projects)
+            coEvery { projectRepository.getAllProjects() } returns flowOf(projects)
+            coEvery { projectRepository.getAlmostDoneProjects() } returns flowOf(listOf(projects[1]))
+            coEvery { miniatureRepository.getLastUpdatedMiniatures() } returns flowOf(listOf(miniature))
 
             // WHEN
             viewModel.onAction(OnAppear)
             advanceUntilIdle()
 
             // THEN
+            coVerify(exactly = 1) { projectRepository.getAllProjects() }
+            coVerify(exactly = 1) { projectRepository.getAlmostDoneProjects() }
+            coVerify(exactly = 1) { miniatureRepository.getLastUpdatedMiniatures() }
             val expectedProjects: List<ProjectVo> = listOf(
                 ProjectItem(projects[0]),
                 ProjectItem(projects[1]),
                 AddProject
             )
             val state = viewModel.uiState.value
-            assertTrue(state.projectsLoaded)
+            assertTrue(state.loaded)
             assertEquals(expectedProjects, state.projects)
+            assertEquals(listOf(miniature), state.lastUpdatedMinis)
+            assertEquals(listOf(projects[1]), state.almostDoneProjects)
             assertNull(state.error)
         }
+
+    @Test
+    fun `GIVEN projects exist WHEN OnAppear is triggered THEN state updates with project list and null last updated items`() =
+        runTest {
+            // GIVEN
+            coEvery { projectRepository.getAllProjects() } returns flowOf(projects)
+            coEvery { projectRepository.getAlmostDoneProjects() } returns flowOf(emptyList())
+            coEvery { miniatureRepository.getLastUpdatedMiniatures() } returns flowOf(emptyList())
+
+            // WHEN
+            viewModel.onAction(OnAppear)
+            advanceUntilIdle()
+
+            // THEN
+            coVerify(exactly = 1) { projectRepository.getAllProjects() }
+            coVerify(exactly = 1) { projectRepository.getAlmostDoneProjects() }
+            coVerify(exactly = 1) { miniatureRepository.getLastUpdatedMiniatures() }
+            val expectedProjects: List<ProjectVo> = listOf(
+                ProjectItem(projects[0]),
+                ProjectItem(projects[1]),
+                AddProject
+            )
+            val state = viewModel.uiState.value
+            assertTrue(state.loaded)
+            assertEquals(expectedProjects, state.projects)
+            assertEquals(emptyList<MiniatureBo>(),state.lastUpdatedMinis)
+            assertEquals(emptyList<ProjectBo>(),state.almostDoneProjects)
+            assertNull(state.error)
+        }
+
 
     @Test
     fun `GIVEN repository error WHEN OnAppear is triggered THEN state updates with error message`() =
         runTest {
             // GIVEN
             val errorMessage = "Error loading from database"
-            coEvery { repository.getAllProjects() } returns flow {
+            coEvery { projectRepository.getAllProjects() } returns flow {
+                throw Exception(errorMessage)
+            }
+            coEvery { projectRepository.getAlmostDoneProjects() } returns flow {
+                throw Exception(errorMessage)
+            }
+            coEvery { miniatureRepository.getLastUpdatedMiniatures() } returns flow {
                 throw Exception(errorMessage)
             }
 

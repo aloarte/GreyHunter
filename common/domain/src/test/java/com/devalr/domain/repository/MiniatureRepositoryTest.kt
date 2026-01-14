@@ -17,30 +17,43 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneId
 
 class MiniatureRepositoryTest {
 
     private val miniatureDao: MiniatureDao = mockk()
     private val mapper: Mapper<MiniatureEntity, MiniatureBo> = mockk()
 
+    private val fixedClock = Clock.fixed(Instant.parse("2022-01-01T00:00:00Z"), ZoneId.of("UTC"))
+    private val date = 1640995200000L
+
     private lateinit var repository: MiniatureRepositoryImpl
 
     @Before
     fun setUp() {
-        repository = MiniatureRepositoryImpl(miniatureDao, mapper)
+        repository = MiniatureRepositoryImpl(miniatureDao, mapper, fixedClock)
         every { mapper.transform(mini1Entity) } returns mini1Bo
         every { mapper.transform(mini2Entity) } returns mini2Bo
         every { mapper.transformReverse(mini1Bo) } returns mini1Entity
         every { mapper.transformReverse(mini2Bo) } returns mini2Entity
+    }
+
+    @After
+    fun tearDown() {
+        unmockkStatic(System::class)
     }
 
     @Test
@@ -97,7 +110,14 @@ class MiniatureRepositoryTest {
     fun `GIVEN list of miniatures inserted WHEN getMiniatures is called THEN returns list flow`() =
         runTest {
             // GIVEN
-            coEvery { miniatureDao.getMiniaturesByIds(listOf(mini1Bo.id, mini2Bo.id)) } returns flowOf(
+            coEvery {
+                miniatureDao.getMiniaturesByIds(
+                    listOf(
+                        mini1Bo.id,
+                        mini2Bo.id
+                    )
+                )
+            } returns flowOf(
                 listOf(mini1Entity, mini2Entity)
             )
 
@@ -106,7 +126,14 @@ class MiniatureRepositoryTest {
             val resultList = resultFlow.first()
 
             // THEN
-            coVerify(exactly = 1) { miniatureDao.getMiniaturesByIds(listOf(mini1Bo.id, mini2Bo.id)) }
+            coVerify(exactly = 1) {
+                miniatureDao.getMiniaturesByIds(
+                    listOf(
+                        mini1Bo.id,
+                        mini2Bo.id
+                    )
+                )
+            }
             verify(exactly = 2) { mapper.transform(any()) }
             assertEquals(2, resultList.size)
             assertEquals(mini1Bo, resultList[0])
@@ -117,14 +144,14 @@ class MiniatureRepositoryTest {
     fun `GIVEN miniature inserted WHEN updateMiniature is called and update the miniature THEN returns 1 row affected`() =
         runTest {
             // GIVEN
-            coEvery { miniatureDao.updateMiniature(mini1Entity) } returns 1
+            coEvery { miniatureDao.updateMiniature(mini1Entity.copy(lastUpdate = date)) } returns 1
 
             // WHEN
             val result = repository.updateMiniature(mini1Bo)
 
             // THEN
             verify(exactly = 1) { mapper.transformReverse(mini1Bo) }
-            coVerify(exactly = 1) { miniatureDao.updateMiniature(mini1Entity) }
+            coVerify(exactly = 1) { miniatureDao.updateMiniature(mini1Entity.copy(lastUpdate = date)) }
             assertTrue(result)
         }
 
@@ -132,14 +159,14 @@ class MiniatureRepositoryTest {
     fun `GIVEN miniature inserted WHEN updateMiniature is called and don't update the miniature THEN returns 0 row affected`() =
         runTest {
             // GIVEN
-            coEvery { miniatureDao.updateMiniature(mini1Entity) } returns 0
+            coEvery { miniatureDao.updateMiniature(mini1Entity.copy(lastUpdate = date)) } returns 0
 
             // WHEN
             val result = repository.updateMiniature(mini1Bo)
 
             // THEN
             verify(exactly = 1) { mapper.transformReverse(mini1Bo) }
-            coVerify(exactly = 1) { miniatureDao.updateMiniature(mini1Entity) }
+            coVerify(exactly = 1) { miniatureDao.updateMiniature(mini1Entity.copy(lastUpdate = date)) }
             assertFalse(result)
         }
 

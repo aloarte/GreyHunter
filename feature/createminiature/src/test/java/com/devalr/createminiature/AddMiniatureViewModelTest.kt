@@ -181,7 +181,7 @@ class AddMiniatureViewModelTest {
             viewModel.onAction(OnAppear(projectId = PROJECT_ID))
             viewModel.onAction(OnNameChanged(MINI_NAME))
             coEvery { miniatureRepository.addMiniature(any()) } returns 1L
-            coEvery { projectRepository.updateProjectProgress(any()) } returns false
+            coEvery { projectRepository.updateProjectProgress(any(), any()) } returns false
 
             // WHEN
             viewModel.onAction(OnAddMiniature)
@@ -191,6 +191,7 @@ class AddMiniatureViewModelTest {
             val state = viewModel.uiState.value
             coVerify(exactly = 1) { miniatureRepository.addMiniature(any()) }
             coVerify(exactly = 0) { miniatureRepository.updateMiniature(any()) }
+            coVerify(exactly = 1) { projectRepository.updateProjectProgress(any(), any()) }
             assertEquals(ErrorType.ErrorUpdatingProgress, state.errorType)
         }
 
@@ -201,7 +202,7 @@ class AddMiniatureViewModelTest {
             viewModel.onAction(OnAppear(projectId = PROJECT_ID))
             viewModel.onAction(OnNameChanged(MINI_NAME))
             coEvery { miniatureRepository.addMiniature(any()) } returns 10L
-            coEvery { projectRepository.updateProjectProgress(PROJECT_ID) } returns true
+            coEvery { projectRepository.updateProjectProgress(PROJECT_ID, any()) } returns true
             val events = mutableListOf<com.devalr.createminiature.interactions.Event>()
             val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                 viewModel.events.collect { events.add(it) }
@@ -214,7 +215,7 @@ class AddMiniatureViewModelTest {
             // THEN
             coVerify(exactly = 1) { miniatureRepository.addMiniature(any()) }
             coVerify(exactly = 0) { miniatureRepository.updateMiniature(any()) }
-            coVerify(exactly = 1) { projectRepository.updateProjectProgress(PROJECT_ID) }
+            coVerify(exactly = 1) { projectRepository.updateProjectProgress(PROJECT_ID, any()) }
             assertNull(viewModel.uiState.value.errorType)
             assertEquals(1, events.size)
             assertTrue(events.contains(OnAddedSuccessfully))

@@ -1,6 +1,5 @@
 package com.devalr.framework.components.markedtext
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,7 +23,9 @@ import com.devalr.framework.theme.ProgressYellow
 
 @Composable
 fun MarkedText(
+    modifier: Modifier = Modifier,
     text: String,
+    textColor: Color = MaterialTheme.colorScheme.onSurface,
     title: Boolean = false,
     fillSpace: Boolean = false,
     color: Color = MaterialTheme.colorScheme.primary,
@@ -32,7 +33,7 @@ fun MarkedText(
     barsSize: Dp = 25.dp
 ) {
     Row(
-        modifier = Modifier.then(if (fillSpace) Modifier.fillMaxWidth() else Modifier),
+        modifier = modifier.then(if (fillSpace) Modifier.fillMaxWidth() else Modifier),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = if (doubleBars) Arrangement.SpaceBetween else Arrangement.Absolute.Left
     ) {
@@ -45,6 +46,7 @@ fun MarkedText(
                 } else Modifier
             ),
             textAlign = TextAlign.Start,
+            textColor = textColor,
             text = text,
             type = if (title) TextType.Featured else TextType.Description
         )
