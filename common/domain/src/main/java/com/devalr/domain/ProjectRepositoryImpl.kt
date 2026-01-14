@@ -117,8 +117,7 @@ class ProjectRepositoryImpl(
         } ?: false
 
 
-    override suspend fun deleteProject(projectId: Long) {
-        projectDao.deleteProject(projectId)
+    override suspend fun deleteProject(projectId: Long): Boolean =
+        projectDao.deleteProject(projectId) > 0
 
-    }
 }

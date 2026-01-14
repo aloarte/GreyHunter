@@ -1,16 +1,17 @@
 package com.devalr.projectdetail
 
-import org.junit.Test
-
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.ProjectBo
+import com.devalr.projectdetail.interactions.Action
 import com.devalr.projectdetail.interactions.Action.OnAppear
 import com.devalr.projectdetail.interactions.Action.OnBackPressed
+import com.devalr.projectdetail.interactions.Action.OnDeleteProject
 import com.devalr.projectdetail.interactions.Action.OnNavigateToEditProject
 import com.devalr.projectdetail.interactions.Event
 import com.devalr.projectdetail.interactions.Event.NavigateBack
 import com.devalr.projectdetail.interactions.Event.NavigateToEditProject
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,6 +29,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ProjectDetailViewModelTest {
@@ -57,37 +59,39 @@ class ProjectDetailViewModelTest {
     }
 
     @Test
-    fun `GIVEN a project id WHEN OnAppear action is triggered THEN state updates with project data`() = runTest {
-        // GIVEN
-        coEvery { repository.getProject(projectId) } returns flowOf(project)
+    fun `GIVEN a project id WHEN OnAppear action is triggered THEN state updates with project data`() =
+        runTest {
+            // GIVEN
+            coEvery { repository.getProject(projectId) } returns flowOf(project)
 
-        // WHEN
-        viewModel.onAction(OnAppear(projectId))
-        advanceUntilIdle()
+            // WHEN
+            viewModel.onAction(OnAppear(projectId))
+            advanceUntilIdle()
 
-        // THEN
-        val currentState = viewModel.uiState.value
-        assertTrue(currentState.projectLoaded)
-        assertEquals(project, currentState.project)
-        assertNull(currentState.error)
-    }
-
-    @Test
-    fun `GIVEN a repository error WHEN OnAppear action is triggered THEN state updates with error message`() = runTest {
-        // GIVEN
-        val errorMessage = "Database connection failed"
-        coEvery { repository.getProject(projectId) } returns flow {
-            throw Exception(errorMessage)
+            // THEN
+            val currentState = viewModel.uiState.value
+            assertTrue(currentState.projectLoaded)
+            assertEquals(project, currentState.project)
+            assertNull(currentState.error)
         }
 
-        // WHEN
-        viewModel.onAction(OnAppear(projectId))
-        advanceUntilIdle()
+    @Test
+    fun `GIVEN a repository error WHEN OnAppear action is triggered THEN state updates with error message`() =
+        runTest {
+            // GIVEN
+            val errorMessage = "Database connection failed"
+            coEvery { repository.getProject(projectId) } returns flow {
+                throw Exception(errorMessage)
+            }
 
-        // THEN
-        val currentState = viewModel.uiState.value
-        assertEquals(errorMessage, currentState.error)
-    }
+            // WHEN
+            viewModel.onAction(OnAppear(projectId))
+            advanceUntilIdle()
+
+            // THEN
+            val currentState = viewModel.uiState.value
+            assertEquals(errorMessage, currentState.error)
+        }
 
 
     @Test
@@ -125,6 +129,47 @@ class ProjectDetailViewModelTest {
             // THEN
             assertEquals(1, events.size)
             assertEquals(NavigateToEditProject(projectId = projectId), events.first())
+            job.cancel()
+        }
+
+    @Test
+    fun `GIVEN existent project WHEN OnDeleteProject is triggered THEN project is removed and NavigateBack event is raised`() =
+        runTest {
+            // GIVEN
+            coEvery { repository.deleteProject(projectId) } returns true
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
+
+            // WHEN
+            viewModel.onAction(OnDeleteProject(projectId = projectId))
+            advanceUntilIdle()
+
+            // THEN
+            coVerify { repository.deleteProject(projectId) }
+            assertEquals(1, events.size)
+            assertEquals(NavigateBack, events.first())
+            job.cancel()
+        }
+
+    @Test
+    fun `GIVEN not existent project WHEN OnDeleteProject is triggered THEN project isn't removed and no event is raised`() =
+        runTest {
+            // GIVEN
+            coEvery { repository.deleteProject(projectId) } returns false
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
+
+            // WHEN
+            viewModel.onAction(OnDeleteProject(projectId = projectId))
+            advanceUntilIdle()
+
+            // THEN
+            coVerify { repository.deleteProject(projectId) }
+            assertEquals(0, events.size)
             job.cancel()
         }
 }

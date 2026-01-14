@@ -8,6 +8,7 @@ import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
 import com.devalr.minidetail.interactions.Action.OnAppear
 import com.devalr.minidetail.interactions.Action.OnBackPressed
+import com.devalr.minidetail.interactions.Action.OnDeleteMiniature
 import com.devalr.minidetail.interactions.Action.OnMilestone
 import com.devalr.minidetail.interactions.Action.OnNavigateToEditMiniature
 import com.devalr.minidetail.interactions.ErrorType
@@ -220,12 +221,61 @@ class MiniatureDetailViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnNavigateToEditMiniature(miniatureId = miniId, projectId = projectId))
+            viewModel.onAction(
+                OnNavigateToEditMiniature(
+                    miniatureId = miniId,
+                    projectId = projectId
+                )
+            )
             advanceUntilIdle()
 
             // THEN
             assertEquals(1, events.size)
-            assertEquals(NavigateToEditMiniature(miniatureId = miniId, projectId = projectId), events.first())
+            assertEquals(
+                NavigateToEditMiniature(miniatureId = miniId, projectId = projectId),
+                events.first()
+            )
+            job.cancel()
+        }
+
+    @Test
+    fun `GIVEN existent project WHEN OnDeleteProject is triggered THEN project is removed and NavigateBack event is raised`() =
+        runTest {
+            // GIVEN
+            coEvery { miniatureRepository.deleteMiniature(miniId) } returns true
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
+
+            // WHEN
+            viewModel.onAction(OnDeleteMiniature(miniatureId = miniId))
+            advanceUntilIdle()
+
+            // THEN
+            coVerify { miniatureRepository.deleteMiniature(miniId) }
+            assertEquals(1, events.size)
+            assertEquals(NavigateBack, events.first())
+            job.cancel()
+        }
+
+    @Test
+    fun `GIVEN not existent project WHEN OnDeleteProject is triggered THEN project isn't removed and no event is raised`() =
+        runTest {
+            // GIVEN
+            coEvery { miniatureRepository.deleteMiniature(miniId) } returns false
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
+
+            // WHEN
+            viewModel.onAction(OnDeleteMiniature(miniatureId = miniId))
+            advanceUntilIdle()
+
+            // THEN
+            coVerify { miniatureRepository.deleteMiniature(miniId) }
+            assertEquals(0, events.size)
             job.cancel()
         }
 }

@@ -6,6 +6,7 @@ import com.devalr.framework.base.BaseViewModel
 import com.devalr.projectdetail.interactions.Action
 import com.devalr.projectdetail.interactions.Action.OnAppear
 import com.devalr.projectdetail.interactions.Action.OnBackPressed
+import com.devalr.projectdetail.interactions.Action.OnDeleteProject
 import com.devalr.projectdetail.interactions.Action.OnNavigateToEditProject
 import com.devalr.projectdetail.interactions.Event
 import com.devalr.projectdetail.interactions.Event.NavigateBack
@@ -20,13 +21,14 @@ class ProjectDetailViewModel(
 
     override fun onAction(action: Action) {
         when (action) {
-            is OnAppear -> observeProject(action.projectId)
+            is OnAppear -> loadProject(action.projectId)
             OnBackPressed -> sendEvent(NavigateBack)
             is OnNavigateToEditProject -> sendEvent(NavigateToEditProject(action.projectId))
+            is OnDeleteProject -> deleteProject(action.projectId)
         }
     }
 
-    private fun observeProject(projectId: Long) {
+    private fun loadProject(projectId: Long) {
         viewModelScope.launch {
             projectRepository.getProject(projectId)
                 .catch { error ->
@@ -41,6 +43,16 @@ class ProjectDetailViewModel(
                         )
                     }
                 }
+        }
+    }
+
+    private fun deleteProject(projectId: Long) {
+        viewModelScope.launch {
+            if (projectRepository.deleteProject(projectId)) {
+                sendEvent(NavigateBack)
+            } else {
+                //TODO: Handle error
+            }
         }
     }
 }

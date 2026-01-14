@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,13 +21,20 @@ import com.devalr.framework.theme.GreyHunterTheme
 fun TopButtons(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
-    onEditPressed: (() -> Unit)? = null
+    onEditPressed: (() -> Unit)? = null,
+    onDeletePressed: (() -> Unit)? = null
 ) {
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         GHIconButton(icon = Icons.Default.ArrowBack, onButtonClicked = onBackPressed)
-        if (onEditPressed!=null) {
-            Spacer(modifier = Modifier.width(10.dp))
-            GHIconButton(icon = Icons.Default.Edit, onButtonClicked = onEditPressed)
+        Row {
+            if (onEditPressed != null) {
+                Spacer(modifier = Modifier.width(10.dp))
+                GHIconButton(icon = Icons.Default.Edit, onButtonClicked = onEditPressed)
+            }
+            if (onDeletePressed != null) {
+                Spacer(modifier = Modifier.width(10.dp))
+                GHIconButton(icon = Icons.Default.Clear, onButtonClicked = onDeletePressed)
+            }
         }
 
     }
@@ -42,6 +50,9 @@ private fun TopButtonsPreviewLightMode() {
             },
             onEditPressed = {
                 // Do nothing
+            },
+            onDeletePressed = {
+                // Do nothing
             }
         )
     }
@@ -56,6 +67,9 @@ private fun TopButtonsPreviewDarkMode() {
                 // Do nothing
             },
             onEditPressed = {
+                // Do nothing
+            },
+            onDeletePressed = {
                 // Do nothing
             }
         )

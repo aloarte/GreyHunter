@@ -17,7 +17,7 @@ interface MiniatureDao {
     suspend fun updateMiniature(miniature: MiniatureEntity) : Int
 
     @Query("DELETE FROM miniatures WHERE id = :miniatureId")
-    suspend fun deleteMiniature(miniatureId: Long)
+    suspend fun deleteMiniature(miniatureId: Long) : Int
 
     @Query("SELECT * FROM miniatures WHERE projectId = :projectId")
     fun getMiniaturesByProject(projectId: Long): Flow<List<MiniatureEntity>>

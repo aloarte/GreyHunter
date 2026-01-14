@@ -23,7 +23,7 @@ class MiniatureRepositoryImpl(
             miniatureDatabaseMapper.transform(entity)
         }
 
-    override suspend fun getLastUpdatedMiniatures(miniatureNumber:Int): Flow<List<MiniatureBo>> =
+    override suspend fun getLastUpdatedMiniatures(miniatureNumber: Int): Flow<List<MiniatureBo>> =
         miniatureDao.getLastUpdatedMiniatures(miniatureNumber).map { entityList ->
             entityList.map { entity ->
                 miniatureDatabaseMapper.transform(entity)
@@ -52,7 +52,7 @@ class MiniatureRepositoryImpl(
         return rowsAffected > 0
     }
 
-    override suspend fun deleteMiniature(miniatureId: Long) {
-        miniatureDao.deleteMiniature(miniatureId)
-    }
+    override suspend fun deleteMiniature(miniatureId: Long): Boolean =
+        miniatureDao.deleteMiniature(miniatureId) > 0
+
 }

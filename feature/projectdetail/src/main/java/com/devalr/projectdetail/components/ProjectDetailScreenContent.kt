@@ -31,7 +31,8 @@ fun ProjectDetailScreenContent(
     onNavigateToMiniature: (Long) -> Unit,
     onCreateMiniature: () -> Unit,
     onBackPressed: () -> Unit,
-    onEditPressed: () -> Unit
+    onEditPressed: () -> Unit,
+    onDeletePressed: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -56,7 +57,8 @@ fun ProjectDetailScreenContent(
                 .align(Alignment.TopCenter)
                 .padding(16.dp),
             onBackPressed = onBackPressed,
-            onEditPressed = onEditPressed
+            onEditPressed = onEditPressed,
+            onDeletePressed = onDeletePressed
         )
 
         LazyColumn(
@@ -121,6 +123,9 @@ private fun ProjectDetailScreenContentPreviewLightTheme() {
                 // Do nothing
             },
             onEditPressed = {
+                // Do nothing
+            },
+            onDeletePressed = {
                 // Do nothing
             }
         )

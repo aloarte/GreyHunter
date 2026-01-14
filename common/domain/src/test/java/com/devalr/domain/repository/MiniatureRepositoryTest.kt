@@ -171,14 +171,28 @@ class MiniatureRepositoryTest {
         }
 
     @Test
-    fun `WHEN deleteMiniature is called THEN call remove in database`() = runTest {
+    fun `WHEN deleteMiniature is called THEN call remove in database returns true`() = runTest {
         // GIVEN
-        coEvery { miniatureDao.deleteMiniature(MINI_1_ID) } just Runs
+        coEvery { miniatureDao.deleteMiniature(MINI_1_ID) } returns 1
 
         //  GIVEN & WHEN
-        repository.deleteMiniature(MINI_1_ID)
+        val result = repository.deleteMiniature(MINI_1_ID)
 
         // THEN
         coVerify(exactly = 1) { miniatureDao.deleteMiniature(MINI_1_ID) }
+        assertTrue(result)
+    }
+
+    @Test
+    fun `WHEN deleteMiniature is called THEN call remove in database returns false`() = runTest {
+        // GIVEN
+        coEvery { miniatureDao.deleteMiniature(MINI_1_ID) } returns 0
+
+        //  GIVEN & WHEN
+        val result = repository.deleteMiniature(MINI_1_ID)
+
+        // THEN
+        coVerify(exactly = 1) { miniatureDao.deleteMiniature(MINI_1_ID) }
+        assertFalse(result)
     }
 }
