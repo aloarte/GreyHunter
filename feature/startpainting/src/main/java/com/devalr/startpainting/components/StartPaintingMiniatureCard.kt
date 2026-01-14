@@ -85,21 +85,20 @@ fun StartPaintingMiniatureCard(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 10.dp, vertical = 5.dp)
-                .fillMaxWidth()
                 .height(30.dp)
         ) {
             Row(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
-                    .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.surfaceVariant),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 GHText(
+                    modifier = Modifier.padding(horizontal = 10.dp),
                     text = miniature.name,
                     textAlign = TextAlign.Center,
-                    type = TextType.LabelMBold,
+                    type = TextType.LabelSBold,
                     textColor = Color.White
                 )
             }
@@ -116,7 +115,6 @@ fun StartPaintingMiniatureCard(
                 contentDescription = ""
             )
         }
-
     }
 }
 
