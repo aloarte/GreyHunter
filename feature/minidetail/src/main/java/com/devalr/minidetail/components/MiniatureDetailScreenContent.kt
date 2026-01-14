@@ -36,6 +36,7 @@ fun MiniatureDetailScreenContent(
     miniature: MiniatureBo,
     onBackPressed: () -> Unit,
     onEditPressed: () -> Unit,
+    onDeletePressed: () -> Unit,
     onMilestone: (MilestoneType, Boolean) -> Unit
 ) {
     val saveAndContinueLabel = stringResource(R.string.label_save_continue)
@@ -62,7 +63,8 @@ fun MiniatureDetailScreenContent(
                     .align(Alignment.TopCenter)
                     .padding(16.dp),
                 onBackPressed = onBackPressed,
-                onEditPressed = onEditPressed
+                onEditPressed = onEditPressed,
+                onDeletePressed = onDeletePressed
             )
         }
 
@@ -131,6 +133,9 @@ private fun MiniatureDetailScreenContentPreviewDarkMode() {
             },
             onEditPressed = {
                 // Do nothing
+            },
+            onDeletePressed = {
+                // Do nothing
             }
         )
     }
@@ -150,6 +155,9 @@ private fun MiniatureDetailScreenContentPreviewLightMode() {
                 // Do nothing
             },
             onEditPressed = {
+                // Do nothing
+            },
+            onDeletePressed = {
                 // Do nothing
             }
         )
@@ -172,6 +180,9 @@ private fun MiniatureDetailScreenContentPreviewOnlyUpdateLightMode() {
             },
             onEditPressed = {
                 // Do nothing
+            },
+            onDeletePressed = {
+                // Do nothing
             }
         )
     }
@@ -191,6 +202,9 @@ private fun MiniatureDetailScreenContentPreviewOnlyUpdateDarkMode() {
                 // Do nothing
             },
             onEditPressed = {
+                // Do nothing
+            },
+            onDeletePressed = {
                 // Do nothing
             }
         )

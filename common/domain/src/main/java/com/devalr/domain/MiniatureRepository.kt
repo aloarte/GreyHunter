@@ -17,6 +17,6 @@ interface MiniatureRepository {
 
     suspend fun updateMiniature(miniature: MiniatureBo): Boolean
 
-    suspend fun deleteMiniature(miniatureId: Long)
+    suspend fun deleteMiniature(miniatureId: Long) : Boolean
 
 }

@@ -5,11 +5,13 @@
     <string name="bs_permission_required_camera">Camera Permission Required</string>
     <string name="bs_permission_denied_description">You have permanently denied camera permission. To use this feature, you must enable it manually in the application settings.</string>
     <string name="bs_permission_required_description">To take photos of your miniatures, the application needs access to the camera.</string>
+    <string name="bs_confirm_delete_description">Are you sure that you want to delete it? Remember that it\'s a permanent decision</string>
 
     <!-- Buttons -->
     <string name="btn_cancel">Cancel</string>
     <string name="btn_go_settings">Go to settings</string>
     <string name="btn_accept">Ok</string>
+    <string name="btn_delete">Delete</string>
     <string name="btn_camera">Camera</string>
     <string name="btn_gallery">Gallery</string>
 

@@ -1,5 +1,6 @@
 package com.devalr.domain
 
+import android.util.Log
 import com.devalr.data.database.miniature.MiniatureDao
 import com.devalr.data.database.miniature.MiniatureEntity
 import com.devalr.domain.mappers.Mapper
@@ -23,7 +24,7 @@ class MiniatureRepositoryImpl(
             miniatureDatabaseMapper.transform(entity)
         }
 
-    override suspend fun getLastUpdatedMiniatures(miniatureNumber:Int): Flow<List<MiniatureBo>> =
+    override suspend fun getLastUpdatedMiniatures(miniatureNumber: Int): Flow<List<MiniatureBo>> =
         miniatureDao.getLastUpdatedMiniatures(miniatureNumber).map { entityList ->
             entityList.map { entity ->
                 miniatureDatabaseMapper.transform(entity)
@@ -52,7 +53,10 @@ class MiniatureRepositoryImpl(
         return rowsAffected > 0
     }
 
-    override suspend fun deleteMiniature(miniatureId: Long) {
-        miniatureDao.deleteMiniature(miniatureId)
+    override suspend fun deleteMiniature(miniatureId: Long): Boolean {
+        val deleteResult = miniatureDao.deleteMiniature(miniatureId)
+        Log.d("ALRALR", "Deleting $miniatureId. Result: $deleteResult")
+        return deleteResult > 0
     }
+
 }
