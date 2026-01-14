@@ -3,6 +3,7 @@ package com.devalr.home.components.cards
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.spacedBy
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -41,7 +42,7 @@ fun MiniatureCard(
         modifier = modifier
             .width(getCardWidth(CardType.LastUpdated))
             .aspectRatio(1.6f),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
         onClick = { onMiniatureClicked(miniature.id) }
     ) {
         Column(
@@ -62,13 +63,23 @@ fun MiniatureCard(
                     text = miniature.name,
                     type = TextType.Title
                 )
-                CircularProgressIndicator(
-                    progress = { miniature.percentage },
-                    modifier = Modifier.size(30.dp),
-                    color = MaterialTheme.colorScheme.primary,
-                    trackColor = MaterialTheme.colorScheme.surfaceVariant,
-                    strokeWidth = 3.dp
-                )
+                Box(
+                    modifier = Modifier.size(40.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    GHText(
+                        text = "${(miniature.percentage * 100).toInt()}%",
+                        type = TextType.LabelS,
+                        singleLane = true
+                    )
+                    CircularProgressIndicator(
+                        progress = { miniature.percentage },
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.primary,
+                        trackColor = MaterialTheme.colorScheme.outlineVariant,
+                        strokeWidth = 3.dp
+                    )
+                }
             }
         }
     }

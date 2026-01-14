@@ -86,10 +86,9 @@ fun ProjectMiniatures(
                             progress = { miniature.percentage },
                             modifier = Modifier.fillMaxSize(),
                             color = MaterialTheme.colorScheme.primary,
-                            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                            trackColor = MaterialTheme.colorScheme.outlineVariant,
                             strokeWidth = 3.dp
                         )
-
                     }
 
                 }

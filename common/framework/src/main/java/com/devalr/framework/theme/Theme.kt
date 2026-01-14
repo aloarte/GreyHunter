@@ -27,7 +27,8 @@ private val DarkColorScheme =darkColorScheme(
     background = DarkGray,
     onBackground = TextLight,
     surface = DarkSurface,
-    onSurface = TextLight
+    onSurface = TextLight,
+    outlineVariant = ProgressTrackDark
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -36,6 +37,7 @@ private val LightColorScheme = lightColorScheme(
     background = WhiteGray,
     onBackground = TextDark,
     surface = LightGray,
-    onSurface = TextDark
+    onSurface = TextDark,
+    outlineVariant = ProgressTrackLight
 )
 
