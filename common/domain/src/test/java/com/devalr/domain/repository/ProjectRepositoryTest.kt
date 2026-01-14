@@ -12,11 +12,9 @@ import com.devalr.domain.TestData.projectEntityData
 import com.devalr.domain.mappers.Mapper
 import com.devalr.domain.model.ProjectBo
 import com.devalr.domain.model.ProjectEntityData
-import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.first
@@ -141,14 +139,28 @@ class ProjectRepositoryTest {
         }
 
     @Test
-    fun `WHEN deleteProject is called THEN call remove in database`() = runTest {
+    fun `WHEN deleteProject is called THEN call remove in database returns true`() = runTest {
         // GIVEN
-        coEvery { projectDao.deleteProject(1L) } just Runs
+        coEvery { projectDao.deleteProject(1L) } returns 1
 
         // WHEN
-        repository.deleteProject(1L)
+        val result = repository.deleteProject(1L)
 
         // THEN
         coVerify(exactly = 1) { projectDao.deleteProject(1L) }
+        assertTrue(result)
+    }
+
+    @Test
+    fun `WHEN deleteProject is called THEN call remove in database returns false`() = runTest {
+        // GIVEN
+        coEvery { projectDao.deleteProject(1L) } returns 0
+
+        // WHEN
+        val result = repository.deleteProject(1L)
+
+        // THEN
+        coVerify(exactly = 1) { projectDao.deleteProject(1L) }
+        assertFalse(result)
     }
 }

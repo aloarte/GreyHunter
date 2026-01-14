@@ -28,8 +28,6 @@ class ProjectDetailViewModel(
         }
     }
 
-
-
     private fun loadProject(projectId: Long) {
         viewModelScope.launch {
             projectRepository.getProject(projectId)
