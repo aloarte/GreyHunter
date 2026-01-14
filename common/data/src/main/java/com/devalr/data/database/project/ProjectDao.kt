@@ -17,7 +17,7 @@ interface ProjectDao {
     suspend fun updateProject(project: ProjectEntity): Int
 
     @Query("DELETE FROM projects WHERE id = :projectId")
-    suspend fun deleteProject(projectId: Long)
+    suspend fun deleteProject(projectId: Long): Int
 
     @Query("SELECT * FROM projects")
     fun getAllProjects(): Flow<List<ProjectEntity>>
@@ -29,5 +29,5 @@ interface ProjectDao {
     fun getLastUpdatedProject(): Flow<ProjectEntity?>
 
     @Query("SELECT * FROM projects WHERE completionPercentage > 0.8 AND completionPercentage < 1 ORDER BY completionPercentage DESC LIMIT :projectNumber")
-    fun getAlmostDoneProjects(projectNumber:Int): Flow<List<ProjectEntity>>
+    fun getAlmostDoneProjects(projectNumber: Int): Flow<List<ProjectEntity>>
 }

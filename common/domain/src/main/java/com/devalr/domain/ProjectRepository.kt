@@ -19,6 +19,5 @@ interface ProjectRepository {
 
     suspend fun updateProjectProgress(projectId: Long, avoidLastUpdate: Boolean = false): Boolean
 
-    suspend fun deleteProject(projectId: Long)
-
+    suspend fun deleteProject(projectId: Long) : Boolean
 }

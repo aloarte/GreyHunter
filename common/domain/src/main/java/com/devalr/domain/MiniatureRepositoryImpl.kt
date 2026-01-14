@@ -1,6 +1,5 @@
 package com.devalr.domain
 
-import android.util.Log
 import com.devalr.data.database.miniature.MiniatureDao
 import com.devalr.data.database.miniature.MiniatureEntity
 import com.devalr.domain.mappers.Mapper
@@ -53,10 +52,7 @@ class MiniatureRepositoryImpl(
         return rowsAffected > 0
     }
 
-    override suspend fun deleteMiniature(miniatureId: Long): Boolean {
-        val deleteResult = miniatureDao.deleteMiniature(miniatureId)
-        Log.d("ALRALR", "Deleting $miniatureId. Result: $deleteResult")
-        return deleteResult > 0
-    }
+    override suspend fun deleteMiniature(miniatureId: Long): Boolean =
+        miniatureDao.deleteMiniature(miniatureId) > 0
 
 }
