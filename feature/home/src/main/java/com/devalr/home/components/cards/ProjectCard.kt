@@ -21,9 +21,9 @@ import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.ProjectBo
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.stormlightArchiveProject
-import com.devalr.framework.components.GHImage
-import com.devalr.framework.components.GHText
-import com.devalr.framework.components.TextType
+import com.devalr.framework.components.gh.GHImage
+import com.devalr.framework.components.gh.GHText
+import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.components.cards.getCardWidth
 import com.devalr.framework.components.progress.GHProgressBar
 import com.devalr.framework.enum.CardType

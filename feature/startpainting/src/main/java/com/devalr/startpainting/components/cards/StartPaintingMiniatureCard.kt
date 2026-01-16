@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -25,13 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.devalr.framework.components.GHImage
-import com.devalr.framework.components.GHText
-import com.devalr.framework.components.TextType
+import com.devalr.framework.components.gh.GHImage
+import com.devalr.framework.components.gh.GHText
+import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.startpainting.model.StartPaintMiniatureVo
 import com.devalr.startpainting.model.helpers.chronomancerVo
@@ -76,7 +75,7 @@ fun StartPaintingMiniatureCard(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.LightGray.copy(alpha = 0.5f))
+                    .background(Color.LightGray.copy(alpha = 0.8f))
             )
         }
 
@@ -106,10 +105,10 @@ fun StartPaintingMiniatureCard(
         if (miniature.isSelected) {
             Icon(
                 modifier = Modifier
-                    .padding(5.dp)
+                    .padding(10.dp)
                     .size(20.dp)
                     .align(Alignment.TopEnd),
-                imageVector = Icons.Default.Check,
+                painter = painterResource(com.devalr.framework.R.drawable.ic_check),
                 tint = MaterialTheme.colorScheme.primary,
                 contentDescription = ""
             )

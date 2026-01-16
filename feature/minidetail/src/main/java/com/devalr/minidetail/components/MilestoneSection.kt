@@ -33,8 +33,8 @@ import com.devalr.domain.enum.MilestoneType.Base
 import com.devalr.domain.enum.MilestoneType.BaseColored
 import com.devalr.domain.enum.MilestoneType.Details
 import com.devalr.domain.enum.MilestoneType.Primed
-import com.devalr.framework.components.GHText
-import com.devalr.framework.components.TextType
+import com.devalr.framework.components.gh.GHText
+import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.minidetail.R
 

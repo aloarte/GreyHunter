@@ -10,7 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.devalr.framework.components.LoadingIndicator
+import com.devalr.framework.components.anim.LoadingIndicator
 import com.devalr.framework.components.bottomsheet.ConfirmDeleteBottomSheetContent
 import com.devalr.minidetail.components.MiniatureDetailScreenContent
 import com.devalr.minidetail.interactions.Action.OnAppear

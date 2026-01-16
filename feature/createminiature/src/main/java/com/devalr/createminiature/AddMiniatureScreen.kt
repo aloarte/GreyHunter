@@ -24,8 +24,8 @@ import com.devalr.createminiature.interactions.Action.OnAppear
 import com.devalr.createminiature.interactions.Action.OnImageChanged
 import com.devalr.createminiature.interactions.Action.OnNameChanged
 import com.devalr.createminiature.interactions.Event.OnAddedSuccessfully
-import com.devalr.framework.components.GHButton
-import com.devalr.framework.components.GHImage
+import com.devalr.framework.components.button.GHButton
+import com.devalr.framework.components.gh.GHImage
 import com.devalr.framework.components.add.AddItemName
 import com.devalr.framework.components.bottomsheet.ImagePickerHandler
 import org.koin.compose.koinInject

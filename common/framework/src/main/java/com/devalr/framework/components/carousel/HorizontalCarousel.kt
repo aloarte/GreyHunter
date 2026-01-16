@@ -1,4 +1,4 @@
-package com.devalr.framework.components
+package com.devalr.framework.components.carousel
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

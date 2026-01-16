@@ -21,8 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.devalr.framework.components.GHText
-import com.devalr.framework.components.TextType
+import com.devalr.framework.components.gh.GHText
+import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.startpainting.model.StartPaintMiniatureVo
 import com.devalr.startpainting.model.StartPaintProjectVo

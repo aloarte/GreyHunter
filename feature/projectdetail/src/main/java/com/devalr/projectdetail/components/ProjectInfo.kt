@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.ProjectBo
-import com.devalr.framework.components.GHText
-import com.devalr.framework.components.TextType
+import com.devalr.framework.components.gh.GHText
+import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.components.markedtext.MarkedText
 import com.devalr.framework.components.progress.GHProgressBar
 import com.devalr.framework.theme.GreyHunterTheme

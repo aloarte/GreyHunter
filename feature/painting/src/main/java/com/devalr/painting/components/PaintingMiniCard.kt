@@ -19,10 +19,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.helpers.technomancer
-import com.devalr.framework.components.GHImage
-import com.devalr.framework.components.GHText
+import com.devalr.framework.components.gh.GHImage
+import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.ScreenSize
-import com.devalr.framework.components.TextType
+import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.components.getScreenSize
 import com.devalr.framework.theme.GreyHunterTheme
 

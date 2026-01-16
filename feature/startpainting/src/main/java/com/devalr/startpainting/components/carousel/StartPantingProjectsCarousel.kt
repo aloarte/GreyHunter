@@ -7,16 +7,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.devalr.framework.components.GHIconButton
-import com.devalr.framework.components.HorizontalCarousel
+import com.devalr.framework.components.button.GHIconButton
+import com.devalr.framework.components.carousel.HorizontalCarousel
 import com.devalr.framework.components.ScreenSize
 import com.devalr.framework.components.getScreenSize
 import com.devalr.framework.theme.GreyHunterTheme
@@ -63,7 +63,7 @@ fun StartPantingProjectsCarousel(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .padding(8.dp),
-                icon = Icons.Default.KeyboardArrowLeft,
+                icon = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
                 onButtonClicked = {
                     scope.launch {
                         pagerState.animateScrollToPage(pagerState.currentPage - 1)
@@ -77,7 +77,7 @@ fun StartPantingProjectsCarousel(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
                     .padding(8.dp),
-                icon = Icons.Default.KeyboardArrowRight,
+                icon = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                 onButtonClicked = {
                     scope.launch {
                         pagerState.animateScrollToPage(pagerState.currentPage + 1)

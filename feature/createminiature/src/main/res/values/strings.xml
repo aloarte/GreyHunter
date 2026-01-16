@@ -4,8 +4,8 @@
     <string name="error_add_miniature_empty_name">Profile name cannot be empty</string>
 
     <!-- Buttons -->
-    <string name="button_add_miniature">Add miniature</string>
-    <string name="button_edit_miniature">Edit miniature</string>
+    <string name="button_add_miniature">Create</string>
+    <string name="button_edit_miniature">Save</string>
 
 
     <!-- Labels -->
