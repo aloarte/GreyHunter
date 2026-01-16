@@ -3,8 +3,6 @@ package com.devalr.home
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -13,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import com.devalr.framework.components.anim.LoadingIndicator
 import com.devalr.home.components.screen.AppTitle
 import com.devalr.home.components.HomeScreenContent
@@ -58,7 +57,7 @@ fun HomeScreen(
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.PlayArrow,
+                        painter = painterResource(com.devalr.framework.R.drawable.ic_paint),
                         contentDescription = "Start Painting"
                     )
                 }
