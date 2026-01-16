@@ -36,7 +36,7 @@ fun MiniatureInfo(miniature: MiniatureBo, onlyUpdate: Boolean) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            MarkedText(title = true, text = miniature.name)
+            MarkedText(title = true, text = miniature.name.capitalize())
             GHText(text = "${(miniature.percentage * 100).toInt()}%", type = TextType.Featured)
         }
         Spacer(modifier = Modifier.height(20.dp))

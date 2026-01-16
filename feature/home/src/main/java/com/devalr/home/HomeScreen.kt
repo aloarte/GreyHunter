@@ -3,6 +3,11 @@ package com.devalr.home
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -10,7 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.devalr.framework.components.LoadingIndicator
 import com.devalr.home.components.screen.AppTitle
-import com.devalr.home.components.screen.HomeScreenContent
+import com.devalr.home.components.HomeScreenContent
 import com.devalr.home.interactions.Action.OnAddProject
 import com.devalr.home.interactions.Action.OnAppear
 import com.devalr.home.interactions.Action.OnOpenMiniatureDetail
@@ -44,7 +49,21 @@ fun HomeScreen(
     LaunchedEffect(true) { viewModel.onAction(OnAppear) }
 
     Scaffold(
-        topBar = {}
+        topBar = {},
+        floatingActionButton = {
+            if (state.loaded && state.projects.any { (it.hasMinis())}) {
+                FloatingActionButton(
+                    onClick = { viewModel.onAction(OnStartPainting) },
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.PlayArrow,
+                        contentDescription = "Start Painting"
+                    )
+                }
+            }
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -64,9 +83,6 @@ fun HomeScreen(
                     },
                     onAddProject = {
                         viewModel.onAction(OnAddProject)
-                    },
-                    onStartPainting = {
-                        viewModel.onAction(OnStartPainting)
                     }
                 )
             } else {

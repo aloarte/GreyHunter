@@ -1,4 +1,4 @@
-package com.devalr.home.components.screen
+package com.devalr.home.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.spacedBy
@@ -18,6 +18,11 @@ import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.immortal
 import com.devalr.domain.model.helpers.stormlightArchiveProject
 import com.devalr.framework.theme.GreyHunterTheme
+import com.devalr.home.components.screen.AlmostDoneProjects
+import com.devalr.home.components.screen.AppTitle
+import com.devalr.home.components.screen.GamificationMessage
+import com.devalr.home.components.screen.LastUpdatedMiniatures
+import com.devalr.home.components.screen.ProjectsCarousel
 import com.devalr.home.model.ProjectVo
 import com.devalr.home.model.ProjectVo.ProjectItem
 
@@ -28,8 +33,7 @@ fun HomeScreenContent(
     almostDoneProjects: List<ProjectBo>,
     onOpenProjectDetail: (Long) -> Unit,
     onOpenMiniatureDetail: (Long) -> Unit,
-    onAddProject: () -> Unit,
-    onStartPainting: () -> Unit
+    onAddProject: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -66,11 +70,6 @@ fun HomeScreenContent(
                 }
             )
         }
-        item {
-            StartPaint {
-                onStartPainting()
-            }
-        }
     }
 }
 
@@ -91,9 +90,6 @@ private fun HomeScreenContentPreviewLightMode() {
                 lastUpdatedMinis = listOf(immortal, alethi),
                 almostDoneProjects = listOf(hierotekCircleProject, stormlightArchiveProject),
                 onAddProject = {
-                    // Do nothing
-                },
-                onStartPainting = {
                     // Do nothing
                 },
                 onOpenProjectDetail = {
@@ -125,9 +121,6 @@ private fun HomeScreenContentPreviewDarkMode() {
                 lastUpdatedMinis = listOf(immortal, alethi),
                 almostDoneProjects = listOf(hierotekCircleProject, stormlightArchiveProject),
                 onAddProject = {
-                    // Do nothing
-                },
-                onStartPainting = {
                     // Do nothing
                 },
                 onOpenProjectDetail = {

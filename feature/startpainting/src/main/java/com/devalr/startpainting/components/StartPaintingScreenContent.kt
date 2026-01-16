@@ -22,11 +22,11 @@ import com.devalr.framework.components.detail.TopButtons
 import com.devalr.framework.components.getScreenSize
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.startpainting.R
+import com.devalr.startpainting.components.carousel.StartPantingProjectsCarousel
 import com.devalr.startpainting.model.StartPaintMiniatureVo
 import com.devalr.startpainting.model.StartPaintProjectVo
 import com.devalr.startpainting.model.helpers.hierotekCircleProjectVo
 import com.devalr.startpainting.model.helpers.stormlightArchiveProjectVo
-
 
 @Composable
 fun StartPaintingScreenContent(

@@ -30,8 +30,8 @@ fun AlmostDoneProjects(
 ) {
     if (projects.isNotEmpty()) {
         Column(modifier = Modifier.padding(25.dp)) {
-            MarkedText(text = stringResource(R.string.title_almost_done_projects))
-            Spacer(modifier = Modifier.height(15.dp))
+            MarkedText(text = stringResource(R.string.title_almost_done_projects), title = true)
+            Spacer(modifier = Modifier.height(20.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround
@@ -39,7 +39,7 @@ fun AlmostDoneProjects(
                 projects.forEach {
                     ProjectCard(
                         project = it,
-                        cardType = CardType.LastUpdated,
+                        cardType = CardType.Home,
                         onProjectClicked = onProjectClicked
                     )
                 }

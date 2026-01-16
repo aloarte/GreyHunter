@@ -1,4 +1,4 @@
-package com.devalr.startpainting.components
+package com.devalr.startpainting.components.cards
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -96,7 +95,7 @@ fun StartPaintingMiniatureCard(
             ) {
                 GHText(
                     modifier = Modifier.padding(horizontal = 10.dp),
-                    text = miniature.name,
+                    text = miniature.name.capitalize(),
                     textAlign = TextAlign.Center,
                     type = TextType.LabelSBold,
                     textColor = Color.White

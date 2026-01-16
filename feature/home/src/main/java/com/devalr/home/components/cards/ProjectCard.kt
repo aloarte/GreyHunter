@@ -55,12 +55,12 @@ fun ProjectCard(
             if (cardType == CardType.Project && project.imageUri != null) {
                 GHImage(imageUri = project.imageUri, size = 60.dp, borderRadius = 10.dp)
             }
-            GHText(text = project.name, type = TextType.Title)
+            GHText(text = project.name.capitalize(), type = TextType.Title)
             if(cardType == CardType.Project) GHText(text = "${project.minis.size} Miniatures", type = TextType.LabelM)
             project.description?.let { description ->
                 GHText(text = description, type = TextType.Description, singleLane = true)
             }
-            GHProgressBar(percentage = project.progress)
+            GHProgressBar(percentage = project.progress, height = if(cardType == CardType.Project) 8.dp else 5.dp )
         }
     }
 }

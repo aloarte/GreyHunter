@@ -35,7 +35,7 @@ fun ProjectInfo(project: ProjectBo) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             MarkedText(
-                text = project.name,
+                text = project.name.capitalize(),
                 title = true
             )
             GHText(text = "${(project.progress * 100).toInt()}%", type = TextType.Featured)

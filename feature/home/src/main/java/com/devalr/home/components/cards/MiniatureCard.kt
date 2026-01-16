@@ -40,7 +40,7 @@ fun MiniatureCard(
 ) {
     Card(
         modifier = modifier
-            .width(getCardWidth(CardType.LastUpdated))
+            .width(getCardWidth(CardType.Home))
             .aspectRatio(1.6f),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
         onClick = { onMiniatureClicked(miniature.id) }
@@ -60,7 +60,7 @@ fun MiniatureCard(
             ) {
                 GHText(
                     modifier = Modifier.fillMaxWidth(0.70f),
-                    text = miniature.name,
+                    text = miniature.name.capitalize(),
                     type = TextType.Title
                 )
                 Box(
