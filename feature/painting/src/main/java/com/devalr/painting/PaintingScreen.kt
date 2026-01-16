@@ -4,7 +4,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import com.devalr.framework.components.LoadingIndicator
+import com.devalr.framework.components.anim.LoadingIndicator
 import com.devalr.painting.components.PaintingScreenContent
 import com.devalr.painting.interactions.Action.OnAppear
 import com.devalr.painting.interactions.Action.OnBackPressed

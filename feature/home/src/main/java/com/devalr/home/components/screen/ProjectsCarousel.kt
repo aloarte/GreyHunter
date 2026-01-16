@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.stormlightArchiveProject
-import com.devalr.framework.components.HorizontalCarousel
+import com.devalr.framework.components.carousel.HorizontalCarousel
 import com.devalr.framework.components.cards.AddCard
 import com.devalr.framework.components.markedtext.MarkedText
 import com.devalr.framework.enum.CardType

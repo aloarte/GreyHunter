@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.helpers.deathmark
 import com.devalr.domain.model.helpers.immortal
-import com.devalr.framework.components.GHText
-import com.devalr.framework.components.TextType
+import com.devalr.framework.components.gh.GHText
+import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.components.cards.getCardWidth
 import com.devalr.framework.enum.CardType
 import com.devalr.framework.theme.GreyHunterTheme

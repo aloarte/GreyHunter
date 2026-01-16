@@ -1,4 +1,4 @@
-package com.devalr.framework.components
+package com.devalr.framework.components.button
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,7 +25,8 @@ import com.devalr.framework.theme.GreyHunterTheme
 fun GHIconButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    icon: ImageVector,
+    icon: ImageVector? = null,
+    painter: Painter? = null,
     onButtonClicked: () -> Unit
 ) {
     Box(
@@ -36,13 +38,24 @@ fun GHIconButton(
             .clickable(enabled = enabled) { onButtonClicked() },
         contentAlignment = Alignment.Center
     ) {
-        Icon(
-            modifier = Modifier.size(20.dp),
-            imageVector = icon,
-            contentDescription = "Atrás",
-            tint = if (enabled) MaterialTheme.colorScheme.onSurface
-            else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
-        )
+        icon?.let {
+            Icon(
+                modifier = Modifier.size(20.dp),
+                imageVector = icon,
+                contentDescription = "Atrás",
+                tint = if (enabled) MaterialTheme.colorScheme.onSurface
+                else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+            )
+        } ?: painter?.let {
+            Icon(
+                modifier = Modifier.size(20.dp),
+                painter = painter,
+                contentDescription = "Atrás",
+                tint = if (enabled) MaterialTheme.colorScheme.onSurface
+                else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+            )
+        }
+
     }
 }
 

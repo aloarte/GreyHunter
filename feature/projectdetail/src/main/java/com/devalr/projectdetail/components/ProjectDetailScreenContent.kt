@@ -19,8 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
-import com.devalr.framework.components.GHImage
-import com.devalr.framework.components.detail.TopButtons
+import com.devalr.framework.components.gh.GHImage
+import com.devalr.framework.components.button.TopButtons
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable

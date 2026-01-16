@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import com.devalr.framework.components.LoadingIndicator
+import com.devalr.framework.components.anim.LoadingIndicator
 import com.devalr.home.components.screen.AppTitle
 import com.devalr.home.components.HomeScreenContent
 import com.devalr.home.interactions.Action.OnAddProject

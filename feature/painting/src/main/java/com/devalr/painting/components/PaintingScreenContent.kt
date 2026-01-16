@@ -30,11 +30,11 @@ import com.devalr.domain.model.helpers.chronomancer
 import com.devalr.domain.model.helpers.deathmark
 import com.devalr.domain.model.helpers.immortal
 import com.devalr.domain.model.helpers.technomancer
-import com.devalr.framework.components.GHButton
-import com.devalr.framework.components.GHText
+import com.devalr.framework.components.button.GHButton
+import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.ScreenSize
-import com.devalr.framework.components.TextType
-import com.devalr.framework.components.detail.TopButtons
+import com.devalr.framework.components.gh.TextType
+import com.devalr.framework.components.button.TopButtons
 import com.devalr.framework.components.getScreenSize
 import com.devalr.framework.components.markedtext.MarkedText
 import com.devalr.framework.theme.GreyHunterTheme

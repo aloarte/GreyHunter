@@ -1,4 +1,4 @@
-package com.devalr.framework.components.detail
+package com.devalr.framework.components.button
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -11,9 +11,10 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.devalr.framework.components.GHIconButton
+import com.devalr.framework.R
 import com.devalr.framework.theme.GreyHunterTheme
 
 
@@ -25,6 +26,9 @@ fun TopButtons(
     onDeletePressed: (() -> Unit)? = null
 ) {
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        /*GHIconButton(
+            painter = painterResource(com.composables.icons.materialicons.outlined.R.drawable.materialicons_ic_arrow_back_outlined),
+            onButtonClicked = onBackPressed)*/
         GHIconButton(icon = Icons.Default.ArrowBack, onButtonClicked = onBackPressed)
         Row {
             if (onEditPressed != null) {

@@ -1,4 +1,4 @@
-package com.devalr.framework.components
+package com.devalr.framework.components.button
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.devalr.framework.components.gh.GHText
+import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.framework.theme.LightGray
 

@@ -22,9 +22,9 @@ import com.devalr.domain.enum.MilestoneType
 import com.devalr.domain.model.CompletionProportionsBo
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.helpers.chronomancer
-import com.devalr.framework.components.GHButton
-import com.devalr.framework.components.GHImage
-import com.devalr.framework.components.detail.TopButtons
+import com.devalr.framework.components.button.GHButton
+import com.devalr.framework.components.gh.GHImage
+import com.devalr.framework.components.button.TopButtons
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.minidetail.R
 

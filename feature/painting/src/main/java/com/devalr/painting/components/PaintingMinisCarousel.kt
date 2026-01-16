@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.helpers.chronomancer
 import com.devalr.domain.model.helpers.technomancer
-import com.devalr.framework.components.InfiniteHorizontalCarousel
+import com.devalr.framework.components.carousel.InfiniteHorizontalCarousel
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable

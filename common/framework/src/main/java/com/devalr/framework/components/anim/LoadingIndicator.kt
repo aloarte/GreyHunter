@@ -1,4 +1,4 @@
-package com.devalr.framework.components
+package com.devalr.framework.components.anim
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable

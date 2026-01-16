@@ -1,4 +1,4 @@
-package com.devalr.framework.components
+package com.devalr.framework.components.gh
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text

@@ -20,8 +20,8 @@ import com.devalr.createproject.interactions.Action.OnDescriptionChanged
 import com.devalr.createproject.interactions.Action.OnImageChanged
 import com.devalr.createproject.interactions.Action.OnNameChanged
 import com.devalr.createproject.interactions.Event.OnAddedSuccessfully
-import com.devalr.framework.components.GHButton
-import com.devalr.framework.components.GHImage
+import com.devalr.framework.components.button.GHButton
+import com.devalr.framework.components.gh.GHImage
 import com.devalr.framework.components.add.AddItemDescription
 import com.devalr.framework.components.add.AddItemName
 import com.devalr.framework.components.bottomsheet.ImagePickerHandler
