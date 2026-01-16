@@ -69,7 +69,7 @@ fun ProjectMiniatures(
                     )
                     GHText(
                         modifier = Modifier.fillMaxWidth(.5f),
-                        text = miniature.name,
+                        text = miniature.name.capitalize(),
                         type = TextType.LabelL,
                         singleLane = true
                     )

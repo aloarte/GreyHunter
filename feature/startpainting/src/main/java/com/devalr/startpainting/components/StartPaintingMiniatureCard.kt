@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -96,7 +97,7 @@ fun StartPaintingMiniatureCard(
             ) {
                 GHText(
                     modifier = Modifier.padding(horizontal = 10.dp),
-                    text = miniature.name,
+                    text = miniature.name.capitalize(),
                     textAlign = TextAlign.Center,
                     type = TextType.LabelSBold,
                     textColor = Color.White

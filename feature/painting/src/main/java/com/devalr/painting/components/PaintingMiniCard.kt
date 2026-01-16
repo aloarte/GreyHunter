@@ -56,7 +56,7 @@ fun PaintingMiniCard(miniature: MiniatureBo) {
             ) {
                 GHText(
                     modifier = Modifier.padding(horizontal = 15.dp),
-                    text = miniature.name,
+                    text = miniature.name.capitalize(),
                     textAlign = TextAlign.Center,
                     type = TextType.LabelMBold
                 )

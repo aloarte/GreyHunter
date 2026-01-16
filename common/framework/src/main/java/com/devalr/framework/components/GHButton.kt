@@ -35,7 +35,7 @@ fun GHButton(
         onClick = onClick
     ) {
         GHText(
-            text = text.uppercase(),
+            text = text.capitalize(),
             type = TextType.Title,
             textColor = if (invertColors) Color.Black else Color.White
         )
