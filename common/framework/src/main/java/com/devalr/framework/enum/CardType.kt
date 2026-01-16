@@ -1,5 +1,5 @@
 package com.devalr.framework.enum
 
 enum class CardType {
-    Project, Miniature, StartPaintProject, LastUpdated
+    Project, Miniature, StartPaintProject, Home
 }

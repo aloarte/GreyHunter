@@ -60,7 +60,7 @@ fun ProjectCard(
             project.description?.let { description ->
                 GHText(text = description, type = TextType.Description, singleLane = true)
             }
-            GHProgressBar(percentage = project.progress)
+            GHProgressBar(percentage = project.progress, height = if(cardType == CardType.Project) 8.dp else 5.dp )
         }
     }
 }

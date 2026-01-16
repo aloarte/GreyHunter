@@ -28,8 +28,7 @@ fun HomeScreenContent(
     almostDoneProjects: List<ProjectBo>,
     onOpenProjectDetail: (Long) -> Unit,
     onOpenMiniatureDetail: (Long) -> Unit,
-    onAddProject: () -> Unit,
-    onStartPainting: () -> Unit
+    onAddProject: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -66,11 +65,6 @@ fun HomeScreenContent(
                 }
             )
         }
-        item {
-            StartPaint {
-                onStartPainting()
-            }
-        }
     }
 }
 
@@ -91,9 +85,6 @@ private fun HomeScreenContentPreviewLightMode() {
                 lastUpdatedMinis = listOf(immortal, alethi),
                 almostDoneProjects = listOf(hierotekCircleProject, stormlightArchiveProject),
                 onAddProject = {
-                    // Do nothing
-                },
-                onStartPainting = {
                     // Do nothing
                 },
                 onOpenProjectDetail = {
@@ -125,9 +116,6 @@ private fun HomeScreenContentPreviewDarkMode() {
                 lastUpdatedMinis = listOf(immortal, alethi),
                 almostDoneProjects = listOf(hierotekCircleProject, stormlightArchiveProject),
                 onAddProject = {
-                    // Do nothing
-                },
-                onStartPainting = {
                     // Do nothing
                 },
                 onOpenProjectDetail = {

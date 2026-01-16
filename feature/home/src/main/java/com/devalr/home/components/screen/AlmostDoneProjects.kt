@@ -39,7 +39,7 @@ fun AlmostDoneProjects(
                 projects.forEach {
                     ProjectCard(
                         project = it,
-                        cardType = CardType.LastUpdated,
+                        cardType = CardType.Home,
                         onProjectClicked = onProjectClicked
                     )
                 }

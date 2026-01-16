@@ -12,7 +12,7 @@ fun getCardWidth(type: CardType): Dp {
         CardType.StartPaintProject -> 1.0f
         CardType.Project -> 0.70f
         CardType.Miniature -> 0.40f
-        CardType.LastUpdated -> 0.4f
+        CardType.Home -> 0.4f
     }
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
