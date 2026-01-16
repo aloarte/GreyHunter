@@ -29,8 +29,8 @@ fun LastUpdatedMiniatures(
 ) {
     if (miniatures.isNotEmpty()) {
         Column(modifier = Modifier.padding(25.dp)) {
-            MarkedText(text = stringResource(R.string.title_last_updated_miniatures))
-            Spacer(modifier = Modifier.height(15.dp))
+            MarkedText(text = stringResource(R.string.title_last_updated_miniatures), title = true)
+            Spacer(modifier = Modifier.height(20.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround

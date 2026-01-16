@@ -1,4 +1,4 @@
-package com.devalr.home.components.screen
+package com.devalr.home.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.spacedBy
@@ -18,6 +18,11 @@ import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.immortal
 import com.devalr.domain.model.helpers.stormlightArchiveProject
 import com.devalr.framework.theme.GreyHunterTheme
+import com.devalr.home.components.screen.AlmostDoneProjects
+import com.devalr.home.components.screen.AppTitle
+import com.devalr.home.components.screen.GamificationMessage
+import com.devalr.home.components.screen.LastUpdatedMiniatures
+import com.devalr.home.components.screen.ProjectsCarousel
 import com.devalr.home.model.ProjectVo
 import com.devalr.home.model.ProjectVo.ProjectItem
 

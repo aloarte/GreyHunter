@@ -13,10 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import com.devalr.domain.model.ProjectBo
 import com.devalr.framework.components.LoadingIndicator
 import com.devalr.home.components.screen.AppTitle
-import com.devalr.home.components.screen.HomeScreenContent
+import com.devalr.home.components.HomeScreenContent
 import com.devalr.home.interactions.Action.OnAddProject
 import com.devalr.home.interactions.Action.OnAppear
 import com.devalr.home.interactions.Action.OnOpenMiniatureDetail
@@ -26,7 +25,6 @@ import com.devalr.home.interactions.Event.NavigateStartPaint
 import com.devalr.home.interactions.Event.NavigateToAddProject
 import com.devalr.home.interactions.Event.NavigateToMiniature
 import com.devalr.home.interactions.Event.NavigateToProject
-import com.devalr.home.model.ProjectVo
 import org.koin.compose.koinInject
 
 @Composable

@@ -32,7 +32,8 @@ fun ProjectsCarousel(
     Column {
         MarkedText(
             modifier = Modifier.padding(horizontal = 20.dp),
-            text = "Projects"
+            text = "Projects",
+            title = true
         )
         Spacer(modifier = Modifier.height(20.dp))
         HorizontalCarousel(items = projects, dots = true) { item ->

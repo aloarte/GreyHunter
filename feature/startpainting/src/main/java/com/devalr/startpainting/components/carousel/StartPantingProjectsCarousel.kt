@@ -1,4 +1,4 @@
-package com.devalr.startpainting.components
+package com.devalr.startpainting.components.carousel
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +20,7 @@ import com.devalr.framework.components.HorizontalCarousel
 import com.devalr.framework.components.ScreenSize
 import com.devalr.framework.components.getScreenSize
 import com.devalr.framework.theme.GreyHunterTheme
+import com.devalr.startpainting.components.cards.StartPaintingProjectCard
 import com.devalr.startpainting.model.StartPaintMiniatureVo
 import com.devalr.startpainting.model.StartPaintProjectVo
 import com.devalr.startpainting.model.helpers.hierotekCircleProjectVo
@@ -56,28 +57,34 @@ fun StartPantingProjectsCarousel(
             )
         }
 
-        GHIconButton(
-            enabled = pagerState.currentPage > 0,
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(8.dp),
-            icon = Icons.Default.KeyboardArrowLeft,
-            onButtonClicked = {
-                scope.launch {
-                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
+        if(pagerState.currentPage > 0){
+            GHIconButton(
+                enabled = pagerState.currentPage > 0,
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(8.dp),
+                icon = Icons.Default.KeyboardArrowLeft,
+                onButtonClicked = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                    }
                 }
-            })
-        GHIconButton(
-            enabled = pagerState.currentPage < projects.lastIndex,
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .padding(8.dp),
-            icon = Icons.Default.KeyboardArrowRight,
-            onButtonClicked = {
-                scope.launch {
-                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+            )
+        }
+        if(pagerState.currentPage < projects.lastIndex){
+            GHIconButton(
+                enabled = pagerState.currentPage < projects.lastIndex,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(8.dp),
+                icon = Icons.Default.KeyboardArrowRight,
+                onButtonClicked = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                    }
                 }
-            })
+            )
+        }
     }
 }
 

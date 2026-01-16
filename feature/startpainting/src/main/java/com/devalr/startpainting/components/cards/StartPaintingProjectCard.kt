@@ -1,4 +1,4 @@
-package com.devalr.startpainting.components
+package com.devalr.startpainting.components.cards
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
