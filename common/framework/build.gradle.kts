@@ -58,8 +58,4 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     debugImplementation(libs.ui.tooling)
-    // Icons
-    //implementation("com.composables:icons-material-icons-outlined-android:2.2.1")
-    //implementation("com.composables:icons-feather-android:2.2.1")
-    //implementation("com.composables:icons-heroicons-outline-android:2.2.1")
 }
