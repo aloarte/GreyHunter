@@ -24,6 +24,10 @@ import com.devalr.home.components.screen.AppTitle
 import com.devalr.home.components.screen.GamificationMessage
 import com.devalr.home.components.screen.LastUpdatedMiniatures
 import com.devalr.home.components.screen.ProjectsCarousel
+import com.devalr.home.model.GamificationMessageType
+import com.devalr.home.model.GamificationMessageType.EmptyProjects
+import com.devalr.home.model.GamificationMessageType.None
+import com.devalr.home.model.GamificationMessageType.ProgressRange
 import com.devalr.home.model.ProjectVo
 import com.devalr.home.model.ProjectVo.AddProject
 import com.devalr.home.model.ProjectVo.ProjectItem
@@ -33,6 +37,7 @@ fun HomeScreenContent(
     projects: List<ProjectVo>,
     lastUpdatedMinis: List<MiniatureBo>,
     almostDoneProjects: List<ProjectBo>,
+    gamificationMessage: GamificationMessageType,
     onOpenProjectDetail: (Long) -> Unit,
     onOpenMiniatureDetail: (Long) -> Unit,
     onAddProject: () -> Unit
@@ -56,8 +61,8 @@ fun HomeScreenContent(
             )
         }
         item {
-            if (projects.size > 1) {
-                GamificationMessage()
+            if (projects.size > 1 && gamificationMessage != None) {
+                GamificationMessage(gamificationMessage)
             } else {
                 EmptyProjects()
             }
@@ -97,6 +102,7 @@ private fun HomeScreenContentPreviewLightMode() {
                 ),
                 lastUpdatedMinis = listOf(immortal, alethi),
                 almostDoneProjects = listOf(hierotekCircleProject, stormlightArchiveProject),
+                gamificationMessage = ProgressRange(0.4f),
                 onAddProject = {
                     // Do nothing
                 },
@@ -128,6 +134,7 @@ private fun HomeScreenContentPreviewDarkMode() {
                 ),
                 lastUpdatedMinis = listOf(immortal, alethi),
                 almostDoneProjects = listOf(hierotekCircleProject, stormlightArchiveProject),
+                gamificationMessage = ProgressRange(0.4f),
                 onAddProject = {
                     // Do nothing
                 },
@@ -156,6 +163,7 @@ private fun HomeScreenContentNoProjectsPreviewLightMode() {
                 projects = listOf(AddProject),
                 lastUpdatedMinis = emptyList(),
                 almostDoneProjects = emptyList(),
+                gamificationMessage = EmptyProjects,
                 onAddProject = {
                     // Do nothing
                 },
@@ -184,6 +192,7 @@ private fun HomeScreenContentNoProjectsPreviewDarkMode() {
                 projects = listOf(AddProject),
                 lastUpdatedMinis = emptyList(),
                 almostDoneProjects = emptyList(),
+                gamificationMessage = EmptyProjects,
                 onAddProject = {
                     // Do nothing
                 },

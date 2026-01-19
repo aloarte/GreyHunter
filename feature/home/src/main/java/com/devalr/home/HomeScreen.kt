@@ -13,8 +13,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.devalr.framework.components.anim.LoadingIndicator
-import com.devalr.home.components.screen.AppTitle
 import com.devalr.home.components.HomeScreenContent
+import com.devalr.home.components.screen.AppTitle
 import com.devalr.home.interactions.Action.OnAddProject
 import com.devalr.home.interactions.Action.OnAppear
 import com.devalr.home.interactions.Action.OnOpenMiniatureDetail
@@ -50,7 +50,7 @@ fun HomeScreen(
     Scaffold(
         topBar = {},
         floatingActionButton = {
-            if (state.loaded && state.projects.any { (it.hasMinis())}) {
+            if (state.loaded && state.projects.any { (it.hasMinis()) }) {
                 FloatingActionButton(
                     onClick = { viewModel.onAction(OnStartPainting) },
                     containerColor = MaterialTheme.colorScheme.primary,
@@ -74,6 +74,7 @@ fun HomeScreen(
                     projects = state.projects,
                     almostDoneProjects = state.almostDoneProjects,
                     lastUpdatedMinis = state.lastUpdatedMinis,
+                    gamificationMessage = state.gamificationSentence,
                     onOpenProjectDetail = { projectId ->
                         viewModel.onAction(OnOpenProjectDetail(projectId = projectId))
                     },
