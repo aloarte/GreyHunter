@@ -15,5 +15,5 @@
     <string name="btn_delete">Delete</string>
     <string name="btn_camera">Camera</string>
     <string name="btn_gallery">Gallery</string>
-
+    <string name="btn_create_project">Create project</string>
 </resources>
