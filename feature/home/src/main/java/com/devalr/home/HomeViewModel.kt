@@ -3,6 +3,7 @@ package com.devalr.home
 import androidx.lifecycle.viewModelScope
 import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.ProjectRepository
+import com.devalr.domain.model.ProjectBo
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.home.interactions.Action
 import com.devalr.home.interactions.Action.OnAddProject
@@ -10,12 +11,17 @@ import com.devalr.home.interactions.Action.OnAppear
 import com.devalr.home.interactions.Action.OnOpenMiniatureDetail
 import com.devalr.home.interactions.Action.OnOpenProjectDetail
 import com.devalr.home.interactions.Action.OnStartPainting
+import com.devalr.home.interactions.Action.OnUploadGamificationMessage
 import com.devalr.home.interactions.Event
 import com.devalr.home.interactions.Event.NavigateStartPaint
 import com.devalr.home.interactions.Event.NavigateToAddProject
 import com.devalr.home.interactions.Event.NavigateToMiniature
 import com.devalr.home.interactions.Event.NavigateToProject
 import com.devalr.home.interactions.State
+import com.devalr.home.model.GamificationMessageType.AlmostDone
+import com.devalr.home.model.GamificationMessageType.EmptyProjects
+import com.devalr.home.model.GamificationMessageType.None
+import com.devalr.home.model.GamificationMessageType.ProgressRange
 import com.devalr.home.model.ProjectVo
 import com.devalr.home.model.ProjectVo.AddProject
 import com.devalr.home.model.ProjectVo.ProjectItem
@@ -34,6 +40,11 @@ class HomeViewModel(
             is OnOpenProjectDetail -> sendEvent(NavigateToProject(projectId = action.projectId))
             is OnOpenMiniatureDetail -> sendEvent(NavigateToMiniature(miniatureId = action.miniatureId))
             is OnStartPainting -> sendEvent(NavigateStartPaint)
+            is OnUploadGamificationMessage -> updateGamificationMessage(
+                projects = action.projects,
+                almostDoneProjects = action.almostDoneProjects
+            )
+
             OnAddProject -> sendEvent(NavigateToAddProject)
         }
     }
@@ -48,7 +59,7 @@ class HomeViewModel(
                 val voProjects: MutableList<ProjectVo> =
                     projects.map { ProjectItem(it) }.toMutableList()
                 voProjects.add(AddProject)
-
+                onAction(OnUploadGamificationMessage(projects, almostDoneProjects))
                 uiState.value.copy(
                     projects = voProjects,
                     almostDoneProjects = almostDoneProjects,
@@ -62,5 +73,39 @@ class HomeViewModel(
                 updateState { newState }
             }
         }
+    }
+
+    fun updateGamificationMessage(
+        projects: List<ProjectBo>,
+        almostDoneProjects: List<ProjectBo>
+    ) {
+        val gamificationMessage = if (almostDoneProjects.isNotEmpty()) {
+            AlmostDone(almostDoneProjects.first().name)
+        } else if (projects.isNotEmpty()) {
+            val progressAverage = projects
+                .removeOutliers()
+                .map { it.progress }
+                .average()
+                .toFloat()
+            when (progressAverage) {
+                0f -> EmptyProjects
+                in 0.01f..0.2f -> ProgressRange(0.2f)
+                in 0.21f..0.5f -> ProgressRange(0.5f)
+                in 0.51f..0.7f -> ProgressRange(0.7f)
+                in 0.71f..0.9f -> ProgressRange(0.9f)
+                in 0.91f..0.99f -> ProgressRange(0.99f)
+                1f -> ProgressRange(1f)
+                else -> None
+            }
+        } else {
+            None
+        }
+        updateState { copy(gamificationSentence = gamificationMessage) }
+    }
+
+    fun List<ProjectBo>.removeOutliers(): List<ProjectBo> {
+        val sorted = this.map { it.progress }.sorted()
+        val median = sorted[sorted.size / 2]
+        return filter { it.progress >= median * 0.5f }
     }
 }

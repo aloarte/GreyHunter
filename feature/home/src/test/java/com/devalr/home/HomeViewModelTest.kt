@@ -9,10 +9,15 @@ import com.devalr.home.interactions.Action.OnAddProject
 import com.devalr.home.interactions.Action.OnAppear
 import com.devalr.home.interactions.Action.OnOpenProjectDetail
 import com.devalr.home.interactions.Action.OnStartPainting
+import com.devalr.home.interactions.Action.OnUploadGamificationMessage
 import com.devalr.home.interactions.Event
 import com.devalr.home.interactions.Event.NavigateStartPaint
 import com.devalr.home.interactions.Event.NavigateToAddProject
 import com.devalr.home.interactions.Event.NavigateToProject
+import com.devalr.home.model.GamificationMessageType.AlmostDone
+import com.devalr.home.model.GamificationMessageType.EmptyProjects
+import com.devalr.home.model.GamificationMessageType.None
+import com.devalr.home.model.GamificationMessageType.ProgressRange
 import com.devalr.home.model.ProjectVo
 import com.devalr.home.model.ProjectVo.AddProject
 import com.devalr.home.model.ProjectVo.ProjectItem
@@ -45,22 +50,22 @@ class HomeViewModelTest {
     private lateinit var viewModel: HomeViewModel
     private val testDispatcher = StandardTestDispatcher()
 
-    private val projects = listOf(
-        ProjectBo(
-            id = 1,
-            name = "Project 1",
-            progress = 0.5f,
-            imageUri = null,
-            minis = emptyList()
-        ),
-        ProjectBo(
-            id = 2,
-            name = "Project 2",
-            progress = 1.0f,
-            imageUri = null,
-            minis = emptyList()
-        )
+    private val project50 = ProjectBo(
+        id = 1,
+        name = "Project 1",
+        progress = 0.5f,
+        imageUri = null,
+        minis = emptyList()
     )
+
+    private val project100 = ProjectBo(
+        id = 2,
+        name = "Project 2",
+        progress = 1.0f,
+        imageUri = null,
+        minis = emptyList()
+    )
+    private val projects = listOf(project50, project100)
     private val miniature = MiniatureBo(
         id = 1,
         projectId = 1,
@@ -85,7 +90,11 @@ class HomeViewModelTest {
             // GIVEN
             coEvery { projectRepository.getAllProjects() } returns flowOf(projects)
             coEvery { projectRepository.getAlmostDoneProjects() } returns flowOf(listOf(projects[1]))
-            coEvery { miniatureRepository.getLastUpdatedMiniatures() } returns flowOf(listOf(miniature))
+            coEvery { miniatureRepository.getLastUpdatedMiniatures() } returns flowOf(
+                listOf(
+                    miniature
+                )
+            )
 
             // WHEN
             viewModel.onAction(OnAppear)
@@ -132,8 +141,8 @@ class HomeViewModelTest {
             val state = viewModel.uiState.value
             assertTrue(state.loaded)
             assertEquals(expectedProjects, state.projects)
-            assertEquals(emptyList<MiniatureBo>(),state.lastUpdatedMinis)
-            assertEquals(emptyList<ProjectBo>(),state.almostDoneProjects)
+            assertEquals(emptyList<MiniatureBo>(), state.lastUpdatedMinis)
+            assertEquals(emptyList<ProjectBo>(), state.almostDoneProjects)
             assertNull(state.error)
         }
 
@@ -222,4 +231,147 @@ class HomeViewModelTest {
             job.cancel()
         }
 
+    @Test
+    fun `GIVEN empty projects WHEN OnUploadGamificationMessage is triggered THEN no message is raised`() =
+        runTest {
+            // GIVEN
+            val projects = emptyList<ProjectBo>()
+            val almostDoneProjects = emptyList<ProjectBo>()
+
+            // WHEN
+            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            advanceUntilIdle()
+
+            // THEN
+            val state = viewModel.uiState.value
+            assertEquals(None, state.gamificationSentence)
+        }
+
+    @Test
+    fun `GIVEN not started projects WHEN OnUploadGamificationMessage is triggered THEN no message is raised`() =
+        runTest {
+            // GIVEN
+            val projects = listOf(project50.copy(progress = 0.0f))
+            val almostDoneProjects = emptyList<ProjectBo>()
+
+            // WHEN
+            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            advanceUntilIdle()
+
+            // THEN
+            val state = viewModel.uiState.value
+            assertEquals(EmptyProjects, state.gamificationSentence)
+        }
+
+    @Test
+    fun `GIVEN 20 percent started projects WHEN OnUploadGamificationMessage is triggered THEN ProgressRange is raised`() =
+        runTest {
+            // GIVEN
+            val projects = listOf(project50.copy(progress = 0.18f))
+            val almostDoneProjects = emptyList<ProjectBo>()
+
+            // WHEN
+            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            advanceUntilIdle()
+
+            // THEN
+            val state = viewModel.uiState.value
+            assertEquals(ProgressRange(progress = 0.2f), state.gamificationSentence)
+        }
+
+    @Test
+    fun `GIVEN 50 percent started projects WHEN OnUploadGamificationMessage is triggered THEN ProgressRange is raised`() =
+        runTest {
+            // GIVEN
+            val projects = listOf(project50.copy(progress = 0.28f))
+            val almostDoneProjects = emptyList<ProjectBo>()
+
+            // WHEN
+            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            advanceUntilIdle()
+
+            // THEN
+            val state = viewModel.uiState.value
+            assertEquals(ProgressRange(progress = 0.5f), state.gamificationSentence)
+        }
+
+    @Test
+    fun `GIVEN 70 percent started projects WHEN OnUploadGamificationMessage is triggered THEN ProgressRange is raised`() =
+        runTest {
+            // GIVEN
+            val projects = listOf(project50.copy(progress = 0.58f))
+            val almostDoneProjects = emptyList<ProjectBo>()
+
+            // WHEN
+            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            advanceUntilIdle()
+
+            // THEN
+            val state = viewModel.uiState.value
+            assertEquals(ProgressRange(progress = 0.7f), state.gamificationSentence)
+        }
+
+    @Test
+    fun `GIVEN 90 percent started projects WHEN OnUploadGamificationMessage is triggered THEN ProgressRange is raised`() =
+        runTest {
+            // GIVEN
+            val projects = listOf(project50.copy(progress = 0.78f))
+            val almostDoneProjects = emptyList<ProjectBo>()
+
+            // WHEN
+            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            advanceUntilIdle()
+
+            // THEN
+            val state = viewModel.uiState.value
+            assertEquals(ProgressRange(progress = 0.9f), state.gamificationSentence)
+        }
+
+    @Test
+    fun `GIVEN 99 percent started projects WHEN OnUploadGamificationMessage is triggered THEN ProgressRange is raised`() =
+        runTest {
+            // GIVEN
+            val projects = listOf(project50.copy(progress = 0.98f))
+            val almostDoneProjects = emptyList<ProjectBo>()
+
+            // WHEN
+            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            advanceUntilIdle()
+
+            // THEN
+            val state = viewModel.uiState.value
+            assertEquals(ProgressRange(progress = 0.99f), state.gamificationSentence)
+        }
+
+    @Test
+    fun `GIVEN 100 percent started projects WHEN OnUploadGamificationMessage is triggered THEN ProgressRange is raised`() =
+        runTest {
+            // GIVEN
+            val projects = listOf(project50.copy(progress = 1.0f))
+            val almostDoneProjects = emptyList<ProjectBo>()
+
+            // WHEN
+            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            advanceUntilIdle()
+
+            // THEN
+            val state = viewModel.uiState.value
+            assertEquals(ProgressRange(progress = 1.0f), state.gamificationSentence)
+        }
+
+    @Test
+    fun `GIVEN selected project WHEN OnUploadGamificationMessage is triggered THEN ProgressRange is raised`() =
+        runTest {
+            // GIVEN
+            val projects = projects
+            val almostDoneProjects = listOf(project50.copy(progress = 1.0f))
+
+            // WHEN
+            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            advanceUntilIdle()
+
+            // THEN
+            val state = viewModel.uiState.value
+            assertEquals(AlmostDone(projectName = project50.name), state.gamificationSentence)
+        }
 }

@@ -2,6 +2,16 @@
 <resources>
     <string name="title_almost_done_projects">Nearly Completed Projects</string>
     <string name="title_last_updated_miniatures">Recently Updated</string>
-    <string name="label_empty_projects_description">No projects yet</string>
     <string name="title_empty_projects_description">Tap \'Create project\' and bring color to the gray</string>
+
+    <string name="label_empty_projects_description">No projects yet</string>
+    <string name="label_gamification_0">Every collection starts with a single piece.</string>
+    <string name="label_gamification_1_20">The first strokes are down. Fresh projects, endless potential.</string>
+    <string name="label_gamification_20_50">The work grows with every session, progress is underway.</string>
+    <string name="label_gamification_50_70">The vision is becoming clear. The work finds its rhythm.</string>
+    <string name="label_gamification_70_90">The collection nears completion. The details now demand attention.</string>
+    <string name="label_gamification_90_99">Only the final touches remain. Refinement stands between work and finish.</string>
+    <string name="label_gamification_100">Everything stands finished. The miniatures are ready for the next campaign.</string>
+    <string name="label_gamification_project">One project carries the banner forward: %s is almost done</string>
+
 </resources>
