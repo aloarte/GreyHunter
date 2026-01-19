@@ -46,7 +46,7 @@ fun <T> HorizontalCarousel(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        if (dots) {
+        if (dots && items.size > 1) {
             Row(
                 Modifier
                     .height(20.dp)

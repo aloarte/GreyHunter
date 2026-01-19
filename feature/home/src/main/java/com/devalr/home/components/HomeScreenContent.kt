@@ -18,12 +18,14 @@ import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.immortal
 import com.devalr.domain.model.helpers.stormlightArchiveProject
 import com.devalr.framework.theme.GreyHunterTheme
+import com.devalr.home.components.anim.EmptyProjects
 import com.devalr.home.components.screen.AlmostDoneProjects
 import com.devalr.home.components.screen.AppTitle
 import com.devalr.home.components.screen.GamificationMessage
 import com.devalr.home.components.screen.LastUpdatedMiniatures
 import com.devalr.home.components.screen.ProjectsCarousel
 import com.devalr.home.model.ProjectVo
+import com.devalr.home.model.ProjectVo.AddProject
 import com.devalr.home.model.ProjectVo.ProjectItem
 
 @Composable
@@ -53,7 +55,13 @@ fun HomeScreenContent(
                 }
             )
         }
-        item { GamificationMessage() }
+        item {
+            if (projects.size > 1) {
+                GamificationMessage()
+            } else {
+                EmptyProjects()
+            }
+        }
         item {
             LastUpdatedMiniatures(
                 miniatures = lastUpdatedMinis,
@@ -120,6 +128,62 @@ private fun HomeScreenContentPreviewDarkMode() {
                 ),
                 lastUpdatedMinis = listOf(immortal, alethi),
                 almostDoneProjects = listOf(hierotekCircleProject, stormlightArchiveProject),
+                onAddProject = {
+                    // Do nothing
+                },
+                onOpenProjectDetail = {
+                    // Do nothing
+                },
+                onOpenMiniatureDetail = {
+                    // Do nothing
+                }
+
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HomeScreenContentNoProjectsPreviewLightMode() {
+    GreyHunterTheme(darkTheme = false) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            HomeScreenContent(
+                projects = listOf(AddProject),
+                lastUpdatedMinis = emptyList(),
+                almostDoneProjects = emptyList(),
+                onAddProject = {
+                    // Do nothing
+                },
+                onOpenProjectDetail = {
+                    // Do nothing
+                },
+                onOpenMiniatureDetail = {
+                    // Do nothing
+                }
+
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HomeScreenContentNoProjectsPreviewDarkMode() {
+    GreyHunterTheme(darkTheme = true) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            HomeScreenContent(
+                projects = listOf(AddProject),
+                lastUpdatedMinis = emptyList(),
+                almostDoneProjects = emptyList(),
                 onAddProject = {
                     // Do nothing
                 },

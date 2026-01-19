@@ -2,4 +2,6 @@
 <resources>
     <string name="title_almost_done_projects">Nearly Completed Projects</string>
     <string name="title_last_updated_miniatures">Recently Updated</string>
+    <string name="label_empty_projects_description">No projects yet</string>
+    <string name="title_empty_projects_description">Tap \'Create project\' and bring color to the gray</string>
 </resources>

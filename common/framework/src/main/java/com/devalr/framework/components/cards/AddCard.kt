@@ -16,12 +16,13 @@ import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.devalr.framework.R
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.enum.CardType
-
 
 @Composable
 fun AddCard(modifier: Modifier = Modifier, type: CardType, onCreate: () -> Unit) {
@@ -38,7 +39,7 @@ fun AddCard(modifier: Modifier = Modifier, type: CardType, onCreate: () -> Unit)
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            GHText(text = "Add a new project", type = TextType.Title)
+            GHText(text = stringResource(R.string.btn_create_project), type = TextType.Title)
             Spacer(modifier = Modifier.height(10.dp))
             Image(
                 modifier = Modifier.size(40.dp),
