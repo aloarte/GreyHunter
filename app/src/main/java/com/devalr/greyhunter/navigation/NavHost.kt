@@ -25,6 +25,7 @@ import com.devalr.home.HomeScreen
 import com.devalr.minidetail.MiniatureDetailScreen
 import com.devalr.painting.PaintingScreen
 import com.devalr.projectdetail.ProjectDetailScreen
+import com.devalr.settings.SettingsScreen
 import com.devalr.startpainting.StartPaintingScreen
 
 
@@ -73,6 +74,9 @@ fun NavHost() {
                         },
                         onNavigateToAddProject = {
                             backStack.add(AddProject())
+                        },
+                        onNavigateToSettings = {
+                            backStack.add(Settings)
                         }
                     )
                 }
@@ -161,6 +165,9 @@ fun NavHost() {
                 }
 
                 is Settings -> NavEntry(key) {
+                    SettingsScreen(
+                        onBackPressed = { backStack.removeLastOrNull() }
+                    )
                 }
 
                 else -> NavEntry(Unit) { }

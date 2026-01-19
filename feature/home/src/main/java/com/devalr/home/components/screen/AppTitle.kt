@@ -2,21 +2,36 @@ package com.devalr.home.components.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.devalr.framework.R
+import com.devalr.framework.components.button.GHIconButton
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
-fun AppTitle() {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        GHText(text = "Grey Hunter", type = TextType.Featured)
+fun AppTitle(onSettingsClicked: () -> Unit) {
+    Box(modifier = Modifier.fillMaxWidth()){
+        Row(modifier = Modifier.fillMaxWidth().align(Alignment.Center), horizontalArrangement = Arrangement.Center) {
+            GHText(text = "Grey Hunter", type = TextType.Featured)
+
+        }
+        GHIconButton(
+            modifier = Modifier.align(Alignment.CenterEnd),
+            icon = Icons.Default.Settings,
+            onButtonClicked = onSettingsClicked
+        )
     }
 }
 
@@ -29,7 +44,9 @@ private fun AppTitlePreviewLightMode() {
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            AppTitle()
+            AppTitle {
+                // Do nothing
+            }
         }
     }
 }
@@ -43,7 +60,9 @@ private fun AppTitlePreviewDarkMode() {
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            AppTitle()
+            AppTitle {
+                // Do nothing
+            }
         }
     }
 }

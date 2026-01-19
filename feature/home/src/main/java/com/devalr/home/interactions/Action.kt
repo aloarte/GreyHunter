@@ -12,4 +12,6 @@ sealed interface Action {
     data class OnUploadGamificationMessage(
         val projects: List<ProjectBo>, val almostDoneProjects: List<ProjectBo>
     ) : Action
+    data object OnOpenSettings : Action
+
 }
