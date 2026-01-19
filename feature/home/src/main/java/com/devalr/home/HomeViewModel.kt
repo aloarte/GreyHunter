@@ -81,9 +81,8 @@ class HomeViewModel(
     ) {
         val gamificationMessage = if (almostDoneProjects.isNotEmpty()) {
             AlmostDone(almostDoneProjects.first().name)
-        } else if (projects.size > 1) {
+        } else if (projects.isNotEmpty()) {
             val progressAverage = projects
-                .filter { it.progress > 0f }
                 .removeOutliers()
                 .map { it.progress }
                 .average()
