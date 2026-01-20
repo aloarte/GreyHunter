@@ -3,21 +3,36 @@ package com.devalr.greyhunter
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.devalr.domain.enum.DarkModeType
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.greyhunter.navigation.NavHost
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
+
+    private val mainViewModel: MainViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            GreyHunterTheme {
+            val darkMode by mainViewModel.darkModeState.collectAsStateWithLifecycle()
+            val isDarkTheme = when (darkMode) {
+                DarkModeType.Light -> false
+                DarkModeType.Dark -> true
+                DarkModeType.System -> isSystemInDarkTheme()
+            }
+            GreyHunterTheme(darkTheme = isDarkTheme) {
                 val systemUiController = rememberSystemUiController()
 
                 SideEffect {

@@ -2,11 +2,15 @@ package com.devalr.settings
 
 import androidx.lifecycle.viewModelScope
 import com.devalr.domain.SettingsRepository
+import com.devalr.domain.enum.DarkModeType
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.settings.interactions.Action
 import com.devalr.settings.interactions.Action.OnAppear
+import com.devalr.settings.interactions.Action.OnChangeDarkMode
+import com.devalr.settings.interactions.ErrorType
 import com.devalr.settings.interactions.Event
 import com.devalr.settings.interactions.State
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
@@ -15,30 +19,22 @@ class SettingsViewModel(
     override fun onAction(action: Action) {
         when (action) {
             is OnAppear -> onLoadScreen()
-            is Action.OnChangeDarkMode -> TODO()
+            is OnChangeDarkMode -> onChangeDarkMode(action.mode)
+        }
+    }
+
+    private fun onChangeDarkMode(mode: DarkModeType) {
+        viewModelScope.launch {
+            projectRepository.setDarkModeConfiguration(mode)
+            // Force
         }
     }
 
     private fun onLoadScreen() {
         viewModelScope.launch {
-            /* projectRepository.getProject(projectId)
-                 .catch { updateState { copy(errorType = ErrorType.BadId) } }
-                 .collect {
-                     if (it == null) return@collect
-                     updateState {
-                         copy(
-                             projectDescription = it.description,
-                             projectName = it.name,
-                             projectImage = it.imageUri,
-                             projectToUpdate = it,
-                             editMode = true
-                         )
-                     }
-                 }
-
-
-             */
-
+            projectRepository.getDarkModeConfiguration()
+                .catch { updateState { copy(errorType = ErrorType.DarkModeDatastore) } }
+                .collect { updateState { copy(darkMode = it) } }
         }
     }
 

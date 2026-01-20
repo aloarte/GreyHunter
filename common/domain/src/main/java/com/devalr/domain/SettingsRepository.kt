@@ -5,4 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
     suspend fun getDarkModeConfiguration(): Flow<DarkModeType>
+
+    suspend fun setDarkModeConfiguration(type: DarkModeType)
 }

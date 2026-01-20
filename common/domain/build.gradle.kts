@@ -34,6 +34,7 @@ android {
 
 dependencies {
     implementation(project(":common:data"))
+    implementation(libs.androidx.datastore.preferences)
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
     implementation(libs.koin.compose.nav)

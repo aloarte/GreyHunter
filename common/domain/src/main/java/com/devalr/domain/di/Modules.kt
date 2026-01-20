@@ -33,7 +33,7 @@ private val repositoriesModules = module {
         )
     }
 
-    factory<SettingsRepository> { SettingsRepositoryImpl() }
+    factory<SettingsRepository> { SettingsRepositoryImpl(get()) }
 }
 
 private val mapperModules = module {
