@@ -9,22 +9,30 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.devalr.domain.enum.AppearanceType
+import androidx.compose.ui.unit.dp
+import com.devalr.domain.enum.ThemeType
+import com.devalr.framework.components.button.TopButtons
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
 fun SettingsScreenContent(
     innerPadding: PaddingValues = PaddingValues(),
-    currentAppearanceType: AppearanceType,
+    currentThemeType: ThemeType,
     onBackClicked: () -> Unit,
-    onAppearanceClicked: (AppearanceType) -> Unit,
+    onThemeClicked: (ThemeType) -> Unit,
     onLanguageClicked: () -> Unit,
     onImportDataClicked: () -> Unit,
     onExportDataClicked: () -> Unit
 
 ) {
     Column(modifier = Modifier.padding(innerPadding)) {
-        AppSettings(currentAppearanceType, onAppearanceClicked, onLanguageClicked)
+        TopButtons(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            onBackPressed = onBackClicked
+        )
+        AppSettings(currentThemeType, onThemeClicked, onLanguageClicked)
         DataSettings(onImportDataClicked, onExportDataClicked)
     }
 }
@@ -39,11 +47,11 @@ fun SettingsScreenContentPreviewLightMode() {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             SettingsScreenContent(
-                currentAppearanceType = AppearanceType.Light,
+                currentThemeType = ThemeType.Light,
                 onBackClicked = {
                     // Do nothing
                 },
-                onAppearanceClicked = {
+                onThemeClicked = {
                     // Do nothing
                 },
                 onLanguageClicked = {
@@ -70,11 +78,11 @@ fun SettingsScreenContentPreviewDarkMode() {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             SettingsScreenContent(
-                currentAppearanceType = AppearanceType.Dark,
+                currentThemeType = ThemeType.Dark,
                 onBackClicked = {
                     // Do nothing
                 },
-                onAppearanceClicked = {
+                onThemeClicked = {
                     // Do nothing
                 },
                 onLanguageClicked = {

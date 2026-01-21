@@ -30,9 +30,9 @@ fun SettingsScreen(
     ) { innerPadding ->
         SettingsScreenContent(
             innerPadding = innerPadding,
-            currentAppearanceType = state.appearanceType,
+            currentThemeType = state.themeType,
             onBackClicked = onBackPressed,
-            onAppearanceClicked = { viewModel.onAction(Action.OnChangeAppearance(it)) },
+            onThemeClicked = { viewModel.onAction(Action.OnChangeAppearance(it)) },
             onLanguageClicked = {},
             onImportDataClicked = {},
             onExportDataClicked = {}

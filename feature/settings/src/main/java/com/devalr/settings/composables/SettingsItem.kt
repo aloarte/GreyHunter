@@ -35,32 +35,27 @@ fun SettingsItem(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onSettingsItemClicked() },
+            .clickable { onSettingsItemClicked() }
+            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                modifier = Modifier.size(15.dp),
+                modifier = Modifier.size(20.dp),
                 painter = iconPainter,
                 contentDescription = "Start Painting",
                 tint = MaterialTheme.colorScheme.onSurface
             )
-            Spacer(modifier = Modifier.width(10.dp))
-            GHText(text = label, type = TextType.LabelSBold)
+            Spacer(modifier = Modifier.width(15.dp))
+            GHText(text = label, type = TextType.LabelMBold)
         }
         currentValue?.let {
-            Row(
-                modifier = Modifier.padding(horizontal = 10.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                GHText(text = label, type = TextType.LabelSBold)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                GHText(text = currentValue, type = TextType.LabelMBold)
                 Spacer(modifier = Modifier.width(10.dp))
                 Icon(
-                    modifier = Modifier.size(15.dp),
+                    modifier = Modifier.size(20.dp),
                     imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                     contentDescription = "Start Painting",
                     tint = MaterialTheme.colorScheme.onSurface

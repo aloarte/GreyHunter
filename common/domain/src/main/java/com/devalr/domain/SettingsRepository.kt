@@ -1,10 +1,10 @@
 package com.devalr.domain
 
-import com.devalr.domain.enum.AppearanceType
+import com.devalr.domain.enum.ThemeType
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
-    suspend fun getAppearanceConfiguration(): Flow<AppearanceType>
+    suspend fun getAppearanceConfiguration(): Flow<ThemeType>
 
-    suspend fun setAppearanceConfiguration(type: AppearanceType)
+    suspend fun setAppearanceConfiguration(type: ThemeType)
 }

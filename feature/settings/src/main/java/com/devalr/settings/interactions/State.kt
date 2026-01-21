@@ -1,6 +1,6 @@
 package com.devalr.settings.interactions
 
-import com.devalr.domain.enum.AppearanceType
+import com.devalr.domain.enum.ThemeType
 
 
 enum class ErrorType {
@@ -10,5 +10,5 @@ enum class ErrorType {
 data class State(
     val settingsLoaded: Boolean = false,
     val errorType: ErrorType? = null,
-    val appearanceType: AppearanceType = AppearanceType.System
+    val themeType: ThemeType = ThemeType.System
 )

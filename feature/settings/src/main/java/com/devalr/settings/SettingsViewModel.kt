@@ -2,7 +2,7 @@ package com.devalr.settings
 
 import androidx.lifecycle.viewModelScope
 import com.devalr.domain.SettingsRepository
-import com.devalr.domain.enum.AppearanceType
+import com.devalr.domain.enum.ThemeType
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.settings.interactions.Action
 import com.devalr.settings.interactions.Action.OnAppear
@@ -23,7 +23,7 @@ class SettingsViewModel(
         }
     }
 
-    private fun onChangeDarkMode(mode: AppearanceType) {
+    private fun onChangeDarkMode(mode: ThemeType) {
         viewModelScope.launch {
             settingsRepository.setAppearanceConfiguration(mode)
         }
@@ -33,7 +33,9 @@ class SettingsViewModel(
         viewModelScope.launch {
             settingsRepository.getAppearanceConfiguration()
                 .catch { updateState { copy(errorType = ErrorType.AppearanceDatastore) } }
-                .collect { updateState { copy(appearanceType = it) } }
+                .collect {
+                    updateState { copy(themeType = it) }
+                }
         }
     }
 
