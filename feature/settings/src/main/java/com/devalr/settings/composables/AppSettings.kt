@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.enum.ThemeType
@@ -28,6 +29,7 @@ import com.devalr.framework.components.bottomsheet.RadioSelectorBottomSheetConte
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.theme.GreyHunterTheme
+import com.devalr.settings.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,7 +46,7 @@ fun AppSettings(
             listOf(ThemeType.Light, ThemeType.Dark, ThemeType.System)
         ModalBottomSheet(onDismissRequest = { displayThemeSelector = false }) {
             RadioSelectorBottomSheetContent(
-                label = "Theme",
+                label = stringResource(R.string.label_settings_theme),
                 optionList = getThemeNameList(themeOptions),
                 selectedIndex = themeOptions.indexOf(currentThemeType),
                 onOptionClicked = { themeOption ->
@@ -57,7 +59,7 @@ fun AppSettings(
     }
 
     Column(modifier = Modifier.padding(20.dp)) {
-        GHText(text = "App settings", type = TextType.Title)
+        GHText(text = stringResource(R.string.label_title_app_settings), type = TextType.Title)
         Spacer(modifier = Modifier.height(10.dp))
         Card(
             modifier = Modifier,
@@ -71,7 +73,7 @@ fun AppSettings(
             ) {
                 SettingsItem(
                     iconPainter = painterResource(com.devalr.framework.R.drawable.ic_dark_mode),
-                    label = "Theme",
+                    label = stringResource(R.string.label_settings_theme),
                     currentValue = currentThemeType.name,
                     onSettingsItemClicked = {
                         displayThemeSelector = true
@@ -79,7 +81,7 @@ fun AppSettings(
                 )
                 SettingsItem(
                     iconPainter = painterResource(com.devalr.framework.R.drawable.ic_colors),
-                    label = "Progress colours",
+                    label = stringResource(R.string.label_settings_colors),
                     currentValue = "Monochromatic",
                     onSettingsItemClicked = { }
                 )
@@ -89,15 +91,15 @@ fun AppSettings(
     }
 }
 
+@Composable
 private fun getThemeNameList(themeOptions: List<ThemeType>): List<String> =
     themeOptions.map {
         when (it) {
-            ThemeType.Light -> "Light"
-            ThemeType.Dark -> "Dark"
-            ThemeType.System -> "System"
+            ThemeType.Light -> stringResource(R.string.label_settings_theme_light)
+            ThemeType.Dark -> stringResource(R.string.label_settings_theme_dark)
+            ThemeType.System -> stringResource(R.string.label_settings_theme_system)
         }
     }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -131,7 +133,7 @@ fun AppSettingsPreviewDarkMode() {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             AppSettings(
-                currentThemeType = ThemeType.Dark,
+                currentThemeType = ThemeType.System,
                 onThemeClicked = {
                     // Do nothing
                 },

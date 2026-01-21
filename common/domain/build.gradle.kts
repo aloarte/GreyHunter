@@ -34,6 +34,7 @@ android {
 
 dependencies {
     implementation(project(":common:data"))
+    testImplementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.koin.android)
     implementation(libs.koin.compose)

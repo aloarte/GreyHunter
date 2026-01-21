@@ -5,9 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import com.devalr.settings.composables.SettingsScreenContent
-import com.devalr.settings.interactions.Action
 import com.devalr.settings.interactions.Action.OnAppear
-import com.devalr.settings.interactions.Event.OnNavigateBack
+import com.devalr.settings.interactions.Action.OnBackPressed
+import com.devalr.settings.interactions.Action.OnChangeAppearance
+import com.devalr.settings.interactions.Event.NavigateBack
 import org.koin.compose.koinInject
 
 @Composable
@@ -19,7 +20,7 @@ fun SettingsScreen(
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                OnNavigateBack -> onBackPressed()
+                NavigateBack -> onBackPressed()
             }
         }
     }
@@ -31,8 +32,8 @@ fun SettingsScreen(
         SettingsScreenContent(
             innerPadding = innerPadding,
             currentThemeType = state.themeType,
-            onBackClicked = onBackPressed,
-            onThemeClicked = { viewModel.onAction(Action.OnChangeAppearance(it)) },
+            onBackClicked = { viewModel.onAction(OnBackPressed) },
+            onThemeClicked = { viewModel.onAction(OnChangeAppearance(it)) },
             onLanguageClicked = {},
             onImportDataClicked = {},
             onExportDataClicked = {}

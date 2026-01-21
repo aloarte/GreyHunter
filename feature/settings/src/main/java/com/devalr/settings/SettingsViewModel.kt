@@ -6,9 +6,11 @@ import com.devalr.domain.enum.ThemeType
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.settings.interactions.Action
 import com.devalr.settings.interactions.Action.OnAppear
+import com.devalr.settings.interactions.Action.OnBackPressed
 import com.devalr.settings.interactions.Action.OnChangeAppearance
 import com.devalr.settings.interactions.ErrorType
 import com.devalr.settings.interactions.Event
+import com.devalr.settings.interactions.Event.NavigateBack
 import com.devalr.settings.interactions.State
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -20,12 +22,7 @@ class SettingsViewModel(
         when (action) {
             is OnAppear -> onLoadScreen()
             is OnChangeAppearance -> onChangeDarkMode(action.mode)
-        }
-    }
-
-    private fun onChangeDarkMode(mode: ThemeType) {
-        viewModelScope.launch {
-            settingsRepository.setAppearanceConfiguration(mode)
+            OnBackPressed -> sendEvent(NavigateBack)
         }
     }
 
@@ -34,9 +31,14 @@ class SettingsViewModel(
             settingsRepository.getAppearanceConfiguration()
                 .catch { updateState { copy(errorType = ErrorType.AppearanceDatastore) } }
                 .collect {
-                    updateState { copy(themeType = it) }
+                    updateState { copy(settingsLoaded = true, themeType = it) }
                 }
         }
     }
 
+    private fun onChangeDarkMode(mode: ThemeType) {
+        viewModelScope.launch {
+            settingsRepository.setAppearanceConfiguration(mode)
+        }
+    }
 }
