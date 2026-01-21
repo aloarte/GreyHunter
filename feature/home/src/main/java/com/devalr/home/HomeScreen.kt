@@ -19,11 +19,13 @@ import com.devalr.home.interactions.Action.OnAddProject
 import com.devalr.home.interactions.Action.OnAppear
 import com.devalr.home.interactions.Action.OnOpenMiniatureDetail
 import com.devalr.home.interactions.Action.OnOpenProjectDetail
+import com.devalr.home.interactions.Action.OnOpenSettings
 import com.devalr.home.interactions.Action.OnStartPainting
 import com.devalr.home.interactions.Event.NavigateStartPaint
 import com.devalr.home.interactions.Event.NavigateToAddProject
 import com.devalr.home.interactions.Event.NavigateToMiniature
 import com.devalr.home.interactions.Event.NavigateToProject
+import com.devalr.home.interactions.Event.NavigateToSettings
 import org.koin.compose.koinInject
 
 @Composable
@@ -32,7 +34,9 @@ fun HomeScreen(
     onNavigateToProject: (Long) -> Unit,
     onNavigateToMiniature: (Long) -> Unit,
     onNavigateToAddProject: () -> Unit,
-    onNavigateToStartPainting: () -> Unit
+    onNavigateToStartPainting: () -> Unit,
+    onNavigateToSettings: () -> Unit
+
 ) {
     val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
@@ -42,13 +46,13 @@ fun HomeScreen(
                 is NavigateToProject -> onNavigateToProject(event.projectId)
                 is NavigateToAddProject -> onNavigateToAddProject()
                 is NavigateToMiniature -> onNavigateToMiniature(event.miniatureId)
+                is NavigateToSettings -> onNavigateToSettings()
             }
         }
     }
     LaunchedEffect(true) { viewModel.onAction(OnAppear) }
 
     Scaffold(
-        topBar = {},
         floatingActionButton = {
             if (state.loaded && state.projects.any { (it.hasMinis()) }) {
                 FloatingActionButton(
@@ -81,12 +85,11 @@ fun HomeScreen(
                     onOpenMiniatureDetail = { miniatureId ->
                         viewModel.onAction(OnOpenMiniatureDetail(miniatureId = miniatureId))
                     },
-                    onAddProject = {
-                        viewModel.onAction(OnAddProject)
-                    }
+                    onAddProject = { viewModel.onAction(OnAddProject) },
+                    onSettingsClicked = { viewModel.onAction(OnOpenSettings) }
                 )
             } else {
-                AppTitle()
+                AppTitle(onSettingsClicked = { viewModel.onAction(OnOpenSettings) })
                 LoadingIndicator()
             }
         }

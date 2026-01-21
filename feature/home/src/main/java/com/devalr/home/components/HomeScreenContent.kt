@@ -40,7 +40,8 @@ fun HomeScreenContent(
     gamificationMessage: GamificationMessageType,
     onOpenProjectDetail: (Long) -> Unit,
     onOpenMiniatureDetail: (Long) -> Unit,
-    onAddProject: () -> Unit
+    onAddProject: () -> Unit,
+    onSettingsClicked: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -48,7 +49,7 @@ fun HomeScreenContent(
             .padding(10.dp),
         verticalArrangement = spacedBy(10.dp)
     ) {
-        item { AppTitle() }
+        item { AppTitle(onSettingsClicked = onSettingsClicked) }
         item {
             ProjectsCarousel(
                 projects = projects,
@@ -111,8 +112,10 @@ private fun HomeScreenContentPreviewLightMode() {
                 },
                 onOpenMiniatureDetail = {
                     // Do nothing
+                },
+                onSettingsClicked = {
+                    // Do nothing
                 }
-
             )
         }
     }
@@ -143,8 +146,10 @@ private fun HomeScreenContentPreviewDarkMode() {
                 },
                 onOpenMiniatureDetail = {
                     // Do nothing
+                },
+                onSettingsClicked = {
+                    // Do nothing
                 }
-
             )
         }
     }
@@ -172,8 +177,10 @@ private fun HomeScreenContentNoProjectsPreviewLightMode() {
                 },
                 onOpenMiniatureDetail = {
                     // Do nothing
+                },
+                onSettingsClicked = {
+                    // Do nothing
                 }
-
             )
         }
     }
@@ -201,8 +208,10 @@ private fun HomeScreenContentNoProjectsPreviewDarkMode() {
                 },
                 onOpenMiniatureDetail = {
                     // Do nothing
+                },
+                onSettingsClicked = {
+                    // Do nothing
                 }
-
             )
         }
     }

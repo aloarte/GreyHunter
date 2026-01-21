@@ -10,6 +10,7 @@ import com.devalr.home.interactions.Action.OnAddProject
 import com.devalr.home.interactions.Action.OnAppear
 import com.devalr.home.interactions.Action.OnOpenMiniatureDetail
 import com.devalr.home.interactions.Action.OnOpenProjectDetail
+import com.devalr.home.interactions.Action.OnOpenSettings
 import com.devalr.home.interactions.Action.OnStartPainting
 import com.devalr.home.interactions.Action.OnUploadGamificationMessage
 import com.devalr.home.interactions.Event
@@ -17,6 +18,7 @@ import com.devalr.home.interactions.Event.NavigateStartPaint
 import com.devalr.home.interactions.Event.NavigateToAddProject
 import com.devalr.home.interactions.Event.NavigateToMiniature
 import com.devalr.home.interactions.Event.NavigateToProject
+import com.devalr.home.interactions.Event.NavigateToSettings
 import com.devalr.home.interactions.State
 import com.devalr.home.model.GamificationMessageType.AlmostDone
 import com.devalr.home.model.GamificationMessageType.EmptyProjects
@@ -46,6 +48,7 @@ class HomeViewModel(
             )
 
             OnAddProject -> sendEvent(NavigateToAddProject)
+            OnOpenSettings -> sendEvent(NavigateToSettings)
         }
     }
 

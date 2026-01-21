@@ -6,6 +6,8 @@ import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.MiniatureRepositoryImpl
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.ProjectRepositoryImpl
+import com.devalr.domain.SettingsRepository
+import com.devalr.domain.SettingsRepositoryImpl
 import com.devalr.domain.mappers.Mapper
 import com.devalr.domain.mappers.MiniatureMapper
 import com.devalr.domain.mappers.ProjectMapper
@@ -30,6 +32,8 @@ private val repositoriesModules = module {
             get(named("ProjectMapper"))
         )
     }
+
+    factory<SettingsRepository> { SettingsRepositoryImpl(get()) }
 }
 
 private val mapperModules = module {
@@ -41,7 +45,6 @@ private val mapperModules = module {
         ProjectMapper(get(named("MiniatureMapper")))
     }
 }
-
 
 val domainModules = module {
     includes(mapperModules, repositoriesModules, dataModules)

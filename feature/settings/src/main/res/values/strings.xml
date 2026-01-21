@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Errors -->
+
+    <!-- Buttons -->
+
+    <!-- Labels -->
+    <string name="label_title_app_settings">App settings</string>
+    <string name="label_settings_theme">Theme</string>
+    <string name="label_settings_theme_light">Light</string>
+    <string name="label_settings_theme_dark">Dark</string>
+    <string name="label_settings_theme_system">Automatic (system settings)</string>
+    <string name="label_settings_colors">Progress colors</string>
+
+
+</resources>

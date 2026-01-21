@@ -43,6 +43,8 @@ dependencies {
     implementation(project(":feature:createminiature"))
     implementation(project(":feature:startpainting"))
     implementation(project(":feature:painting"))
+    implementation(project(":feature:settings"))
+    implementation(project(":common:domain"))
     implementation(project(":common:framework"))
     implementation(libs.koin.android)
     implementation(libs.androidx.core.ktx)
