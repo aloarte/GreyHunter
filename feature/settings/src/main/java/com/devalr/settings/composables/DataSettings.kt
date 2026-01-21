@@ -2,53 +2,30 @@ package com.devalr.settings.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.devalr.domain.enum.AppearanceType
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
-fun SettingsScreenContent(
-    innerPadding: PaddingValues = PaddingValues(),
-    currentAppearanceType: AppearanceType,
-    onBackClicked: () -> Unit,
-    onAppearanceClicked: (AppearanceType) -> Unit,
-    onLanguageClicked: () -> Unit,
+fun DataSettings(
     onImportDataClicked: () -> Unit,
     onExportDataClicked: () -> Unit
-
 ) {
-    Column(modifier = Modifier.padding(innerPadding)) {
-        AppSettings(currentAppearanceType, onAppearanceClicked, onLanguageClicked)
-        DataSettings(onImportDataClicked, onExportDataClicked)
-    }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun SettingsScreenContentPreviewLightMode() {
+fun DataSettingsPreviewLightMode() {
     GreyHunterTheme(darkTheme = false) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            SettingsScreenContent(
-                currentAppearanceType = AppearanceType.Light,
-                onBackClicked = {
-                    // Do nothing
-                },
-                onAppearanceClicked = {
-                    // Do nothing
-                },
-                onLanguageClicked = {
-                    // Do nothing
-                },
+            DataSettings(
                 onImportDataClicked = {
                     // Do nothing
                 },
@@ -62,24 +39,14 @@ fun SettingsScreenContentPreviewLightMode() {
 
 @Preview(showBackground = true)
 @Composable
-fun SettingsScreenContentPreviewDarkMode() {
+fun DataSettingsPreviewDarkMode() {
     GreyHunterTheme(darkTheme = true) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            SettingsScreenContent(
-                currentAppearanceType = AppearanceType.Dark,
-                onBackClicked = {
-                    // Do nothing
-                },
-                onAppearanceClicked = {
-                    // Do nothing
-                },
-                onLanguageClicked = {
-                    // Do nothing
-                },
+            DataSettings(
                 onImportDataClicked = {
                     // Do nothing
                 },

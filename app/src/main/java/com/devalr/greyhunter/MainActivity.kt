@@ -1,6 +1,7 @@
 package com.devalr.greyhunter
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -12,8 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.devalr.domain.enum.DarkModeType
+import com.devalr.domain.enum.AppearanceType
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.greyhunter.navigation.NavHost
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -28,10 +28,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             val darkMode by mainViewModel.darkModeState.collectAsStateWithLifecycle()
             val isDarkTheme = when (darkMode) {
-                DarkModeType.Light -> false
-                DarkModeType.Dark -> true
-                DarkModeType.System -> isSystemInDarkTheme()
+                AppearanceType.Light -> false
+                AppearanceType.Dark -> true
+                AppearanceType.System -> isSystemInDarkTheme()
             }
+            Log.d("ALRALR","Is dark theme: $isDarkTheme. Mode: $darkMode")
             GreyHunterTheme(darkTheme = isDarkTheme) {
                 val systemUiController = rememberSystemUiController()
 

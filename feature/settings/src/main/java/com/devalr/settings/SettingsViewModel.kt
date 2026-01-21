@@ -2,11 +2,11 @@ package com.devalr.settings
 
 import androidx.lifecycle.viewModelScope
 import com.devalr.domain.SettingsRepository
-import com.devalr.domain.enum.DarkModeType
+import com.devalr.domain.enum.AppearanceType
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.settings.interactions.Action
 import com.devalr.settings.interactions.Action.OnAppear
-import com.devalr.settings.interactions.Action.OnChangeDarkMode
+import com.devalr.settings.interactions.Action.OnChangeAppearance
 import com.devalr.settings.interactions.ErrorType
 import com.devalr.settings.interactions.Event
 import com.devalr.settings.interactions.State
@@ -14,27 +14,26 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    val projectRepository: SettingsRepository
+    val settingsRepository: SettingsRepository
 ) : BaseViewModel<State, Action, Event>(initialState = State()) {
     override fun onAction(action: Action) {
         when (action) {
             is OnAppear -> onLoadScreen()
-            is OnChangeDarkMode -> onChangeDarkMode(action.mode)
+            is OnChangeAppearance -> onChangeDarkMode(action.mode)
         }
     }
 
-    private fun onChangeDarkMode(mode: DarkModeType) {
+    private fun onChangeDarkMode(mode: AppearanceType) {
         viewModelScope.launch {
-            projectRepository.setDarkModeConfiguration(mode)
-            // Force
+            settingsRepository.setAppearanceConfiguration(mode)
         }
     }
 
     private fun onLoadScreen() {
         viewModelScope.launch {
-            projectRepository.getDarkModeConfiguration()
-                .catch { updateState { copy(errorType = ErrorType.DarkModeDatastore) } }
-                .collect { updateState { copy(darkMode = it) } }
+            settingsRepository.getAppearanceConfiguration()
+                .catch { updateState { copy(errorType = ErrorType.AppearanceDatastore) } }
+                .collect { updateState { copy(appearanceType = it) } }
         }
     }
 

@@ -1,10 +1,10 @@
 package com.devalr.domain
 
-import com.devalr.domain.enum.DarkModeType
+import com.devalr.domain.enum.AppearanceType
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
-    suspend fun getDarkModeConfiguration(): Flow<DarkModeType>
+    suspend fun getAppearanceConfiguration(): Flow<AppearanceType>
 
-    suspend fun setDarkModeConfiguration(type: DarkModeType)
+    suspend fun setAppearanceConfiguration(type: AppearanceType)
 }

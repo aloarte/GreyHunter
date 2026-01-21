@@ -1,6 +1,6 @@
 package com.devalr.domain.enum
 
-enum class DarkModeType {
+enum class AppearanceType {
     Light,
     Dark,
     System
