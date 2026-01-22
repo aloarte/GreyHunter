@@ -13,6 +13,7 @@ import com.devalr.settings.interactions.Event
 import com.devalr.settings.interactions.Event.NavigateBack
 import com.devalr.settings.interactions.State
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
@@ -28,11 +29,19 @@ class SettingsViewModel(
 
     private fun onLoadScreen() {
         viewModelScope.launch {
-            settingsRepository.getAppearanceConfiguration()
+            combine(
+                settingsRepository.getAppearanceConfiguration(),
+                settingsRepository.getAppVersion()
+            ) { appearanceConfig, appVersion ->
+                uiState.value.copy(
+                    settingsLoaded = true,
+                    themeType = appearanceConfig,
+                    appVersion = appVersion
+                )
+            }
                 .catch { updateState { copy(errorType = ErrorType.AppearanceDatastore) } }
-                .collect {
-                    updateState { copy(settingsLoaded = true, themeType = it) }
-                }
+                .collect { newState -> updateState { newState } }
+
         }
     }
 

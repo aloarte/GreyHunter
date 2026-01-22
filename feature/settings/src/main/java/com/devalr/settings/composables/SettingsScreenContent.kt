@@ -18,6 +18,7 @@ import com.devalr.framework.theme.GreyHunterTheme
 fun SettingsScreenContent(
     innerPadding: PaddingValues = PaddingValues(),
     currentThemeType: ThemeType,
+    appVersion: String,
     onBackClicked: () -> Unit,
     onThemeClicked: (ThemeType) -> Unit,
     onLanguageClicked: () -> Unit,
@@ -32,8 +33,19 @@ fun SettingsScreenContent(
                 .padding(16.dp),
             onBackPressed = onBackClicked
         )
-        AppSettings(currentThemeType, onThemeClicked, onLanguageClicked)
-        DataSettings(onImportDataClicked, onExportDataClicked)
+        AppSettings(
+            currentThemeType = currentThemeType,
+            onThemeClicked = onThemeClicked,
+            onLanguageClicked
+        )
+        DataSettings(
+            onImportDataClicked = onImportDataClicked,
+            onExportDataClicked = onExportDataClicked
+        )
+        AppInfo(
+            appVersion = appVersion,
+            onChangeLogClicked = {}
+        )
     }
 }
 
@@ -48,6 +60,7 @@ fun SettingsScreenContentPreviewLightMode() {
         ) {
             SettingsScreenContent(
                 currentThemeType = ThemeType.Light,
+                appVersion = "26.1.0",
                 onBackClicked = {
                     // Do nothing
                 },
@@ -79,6 +92,7 @@ fun SettingsScreenContentPreviewDarkMode() {
         ) {
             SettingsScreenContent(
                 currentThemeType = ThemeType.Dark,
+                appVersion = "26.1.0",
                 onBackClicked = {
                     // Do nothing
                 },

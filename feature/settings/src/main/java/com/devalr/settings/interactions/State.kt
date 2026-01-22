@@ -10,5 +10,6 @@ enum class ErrorType {
 data class State(
     val settingsLoaded: Boolean = false,
     val errorType: ErrorType? = null,
-    val themeType: ThemeType = ThemeType.System
+    val themeType: ThemeType = ThemeType.System,
+    val appVersion:String = ""
 )

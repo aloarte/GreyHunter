@@ -32,6 +32,7 @@ fun SettingsScreen(
         SettingsScreenContent(
             innerPadding = innerPadding,
             currentThemeType = state.themeType,
+            appVersion = state.appVersion,
             onBackClicked = { viewModel.onAction(OnBackPressed) },
             onThemeClicked = { viewModel.onAction(OnChangeAppearance(it)) },
             onLanguageClicked = {},

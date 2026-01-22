@@ -1,8 +1,11 @@
 package com.devalr.settings.composables
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,6 +15,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -24,14 +28,9 @@ import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.settings.R
 
 @Composable
-fun DataSettings(
-    onImportDataClicked: () -> Unit,
-    onExportDataClicked: () -> Unit
-) {
+fun AppInfo(appVersion:String, onChangeLogClicked: () -> Unit) {
     Column(modifier = Modifier.padding(20.dp)) {
-        GHText(text = stringResource(R.string.label_title_data_settings), type = TextType.Title)
-        Spacer(modifier = Modifier.height(10.dp))
-        GHText(text = stringResource(R.string.label_description_data_settings), type = TextType.Description)
+        GHText(text = stringResource(R.string.label_title_app_info_settings), type = TextType.Title)
         Spacer(modifier = Modifier.height(10.dp))
         Card(
             modifier = Modifier,
@@ -43,15 +42,23 @@ fun DataSettings(
                     .background(MaterialTheme.colorScheme.surface),
                 verticalArrangement = spacedBy(5.dp)
             ) {
+                Spacer(modifier = Modifier.height(5.dp))
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp, vertical = 10.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    GHText(
+                        text = stringResource(R.string.label_settings_version,appVersion),
+                        type = TextType.LabelMBold
+                    )
+                }
                 SettingsItem(
                     iconPainter = painterResource(com.devalr.framework.R.drawable.ic_import),
-                    label = stringResource(R.string.label_settings_import),
-                    onSettingsItemClicked = onImportDataClicked
-                )
-                SettingsItem(
-                    iconPainter = painterResource(com.devalr.framework.R.drawable.ic_export),
-                    label = stringResource(R.string.label_settings_export),
-                    onSettingsItemClicked = onExportDataClicked
+                    label = stringResource(R.string.label_settings_changelog),
+                    onSettingsItemClicked = onChangeLogClicked
                 )
             }
         }
@@ -60,18 +67,16 @@ fun DataSettings(
 
 @Preview(showBackground = true)
 @Composable
-fun DataSettingsPreviewLightMode() {
+fun AppInfoPreviewLightMode() {
     GreyHunterTheme(darkTheme = false) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            DataSettings(
-                onImportDataClicked = {
-                    // Do nothing
-                },
-                onExportDataClicked = {
+            AppInfo(
+                appVersion = "26.1.1",
+                onChangeLogClicked = {
                     // Do nothing
                 }
             )
@@ -81,18 +86,16 @@ fun DataSettingsPreviewLightMode() {
 
 @Preview(showBackground = true)
 @Composable
-fun DataSettingsPreviewDarkMode() {
+fun AppInfoPreviewDarkMode() {
     GreyHunterTheme(darkTheme = true) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            DataSettings(
-                onImportDataClicked = {
-                    // Do nothing
-                },
-                onExportDataClicked = {
+            AppInfo(
+                appVersion = "26.1.1",
+                onChangeLogClicked = {
                     // Do nothing
                 }
             )

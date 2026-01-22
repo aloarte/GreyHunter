@@ -7,4 +7,9 @@ interface SettingsRepository {
     suspend fun getAppearanceConfiguration(): Flow<ThemeType>
 
     suspend fun setAppearanceConfiguration(type: ThemeType)
+
+    suspend fun getAppVersion(): Flow<String>
+
+    suspend fun setAppVersion(appVersion: String)
+
 }

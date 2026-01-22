@@ -87,7 +87,6 @@ fun AppSettings(
                 )
             }
         }
-
     }
 }
 

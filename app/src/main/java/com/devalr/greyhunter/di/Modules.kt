@@ -7,5 +7,5 @@ import org.koin.dsl.module
 
 val appModule = module {
     single(named("AppContext")) { androidContext() }
-    factory { MainViewModel(get()) }
+    factory { MainViewModel(get(),get()) }
 }

@@ -14,6 +14,8 @@ class SettingsRepositoryImpl(
 
     private companion object {
         val APPEARANCE_KEY = stringPreferencesKey("appearance_type")
+        val APP_VERSION_KEY = stringPreferencesKey("app_version")
+
     }
 
     override suspend fun getAppearanceConfiguration(): Flow<ThemeType> {
@@ -26,6 +28,18 @@ class SettingsRepositoryImpl(
     override suspend fun setAppearanceConfiguration(type: ThemeType) {
         dataStore.edit { preferences ->
             preferences[APPEARANCE_KEY] = type.name
+        }
+    }
+
+    override suspend fun getAppVersion(): Flow<String> {
+        return dataStore.data.map { preferences ->
+            preferences[APP_VERSION_KEY] ?: "0.0"
+        }
+    }
+
+    override suspend fun setAppVersion(appVersion: String) {
+        dataStore.edit { preferences ->
+            preferences[APP_VERSION_KEY] = appVersion
         }
     }
 }
