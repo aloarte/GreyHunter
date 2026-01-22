@@ -1,15 +1,22 @@
 package com.devalr.domain
 
+import android.content.Context
+import android.net.Uri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.devalr.domain.enum.ThemeType
+import com.devalr.domain.file.CSVManager
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class SettingsRepositoryImpl(
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    private val projectRepository: ProjectRepository,
+    private val csvManager: CSVManager,
+    private val context: Context
 ) : SettingsRepository {
 
     private companion object {
@@ -42,4 +49,27 @@ class SettingsRepositoryImpl(
             preferences[APP_VERSION_KEY] = appVersion
         }
     }
+
+    override suspend fun exportData(uri: Uri): Boolean = try {
+        val projects = projectRepository.getAllProjects().first()
+        context.contentResolver.openOutputStream(uri)?.let { outputStream ->
+            csvManager.writeProjectsToCSV(outputStream, projects)
+        } ?: false
+    } catch (e: Exception) {
+        //TODO Error, output stream wasn't opened
+        false
+    }
+
+
+    override suspend fun importData(uri: Uri): Boolean = try {
+        context.contentResolver.openInputStream(uri)?.let { inputStream ->
+            val projectsWithMinis = csvManager.readProjectsFromCSV(inputStream)
+            projectRepository.addAllProjects(projects = projectsWithMinis, resetDatabase = true)
+        } ?: false
+
+    } catch (e: Exception) {
+        //TODO Error, input stream wasn't opened
+        false
+    }
+
 }

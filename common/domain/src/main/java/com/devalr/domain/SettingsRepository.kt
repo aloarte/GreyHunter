@@ -1,5 +1,6 @@
 package com.devalr.domain
 
+import android.net.Uri
 import com.devalr.domain.enum.ThemeType
 import kotlinx.coroutines.flow.Flow
 
@@ -11,5 +12,9 @@ interface SettingsRepository {
     suspend fun getAppVersion(): Flow<String>
 
     suspend fun setAppVersion(appVersion: String)
+
+    suspend fun exportData(uri: Uri) : Boolean
+
+    suspend fun importData(uri: Uri) : Boolean
 
 }

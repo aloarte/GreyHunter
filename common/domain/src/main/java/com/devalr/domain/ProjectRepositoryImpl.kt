@@ -6,6 +6,7 @@ import com.devalr.data.database.miniature.MiniatureDao
 import com.devalr.data.database.miniature.MiniatureEntity
 import com.devalr.data.database.project.ProjectDao
 import com.devalr.domain.mappers.Mapper
+import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
 import com.devalr.domain.model.ProjectEntityData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,6 +22,7 @@ class ProjectRepositoryImpl(
     private val projectDao: ProjectDao,
     private val miniatureDao: MiniatureDao,
     private val projectDatabaseMapper: Mapper<ProjectEntityData, ProjectBo>,
+    private val miniatureDatabaseMapper: Mapper<MiniatureEntity, MiniatureBo>,
     private val clock: Clock = Clock.systemDefaultZone()
 ) : ProjectRepository {
 
@@ -94,7 +96,26 @@ class ProjectRepositoryImpl(
 
     override suspend fun addProject(project: ProjectBo): Long {
         val projectEntityData = projectDatabaseMapper.transformReverse(project)
-        return projectDao.insertProject(projectEntityData.projectEntity)
+        val addResult = projectDao.insertProject(projectEntityData.projectEntity)
+        project.minis.forEach { miniatureBo->
+            val entityMiniature = miniatureDatabaseMapper.transformReverse(miniatureBo)
+            miniatureDao.insertMiniature(entityMiniature)
+        }
+
+        return addResult
+    }
+
+    override suspend fun addAllProjects(projects: List<ProjectBo>, resetDatabase: Boolean): Boolean {
+        if (resetDatabase) {
+            projectDao.deleteAllProjects()
+            miniatureDao.deleteMiniatures()
+        }
+        var addedResult = 0L
+        projects.forEach { project->
+            addedResult += addProject(project)
+        }
+
+        return addedResult.toInt() == projects.size
     }
 
     override suspend fun updateProject(project: ProjectBo, avoidLastUpdate: Boolean): Boolean {
