@@ -1,6 +1,6 @@
 package com.devalr.domain
 
-import android.content.Context
+import android.content.ContentResolver
 import android.net.Uri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -16,7 +16,7 @@ class SettingsRepositoryImpl(
     private val dataStore: DataStore<Preferences>,
     private val projectRepository: ProjectRepository,
     private val csvManager: CSVManager,
-    private val context: Context
+    private val contentResolver: ContentResolver
 ) : SettingsRepository {
 
     private companion object {
@@ -40,7 +40,7 @@ class SettingsRepositoryImpl(
 
     override suspend fun getAppVersion(): Flow<String> {
         return dataStore.data.map { preferences ->
-            preferences[APP_VERSION_KEY] ?: "0.0"
+            preferences[APP_VERSION_KEY] ?: ""
         }
     }
 
@@ -52,7 +52,7 @@ class SettingsRepositoryImpl(
 
     override suspend fun exportData(uri: Uri): Boolean = try {
         val projects = projectRepository.getAllProjects().first()
-        context.contentResolver.openOutputStream(uri)?.let { outputStream ->
+        contentResolver.openOutputStream(uri)?.let { outputStream ->
             csvManager.writeProjectsToCSV(outputStream, projects)
         } ?: false
     } catch (e: Exception) {
@@ -62,9 +62,11 @@ class SettingsRepositoryImpl(
 
 
     override suspend fun importData(uri: Uri): Boolean = try {
-        context.contentResolver.openInputStream(uri)?.let { inputStream ->
+        contentResolver.openInputStream(uri)?.let { inputStream ->
             val projectsWithMinis = csvManager.readProjectsFromCSV(inputStream)
-            projectRepository.addAllProjects(projects = projectsWithMinis, resetDatabase = true)
+            if (projectsWithMinis.isNotEmpty()) {
+                projectRepository.addAllProjects(projects = projectsWithMinis, resetDatabase = true)
+            } else false
         } ?: false
 
     } catch (e: Exception) {

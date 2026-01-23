@@ -1,5 +1,7 @@
 package com.devalr.domain.di
 
+import android.content.ContentResolver
+import android.content.Context
 import com.devalr.data.database.miniature.MiniatureEntity
 import com.devalr.data.di.dataModules
 import com.devalr.domain.MiniatureRepository
@@ -35,7 +37,14 @@ private val repositoriesModules = module {
         )
     }
 
-    factory<SettingsRepository> { SettingsRepositoryImpl(get(), get(), get(), get()) }
+    factory<SettingsRepository> {
+        SettingsRepositoryImpl(
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
 }
 
 private val mapperModules = module {
@@ -50,7 +59,10 @@ private val mapperModules = module {
 
 private val frameworkModule = module {
     single { provideCSVManager() }
+    single { provideContentResolver(get()) }
 }
+
+private fun provideContentResolver(context: Context):ContentResolver = context.contentResolver
 
 private fun provideCSVManager(): CSVManager = CSVManager()
 

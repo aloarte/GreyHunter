@@ -1,6 +1,7 @@
 package com.devalr.domain.repository
 
 import com.devalr.data.database.miniature.MiniatureDao
+import com.devalr.data.database.miniature.MiniatureEntity
 import com.devalr.data.database.project.ProjectDao
 import com.devalr.domain.ProjectRepositoryImpl
 import com.devalr.domain.TestData.PROJECT_ID
@@ -10,6 +11,7 @@ import com.devalr.domain.TestData.projectBo
 import com.devalr.domain.TestData.projectEntity
 import com.devalr.domain.TestData.projectEntityData
 import com.devalr.domain.mappers.Mapper
+import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
 import com.devalr.domain.model.ProjectEntityData
 import io.mockk.coEvery
@@ -36,6 +38,8 @@ class ProjectRepositoryTest {
     private val miniatureDao: MiniatureDao = mockk()
 
     private val mapper: Mapper<ProjectEntityData, ProjectBo> = mockk()
+    private val minisMapper: Mapper<MiniatureEntity, MiniatureBo> = mockk()
+
 
     private val fixedClock = Clock.fixed(Instant.parse("2022-01-01T00:00:00Z"), ZoneId.of("UTC"))
 
@@ -46,7 +50,8 @@ class ProjectRepositoryTest {
 
     @Before
     fun setUp() {
-        repository = ProjectRepositoryImpl(projectDao, miniatureDao, mapper, fixedClock)
+        repository =
+            ProjectRepositoryImpl(projectDao, miniatureDao, mapper, minisMapper, fixedClock)
         every { mapper.transform(projectEntityData) } returns projectBo
         every { mapper.transformReverse(projectBo) } returns projectEntityData
     }
