@@ -5,7 +5,9 @@ import com.devalr.data.database.miniature.MiniatureEntity
 import com.devalr.data.database.project.ProjectDao
 import com.devalr.domain.ProjectRepositoryImpl
 import com.devalr.domain.TestData.PROJECT_ID
+import com.devalr.domain.TestData.mini1Bo
 import com.devalr.domain.TestData.mini1Entity
+import com.devalr.domain.TestData.mini2Bo
 import com.devalr.domain.TestData.mini2Entity
 import com.devalr.domain.TestData.projectBo
 import com.devalr.domain.TestData.projectEntity
@@ -34,15 +36,10 @@ import java.time.ZoneId
 class ProjectRepositoryTest {
 
     private val projectDao: ProjectDao = mockk()
-
     private val miniatureDao: MiniatureDao = mockk()
-
     private val mapper: Mapper<ProjectEntityData, ProjectBo> = mockk()
     private val minisMapper: Mapper<MiniatureEntity, MiniatureBo> = mockk()
-
-
     private val fixedClock = Clock.fixed(Instant.parse("2022-01-01T00:00:00Z"), ZoneId.of("UTC"))
-
     private val date = 1640995200000L
 
     private lateinit var repository: ProjectRepositoryImpl
@@ -61,6 +58,10 @@ class ProjectRepositoryTest {
         runTest {
             // GIVEN
             coEvery { projectDao.insertProject(projectEntity) } returns PROJECT_ID
+            coEvery { miniatureDao.insertMiniature(mini1Entity) } returns mini1Bo.id
+            coEvery { miniatureDao.insertMiniature(mini2Entity) } returns mini2Bo.id
+            every { minisMapper.transformReverse(mini1Bo) } returns mini1Entity
+            every { minisMapper.transformReverse(mini2Bo) } returns mini2Entity
 
             // WHEN
             val result = repository.addProject(projectBo)
@@ -68,6 +69,8 @@ class ProjectRepositoryTest {
             // THEN
             verify(exactly = 1) { mapper.transformReverse(projectBo) }
             coVerify(exactly = 1) { projectDao.insertProject(projectEntity) }
+            verify(exactly = 2) { minisMapper.transformReverse(any()) }
+            coVerify(exactly = 2) { miniatureDao.insertMiniature(any()) }
             assertEquals(PROJECT_ID, result)
         }
 

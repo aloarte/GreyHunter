@@ -2,7 +2,6 @@ package com.devalr.settings
 
 import com.devalr.domain.SettingsRepository
 import com.devalr.domain.enum.ThemeType.Dark
-import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
 import com.devalr.settings.interactions.Action.OnAppear
 import com.devalr.settings.interactions.Action.OnBackPressed
@@ -32,7 +31,7 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class MiniatureDetailViewModelTest {
+class SettingsViewModelTest {
 
     private val repository: SettingsRepository = mockk()
 
@@ -40,9 +39,7 @@ class MiniatureDetailViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
 
-    val miniId = 1L
     val projectId = 100L
-    val miniature = MiniatureBo(id = miniId, projectId = projectId, name = "Space Marine")
     val project = ProjectBo(id = projectId, name = "Warhammer Army")
 
     @Before
@@ -56,12 +53,13 @@ class MiniatureDetailViewModelTest {
         Dispatchers.resetMain()
     }
 
-
     @Test
     fun `GIVEN loaded settings WHEN OnAppear is triggered THEN state updates with current status`() =
         runTest {
             // GIVEN
+            val appVersion = "1.0"
             coEvery { repository.getAppearanceConfiguration() } returns flowOf(Dark)
+            coEvery { repository.getAppVersion() } returns flowOf(appVersion)
             advanceUntilIdle()
 
             // WHEN
@@ -71,8 +69,10 @@ class MiniatureDetailViewModelTest {
             // THEN
             val state = viewModel.uiState.value
             coVerify(exactly = 1) { repository.getAppearanceConfiguration() }
+            coVerify(exactly = 1) { repository.getAppVersion() }
             assertTrue(state.settingsLoaded)
             assertEquals(Dark, state.themeType)
+            assertEquals(appVersion, state.appVersion)
             assertNull(state.errorType)
         }
 
