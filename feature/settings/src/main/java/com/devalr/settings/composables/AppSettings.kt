@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.devalr.domain.enum.ProgressColorType
 import com.devalr.domain.enum.ThemeType
 import com.devalr.framework.components.bottomsheet.RadioSelectorBottomSheetContent
 import com.devalr.framework.components.gh.GHText
@@ -35,11 +36,13 @@ import com.devalr.settings.R
 @Composable
 fun AppSettings(
     currentThemeType: ThemeType,
+    currentProgressColorType: ProgressColorType,
     onThemeClicked: (ThemeType) -> Unit,
-    onChangeColorClicked: () -> Unit,
+    onChangeColorClicked: (ProgressColorType) -> Unit,
 ) {
 
     var displayThemeSelector by remember { mutableStateOf(false) }
+    var displayProgressColorSelector by remember { mutableStateOf(false) }
 
     if (displayThemeSelector) {
         val themeOptions =
@@ -55,7 +58,25 @@ fun AppSettings(
                 }
             )
         }
-
+    }
+    if (displayProgressColorSelector) {
+        val progressColorOptions =
+            listOf(
+                ProgressColorType.Brand,
+                ProgressColorType.Monochrome,
+                ProgressColorType.TrafficLight
+            )
+        ModalBottomSheet(onDismissRequest = { displayProgressColorSelector = false }) {
+            RadioSelectorBottomSheetContent(
+                label = stringResource(R.string.label_settings_theme),
+                optionList = getProgressColorNameList(progressColorOptions),
+                selectedIndex = progressColorOptions.indexOf(currentProgressColorType),
+                onOptionClicked = { themeOption ->
+                    onChangeColorClicked(progressColorOptions[themeOption])
+                    displayProgressColorSelector = false
+                }
+            )
+        }
     }
 
     Column(modifier = Modifier.padding(20.dp)) {
@@ -75,19 +96,16 @@ fun AppSettings(
                     iconPainter = painterResource(com.devalr.framework.R.drawable.ic_dark_mode),
                     label = stringResource(R.string.label_settings_theme),
                     currentValue = currentThemeType.name,
-                    onSettingsItemClicked = {
-                        displayThemeSelector = true
-                    }
+                    onSettingsItemClicked = { displayThemeSelector = true }
                 )
                 SettingsItem(
                     iconPainter = painterResource(com.devalr.framework.R.drawable.ic_colors),
                     label = stringResource(R.string.label_settings_colors),
-                    currentValue = "Monochromatic",
-                    onSettingsItemClicked = { }
+                    currentValue = currentProgressColorType.name,
+                    onSettingsItemClicked = { displayProgressColorSelector = true }
                 )
             }
         }
-
     }
 }
 
@@ -98,6 +116,16 @@ private fun getThemeNameList(themeOptions: List<ThemeType>): List<String> =
             ThemeType.Light -> stringResource(R.string.label_settings_theme_light)
             ThemeType.Dark -> stringResource(R.string.label_settings_theme_dark)
             ThemeType.System -> stringResource(R.string.label_settings_theme_system)
+        }
+    }
+
+@Composable
+private fun getProgressColorNameList(colorOptions: List<ProgressColorType>): List<String> =
+    colorOptions.map {
+        when (it) {
+            ProgressColorType.Brand -> stringResource(R.string.label_settings_colors_brand)
+            ProgressColorType.Monochrome -> stringResource(R.string.label_settings_colors_monochrome)
+            ProgressColorType.TrafficLight -> stringResource(R.string.label_settings_colors_traffic)
         }
     }
 
@@ -112,6 +140,7 @@ fun AppSettingsPreviewLightMode() {
         ) {
             AppSettings(
                 currentThemeType = ThemeType.Light,
+                currentProgressColorType = ProgressColorType.Monochrome,
                 onThemeClicked = {
                     // Do nothing
                 },
@@ -134,6 +163,7 @@ fun AppSettingsPreviewDarkMode() {
         ) {
             AppSettings(
                 currentThemeType = ThemeType.System,
+                currentProgressColorType = ProgressColorType.TrafficLight,
                 onThemeClicked = {
                     // Do nothing
                 },

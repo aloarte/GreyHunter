@@ -15,6 +15,8 @@ interface ProjectRepository {
 
     suspend fun addProject(project: ProjectBo): Long
 
+    suspend fun addAllProjects(projects: List<ProjectBo>, resetDatabase: Boolean = false): Boolean
+
     suspend fun updateProject(project: ProjectBo, avoidLastUpdate: Boolean = false): Boolean
 
     suspend fun updateProjectProgress(projectId: Long, avoidLastUpdate: Boolean = false): Boolean

@@ -1,12 +1,18 @@
 package com.devalr.settings
 
+import android.net.Uri
+import androidx.compose.ui.text.input.KeyboardType.Companion.Uri
 import com.devalr.domain.SettingsRepository
+import com.devalr.domain.enum.ProgressColorType
+import com.devalr.domain.enum.ProgressColorType.TrafficLight
 import com.devalr.domain.enum.ThemeType.Dark
-import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
+import com.devalr.settings.interactions.Action
 import com.devalr.settings.interactions.Action.OnAppear
 import com.devalr.settings.interactions.Action.OnBackPressed
 import com.devalr.settings.interactions.Action.OnChangeAppearance
+import com.devalr.settings.interactions.Action.OnChangeProgressColors
+import com.devalr.settings.interactions.Action.OnImportPressed
 import com.devalr.settings.interactions.Event
 import com.devalr.settings.interactions.Event.NavigateBack
 import io.mockk.Runs
@@ -32,17 +38,15 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class MiniatureDetailViewModelTest {
+class SettingsViewModelTest {
 
     private val repository: SettingsRepository = mockk()
-
+    private val uri: Uri = mockk()
     private lateinit var viewModel: SettingsViewModel
 
     private val testDispatcher = StandardTestDispatcher()
 
-    val miniId = 1L
     val projectId = 100L
-    val miniature = MiniatureBo(id = miniId, projectId = projectId, name = "Space Marine")
     val project = ProjectBo(id = projectId, name = "Warhammer Army")
 
     @Before
@@ -56,12 +60,14 @@ class MiniatureDetailViewModelTest {
         Dispatchers.resetMain()
     }
 
-
     @Test
     fun `GIVEN loaded settings WHEN OnAppear is triggered THEN state updates with current status`() =
         runTest {
             // GIVEN
+            val appVersion = "1.0"
             coEvery { repository.getAppearanceConfiguration() } returns flowOf(Dark)
+            coEvery { repository.getProgressColorConfiguration() } returns flowOf(TrafficLight)
+            coEvery { repository.getAppVersion() } returns flowOf(appVersion)
             advanceUntilIdle()
 
             // WHEN
@@ -71,8 +77,12 @@ class MiniatureDetailViewModelTest {
             // THEN
             val state = viewModel.uiState.value
             coVerify(exactly = 1) { repository.getAppearanceConfiguration() }
+            coVerify(exactly = 1) { repository.getProgressColorConfiguration() }
+            coVerify(exactly = 1) { repository.getAppVersion() }
             assertTrue(state.settingsLoaded)
             assertEquals(Dark, state.themeType)
+            assertEquals(TrafficLight, state.progressColorConfigType)
+            assertEquals(appVersion, state.appVersion)
             assertNull(state.errorType)
         }
 
@@ -108,5 +118,49 @@ class MiniatureDetailViewModelTest {
 
             // THEN
             coVerify(exactly = 1) { repository.setAppearanceConfiguration(Dark) }
+        }
+
+    @Test
+    fun `WHEN OnChangeProgressColors is triggered THEN preference is updated`() =
+        runTest {
+            // GIVEN
+            coEvery { repository.setProgressColorConfiguration(TrafficLight) } just Runs
+
+            // WHEN
+            viewModel.onAction(OnChangeProgressColors(TrafficLight))
+            advanceUntilIdle()
+
+            // THEN
+            coVerify(exactly = 1) { repository.setProgressColorConfiguration(TrafficLight) }
+        }
+
+
+    @Test
+    fun `WHEN OnImportPressed is triggered THEN repository importing is called`() =
+        runTest {
+            // GIVEN
+            coEvery { repository.importData(uri) } returns true
+
+            // WHEN
+            viewModel.onAction(OnImportPressed(uri))
+            advanceUntilIdle()
+
+            // THEN
+            coVerify(exactly = 1) { repository.importData(uri) }
+        }
+
+
+    @Test
+    fun `WHEN OnExportPressed is triggered THEN repository exporting is called`() =
+        runTest {
+            // GIVEN
+            coEvery { repository.exportData(uri) } returns true
+
+            // WHEN
+            viewModel.onAction(Action.OnExportPressed(uri))
+            advanceUntilIdle()
+
+            // THEN
+            coVerify(exactly = 1) { repository.exportData(uri) }
         }
 }

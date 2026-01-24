@@ -19,6 +19,9 @@ interface ProjectDao {
     @Query("DELETE FROM projects WHERE id = :projectId")
     suspend fun deleteProject(projectId: Long): Int
 
+    @Query("DELETE FROM projects")
+    suspend fun deleteAllProjects(): Int
+
     @Query("SELECT * FROM projects")
     fun getAllProjects(): Flow<List<ProjectEntity>>
 

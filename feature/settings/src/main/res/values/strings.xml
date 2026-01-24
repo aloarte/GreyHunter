@@ -11,6 +11,19 @@
     <string name="label_settings_theme_dark">Dark</string>
     <string name="label_settings_theme_system">Automatic (system settings)</string>
     <string name="label_settings_colors">Progress colors</string>
+    <string name="label_settings_colors_brand">Default</string>
+    <string name="label_settings_colors_monochrome">Monochrome</string>
+    <string name="label_settings_colors_traffic">Traffic lights color scheme</string>
+
+    <string name="label_title_data_settings">Data</string>
+    <string name="label_description_data_settings">Download your data as a CSV file so you can import it later if you change apps or reinstall.</string>
+    <string name="label_settings_import">Import</string>
+    <string name="label_settings_export">Export</string>
+
+    <string name="label_title_app_info_settings">App info</string>
+    <string name="label_settings_version">Version %s</string>
+    <string name="label_settings_changelog">Changelog</string>
+
 
 
 </resources>

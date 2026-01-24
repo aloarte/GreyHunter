@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,6 +28,8 @@ import com.devalr.domain.model.helpers.immortal
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.components.cards.getCardWidth
+import com.devalr.framework.components.progress.GHCircularProgress
+import com.devalr.framework.components.progress.LocalProgressColors
 import com.devalr.framework.enum.CardType
 import com.devalr.framework.theme.GreyHunterTheme
 
@@ -72,12 +73,9 @@ fun MiniatureCard(
                         type = TextType.LabelS,
                         singleLane = true
                     )
-                    CircularProgressIndicator(
-                        progress = { miniature.percentage },
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.primary,
-                        trackColor = MaterialTheme.colorScheme.outlineVariant,
-                        strokeWidth = 3.dp
+                    GHCircularProgress(
+                        percentage = miniature.percentage,
+                        spectrum = LocalProgressColors.current
                     )
                 }
             }
