@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.devalr.domain.enum.ProgressColorType
 import com.devalr.domain.enum.ThemeType
 import com.devalr.framework.components.button.TopButtons
 import com.devalr.framework.theme.GreyHunterTheme
@@ -18,10 +19,11 @@ import com.devalr.framework.theme.GreyHunterTheme
 fun SettingsScreenContent(
     innerPadding: PaddingValues = PaddingValues(),
     currentThemeType: ThemeType,
+    progressColorType: ProgressColorType,
     appVersion: String,
     onBackClicked: () -> Unit,
     onThemeClicked: (ThemeType) -> Unit,
-    onLanguageClicked: () -> Unit,
+    onProgressColorClicked: (ProgressColorType) -> Unit,
     onImportDataClicked: () -> Unit,
     onExportDataClicked: () -> Unit
 
@@ -35,8 +37,9 @@ fun SettingsScreenContent(
         )
         AppSettings(
             currentThemeType = currentThemeType,
+            currentProgressColorType = progressColorType,
             onThemeClicked = onThemeClicked,
-            onLanguageClicked
+            onChangeColorClicked = onProgressColorClicked
         )
         DataSettings(
             onImportDataClicked = onImportDataClicked,
@@ -60,6 +63,7 @@ fun SettingsScreenContentPreviewLightMode() {
         ) {
             SettingsScreenContent(
                 currentThemeType = ThemeType.Light,
+                progressColorType = ProgressColorType.TrafficLight,
                 appVersion = "26.1.0",
                 onBackClicked = {
                     // Do nothing
@@ -67,7 +71,7 @@ fun SettingsScreenContentPreviewLightMode() {
                 onThemeClicked = {
                     // Do nothing
                 },
-                onLanguageClicked = {
+                onProgressColorClicked = {
                     // Do nothing
                 },
                 onImportDataClicked = {
@@ -92,6 +96,7 @@ fun SettingsScreenContentPreviewDarkMode() {
         ) {
             SettingsScreenContent(
                 currentThemeType = ThemeType.Dark,
+                progressColorType = ProgressColorType.TrafficLight,
                 appVersion = "26.1.0",
                 onBackClicked = {
                     // Do nothing
@@ -99,7 +104,7 @@ fun SettingsScreenContentPreviewDarkMode() {
                 onThemeClicked = {
                     // Do nothing
                 },
-                onLanguageClicked = {
+                onProgressColorClicked = {
                     // Do nothing
                 },
                 onImportDataClicked = {

@@ -19,6 +19,7 @@ import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.components.markedtext.MarkedText
 import com.devalr.framework.components.progress.GHProgressBar
+import com.devalr.framework.components.progress.LocalProgressColors
 import com.devalr.framework.theme.GreyHunterTheme
 
 
@@ -49,7 +50,7 @@ fun ProjectInfo(project: ProjectBo) {
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
-        GHProgressBar(percentage = project.progress)
+        GHProgressBar(percentage = project.progress,spectrum = LocalProgressColors.current)
         Spacer(modifier = Modifier.height(10.dp))
 
     }

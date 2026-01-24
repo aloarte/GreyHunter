@@ -6,6 +6,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.devalr.domain.enum.ProgressColorType
 import com.devalr.domain.enum.ThemeType
 import com.devalr.domain.file.CSVManager
 import kotlinx.coroutines.flow.Flow
@@ -21,8 +22,8 @@ class SettingsRepositoryImpl(
 
     private companion object {
         val APPEARANCE_KEY = stringPreferencesKey("appearance_type")
+        val PROGRESS_COLOR_KEY = stringPreferencesKey("progress_color")
         val APP_VERSION_KEY = stringPreferencesKey("app_version")
-
     }
 
     override suspend fun getAppearanceConfiguration(): Flow<ThemeType> {
@@ -35,6 +36,20 @@ class SettingsRepositoryImpl(
     override suspend fun setAppearanceConfiguration(type: ThemeType) {
         dataStore.edit { preferences ->
             preferences[APPEARANCE_KEY] = type.name
+        }
+    }
+
+    override suspend fun getProgressColorConfiguration(): Flow<ProgressColorType> {
+
+        return dataStore.data.map { preferences ->
+            val name = preferences[PROGRESS_COLOR_KEY] ?: ProgressColorType.Brand.name
+            ProgressColorType.valueOf(name)
+        }
+    }
+
+    override suspend fun setProgressColorConfiguration(colorType: ProgressColorType) {
+        dataStore.edit { preferences ->
+            preferences[PROGRESS_COLOR_KEY] = colorType.name
         }
     }
 

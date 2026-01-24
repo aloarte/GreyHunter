@@ -3,12 +3,14 @@ package com.devalr.settings
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.devalr.domain.SettingsRepository
+import com.devalr.domain.enum.ProgressColorType
 import com.devalr.domain.enum.ThemeType
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.settings.interactions.Action
 import com.devalr.settings.interactions.Action.OnAppear
 import com.devalr.settings.interactions.Action.OnBackPressed
 import com.devalr.settings.interactions.Action.OnChangeAppearance
+import com.devalr.settings.interactions.Action.OnChangeProgressColors
 import com.devalr.settings.interactions.Action.OnExportPressed
 import com.devalr.settings.interactions.Action.OnImportPressed
 import com.devalr.settings.interactions.ErrorType
@@ -27,6 +29,7 @@ class SettingsViewModel(
             is OnAppear -> onLoadScreen()
             OnBackPressed -> sendEvent(NavigateBack)
             is OnChangeAppearance -> onChangeDarkMode(action.mode)
+            is OnChangeProgressColors -> onChangeProgressColors(action.colorType)
             is OnImportPressed -> onImportPressed(action.uri)
             is OnExportPressed -> onExportPressed(action.uri)
         }
@@ -35,11 +38,13 @@ class SettingsViewModel(
     private fun onLoadScreen() = viewModelScope.launch {
         combine(
             settingsRepository.getAppearanceConfiguration(),
+            settingsRepository.getProgressColorConfiguration(),
             settingsRepository.getAppVersion()
-        ) { appearanceConfig, appVersion ->
+        ) { appearanceConfig, progressColorConfig, appVersion ->
             uiState.value.copy(
                 settingsLoaded = true,
                 themeType = appearanceConfig,
+                progressColorConfigType = progressColorConfig,
                 appVersion = appVersion
             )
         }
@@ -52,6 +57,9 @@ class SettingsViewModel(
         settingsRepository.setAppearanceConfiguration(mode)
     }
 
+    private fun onChangeProgressColors(colorType: ProgressColorType) = viewModelScope.launch {
+        settingsRepository.setProgressColorConfiguration(colorType)
+    }
 
     private fun onImportPressed(uri: Uri) =
         viewModelScope.launch { settingsRepository.importData(uri) }
@@ -59,6 +67,5 @@ class SettingsViewModel(
     private fun onExportPressed(uri: Uri) = viewModelScope.launch {
         settingsRepository.exportData(uri)
     }
-
 
 }

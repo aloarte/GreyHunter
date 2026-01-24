@@ -1,25 +1,16 @@
 package com.devalr.framework.components.progress
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.framework.theme.ProgressGreen
@@ -27,49 +18,35 @@ import com.devalr.framework.theme.ProgressRed
 import com.devalr.framework.theme.ProgressYellow
 
 @Composable
-fun GHProgressBar(
+fun GHCircularProgress(
     modifier: Modifier = Modifier,
-    spectrum: List<Color> = listOf(MaterialTheme.colorScheme.primary),
-    percentage: Float = 0f,
-    height: Dp = 10.dp,
-    backgroundColor: Color = Color.LightGray.copy(alpha = 0.3f)
+    percentage: Float,
+    spectrum: List<Color> = listOf(MaterialTheme.colorScheme.primary)
 ) {
     val safePercentage = percentage.coerceIn(0f, 1f)
     val targetColor = calculateColorForPercentage(safePercentage, spectrum)
-    val animatedColor by animateColorAsState(
-        targetValue = targetColor,
-        animationSpec = tween(durationMillis = 500),
-        label = "ColorAnimation"
+    CircularProgressIndicator(
+        progress = { percentage },
+        modifier = modifier,
+        color = targetColor,
+        trackColor = MaterialTheme.colorScheme.outlineVariant,
+        strokeWidth = 3.dp
     )
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(height)
-            .clip(RoundedCornerShape(percent = 50))
-            .background(backgroundColor)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(fraction = safePercentage)
-                .fillMaxHeight()
-                .clip(RoundedCornerShape(percent = 50))
-                .background(animatedColor)
-        )
-    }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun ProgressBarPreviewDefaultColorsDarkTheme() {
+private fun GHCircularProgressDefaultColorsDarkTheme() {
     GreyHunterTheme(darkTheme = true) {
-        Column(
+        Row(
             Modifier
+                .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
                 .padding(10.dp),
-            verticalArrangement = spacedBy(1.dp)
+            horizontalArrangement = spacedBy(1.dp)
         ) {
             for (i in 0..10) {
-                GHProgressBar(percentage = i / 10f)
+                GHCircularProgress(percentage = i / 10f)
             }
         }
     }
@@ -77,16 +54,17 @@ private fun ProgressBarPreviewDefaultColorsDarkTheme() {
 
 @Preview(showBackground = true)
 @Composable
-private fun ProgressBarPreviewDefaultColorsLightTheme() {
+private fun GHCircularProgressDefaultColorsLightTheme() {
     GreyHunterTheme(darkTheme = false) {
-        Column(
+        Row(
             Modifier
+                .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
                 .padding(10.dp),
-            verticalArrangement = spacedBy(1.dp)
+            horizontalArrangement = spacedBy(1.dp)
         ) {
             for (i in 0..10) {
-                GHProgressBar(percentage = i / 10f)
+                GHCircularProgress(percentage = i / 10f)
             }
         }
     }
@@ -94,16 +72,17 @@ private fun ProgressBarPreviewDefaultColorsLightTheme() {
 
 @Preview(showBackground = true)
 @Composable
-private fun ProgressBarPreviewTrafficColorsDarkTheme() {
+private fun GHCircularProgressTrafficLightsColorsDarkTheme() {
     GreyHunterTheme(darkTheme = true) {
-        Column(
+        Row(
             Modifier
+                .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
                 .padding(10.dp),
-            verticalArrangement = Arrangement.spacedBy(1.dp)
+            horizontalArrangement = spacedBy(1.dp)
         ) {
             for (i in 0..10) {
-                GHProgressBar(
+                GHCircularProgress(
                     percentage = i / 10f,
                     spectrum = listOf(ProgressRed, ProgressYellow, ProgressGreen)
                 )
@@ -114,16 +93,17 @@ private fun ProgressBarPreviewTrafficColorsDarkTheme() {
 
 @Preview(showBackground = true)
 @Composable
-private fun ProgressBarPreviewTrafficColorsLightTheme() {
+private fun GHCircularProgressTrafficLightsColorsLightTheme() {
     GreyHunterTheme(darkTheme = false) {
-        Column(
+        Row(
             Modifier
+                .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
                 .padding(10.dp),
-            verticalArrangement = Arrangement.spacedBy(1.dp)
+            horizontalArrangement = spacedBy(1.dp)
         ) {
             for (i in 0..10) {
-                GHProgressBar(
+                GHCircularProgress(
                     percentage = i / 10f,
                     spectrum = listOf(ProgressRed, ProgressYellow, ProgressGreen)
                 )
@@ -131,3 +111,4 @@ private fun ProgressBarPreviewTrafficColorsLightTheme() {
         }
     }
 }
+

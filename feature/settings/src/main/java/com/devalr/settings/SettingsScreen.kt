@@ -9,10 +9,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import com.devalr.settings.composables.SettingsScreenContent
-import com.devalr.settings.interactions.Action
 import com.devalr.settings.interactions.Action.OnAppear
 import com.devalr.settings.interactions.Action.OnBackPressed
 import com.devalr.settings.interactions.Action.OnChangeAppearance
+import com.devalr.settings.interactions.Action.OnChangeProgressColors
 import com.devalr.settings.interactions.Action.OnExportPressed
 import com.devalr.settings.interactions.Action.OnImportPressed
 import com.devalr.settings.interactions.Event.NavigateBack
@@ -63,13 +63,14 @@ fun SettingsScreen(
         SettingsScreenContent(
             innerPadding = innerPadding,
             currentThemeType = state.themeType,
+            progressColorType = state.progressColorConfigType,
             appVersion = state.appVersion,
             onBackClicked = { viewModel.onAction(OnBackPressed) },
             onThemeClicked = { viewModel.onAction(OnChangeAppearance(it)) },
-            onLanguageClicked = {},
+            onProgressColorClicked = { viewModel.onAction(OnChangeProgressColors(it)) },
             onImportDataClicked = {
                 importLauncher.launch(arrayOf("*/*"))
-                                  },
+            },
             onExportDataClicked = {
                 exportLauncher.launch("backup_projects.csv")
             }
