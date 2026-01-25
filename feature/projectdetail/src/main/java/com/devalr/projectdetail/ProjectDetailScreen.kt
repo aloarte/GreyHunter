@@ -10,8 +10,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
+import com.devalr.framework.R
 import com.devalr.framework.components.anim.LoadingIndicator
-import com.devalr.framework.components.bottomsheet.ConfirmDeleteBottomSheetContent
+import com.devalr.framework.components.bottomsheet.ConfirmBottomSheetContent
 import com.devalr.projectdetail.components.ProjectDetailScreenContent
 import com.devalr.projectdetail.interactions.Action.OnAppear
 import com.devalr.projectdetail.interactions.Action.OnBackPressed
@@ -47,7 +49,9 @@ fun ProjectDetailScreen(
     LaunchedEffect(true) { viewModel.onAction(OnAppear(projectId = projectId)) }
     if (showConfirmDelete) {
         ModalBottomSheet(onDismissRequest = { showConfirmDelete = false }) {
-            ConfirmDeleteBottomSheetContent(
+            ConfirmBottomSheetContent(
+                description = stringResource(R.string.bs_confirm_delete_description),
+                okButtonText = stringResource(R.string.btn_delete),
                 onConfirmDelete = {
                     showConfirmDelete = false
                     viewModel.onAction(OnDeleteProject(state.project!!.id))

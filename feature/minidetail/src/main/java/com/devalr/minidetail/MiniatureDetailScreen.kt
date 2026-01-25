@@ -10,8 +10,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
+import com.devalr.framework.R
 import com.devalr.framework.components.anim.LoadingIndicator
-import com.devalr.framework.components.bottomsheet.ConfirmDeleteBottomSheetContent
+import com.devalr.framework.components.bottomsheet.ConfirmBottomSheetContent
 import com.devalr.minidetail.components.MiniatureDetailScreenContent
 import com.devalr.minidetail.interactions.Action.OnAppear
 import com.devalr.minidetail.interactions.Action.OnBackPressed
@@ -49,7 +51,9 @@ fun MiniatureDetailScreen(
     LaunchedEffect(true) { viewModel.onAction(OnAppear(miniatureId)) }
     if (showConfirmDelete) {
         ModalBottomSheet(onDismissRequest = { showConfirmDelete = false }) {
-            ConfirmDeleteBottomSheetContent(
+            ConfirmBottomSheetContent(
+                description = stringResource(R.string.bs_confirm_delete_description),
+                okButtonText = stringResource(R.string.btn_delete),
                 onConfirmDelete = {
                     showConfirmDelete = false
                     viewModel.onAction(OnDeleteMiniature(state.miniature!!.id))

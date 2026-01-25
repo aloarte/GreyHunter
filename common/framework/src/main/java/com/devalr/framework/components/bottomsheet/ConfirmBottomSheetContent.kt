@@ -22,7 +22,9 @@ import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
-fun ConfirmDeleteBottomSheetContent(
+fun ConfirmBottomSheetContent(
+    description: String,
+    okButtonText: String,
     onConfirmDelete: () -> Unit,
     onDeny: () -> Unit
 ) {
@@ -33,7 +35,7 @@ fun ConfirmDeleteBottomSheetContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         GHText(
-            text = stringResource(R.string.bs_confirm_delete_description),
+            text = description,
             type = TextType.Description
         )
         Spacer(modifier = Modifier.height(20.dp))
@@ -43,7 +45,7 @@ fun ConfirmDeleteBottomSheetContent(
         ) {
             GHButton(
                 modifier = Modifier.weight(1f),
-                text = stringResource(R.string.btn_delete),
+                text = okButtonText,
                 onClick = onConfirmDelete
             )
 
@@ -58,14 +60,16 @@ fun ConfirmDeleteBottomSheetContent(
 
 @Preview(showBackground = true)
 @Composable
-private fun ConfirmDeleteBottomSheetContentPreviewDarkTheme() {
+private fun ConfirmBottomSheetContentPreviewDarkTheme() {
     GreyHunterTheme(darkTheme = true) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            ConfirmDeleteBottomSheetContent(
+            ConfirmBottomSheetContent(
+                description = "Are you sure that you want to delete this project?",
+                okButtonText = "Delete",
                 onConfirmDelete = {
                     // Do nothing
                 },
@@ -80,14 +84,16 @@ private fun ConfirmDeleteBottomSheetContentPreviewDarkTheme() {
 
 @Preview(showBackground = true)
 @Composable
-private fun ConfirmDeleteBottomSheetContentPreviewLightTheme() {
+private fun ConfirmBottomSheetContentPreviewLightTheme() {
     GreyHunterTheme(darkTheme = false) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            ConfirmDeleteBottomSheetContent(
+            ConfirmBottomSheetContent(
+                description = "Are you sure that you want to delete this project?",
+                okButtonText = "Delete",
                 onConfirmDelete = {
                     // Do nothing
                 },

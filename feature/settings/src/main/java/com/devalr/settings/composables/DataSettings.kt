@@ -10,28 +10,55 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.devalr.framework.components.bottomsheet.ConfirmBottomSheetContent
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.settings.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DataSettings(
     onImportDataClicked: () -> Unit,
     onExportDataClicked: () -> Unit
 ) {
+    var displayConfirmExport by remember { mutableStateOf(false) }
+    if (displayConfirmExport) {
+        ModalBottomSheet(onDismissRequest = { displayConfirmExport = false }) {
+            ConfirmBottomSheetContent(
+                description = stringResource(R.string.bottom_sheet_confirm_export),
+                okButtonText = stringResource(R.string.bottom_sheet_confirm_export_btn),
+                onConfirmDelete = {
+                    onExportDataClicked()
+                    displayConfirmExport = false
+                },
+                onDeny = {
+                    displayConfirmExport = false
+                }
+            )
+        }
+    }
     Column(modifier = Modifier.padding(20.dp)) {
         GHText(text = stringResource(R.string.label_title_data_settings), type = TextType.Title)
         Spacer(modifier = Modifier.height(10.dp))
-        GHText(text = stringResource(R.string.label_description_data_settings), type = TextType.Description)
+        GHText(
+            text = stringResource(R.string.label_description_data_settings),
+            type = TextType.Description
+        )
         Spacer(modifier = Modifier.height(10.dp))
         Card(
             modifier = Modifier,
@@ -51,7 +78,7 @@ fun DataSettings(
                 SettingsItem(
                     iconPainter = painterResource(com.devalr.framework.R.drawable.ic_export),
                     label = stringResource(R.string.label_settings_export),
-                    onSettingsItemClicked = onExportDataClicked
+                    onSettingsItemClicked = { displayConfirmExport = true }
                 )
             }
         }

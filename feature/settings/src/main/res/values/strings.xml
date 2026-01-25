@@ -2,7 +2,9 @@
 <resources>
     <!-- Errors -->
 
-    <!-- Buttons -->
+    <!-- Bottom sheet -->
+    <string name="bottom_sheet_confirm_export">    Exporting your data will generate a .csv file. You can import this file later if you switch apps or reinstall GreyHunter. Please note that images are not included in the export.\n\nDo you want to continue?</string>
+    <string name="bottom_sheet_confirm_export_btn">Continue</string>
 
     <!-- Labels -->
     <string name="label_title_app_settings">App settings</string>
