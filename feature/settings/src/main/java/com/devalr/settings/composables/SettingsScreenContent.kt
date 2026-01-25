@@ -25,9 +25,8 @@ fun SettingsScreenContent(
     onThemeClicked: (ThemeType) -> Unit,
     onProgressColorClicked: (ProgressColorType) -> Unit,
     onImportDataClicked: () -> Unit,
-    onExportDataClicked: () -> Unit,
-
-    ) {
+    onExportDataClicked: () -> Unit
+) {
     Column(modifier = Modifier.padding(innerPadding)) {
         TopButtons(
             modifier = Modifier
