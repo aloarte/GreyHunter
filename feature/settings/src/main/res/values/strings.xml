@@ -2,7 +2,9 @@
 <resources>
     <!-- Errors -->
 
-    <!-- Buttons -->
+    <!-- Bottom sheet -->
+    <string name="bottom_sheet_confirm_export">    Exporting your data will generate a .csv file. You can import this file later if you switch apps or reinstall GreyHunter. Please note that images are not included in the export.\n\nDo you want to continue?</string>
+    <string name="bottom_sheet_confirm_export_btn">Continue</string>
 
     <!-- Labels -->
     <string name="label_title_app_settings">App settings</string>
@@ -14,16 +16,21 @@
     <string name="label_settings_colors_brand">Default</string>
     <string name="label_settings_colors_monochrome">Monochrome</string>
     <string name="label_settings_colors_traffic">Traffic lights color scheme</string>
-
     <string name="label_title_data_settings">Data</string>
     <string name="label_description_data_settings">Download your data as a CSV file so you can import it later if you change apps or reinstall.</string>
     <string name="label_settings_import">Import</string>
     <string name="label_settings_export">Export</string>
-
     <string name="label_title_app_info_settings">App info</string>
     <string name="label_settings_version">Version %s</string>
     <string name="label_settings_changelog">Changelog</string>
 
+    <!-- Changelog-->
+    <string name="changelog_26_1_0">Launch version.</string>
 
+    <!-- SnackBar -->
+    <string name="snack_bar_imported_success">Projects imported successfully.</string>
+    <string name="snack_bar_imported_error">Error: Could not import projects. Check the file format.</string>
+    <string name="snack_bar_exported_success">Projects exported successfully.</string>
+    <string name="snack_bar_exported_error">Error: Could not export projects. Try again later.</string>
 
 </resources>

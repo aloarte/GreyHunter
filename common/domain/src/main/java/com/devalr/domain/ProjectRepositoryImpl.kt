@@ -97,7 +97,7 @@ class ProjectRepositoryImpl(
     override suspend fun addProject(project: ProjectBo): Long {
         val projectEntityData = projectDatabaseMapper.transformReverse(project)
         val addResult = projectDao.insertProject(projectEntityData.projectEntity)
-        project.minis.forEach { miniatureBo->
+        project.minis.forEach { miniatureBo ->
             val entityMiniature = miniatureDatabaseMapper.transformReverse(miniatureBo)
             miniatureDao.insertMiniature(entityMiniature)
         }
@@ -105,17 +105,19 @@ class ProjectRepositoryImpl(
         return addResult
     }
 
-    override suspend fun addAllProjects(projects: List<ProjectBo>, resetDatabase: Boolean): Boolean {
+    override suspend fun addAllProjects(
+        projects: List<ProjectBo>,
+        resetDatabase: Boolean
+    ): Boolean {
         if (resetDatabase) {
             projectDao.deleteAllProjects()
             miniatureDao.deleteMiniatures()
         }
-        var addedResult = 0L
-        projects.forEach { project->
-            addedResult += addProject(project)
+        var addedResult = true
+        projects.forEach { project ->
+            addedResult = addedResult && (addProject(project) > 0)
         }
-
-        return addedResult.toInt() == projects.size
+        return addedResult
     }
 
     override suspend fun updateProject(project: ProjectBo, avoidLastUpdate: Boolean): Boolean {

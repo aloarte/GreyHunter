@@ -6,6 +6,7 @@ import com.devalr.domain.SettingsRepository
 import com.devalr.domain.enum.ProgressColorType
 import com.devalr.domain.enum.ThemeType
 import com.devalr.framework.base.BaseViewModel
+import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.settings.interactions.Action
 import com.devalr.settings.interactions.Action.OnAppear
 import com.devalr.settings.interactions.Action.OnBackPressed
@@ -15,6 +16,7 @@ import com.devalr.settings.interactions.Action.OnExportPressed
 import com.devalr.settings.interactions.Action.OnImportPressed
 import com.devalr.settings.interactions.ErrorType
 import com.devalr.settings.interactions.Event
+import com.devalr.settings.interactions.Event.LaunchSnackBar
 import com.devalr.settings.interactions.Event.NavigateBack
 import com.devalr.settings.interactions.State
 import kotlinx.coroutines.flow.catch
@@ -62,10 +64,20 @@ class SettingsViewModel(
     }
 
     private fun onImportPressed(uri: Uri) =
-        viewModelScope.launch { settingsRepository.importData(uri) }
+        viewModelScope.launch {
+            if (settingsRepository.importData(uri)) {
+                sendEvent(LaunchSnackBar(true, SnackBarType.SUCCESS))
+            } else {
+                sendEvent(LaunchSnackBar(true, SnackBarType.ERROR))
+            }
+        }
 
     private fun onExportPressed(uri: Uri) = viewModelScope.launch {
-        settingsRepository.exportData(uri)
+        if (settingsRepository.exportData(uri)) {
+            sendEvent(LaunchSnackBar(false, SnackBarType.SUCCESS))
+        } else {
+            sendEvent(LaunchSnackBar(false, SnackBarType.ERROR))
+        }
     }
 
 }

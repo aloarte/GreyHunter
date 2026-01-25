@@ -1,12 +1,12 @@
 package com.devalr.settings
 
 import android.net.Uri
-import androidx.compose.ui.text.input.KeyboardType.Companion.Uri
 import com.devalr.domain.SettingsRepository
-import com.devalr.domain.enum.ProgressColorType
 import com.devalr.domain.enum.ProgressColorType.TrafficLight
 import com.devalr.domain.enum.ThemeType.Dark
 import com.devalr.domain.model.ProjectBo
+import com.devalr.framework.components.snackbar.SnackBarType.ERROR
+import com.devalr.framework.components.snackbar.SnackBarType.SUCCESS
 import com.devalr.settings.interactions.Action
 import com.devalr.settings.interactions.Action.OnAppear
 import com.devalr.settings.interactions.Action.OnBackPressed
@@ -14,6 +14,7 @@ import com.devalr.settings.interactions.Action.OnChangeAppearance
 import com.devalr.settings.interactions.Action.OnChangeProgressColors
 import com.devalr.settings.interactions.Action.OnImportPressed
 import com.devalr.settings.interactions.Event
+import com.devalr.settings.interactions.Event.LaunchSnackBar
 import com.devalr.settings.interactions.Event.NavigateBack
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -136,9 +137,13 @@ class SettingsViewModelTest {
 
 
     @Test
-    fun `WHEN OnImportPressed is triggered THEN repository importing is called`() =
+    fun `WHEN OnImportPressed is triggered THEN repository importing is called with a success result and LaunchSnackBar event is triggered`() =
         runTest {
             // GIVEN
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
             coEvery { repository.importData(uri) } returns true
 
             // WHEN
@@ -147,13 +152,41 @@ class SettingsViewModelTest {
 
             // THEN
             coVerify(exactly = 1) { repository.importData(uri) }
+            assertEquals(1, events.size)
+            assertEquals(LaunchSnackBar(true, SUCCESS), events.first())
+            job.cancel()
+        }
+
+    @Test
+    fun `WHEN OnImportPressed is triggered THEN repository importing is called with an error result and LaunchSnackBar event is triggered`() =
+        runTest {
+            // GIVEN
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
+            coEvery { repository.importData(uri) } returns false
+
+            // WHEN
+            viewModel.onAction(OnImportPressed(uri))
+            advanceUntilIdle()
+
+            // THEN
+            coVerify(exactly = 1) { repository.importData(uri) }
+            assertEquals(1, events.size)
+            assertEquals(LaunchSnackBar(true, ERROR), events.first())
+            job.cancel()
         }
 
 
     @Test
-    fun `WHEN OnExportPressed is triggered THEN repository exporting is called`() =
+    fun `WHEN OnExportPressed is triggered THEN repository exporting is called with a success result and LaunchSnackBar event is triggered`() =
         runTest {
             // GIVEN
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
             coEvery { repository.exportData(uri) } returns true
 
             // WHEN
@@ -162,5 +195,30 @@ class SettingsViewModelTest {
 
             // THEN
             coVerify(exactly = 1) { repository.exportData(uri) }
+            assertEquals(1, events.size)
+            assertEquals(LaunchSnackBar(false, SUCCESS), events.first())
+            job.cancel()
+        }
+
+
+    @Test
+    fun `WHEN OnExportPressed is triggered THEN repository exporting is called with an error result and LaunchSnackBar event is triggered`() =
+        runTest {
+            // GIVEN
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
+            coEvery { repository.exportData(uri) } returns false
+
+            // WHEN
+            viewModel.onAction(Action.OnExportPressed(uri))
+            advanceUntilIdle()
+
+            // THEN
+            coVerify(exactly = 1) { repository.exportData(uri) }
+            assertEquals(1, events.size)
+            assertEquals(LaunchSnackBar(false, ERROR), events.first())
+            job.cancel()
         }
 }
