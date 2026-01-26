@@ -8,7 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.devalr.createproject.composables.AddProjectScreenContent
+import com.devalr.createproject.components.AddProjectScreenContent
 import com.devalr.createproject.interactions.Action.AddProject
 import com.devalr.createproject.interactions.Action.ChangeDescription
 import com.devalr.createproject.interactions.Action.ChangeImage

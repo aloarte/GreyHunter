@@ -5,10 +5,12 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import com.devalr.createminiature.interactions.Action.AddMiniature
-import com.devalr.createminiature.interactions.Action.Load
 import com.devalr.createminiature.interactions.Action.ChangeImage
 import com.devalr.createminiature.interactions.Action.ChangeName
+import com.devalr.createminiature.interactions.Action.Load
+import com.devalr.createminiature.interactions.Action.Return
 import com.devalr.createminiature.interactions.ErrorType
+import com.devalr.createminiature.interactions.Event
 import com.devalr.createminiature.interactions.Event.NavigateBack
 import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.ProjectRepository
@@ -203,7 +205,7 @@ class AddMiniatureViewModelTest {
             viewModel.onAction(ChangeName(MINI_NAME))
             coEvery { miniatureRepository.addMiniature(any()) } returns 10L
             coEvery { projectRepository.updateProjectProgress(PROJECT_ID, any()) } returns true
-            val events = mutableListOf<com.devalr.createminiature.interactions.Event>()
+            val events = mutableListOf<Event>()
             val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                 viewModel.events.collect { events.add(it) }
             }
@@ -257,7 +259,7 @@ class AddMiniatureViewModelTest {
             viewModel.onAction(ChangeName(NEW_MINI_IMAGE))
 
             advanceUntilIdle()
-            val events = mutableListOf<com.devalr.createminiature.interactions.Event>()
+            val events = mutableListOf<Event>()
             val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                 viewModel.events.collect { events.add(it) }
             }
@@ -319,5 +321,24 @@ class AddMiniatureViewModelTest {
             }
             val state = viewModel.uiState.value
             assertEquals(cameraUriString, state.miniatureImage)
+        }
+
+    @Test
+    fun `WHEN Return action is triggered THEN NavigateBack event is raised`() =
+        runTest {
+            // GIVEN
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
+
+            // WHEN
+            viewModel.onAction(Return)
+            advanceUntilIdle()
+
+            // THEN
+            assertEquals(1, events.size)
+            assertTrue(events.contains(NavigateBack))
+            job.cancel()
         }
 }

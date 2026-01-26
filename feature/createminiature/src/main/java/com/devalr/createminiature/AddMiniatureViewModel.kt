@@ -6,9 +6,10 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.devalr.createminiature.interactions.Action
 import com.devalr.createminiature.interactions.Action.AddMiniature
-import com.devalr.createminiature.interactions.Action.Load
 import com.devalr.createminiature.interactions.Action.ChangeImage
 import com.devalr.createminiature.interactions.Action.ChangeName
+import com.devalr.createminiature.interactions.Action.Load
+import com.devalr.createminiature.interactions.Action.Return
 import com.devalr.createminiature.interactions.ErrorType
 import com.devalr.createminiature.interactions.Event
 import com.devalr.createminiature.interactions.Event.NavigateBack
@@ -32,10 +33,10 @@ class AddMiniatureViewModel(
                 miniatureId = action.miniatureId,
                 projectId = action.projectId
             )
-
             is ChangeName -> updateState { copy(miniatureName = action.name) }
             is ChangeImage -> updateImage(action.imageUri)
             is AddMiniature -> addEditMiniature()
+            is Return -> sendEvent(NavigateBack)
         }
     }
 
@@ -63,7 +64,7 @@ class AddMiniatureViewModel(
                         updateState { copy(errorType = ErrorType.BadId) }
                     }
                     .collect {
-                        if(it == null ) return@collect
+                        if (it == null) return@collect
                         updateState {
                             copy(
                                 projectId = it.projectId,
@@ -113,7 +114,10 @@ class AddMiniatureViewModel(
         viewModelScope.launch {
             val miniatureAdded = miniatureRepository.addMiniature(miniature) > 0
             if (miniatureAdded) {
-                val projectUpdated = projectRepository.updateProjectProgress(projectId = projectId, avoidLastUpdate = true)
+                val projectUpdated = projectRepository.updateProjectProgress(
+                    projectId = projectId,
+                    avoidLastUpdate = true
+                )
                 updateState { copy(errorType = if (projectUpdated) null else ErrorType.ErrorUpdatingProgress) }
                 sendEvent(NavigateBack)
 

@@ -1,4 +1,4 @@
-package com.devalr.createproject.composables
+package com.devalr.createproject.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
