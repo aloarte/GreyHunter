@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
+import com.devalr.framework.limitSize
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
@@ -25,15 +26,15 @@ fun TopTitleText(modifier: Modifier = Modifier, text: String) {
         modifier = modifier
             .padding(16.dp)
             .height(35.dp)
-            .shadow(elevation = 6.dp, shape = CircleShape)
+            .shadow(elevation = 4.dp, shape = CircleShape)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxHeight()
                 .background(MaterialTheme.colorScheme.surface)
-                .padding(horizontal = 10.dp, vertical = 5.dp)
+                .padding(horizontal = 15.dp, vertical = 5.dp)
         ) {
-            GHText(text = text.limitSize(30), type = TextType.LabelMBold)
+            GHText(text = text.limitSize(22), type = TextType.LabelMBold)
         }
     }
 }
@@ -65,13 +66,5 @@ fun TopTitleTextPreviewDarkMode() {
         ) {
             TopTitleText(text = " Super special name")
         }
-    }
-}
-
-fun String.limitSize(limit: Int): String {
-    return if (this.length > limit) {
-        "${this.take(limit)}..."
-    } else {
-        this
     }
 }

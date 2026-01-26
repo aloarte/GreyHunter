@@ -17,9 +17,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.helpers.chronomancer
+import com.devalr.framework.components.ScreenSize.LARGE
+import com.devalr.framework.components.ScreenSize.MEDIUM
+import com.devalr.framework.components.ScreenSize.SMALL
+import com.devalr.framework.components.getScreenSize
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.components.markedtext.MarkedText
+import com.devalr.framework.limitSize
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.framework.theme.ProgressYellow
 import com.devalr.minidetail.R
@@ -36,7 +41,15 @@ fun MiniatureInfo(miniature: MiniatureBo, onlyUpdate: Boolean) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            MarkedText(title = true, text = miniature.name.capitalize())
+            MarkedText(
+                title = true,
+                text = miniature.name
+                    .limitSize(when(getScreenSize()){
+                        SMALL -> 20
+                        MEDIUM -> 25
+                        LARGE -> 30
+                    })
+                    .capitalize())
             GHText(text = "${(miniature.percentage * 100).toInt()}%", type = TextType.Featured)
         }
         Spacer(modifier = Modifier.height(20.dp))

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,9 +39,11 @@ fun AddProjectScreenContent(
     onChangeDescription: (String) -> Unit,
     onAddProject: () -> Unit
 ) {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .padding(innerPadding)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
+    ) {
         TopButtons(
             modifier = Modifier
                 .fillMaxWidth()
@@ -48,7 +51,7 @@ fun AddProjectScreenContent(
                 .padding(16.dp),
             onNavigateBack = onNavigateBack
         )
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxSize()
@@ -56,31 +59,39 @@ fun AddProjectScreenContent(
                 .padding(all = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            GHImage(
-                imageUri = projectImage,
-                size = 250.dp,
-                showMessage = true,
-                onImageClick = onPickImage
-            )
-            Spacer(modifier = Modifier.height(30.dp))
-            AddItemName(
-                name = projectName,
-                label = stringResource(R.string.label_project_name),
-                onChangeName = onChangeName
-            )
-            Spacer(modifier = Modifier.height(5.dp))
-            AddItemDescription(
-                description = projectDescription,
-                label = stringResource(R.string.label_project_description),
-                onChangeDescription = onChangeDescription
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            GHButton(
-                text = if (editMode) stringResource(R.string.button_edit_project) else stringResource(
-                    R.string.button_add_project
-                ),
-                onClick = onAddProject
-            )
+            item {
+                GHImage(
+                    imageUri = projectImage,
+                    size = 250.dp,
+                    showMessage = true,
+                    onImageClick = onPickImage
+                )
+            }
+            item { Spacer(modifier = Modifier.height(30.dp)) }
+            item {
+                AddItemName(
+                    name = projectName,
+                    label = stringResource(R.string.label_project_name),
+                    onChangeName = onChangeName
+                )
+            }
+            item { Spacer(modifier = Modifier.height(5.dp)) }
+            item {
+                AddItemDescription(
+                    description = projectDescription,
+                    label = stringResource(R.string.label_project_description),
+                    onChangeDescription = onChangeDescription
+                )
+            }
+            item { Spacer(modifier = Modifier.height(20.dp)) }
+            item {
+                GHButton(
+                    text = if (editMode) stringResource(R.string.button_edit_project) else stringResource(
+                        R.string.button_add_project
+                    ),
+                    onClick = onAddProject
+                )
+            }
         }
     }
 }

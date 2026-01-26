@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -58,7 +59,7 @@ fun AddMiniatureScreenContent(
                 text = it
             )
         }
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxSize()
@@ -66,25 +67,31 @@ fun AddMiniatureScreenContent(
                 .padding(all = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            GHImage(
-                imageUri = miniatureImage,
-                size = 250.dp,
-                showMessage = true,
-                onImageClick = onPickImage
-            )
-            Spacer(modifier = Modifier.height(30.dp))
-            AddItemName(
-                name = miniatureName,
-                label = stringResource(R.string.label_miniature_name),
-                onChangeName = onChangeName
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            GHButton(
-                text = if (editMode) stringResource(R.string.button_edit_miniature) else stringResource(
-                    R.string.button_add_miniature
-                ),
-                onClick = onAddMiniature
-            )
+            item {
+                GHImage(
+                    imageUri = miniatureImage,
+                    size = 250.dp,
+                    showMessage = true,
+                    onImageClick = onPickImage
+                )
+            }
+            item { Spacer(modifier = Modifier.height(30.dp)) }
+            item {
+                AddItemName(
+                    name = miniatureName,
+                    label = stringResource(R.string.label_miniature_name),
+                    onChangeName = onChangeName
+                )
+            }
+            item { Spacer(modifier = Modifier.height(20.dp)) }
+            item {
+                GHButton(
+                    text = if (editMode) stringResource(R.string.button_edit_miniature) else stringResource(
+                        R.string.button_add_miniature
+                    ),
+                    onClick = onAddMiniature
+                )
+            }
         }
     }
 }
