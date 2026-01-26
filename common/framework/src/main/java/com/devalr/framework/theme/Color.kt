@@ -16,3 +16,8 @@ val ProgressGreen = Color(0xFF2E7D32)
 
 val ProgressTrackLight = Color(0xFFE3E7E6)
 val ProgressTrackDark = Color(0xFF3A3F3F)
+
+
+
+val PlaceholderLight = Color(0xFFE9ECEC)
+val PlaceholderDark  = Color(0xFF2E3232)

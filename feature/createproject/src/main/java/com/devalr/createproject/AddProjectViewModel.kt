@@ -6,10 +6,11 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.devalr.createproject.interactions.Action
 import com.devalr.createproject.interactions.Action.AddProject
-import com.devalr.createproject.interactions.Action.Load
 import com.devalr.createproject.interactions.Action.ChangeDescription
 import com.devalr.createproject.interactions.Action.ChangeImage
 import com.devalr.createproject.interactions.Action.ChangeName
+import com.devalr.createproject.interactions.Action.Load
+import com.devalr.createproject.interactions.Action.Return
 import com.devalr.createproject.interactions.ErrorType
 import com.devalr.createproject.interactions.Event
 import com.devalr.createproject.interactions.Event.NavigateBack
@@ -32,6 +33,7 @@ class AddProjectViewModel(
             is ChangeDescription -> updateState { copy(projectDescription = action.description) }
             is ChangeImage -> updateImage(action.imageUri)
             is AddProject -> addEditProject()
+            Return -> sendEvent(NavigateBack)
         }
     }
 
