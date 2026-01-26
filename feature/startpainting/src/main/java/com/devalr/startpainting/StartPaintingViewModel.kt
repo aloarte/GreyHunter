@@ -7,14 +7,14 @@ import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.startpainting.interactions.Action
-import com.devalr.startpainting.interactions.Action.OnAppear
-import com.devalr.startpainting.interactions.Action.OnBackPressed
-import com.devalr.startpainting.interactions.Action.OnSelectMiniature
-import com.devalr.startpainting.interactions.Action.OnStartPainting
+import com.devalr.startpainting.interactions.Action.Load
+import com.devalr.startpainting.interactions.Action.Return
+import com.devalr.startpainting.interactions.Action.SelectMiniature
+import com.devalr.startpainting.interactions.Action.StartPainting
 import com.devalr.startpainting.interactions.ErrorType
 import com.devalr.startpainting.interactions.Event
 import com.devalr.startpainting.interactions.Event.NavigateBack
-import com.devalr.startpainting.interactions.Event.NavigatePaintMiniatures
+import com.devalr.startpainting.interactions.Event.NavigateToPaintMiniatures
 import com.devalr.startpainting.interactions.State
 import com.devalr.startpainting.model.StartPaintMiniatureVo
 import com.devalr.startpainting.model.StartPaintProjectVo
@@ -29,10 +29,10 @@ class StartPaintingViewModel(
 
     override fun onAction(action: Action) {
         when (action) {
-            is OnAppear -> loadProjects()
-            OnBackPressed -> sendEvent(NavigateBack)
-            is OnSelectMiniature -> selectMiniature(miniature = action.miniature)
-            is OnStartPainting -> startPainting()
+            is Load -> loadProjects()
+            Return -> sendEvent(NavigateBack)
+            is SelectMiniature -> selectMiniature(miniature = action.miniature)
+            is StartPainting -> startPainting()
         }
     }
 
@@ -88,7 +88,7 @@ class StartPaintingViewModel(
             val miniatureBoList = selectedMiniatures.map { miniatureVo ->
                 miniatureVoMapper.transformReverse(miniatureVo)
             }
-            sendEvent(NavigatePaintMiniatures(miniatureBoList.map { it.id }))
+            sendEvent(NavigateToPaintMiniatures(miniatureBoList.map { it.id }))
 
         } else {
             updateState { copy(error = ErrorType.NoMinisToPaint) }

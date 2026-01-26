@@ -12,16 +12,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.devalr.framework.R
 import com.devalr.framework.components.button.GHIconButton
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
-fun AppTitle(onSettingsClicked: () -> Unit) {
+fun AppTitle(onNavigateToSettings: () -> Unit) {
     Box(modifier = Modifier.fillMaxWidth()){
         Row(modifier = Modifier.fillMaxWidth().align(Alignment.Center), horizontalArrangement = Arrangement.Center) {
             GHText(text = "Grey Hunter", type = TextType.Featured)
@@ -30,7 +28,7 @@ fun AppTitle(onSettingsClicked: () -> Unit) {
         GHIconButton(
             modifier = Modifier.align(Alignment.CenterEnd),
             icon = Icons.Default.Settings,
-            onButtonClicked = onSettingsClicked
+            onButtonClicked = onNavigateToSettings
         )
     }
 }

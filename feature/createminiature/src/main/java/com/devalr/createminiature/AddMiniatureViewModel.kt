@@ -5,13 +5,13 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.devalr.createminiature.interactions.Action
-import com.devalr.createminiature.interactions.Action.OnAddMiniature
-import com.devalr.createminiature.interactions.Action.OnAppear
-import com.devalr.createminiature.interactions.Action.OnImageChanged
-import com.devalr.createminiature.interactions.Action.OnNameChanged
+import com.devalr.createminiature.interactions.Action.AddMiniature
+import com.devalr.createminiature.interactions.Action.Load
+import com.devalr.createminiature.interactions.Action.ChangeImage
+import com.devalr.createminiature.interactions.Action.ChangeName
 import com.devalr.createminiature.interactions.ErrorType
 import com.devalr.createminiature.interactions.Event
-import com.devalr.createminiature.interactions.Event.OnAddedSuccessfully
+import com.devalr.createminiature.interactions.Event.NavigateBack
 import com.devalr.createminiature.interactions.State
 import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.ProjectRepository
@@ -28,14 +28,14 @@ class AddMiniatureViewModel(
     BaseViewModel<State, Action, Event>(initialState = State()) {
     override fun onAction(action: Action) {
         when (action) {
-            is OnAppear -> onLoadScreen(
+            is Load -> onLoadScreen(
                 miniatureId = action.miniatureId,
                 projectId = action.projectId
             )
 
-            is OnNameChanged -> updateState { copy(miniatureName = action.name) }
-            is OnImageChanged -> updateImage(action.imageUri)
-            is OnAddMiniature -> addEditMiniature()
+            is ChangeName -> updateState { copy(miniatureName = action.name) }
+            is ChangeImage -> updateImage(action.imageUri)
+            is AddMiniature -> addEditMiniature()
         }
     }
 
@@ -115,7 +115,7 @@ class AddMiniatureViewModel(
             if (miniatureAdded) {
                 val projectUpdated = projectRepository.updateProjectProgress(projectId = projectId, avoidLastUpdate = true)
                 updateState { copy(errorType = if (projectUpdated) null else ErrorType.ErrorUpdatingProgress) }
-                sendEvent(OnAddedSuccessfully)
+                sendEvent(NavigateBack)
 
             } else {
                 updateState { copy(errorType = ErrorType.AddDatabase) }
@@ -136,7 +136,7 @@ class AddMiniatureViewModel(
                     val projectUpdated =
                         projectRepository.updateProjectProgress(projectId = projectId)
                     updateState { copy(errorType = if (projectUpdated) null else ErrorType.ErrorUpdatingProgress) }
-                    sendEvent(OnAddedSuccessfully)
+                    sendEvent(NavigateBack)
 
                 } else {
                     updateState { copy(errorType = ErrorType.EditDatabase) }

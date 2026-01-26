@@ -5,14 +5,14 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.devalr.createproject.interactions.Action
-import com.devalr.createproject.interactions.Action.OnAddProject
-import com.devalr.createproject.interactions.Action.OnAppear
-import com.devalr.createproject.interactions.Action.OnDescriptionChanged
-import com.devalr.createproject.interactions.Action.OnImageChanged
-import com.devalr.createproject.interactions.Action.OnNameChanged
+import com.devalr.createproject.interactions.Action.AddProject
+import com.devalr.createproject.interactions.Action.Load
+import com.devalr.createproject.interactions.Action.ChangeDescription
+import com.devalr.createproject.interactions.Action.ChangeImage
+import com.devalr.createproject.interactions.Action.ChangeName
 import com.devalr.createproject.interactions.ErrorType
 import com.devalr.createproject.interactions.Event
-import com.devalr.createproject.interactions.Event.OnAddedSuccessfully
+import com.devalr.createproject.interactions.Event.NavigateBack
 import com.devalr.createproject.interactions.State
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.ProjectBo
@@ -27,11 +27,11 @@ class AddProjectViewModel(
     BaseViewModel<State, Action, Event>(initialState = State()) {
     override fun onAction(action: Action) {
         when (action) {
-            is OnAppear -> onLoadScreen(projectId = action.projectId)
-            is OnNameChanged -> updateState { copy(projectName = action.name) }
-            is OnDescriptionChanged -> updateState { copy(projectDescription = action.description) }
-            is OnImageChanged -> updateImage(action.imageUri)
-            is OnAddProject -> addEditProject()
+            is Load -> onLoadScreen(projectId = action.projectId)
+            is ChangeName -> updateState { copy(projectName = action.name) }
+            is ChangeDescription -> updateState { copy(projectDescription = action.description) }
+            is ChangeImage -> updateImage(action.imageUri)
+            is AddProject -> addEditProject()
         }
     }
 
@@ -113,7 +113,7 @@ class AddProjectViewModel(
                 )
             if (projectRepository.updateProject(updatedProject)) {
                 updateState { copy(errorType = null) }
-                sendEvent(OnAddedSuccessfully)
+                sendEvent(NavigateBack)
             } else {
                 updateState { copy(errorType = ErrorType.EditDatabase) }
             }
@@ -126,7 +126,7 @@ class AddProjectViewModel(
         val projectAdded = projectRepository.addProject(project) > 0
         if (projectAdded) {
             updateState { copy(errorType = null) }
-            sendEvent(OnAddedSuccessfully)
+            sendEvent(NavigateBack)
         } else {
             updateState { copy(errorType = ErrorType.AddDatabase) }
         }

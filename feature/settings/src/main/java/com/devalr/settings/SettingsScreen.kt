@@ -17,12 +17,12 @@ import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
 import com.devalr.settings.composables.SettingsScreenContent
-import com.devalr.settings.interactions.Action.OnAppear
-import com.devalr.settings.interactions.Action.OnBackPressed
-import com.devalr.settings.interactions.Action.OnChangeAppearance
-import com.devalr.settings.interactions.Action.OnChangeProgressColors
-import com.devalr.settings.interactions.Action.OnExportPressed
-import com.devalr.settings.interactions.Action.OnImportPressed
+import com.devalr.settings.interactions.Action.Load
+import com.devalr.settings.interactions.Action.Return
+import com.devalr.settings.interactions.Action.ChangeAppearance
+import com.devalr.settings.interactions.Action.ChangeProgressColors
+import com.devalr.settings.interactions.Action.ExportProjects
+import com.devalr.settings.interactions.Action.ImportProjects
 import com.devalr.settings.interactions.Event.LaunchSnackBar
 import com.devalr.settings.interactions.Event.NavigateBack
 import org.koin.compose.koinInject
@@ -30,7 +30,7 @@ import org.koin.compose.koinInject
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = koinInject(),
-    onBackPressed: () -> Unit
+    onNavigateBack: () -> Unit
 ) {
     val context = LocalContext.current
     val state = viewModel.uiState.collectAsState().value
@@ -40,7 +40,7 @@ fun SettingsScreen(
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                NavigateBack -> onBackPressed()
+                NavigateBack -> onNavigateBack()
                 is LaunchSnackBar -> {
                     snackBarHostState.showSnackbar(
                         SnackBarVisualsCustom(
@@ -61,10 +61,10 @@ fun SettingsScreen(
                 it,
                 Intent.FLAG_GRANT_READ_URI_PERMISSION
             )
-            viewModel.onAction(OnImportPressed(it))
+            viewModel.onAction(ImportProjects(it))
         }
     }
-    val exportLauncher = rememberLauncherForActivityResult(
+    val exportProjectsLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument("text/csv")
     ) { uri ->
         uri?.let {
@@ -72,10 +72,10 @@ fun SettingsScreen(
                 it,
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             )
-            viewModel.onAction(OnExportPressed(it))
+            viewModel.onAction(ExportProjects(it))
         }
     }
-    LaunchedEffect(true) { viewModel.onAction(OnAppear) }
+    LaunchedEffect(true) { viewModel.onAction(Load) }
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackBarHostState) { data ->
@@ -88,14 +88,14 @@ fun SettingsScreen(
             currentThemeType = state.themeType,
             progressColorType = state.progressColorConfigType,
             appVersion = state.appVersion,
-            onBackClicked = { viewModel.onAction(OnBackPressed) },
-            onThemeClicked = { viewModel.onAction(OnChangeAppearance(it)) },
-            onProgressColorClicked = { viewModel.onAction(OnChangeProgressColors(it)) },
-            onImportDataClicked = {
+            onNavigateBack = { viewModel.onAction(Return) },
+            onChangeTheme = { viewModel.onAction(ChangeAppearance(it)) },
+            onChangeProgressColor = { viewModel.onAction(ChangeProgressColors(it)) },
+            onImportProjects = {
                 importLauncher.launch(arrayOf("*/*"))
             },
-            onExportDataClicked = {
-                exportLauncher.launch("backup_projects.csv")
+            onExportProjects = {
+                exportProjectsLauncher.launch("backup_projects.csv")
             }
         )
     }

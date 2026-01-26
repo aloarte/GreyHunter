@@ -5,13 +5,13 @@ import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
-import com.devalr.home.interactions.Action.OnAddProject
-import com.devalr.home.interactions.Action.OnAppear
-import com.devalr.home.interactions.Action.OnOpenProjectDetail
-import com.devalr.home.interactions.Action.OnStartPainting
-import com.devalr.home.interactions.Action.OnUploadGamificationMessage
+import com.devalr.home.interactions.Action.AddProject
+import com.devalr.home.interactions.Action.Load
+import com.devalr.home.interactions.Action.OpenProjectDetail
+import com.devalr.home.interactions.Action.StartPainting
+import com.devalr.home.interactions.Action.UpdateGamificationMessage
 import com.devalr.home.interactions.Event
-import com.devalr.home.interactions.Event.NavigateStartPaint
+import com.devalr.home.interactions.Event.NavigateToStartPaint
 import com.devalr.home.interactions.Event.NavigateToAddProject
 import com.devalr.home.interactions.Event.NavigateToProject
 import com.devalr.home.model.GamificationMessageType.AlmostDone
@@ -19,7 +19,7 @@ import com.devalr.home.model.GamificationMessageType.EmptyProjects
 import com.devalr.home.model.GamificationMessageType.None
 import com.devalr.home.model.GamificationMessageType.ProgressRange
 import com.devalr.home.model.ProjectVo
-import com.devalr.home.model.ProjectVo.AddProject
+import com.devalr.home.model.ProjectVo.AddProjectItem
 import com.devalr.home.model.ProjectVo.ProjectItem
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -97,7 +97,7 @@ class HomeViewModelTest {
             )
 
             // WHEN
-            viewModel.onAction(OnAppear)
+            viewModel.onAction(Load)
             advanceUntilIdle()
 
             // THEN
@@ -107,7 +107,7 @@ class HomeViewModelTest {
             val expectedProjects: List<ProjectVo> = listOf(
                 ProjectItem(projects[0]),
                 ProjectItem(projects[1]),
-                AddProject
+                AddProjectItem
             )
             val state = viewModel.uiState.value
             assertTrue(state.loaded)
@@ -126,7 +126,7 @@ class HomeViewModelTest {
             coEvery { miniatureRepository.getLastUpdatedMiniatures() } returns flowOf(emptyList())
 
             // WHEN
-            viewModel.onAction(OnAppear)
+            viewModel.onAction(Load)
             advanceUntilIdle()
 
             // THEN
@@ -136,7 +136,7 @@ class HomeViewModelTest {
             val expectedProjects: List<ProjectVo> = listOf(
                 ProjectItem(projects[0]),
                 ProjectItem(projects[1]),
-                AddProject
+                AddProjectItem
             )
             val state = viewModel.uiState.value
             assertTrue(state.loaded)
@@ -163,7 +163,7 @@ class HomeViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnAppear)
+            viewModel.onAction(Load)
             advanceUntilIdle()
 
             // THEN
@@ -183,7 +183,7 @@ class HomeViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnOpenProjectDetail(projectId))
+            viewModel.onAction(OpenProjectDetail(projectId))
             advanceUntilIdle()
 
             // THEN
@@ -203,12 +203,12 @@ class HomeViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnStartPainting)
+            viewModel.onAction(StartPainting)
             advanceUntilIdle()
 
             // THEN
             assertEquals(1, events.size)
-            assertEquals(NavigateStartPaint, events.first())
+            assertEquals(NavigateToStartPaint, events.first())
             job.cancel()
         }
 
@@ -222,7 +222,7 @@ class HomeViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnAddProject)
+            viewModel.onAction(AddProject)
             advanceUntilIdle()
 
             // THEN
@@ -239,7 +239,7 @@ class HomeViewModelTest {
             val almostDoneProjects = emptyList<ProjectBo>()
 
             // WHEN
-            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            viewModel.onAction(UpdateGamificationMessage(projects = projects, almostDoneProjects))
             advanceUntilIdle()
 
             // THEN
@@ -255,7 +255,7 @@ class HomeViewModelTest {
             val almostDoneProjects = emptyList<ProjectBo>()
 
             // WHEN
-            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            viewModel.onAction(UpdateGamificationMessage(projects = projects, almostDoneProjects))
             advanceUntilIdle()
 
             // THEN
@@ -271,7 +271,7 @@ class HomeViewModelTest {
             val almostDoneProjects = emptyList<ProjectBo>()
 
             // WHEN
-            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            viewModel.onAction(UpdateGamificationMessage(projects = projects, almostDoneProjects))
             advanceUntilIdle()
 
             // THEN
@@ -287,7 +287,7 @@ class HomeViewModelTest {
             val almostDoneProjects = emptyList<ProjectBo>()
 
             // WHEN
-            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            viewModel.onAction(UpdateGamificationMessage(projects = projects, almostDoneProjects))
             advanceUntilIdle()
 
             // THEN
@@ -303,7 +303,7 @@ class HomeViewModelTest {
             val almostDoneProjects = emptyList<ProjectBo>()
 
             // WHEN
-            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            viewModel.onAction(UpdateGamificationMessage(projects = projects, almostDoneProjects))
             advanceUntilIdle()
 
             // THEN
@@ -319,7 +319,7 @@ class HomeViewModelTest {
             val almostDoneProjects = emptyList<ProjectBo>()
 
             // WHEN
-            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            viewModel.onAction(UpdateGamificationMessage(projects = projects, almostDoneProjects))
             advanceUntilIdle()
 
             // THEN
@@ -335,7 +335,7 @@ class HomeViewModelTest {
             val almostDoneProjects = emptyList<ProjectBo>()
 
             // WHEN
-            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            viewModel.onAction(UpdateGamificationMessage(projects = projects, almostDoneProjects))
             advanceUntilIdle()
 
             // THEN
@@ -351,7 +351,7 @@ class HomeViewModelTest {
             val almostDoneProjects = emptyList<ProjectBo>()
 
             // WHEN
-            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            viewModel.onAction(UpdateGamificationMessage(projects = projects, almostDoneProjects))
             advanceUntilIdle()
 
             // THEN
@@ -367,7 +367,7 @@ class HomeViewModelTest {
             val almostDoneProjects = listOf(project50.copy(progress = 1.0f))
 
             // WHEN
-            viewModel.onAction(OnUploadGamificationMessage(projects = projects, almostDoneProjects))
+            viewModel.onAction(UpdateGamificationMessage(projects = projects, almostDoneProjects))
             advanceUntilIdle()
 
             // THEN

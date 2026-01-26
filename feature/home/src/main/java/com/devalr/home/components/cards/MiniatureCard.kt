@@ -37,14 +37,14 @@ import com.devalr.framework.theme.GreyHunterTheme
 fun MiniatureCard(
     modifier: Modifier = Modifier,
     miniature: MiniatureBo,
-    onMiniatureClicked: (Long) -> Unit
+    onOpenMiniature: (Long) -> Unit
 ) {
     Card(
         modifier = modifier
             .width(getCardWidth(CardType.Home))
             .aspectRatio(1.6f),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
-        onClick = { onMiniatureClicked(miniature.id) }
+        onClick = { onOpenMiniature(miniature.id) }
     ) {
         Column(
             modifier = Modifier
@@ -98,14 +98,14 @@ private fun MiniatureCardPreviewInHorizontalRow() {
                 MiniatureCard(
                     modifier = Modifier.fillMaxSize(),
                     miniature = immortal,
-                    onMiniatureClicked = {}
+                    onOpenMiniature = {}
                 )
             }
             item {
                 MiniatureCard(
                     modifier = Modifier.fillMaxSize(),
                     miniature = deathmark,
-                    onMiniatureClicked = {}
+                    onOpenMiniature = {}
                 )
             }
         }
@@ -127,14 +127,14 @@ private fun MiniatureCardPreviewInVerticalColumn() {
                 MiniatureCard(
                     modifier = Modifier.fillMaxSize(),
                     miniature = immortal,
-                    onMiniatureClicked = {}
+                    onOpenMiniature = {}
                 )
             }
             item {
                 MiniatureCard(
                     modifier = Modifier.fillMaxSize(),
                     miniature = deathmark,
-                    onMiniatureClicked = {}
+                    onOpenMiniature = {}
                 )
             }
         }

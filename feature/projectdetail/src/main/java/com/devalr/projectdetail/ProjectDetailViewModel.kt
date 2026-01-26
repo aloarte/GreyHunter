@@ -4,10 +4,10 @@ import androidx.lifecycle.viewModelScope
 import com.devalr.domain.ProjectRepository
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.projectdetail.interactions.Action
-import com.devalr.projectdetail.interactions.Action.OnAppear
-import com.devalr.projectdetail.interactions.Action.OnBackPressed
-import com.devalr.projectdetail.interactions.Action.OnDeleteProject
-import com.devalr.projectdetail.interactions.Action.OnNavigateToEditProject
+import com.devalr.projectdetail.interactions.Action.Load
+import com.devalr.projectdetail.interactions.Action.Return
+import com.devalr.projectdetail.interactions.Action.DeleteProject
+import com.devalr.projectdetail.interactions.Action.EditProject
 import com.devalr.projectdetail.interactions.Event
 import com.devalr.projectdetail.interactions.Event.NavigateBack
 import com.devalr.projectdetail.interactions.Event.NavigateToEditProject
@@ -21,10 +21,10 @@ class ProjectDetailViewModel(
 
     override fun onAction(action: Action) {
         when (action) {
-            is OnAppear -> loadProject(action.projectId)
-            OnBackPressed -> sendEvent(NavigateBack)
-            is OnNavigateToEditProject -> sendEvent(NavigateToEditProject(action.projectId))
-            is OnDeleteProject -> deleteProject(action.projectId)
+            is Load -> loadProject(action.projectId)
+            Return -> sendEvent(NavigateBack)
+            is EditProject -> sendEvent(NavigateToEditProject(action.projectId))
+            is DeleteProject -> deleteProject(action.projectId)
         }
     }
 

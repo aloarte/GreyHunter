@@ -4,9 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.devalr.domain.MiniatureRepository
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.painting.interactions.Action
-import com.devalr.painting.interactions.Action.OnAppear
-import com.devalr.painting.interactions.Action.OnBackPressed
-import com.devalr.painting.interactions.Action.OnDonePainting
+import com.devalr.painting.interactions.Action.FinishPainting
+import com.devalr.painting.interactions.Action.Load
+import com.devalr.painting.interactions.Action.Return
 import com.devalr.painting.interactions.ErrorType
 import com.devalr.painting.interactions.Event
 import com.devalr.painting.interactions.Event.NavigateBack
@@ -20,9 +20,9 @@ class PaintingViewModel(val minisRepository: MiniatureRepository) :
 
     override fun onAction(action: Action) {
         when (action) {
-            is OnAppear -> fetchMiniatures(action.minisIds)
-            OnBackPressed -> sendEvent(NavigateBack)
-            is OnDonePainting -> sendEvent(NavigateToUpdateMiniatures(action.miniatureIds))
+            is Load -> fetchMiniatures(action.minisIds)
+            Return -> sendEvent(NavigateBack)
+            is FinishPainting -> sendEvent(NavigateToUpdateMiniatures(action.miniatureIds))
         }
     }
 

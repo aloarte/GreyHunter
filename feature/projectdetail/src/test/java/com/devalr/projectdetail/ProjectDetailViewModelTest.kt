@@ -2,11 +2,10 @@ package com.devalr.projectdetail
 
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.ProjectBo
-import com.devalr.projectdetail.interactions.Action
-import com.devalr.projectdetail.interactions.Action.OnAppear
-import com.devalr.projectdetail.interactions.Action.OnBackPressed
-import com.devalr.projectdetail.interactions.Action.OnDeleteProject
-import com.devalr.projectdetail.interactions.Action.OnNavigateToEditProject
+import com.devalr.projectdetail.interactions.Action.Load
+import com.devalr.projectdetail.interactions.Action.Return
+import com.devalr.projectdetail.interactions.Action.DeleteProject
+import com.devalr.projectdetail.interactions.Action.EditProject
 import com.devalr.projectdetail.interactions.Event
 import com.devalr.projectdetail.interactions.Event.NavigateBack
 import com.devalr.projectdetail.interactions.Event.NavigateToEditProject
@@ -65,7 +64,7 @@ class ProjectDetailViewModelTest {
             coEvery { repository.getProject(projectId) } returns flowOf(project)
 
             // WHEN
-            viewModel.onAction(OnAppear(projectId))
+            viewModel.onAction(Load(projectId))
             advanceUntilIdle()
 
             // THEN
@@ -85,7 +84,7 @@ class ProjectDetailViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnAppear(projectId))
+            viewModel.onAction(Load(projectId))
             advanceUntilIdle()
 
             // THEN
@@ -95,7 +94,7 @@ class ProjectDetailViewModelTest {
 
 
     @Test
-    fun `WHEN OnBackPressed is triggered THEN NavigateBack event is raised`() =
+    fun `WHEN Return is triggered THEN NavigateBack event is raised`() =
         runTest {
             // GIVEN
             val events = mutableListOf<Event>()
@@ -104,7 +103,7 @@ class ProjectDetailViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnBackPressed)
+            viewModel.onAction(Return)
             advanceUntilIdle()
 
             // THEN
@@ -123,7 +122,7 @@ class ProjectDetailViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnNavigateToEditProject(projectId = projectId))
+            viewModel.onAction(EditProject(projectId = projectId))
             advanceUntilIdle()
 
             // THEN
@@ -143,7 +142,7 @@ class ProjectDetailViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnDeleteProject(projectId = projectId))
+            viewModel.onAction(DeleteProject(projectId = projectId))
             advanceUntilIdle()
 
             // THEN
@@ -164,7 +163,7 @@ class ProjectDetailViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnDeleteProject(projectId = projectId))
+            viewModel.onAction(DeleteProject(projectId = projectId))
             advanceUntilIdle()
 
             // THEN

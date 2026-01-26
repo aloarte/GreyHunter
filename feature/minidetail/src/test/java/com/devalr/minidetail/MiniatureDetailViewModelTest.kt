@@ -6,15 +6,14 @@ import com.devalr.domain.enum.MilestoneType
 import com.devalr.domain.model.MiniCompletionBo
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
-import com.devalr.minidetail.interactions.Action.OnAppear
-import com.devalr.minidetail.interactions.Action.OnBackPressed
-import com.devalr.minidetail.interactions.Action.OnDeleteMiniature
-import com.devalr.minidetail.interactions.Action.OnMilestone
-import com.devalr.minidetail.interactions.Action.OnNavigateToEditMiniature
+import com.devalr.minidetail.interactions.Action
+import com.devalr.minidetail.interactions.Action.Load
+import com.devalr.minidetail.interactions.Action.Return
+import com.devalr.minidetail.interactions.Action.DeleteMiniature
+import com.devalr.minidetail.interactions.Action.UpdateMilestone
 import com.devalr.minidetail.interactions.ErrorType
 import com.devalr.minidetail.interactions.Event
 import com.devalr.minidetail.interactions.Event.NavigateBack
-import com.devalr.minidetail.interactions.Event.NavigateToEditMiniature
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -72,7 +71,7 @@ class MiniatureDetailViewModelTest {
             advanceUntilIdle()
 
             // WHEN
-            viewModel.onAction(OnAppear(miniId))
+            viewModel.onAction(Load(miniId))
             advanceUntilIdle()
 
             // THEN
@@ -96,7 +95,7 @@ class MiniatureDetailViewModelTest {
             advanceUntilIdle()
 
             // WHEN
-            viewModel.onAction(OnAppear(miniId))
+            viewModel.onAction(Load(miniId))
             advanceUntilIdle()
 
             // THEN
@@ -117,7 +116,7 @@ class MiniatureDetailViewModelTest {
             advanceUntilIdle()
 
             // WHEN
-            viewModel.onAction(OnAppear(miniId))
+            viewModel.onAction(Load(miniId))
             advanceUntilIdle()
 
             // THEN
@@ -140,11 +139,11 @@ class MiniatureDetailViewModelTest {
                 )
             )
             coEvery { projectRepository.getProject(projectId) } returns flowOf(project)
-            viewModel.onAction(OnAppear(miniId))
+            viewModel.onAction(Load(miniId))
             advanceUntilIdle()
 
             // WHEN
-            viewModel.onAction(OnMilestone(MilestoneType.Assembled, enable = true))
+            viewModel.onAction(UpdateMilestone(MilestoneType.Assembled, enable = true))
             advanceUntilIdle()
 
             // THEN
@@ -166,11 +165,11 @@ class MiniatureDetailViewModelTest {
                 )
             )
             coEvery { projectRepository.getProject(projectId) } returns flowOf(project)
-            viewModel.onAction(OnAppear(miniId))
+            viewModel.onAction(Load(miniId))
             advanceUntilIdle()
 
             // WHEN
-            viewModel.onAction(OnMilestone(MilestoneType.Primed, enable = true))
+            viewModel.onAction(UpdateMilestone(MilestoneType.Primed, enable = true))
             advanceUntilIdle()
 
             // THEN
@@ -184,7 +183,7 @@ class MiniatureDetailViewModelTest {
     fun `GIVEN a not loaded miniature WHEN OnMilestone is triggered THEN error state`() =
         runTest {
             // GIVEN & WHEN
-            viewModel.onAction(OnMilestone(MilestoneType.Primed, enable = true))
+            viewModel.onAction(UpdateMilestone(MilestoneType.Primed, enable = true))
             advanceUntilIdle()
 
             // THEN
@@ -193,7 +192,7 @@ class MiniatureDetailViewModelTest {
         }
 
     @Test
-    fun `WHEN OnBackPressed is triggered THEN NavigateBack event is raised`() =
+    fun `WHEN Return is triggered THEN NavigateBack event is raised`() =
         runTest {
             // GIVEN
             val events = mutableListOf<Event>()
@@ -202,7 +201,7 @@ class MiniatureDetailViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnBackPressed)
+            viewModel.onAction(Return)
             advanceUntilIdle()
 
             // THEN
@@ -222,7 +221,7 @@ class MiniatureDetailViewModelTest {
 
             // WHEN
             viewModel.onAction(
-                OnNavigateToEditMiniature(
+                Action.EditMiniature(
                     miniatureId = miniId,
                     projectId = projectId
                 )
@@ -232,7 +231,7 @@ class MiniatureDetailViewModelTest {
             // THEN
             assertEquals(1, events.size)
             assertEquals(
-                NavigateToEditMiniature(miniatureId = miniId, projectId = projectId),
+                Event.NavigateToEditMiniature(miniatureId = miniId, projectId = projectId),
                 events.first()
             )
             job.cancel()
@@ -249,7 +248,7 @@ class MiniatureDetailViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnDeleteMiniature(miniatureId = miniId))
+            viewModel.onAction(DeleteMiniature(miniatureId = miniId))
             advanceUntilIdle()
 
             // THEN
@@ -270,7 +269,7 @@ class MiniatureDetailViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnDeleteMiniature(miniatureId = miniId))
+            viewModel.onAction(DeleteMiniature(miniatureId = miniId))
             advanceUntilIdle()
 
             // THEN

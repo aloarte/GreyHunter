@@ -23,7 +23,7 @@ fun RadioSelectorBottomSheetContent(
     label: String,
     selectedIndex: Int,
     optionList: List<String>,
-    onOptionClicked: (Int) -> Unit
+    onOptionSelected: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -42,7 +42,7 @@ fun RadioSelectorBottomSheetContent(
                 ) {
                     RadioButton(
                         selected = index == selectedIndex,
-                        onClick = { onOptionClicked(index) }
+                        onClick = { onOptionSelected(index) }
                     )
                     GHText(text = option, type = TextType.Description)
                 }
@@ -64,7 +64,7 @@ private fun RadioSelectorBottomSheetContentPreviewDarkTheme() {
                 label = "Theme",
                 optionList = listOf("Dark", "Light", "System"),
                 selectedIndex = 1,
-                onOptionClicked = {
+                onOptionSelected = {
                     // Do nothing
                 }
             )
@@ -85,7 +85,7 @@ private fun RadioSelectorBottomSheetContentPreviewLightTheme() {
                 label = "Theme",
                 optionList = listOf("Dark", "Light", "System"),
                 selectedIndex = 2,
-                onOptionClicked = {
+                onOptionSelected = {
                     // Do nothing
                 }
             )

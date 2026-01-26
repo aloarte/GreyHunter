@@ -14,12 +14,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.devalr.createproject.interactions.Action.OnAddProject
-import com.devalr.createproject.interactions.Action.OnAppear
-import com.devalr.createproject.interactions.Action.OnDescriptionChanged
-import com.devalr.createproject.interactions.Action.OnImageChanged
-import com.devalr.createproject.interactions.Action.OnNameChanged
-import com.devalr.createproject.interactions.Event.OnAddedSuccessfully
+import com.devalr.createproject.interactions.Action.AddProject
+import com.devalr.createproject.interactions.Action.Load
+import com.devalr.createproject.interactions.Action.ChangeDescription
+import com.devalr.createproject.interactions.Action.ChangeImage
+import com.devalr.createproject.interactions.Action.ChangeName
+import com.devalr.createproject.interactions.Event.NavigateBack
 import com.devalr.framework.components.button.GHButton
 import com.devalr.framework.components.gh.GHImage
 import com.devalr.framework.components.add.AddItemDescription
@@ -31,23 +31,23 @@ import org.koin.compose.koinInject
 fun AddProjectScreen(
     viewModel: AddProjectViewModel = koinInject(),
     projectId:Long?,
-    onBackPressed: () -> Unit) {
+    onBack: () -> Unit) {
     var showImagePicker by remember { mutableStateOf(false) }
     val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                OnAddedSuccessfully -> onBackPressed()
+                NavigateBack -> onBack()
             }
         }
     }
-    LaunchedEffect(true) { viewModel.onAction(OnAppear(projectId)) }
+    LaunchedEffect(true) { viewModel.onAction(Load(projectId)) }
 
     if (showImagePicker) {
         ImagePickerHandler(
             show = true,
             onImageChanged = { uri ->
-                viewModel.onAction(OnImageChanged(uri))
+                viewModel.onAction(ChangeImage(uri))
                 showImagePicker = false
             },
             onDismiss = {
@@ -71,16 +71,16 @@ fun AddProjectScreen(
                 name = state.projectName,
                 label = stringResource(R.string.label_project_name)
             ) {
-                viewModel.onAction(OnNameChanged(it))
+                viewModel.onAction(ChangeName(it))
             }
             AddItemDescription(
                 description = state.projectDescription,
                 label = stringResource(R.string.label_project_description)
             ) {
-                viewModel.onAction(OnDescriptionChanged(it))
+                viewModel.onAction(ChangeDescription(it))
             }
             GHButton(text = if(state.editMode) stringResource(R.string.button_edit_project) else stringResource(R.string.button_add_project)) {
-                viewModel.onAction(OnAddProject)
+                viewModel.onAction(AddProject)
             }
         }
     }

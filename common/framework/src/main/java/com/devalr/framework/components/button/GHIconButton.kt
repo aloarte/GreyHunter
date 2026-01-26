@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -70,7 +70,7 @@ private fun GHIconButtonPreviewDarkTheme() {
         ) {
             GHIconButton(
                 modifier = Modifier.align(Alignment.Center),
-                icon = Icons.Default.ArrowBack,
+                icon = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
                 onButtonClicked = {
                     // Do nothing
                 }
@@ -111,7 +111,7 @@ private fun GHIconButtonPreviewDisabledDarkTheme() {
             GHIconButton(
                 enabled = false,
                 modifier = Modifier.align(Alignment.Center),
-                icon = Icons.Default.ArrowBack,
+                icon = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
                 onButtonClicked = {
                     // Do nothing
                 }

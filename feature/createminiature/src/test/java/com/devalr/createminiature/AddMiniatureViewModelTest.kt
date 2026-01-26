@@ -4,12 +4,12 @@ import android.app.Application
 import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
-import com.devalr.createminiature.interactions.Action.OnAddMiniature
-import com.devalr.createminiature.interactions.Action.OnAppear
-import com.devalr.createminiature.interactions.Action.OnImageChanged
-import com.devalr.createminiature.interactions.Action.OnNameChanged
+import com.devalr.createminiature.interactions.Action.AddMiniature
+import com.devalr.createminiature.interactions.Action.Load
+import com.devalr.createminiature.interactions.Action.ChangeImage
+import com.devalr.createminiature.interactions.Action.ChangeName
 import com.devalr.createminiature.interactions.ErrorType
-import com.devalr.createminiature.interactions.Event.OnAddedSuccessfully
+import com.devalr.createminiature.interactions.Event.NavigateBack
 import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.MiniatureBo
@@ -87,7 +87,7 @@ class AddMiniatureViewModelTest {
     fun `GIVEN a projectId and empty miniId WHEN OnAppear is triggered THEN state updates with projectId`() =
         runTest {
             // GIVEN & WHEN
-            viewModel.onAction(OnAppear(projectId = PROJECT_ID))
+            viewModel.onAction(Load(projectId = PROJECT_ID))
             advanceUntilIdle()
 
             // THEN
@@ -104,7 +104,7 @@ class AddMiniatureViewModelTest {
             coEvery { miniatureRepository.getMiniature(MINI_ID) } returns flow { emit(existentMini) }
 
             // WHEN
-            viewModel.onAction(OnAppear(projectId = PROJECT_ID, miniatureId = MINI_ID))
+            viewModel.onAction(Load(projectId = PROJECT_ID, miniatureId = MINI_ID))
             advanceUntilIdle()
 
             // THEN
@@ -120,7 +120,7 @@ class AddMiniatureViewModelTest {
     @Test
     fun `GIVEN user inputs name WHEN OnNameChanged is triggered THEN state updates with miniature name`() =
         runTest {
-            viewModel.onAction(OnNameChanged(MINI_NAME))
+            viewModel.onAction(ChangeName(MINI_NAME))
 
             val state = viewModel.uiState.value
             assertEquals(MINI_NAME, state.miniatureName)
@@ -130,10 +130,10 @@ class AddMiniatureViewModelTest {
     fun `GIVEN missing project ID WHEN OnAddMiniature is triggered THEN EmptyTitle error is set`() =
         runTest {
             // GIVEN
-            viewModel.onAction(OnNameChanged(MINI_NAME))
+            viewModel.onAction(ChangeName(MINI_NAME))
 
             // WHEN
-            viewModel.onAction(OnAddMiniature)
+            viewModel.onAction(AddMiniature)
 
             // THEN
             val state = viewModel.uiState.value
@@ -145,11 +145,11 @@ class AddMiniatureViewModelTest {
     fun `GIVEN empty name WHEN OnAddMiniature is triggered THEN EmptyTitle error is set`() =
         runTest {
             // GIVEN
-            viewModel.onAction(OnAppear(projectId = PROJECT_ID))
-            viewModel.onAction(OnNameChanged(""))
+            viewModel.onAction(Load(projectId = PROJECT_ID))
+            viewModel.onAction(ChangeName(""))
 
             // WHEN
-            viewModel.onAction(OnAddMiniature)
+            viewModel.onAction(AddMiniature)
 
             // THEN
             val state = viewModel.uiState.value
@@ -161,12 +161,12 @@ class AddMiniatureViewModelTest {
     fun `GIVEN database error WHEN OnAddMiniature is triggered THEN AddDatabase error is set`() =
         runTest {
             // GIVEN
-            viewModel.onAction(OnAppear(projectId = PROJECT_ID))
-            viewModel.onAction(OnNameChanged(MINI_NAME))
+            viewModel.onAction(Load(projectId = PROJECT_ID))
+            viewModel.onAction(ChangeName(MINI_NAME))
             coEvery { miniatureRepository.addMiniature(any()) } returns 0L
 
             // WHEN
-            viewModel.onAction(OnAddMiniature)
+            viewModel.onAction(AddMiniature)
             advanceUntilIdle()
 
             // THEN
@@ -178,13 +178,13 @@ class AddMiniatureViewModelTest {
     fun `GIVEN successful add but failed progress update WHEN OnAddMiniature is triggered THEN ErrorUpdatingProgress is set`() =
         runTest {
             // GIVEN
-            viewModel.onAction(OnAppear(projectId = PROJECT_ID))
-            viewModel.onAction(OnNameChanged(MINI_NAME))
+            viewModel.onAction(Load(projectId = PROJECT_ID))
+            viewModel.onAction(ChangeName(MINI_NAME))
             coEvery { miniatureRepository.addMiniature(any()) } returns 1L
             coEvery { projectRepository.updateProjectProgress(any(), any()) } returns false
 
             // WHEN
-            viewModel.onAction(OnAddMiniature)
+            viewModel.onAction(AddMiniature)
             advanceUntilIdle()
 
             // THEN
@@ -199,8 +199,8 @@ class AddMiniatureViewModelTest {
     fun `GIVEN successful add and progress update WHEN OnAddMiniature is triggered THEN success event is sent`() =
         runTest {
             // GIVEN
-            viewModel.onAction(OnAppear(projectId = PROJECT_ID))
-            viewModel.onAction(OnNameChanged(MINI_NAME))
+            viewModel.onAction(Load(projectId = PROJECT_ID))
+            viewModel.onAction(ChangeName(MINI_NAME))
             coEvery { miniatureRepository.addMiniature(any()) } returns 10L
             coEvery { projectRepository.updateProjectProgress(PROJECT_ID, any()) } returns true
             val events = mutableListOf<com.devalr.createminiature.interactions.Event>()
@@ -209,7 +209,7 @@ class AddMiniatureViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnAddMiniature)
+            viewModel.onAction(AddMiniature)
             advanceUntilIdle()
 
             // THEN
@@ -218,7 +218,7 @@ class AddMiniatureViewModelTest {
             coVerify(exactly = 1) { projectRepository.updateProjectProgress(PROJECT_ID, any()) }
             assertNull(viewModel.uiState.value.errorType)
             assertEquals(1, events.size)
-            assertTrue(events.contains(OnAddedSuccessfully))
+            assertTrue(events.contains(NavigateBack))
             job.cancel()
         }
 
@@ -229,12 +229,12 @@ class AddMiniatureViewModelTest {
             coEvery { miniatureRepository.getMiniature(MINI_ID) } returns flow { emit(existentMini) }
             coEvery { miniatureRepository.updateMiniature(any()) } returns true
             coEvery { projectRepository.updateProjectProgress(any()) } returns false
-            viewModel.onAction(OnAppear(projectId = PROJECT_ID, miniatureId = MINI_ID))
-            viewModel.onAction(OnNameChanged(NEW_MINI_NAME))
+            viewModel.onAction(Load(projectId = PROJECT_ID, miniatureId = MINI_ID))
+            viewModel.onAction(ChangeName(NEW_MINI_NAME))
             advanceUntilIdle()
 
             // WHEN
-            viewModel.onAction(OnAddMiniature)
+            viewModel.onAction(AddMiniature)
             advanceUntilIdle()
 
             // THEN
@@ -252,9 +252,9 @@ class AddMiniatureViewModelTest {
             coEvery { miniatureRepository.getMiniature(MINI_ID) } returns flow { emit(existentMini) }
             coEvery { miniatureRepository.updateMiniature(any()) } returns true
             coEvery { projectRepository.updateProjectProgress(PROJECT_ID) } returns true
-            viewModel.onAction(OnAppear(projectId = PROJECT_ID, miniatureId = MINI_ID))
-            viewModel.onAction(OnNameChanged(NEW_MINI_NAME))
-            viewModel.onAction(OnNameChanged(NEW_MINI_IMAGE))
+            viewModel.onAction(Load(projectId = PROJECT_ID, miniatureId = MINI_ID))
+            viewModel.onAction(ChangeName(NEW_MINI_NAME))
+            viewModel.onAction(ChangeName(NEW_MINI_IMAGE))
 
             advanceUntilIdle()
             val events = mutableListOf<com.devalr.createminiature.interactions.Event>()
@@ -263,7 +263,7 @@ class AddMiniatureViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnAddMiniature)
+            viewModel.onAction(AddMiniature)
             advanceUntilIdle()
 
             // THEN
@@ -273,7 +273,7 @@ class AddMiniatureViewModelTest {
             coVerify(exactly = 1) { projectRepository.updateProjectProgress(PROJECT_ID) }
             assertNull(viewModel.uiState.value.errorType)
             assertEquals(1, events.size)
-            assertTrue(events.contains(OnAddedSuccessfully))
+            assertTrue(events.contains(NavigateBack))
             job.cancel()
         }
 
@@ -287,7 +287,7 @@ class AddMiniatureViewModelTest {
             every { Uri.parse(galleryUriString) } returns galleryUri
             every { galleryUri.toString() } returns galleryUriString
             // WHEN
-            viewModel.onAction(OnImageChanged(galleryUri))
+            viewModel.onAction(ChangeImage(galleryUri))
 
             // THEN
             verify(exactly = 1) {
@@ -311,7 +311,7 @@ class AddMiniatureViewModelTest {
             every { cameraUri.toString() } returns cameraUriString
 
             // WHEN
-            viewModel.onAction(OnImageChanged(cameraUri))
+            viewModel.onAction(ChangeImage(cameraUri))
 
             // THEN
             verify(exactly = 0) {

@@ -7,30 +7,29 @@ import androidx.compose.runtime.collectAsState
 import com.devalr.framework.components.anim.LoadingIndicator
 import com.devalr.startpainting.components.StartPaintingScreenContent
 import com.devalr.startpainting.interactions.Action
-import com.devalr.startpainting.interactions.Action.OnSelectMiniature
-import com.devalr.startpainting.interactions.Action.OnStartPainting
+import com.devalr.startpainting.interactions.Action.SelectMiniature
+import com.devalr.startpainting.interactions.Action.StartPainting
 import com.devalr.startpainting.interactions.Event.NavigateBack
-import com.devalr.startpainting.interactions.Event.NavigatePaintMiniatures
+import com.devalr.startpainting.interactions.Event.NavigateToPaintMiniatures
 import org.koin.compose.koinInject
 
 @Composable
 fun StartPaintingScreen(
     viewModel: StartPaintingViewModel = koinInject(),
-    onNavigateToPaintMinis:(List<Long>)->Unit,
-    onBackPressed: () -> Unit
-
+    onNavigateToPaintMinis: (List<Long>) -> Unit,
+    onNavigateBack: () -> Unit
 ) {
     val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                NavigateBack -> onBackPressed()
-                is NavigatePaintMiniatures -> onNavigateToPaintMinis(event.miniatures)
+                NavigateBack -> onNavigateBack()
+                is NavigateToPaintMiniatures -> onNavigateToPaintMinis(event.miniatures)
             }
 
         }
     }
-    LaunchedEffect(true) { viewModel.onAction(Action.OnAppear) }
+    LaunchedEffect(true) { viewModel.onAction(Action.Load) }
 
     Scaffold(
         topBar = { }
@@ -41,12 +40,12 @@ fun StartPaintingScreen(
                     innerPadding = innerPadding,
                     projectList = state.projectList,
                     buttonEnabled = state.paintButtonEnabled,
-                    onBackPressed = onBackPressed,
+                    onNavigateBack = onNavigateBack,
                     onStartPainting = {
-                        viewModel.onAction(OnStartPainting)
+                        viewModel.onAction(StartPainting)
                     },
-                    onMiniatureSelected = { miniature ->
-                        viewModel.onAction(OnSelectMiniature(miniature))
+                    onSelectMiniature = { miniature ->
+                        viewModel.onAction(SelectMiniature(miniature))
                     }
                 )
 

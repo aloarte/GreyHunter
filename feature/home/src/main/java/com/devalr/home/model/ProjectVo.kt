@@ -10,7 +10,7 @@ sealed interface ProjectVo {
         override fun hasMinis(): Boolean = project.minis.isNotEmpty()
     }
 
-    data object AddProject : ProjectVo {
+    data object AddProjectItem : ProjectVo {
         override fun hasMinis(): Boolean = false
     }
 }

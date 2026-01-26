@@ -19,11 +19,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.devalr.createminiature.interactions.Action.OnAddMiniature
-import com.devalr.createminiature.interactions.Action.OnAppear
-import com.devalr.createminiature.interactions.Action.OnImageChanged
-import com.devalr.createminiature.interactions.Action.OnNameChanged
-import com.devalr.createminiature.interactions.Event.OnAddedSuccessfully
+import com.devalr.createminiature.interactions.Action.AddMiniature
+import com.devalr.createminiature.interactions.Action.Load
+import com.devalr.createminiature.interactions.Action.ChangeImage
+import com.devalr.createminiature.interactions.Action.ChangeName
+import com.devalr.createminiature.interactions.Event.NavigateBack
 import com.devalr.framework.components.button.GHButton
 import com.devalr.framework.components.gh.GHImage
 import com.devalr.framework.components.add.AddItemName
@@ -35,20 +35,20 @@ fun AddMiniatureScreen(
     viewModel: AddMiniatureViewModel = koinInject(),
     projectId: Long,
     miniatureId: Long?,
-    onBackPressed: () -> Unit
+    onBack: () -> Unit
 ) {
     var showImagePicker by remember { mutableStateOf(false) }
     val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                OnAddedSuccessfully -> onBackPressed()
+                NavigateBack -> onBack()
             }
         }
     }
     LaunchedEffect(true) {
         viewModel.onAction(
-            OnAppear(
+            Load(
                 projectId = projectId,
                 miniatureId = miniatureId
             )
@@ -58,7 +58,7 @@ fun AddMiniatureScreen(
         ImagePickerHandler(
             show = true,
             onImageChanged = { uri ->
-                viewModel.onAction(OnImageChanged(uri))
+                viewModel.onAction(ChangeImage(uri))
                 showImagePicker = false
             },
             onDismiss = {
@@ -84,7 +84,7 @@ fun AddMiniatureScreen(
                 name = state.miniatureName,
                 label = stringResource(R.string.label_miniature_name)
             ) {
-                viewModel.onAction(OnNameChanged(it))
+                viewModel.onAction(ChangeName(it))
             }
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -92,7 +92,7 @@ fun AddMiniatureScreen(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(if (state.editMode) R.string.button_edit_miniature else R.string.button_add_miniature)
             ) {
-                viewModel.onAction(OnAddMiniature)
+                viewModel.onAction(AddMiniature)
             }
         }
     }

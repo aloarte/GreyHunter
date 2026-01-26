@@ -9,11 +9,11 @@ import com.devalr.domain.extension.recalculateProgress
 import com.devalr.domain.extension.toggle
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.minidetail.interactions.Action
-import com.devalr.minidetail.interactions.Action.OnAppear
-import com.devalr.minidetail.interactions.Action.OnBackPressed
-import com.devalr.minidetail.interactions.Action.OnDeleteMiniature
-import com.devalr.minidetail.interactions.Action.OnMilestone
-import com.devalr.minidetail.interactions.Action.OnNavigateToEditMiniature
+import com.devalr.minidetail.interactions.Action.DeleteMiniature
+import com.devalr.minidetail.interactions.Action.EditMiniature
+import com.devalr.minidetail.interactions.Action.Load
+import com.devalr.minidetail.interactions.Action.Return
+import com.devalr.minidetail.interactions.Action.UpdateMilestone
 import com.devalr.minidetail.interactions.ErrorType
 import com.devalr.minidetail.interactions.Event
 import com.devalr.minidetail.interactions.Event.NavigateBack
@@ -33,17 +33,17 @@ class MiniatureDetailViewModel(
 
     override fun onAction(action: Action) {
         when (action) {
-            is OnAppear -> loadMiniature(action.miniatureId)
-            is OnMilestone -> updateMiniatureMilestone(action.type, action.enable)
-            OnBackPressed -> sendEvent(NavigateBack)
-            is OnNavigateToEditMiniature -> sendEvent(
+            is Load -> loadMiniature(action.miniatureId)
+            is UpdateMilestone -> updateMiniatureMilestone(action.type, action.enable)
+            is DeleteMiniature -> deleteMiniature(action.miniatureId)
+            is EditMiniature -> sendEvent(
                 NavigateToEditMiniature(
                     miniatureId = action.miniatureId,
                     projectId = action.projectId
                 )
             )
 
-            is OnDeleteMiniature -> deleteMiniature(action.miniatureId)
+            Return -> sendEvent(NavigateBack)
         }
     }
 

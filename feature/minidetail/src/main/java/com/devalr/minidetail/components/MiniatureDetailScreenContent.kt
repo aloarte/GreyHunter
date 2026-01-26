@@ -34,10 +34,10 @@ fun MiniatureDetailScreenContent(
     innerPadding: PaddingValues = PaddingValues(0.dp),
     onlyUpdate: Boolean,
     miniature: MiniatureBo,
-    onBackPressed: () -> Unit,
-    onEditPressed: () -> Unit,
-    onDeletePressed: () -> Unit,
-    onMilestone: (MilestoneType, Boolean) -> Unit
+    onNavigateBack: () -> Unit,
+    onEdit: () -> Unit,
+    onDelete: () -> Unit,
+    onUpdateMilestone: (MilestoneType, Boolean) -> Unit
 ) {
     val saveAndContinueLabel = stringResource(R.string.label_save_continue)
     Box(
@@ -62,9 +62,9 @@ fun MiniatureDetailScreenContent(
                     .fillMaxWidth()
                     .align(Alignment.TopCenter)
                     .padding(16.dp),
-                onBackPressed = onBackPressed,
-                onEditPressed = onEditPressed,
-                onDeletePressed = onDeletePressed
+                onNavigateBack = onNavigateBack,
+                onEdit = onEdit,
+                onDelete = onDelete
             )
         }
 
@@ -100,13 +100,13 @@ fun MiniatureDetailScreenContent(
                                     base = 0.1f
                                 )
                             ) { type, enabled ->
-                                onMilestone(type, enabled)
+                                onUpdateMilestone(type, enabled)
                             }
                         }
                         if (onlyUpdate) {
                             item {
                                 GHButton(text = saveAndContinueLabel) {
-                                    onBackPressed()
+                                    onNavigateBack()
                                 }
                             }
                         }
@@ -125,16 +125,16 @@ private fun MiniatureDetailScreenContentPreviewDarkMode() {
         MiniatureDetailScreenContent(
             miniature = chronomancer,
             onlyUpdate = false,
-            onBackPressed = {
+            onNavigateBack = {
                 // Do nothing
             },
-            onMilestone = { _, _ ->
+            onUpdateMilestone = { _, _ ->
                 // Do nothing
             },
-            onEditPressed = {
+            onEdit = {
                 // Do nothing
             },
-            onDeletePressed = {
+            onDelete = {
                 // Do nothing
             }
         )
@@ -148,16 +148,16 @@ private fun MiniatureDetailScreenContentPreviewLightMode() {
         MiniatureDetailScreenContent(
             miniature = chronomancer,
             onlyUpdate = false,
-            onBackPressed = {
+            onNavigateBack = {
                 // Do nothing
             },
-            onMilestone = { _, _ ->
+            onUpdateMilestone = { _, _ ->
                 // Do nothing
             },
-            onEditPressed = {
+            onEdit = {
                 // Do nothing
             },
-            onDeletePressed = {
+            onDelete = {
                 // Do nothing
             }
         )
@@ -172,16 +172,16 @@ private fun MiniatureDetailScreenContentPreviewOnlyUpdateLightMode() {
         MiniatureDetailScreenContent(
             miniature = chronomancer,
             onlyUpdate = true,
-            onBackPressed = {
+            onNavigateBack = {
                 // Do nothing
             },
-            onMilestone = { _, _ ->
+            onUpdateMilestone = { _, _ ->
                 // Do nothing
             },
-            onEditPressed = {
+            onEdit = {
                 // Do nothing
             },
-            onDeletePressed = {
+            onDelete = {
                 // Do nothing
             }
         )
@@ -195,16 +195,16 @@ private fun MiniatureDetailScreenContentPreviewOnlyUpdateDarkMode() {
         MiniatureDetailScreenContent(
             miniature = chronomancer,
             onlyUpdate = true,
-            onBackPressed = {
+            onNavigateBack = {
                 // Do nothing
             },
-            onMilestone = { _, _ ->
+            onUpdateMilestone = { _, _ ->
                 // Do nothing
             },
-            onEditPressed = {
+            onEdit = {
                 // Do nothing
             },
-            onDeletePressed = {
+            onDelete = {
                 // Do nothing
             }
         )

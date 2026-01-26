@@ -15,13 +15,13 @@ import androidx.compose.ui.res.painterResource
 import com.devalr.framework.components.anim.LoadingIndicator
 import com.devalr.home.components.HomeScreenContent
 import com.devalr.home.components.screen.AppTitle
-import com.devalr.home.interactions.Action.OnAddProject
-import com.devalr.home.interactions.Action.OnAppear
-import com.devalr.home.interactions.Action.OnOpenMiniatureDetail
-import com.devalr.home.interactions.Action.OnOpenProjectDetail
-import com.devalr.home.interactions.Action.OnOpenSettings
-import com.devalr.home.interactions.Action.OnStartPainting
-import com.devalr.home.interactions.Event.NavigateStartPaint
+import com.devalr.home.interactions.Action.AddProject
+import com.devalr.home.interactions.Action.Load
+import com.devalr.home.interactions.Action.OpenMiniatureDetail
+import com.devalr.home.interactions.Action.OpenProjectDetail
+import com.devalr.home.interactions.Action.OpenSettings
+import com.devalr.home.interactions.Action.StartPainting
+import com.devalr.home.interactions.Event.NavigateToStartPaint
 import com.devalr.home.interactions.Event.NavigateToAddProject
 import com.devalr.home.interactions.Event.NavigateToMiniature
 import com.devalr.home.interactions.Event.NavigateToProject
@@ -36,13 +36,12 @@ fun HomeScreen(
     onNavigateToAddProject: () -> Unit,
     onNavigateToStartPainting: () -> Unit,
     onNavigateToSettings: () -> Unit
-
 ) {
     val state = viewModel.uiState.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                NavigateStartPaint -> onNavigateToStartPainting()
+                NavigateToStartPaint -> onNavigateToStartPainting()
                 is NavigateToProject -> onNavigateToProject(event.projectId)
                 is NavigateToAddProject -> onNavigateToAddProject()
                 is NavigateToMiniature -> onNavigateToMiniature(event.miniatureId)
@@ -50,13 +49,13 @@ fun HomeScreen(
             }
         }
     }
-    LaunchedEffect(true) { viewModel.onAction(OnAppear) }
+    LaunchedEffect(true) { viewModel.onAction(Load) }
 
     Scaffold(
         floatingActionButton = {
             if (state.loaded && state.projects.any { (it.hasMinis()) }) {
                 FloatingActionButton(
-                    onClick = { viewModel.onAction(OnStartPainting) },
+                    onClick = { viewModel.onAction(StartPainting) },
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 ) {
@@ -80,16 +79,16 @@ fun HomeScreen(
                     lastUpdatedMinis = state.lastUpdatedMinis,
                     gamificationMessage = state.gamificationSentence,
                     onOpenProjectDetail = { projectId ->
-                        viewModel.onAction(OnOpenProjectDetail(projectId = projectId))
+                        viewModel.onAction(OpenProjectDetail(projectId = projectId))
                     },
                     onOpenMiniatureDetail = { miniatureId ->
-                        viewModel.onAction(OnOpenMiniatureDetail(miniatureId = miniatureId))
+                        viewModel.onAction(OpenMiniatureDetail(miniatureId = miniatureId))
                     },
-                    onAddProject = { viewModel.onAction(OnAddProject) },
-                    onSettingsClicked = { viewModel.onAction(OnOpenSettings) }
+                    onAddProject = { viewModel.onAction(AddProject) },
+                    onNavigateToSettings = { viewModel.onAction(OpenSettings) }
                 )
             } else {
-                AppTitle(onSettingsClicked = { viewModel.onAction(OnOpenSettings) })
+                AppTitle(onNavigateToSettings = { viewModel.onAction(OpenSettings) })
                 LoadingIndicator()
             }
         }
