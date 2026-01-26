@@ -13,6 +13,7 @@ enum class ErrorType {
 
 data class State(
     val projectId: Long? = null,
+    val projectName: String? = null,
     val miniatureToUpdate: MiniatureBo? = null,
     val miniatureName: String? = null,
     val miniatureImage: String? = null,

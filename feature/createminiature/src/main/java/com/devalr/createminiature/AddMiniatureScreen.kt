@@ -60,6 +60,7 @@ fun AddMiniatureScreen(
     ) { innerPadding ->
         AddMiniatureScreenContent(
             innerPadding = innerPadding,
+            projectName = state.projectName,
             miniatureName = state.miniatureName,
             miniatureImage = state.miniatureImage,
             editMode = state.editMode,

@@ -17,17 +17,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.createminiature.R
+import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.technomancer
 import com.devalr.framework.components.add.AddItemName
 import com.devalr.framework.components.button.GHButton
 import com.devalr.framework.components.button.TopButtons
 import com.devalr.framework.components.gh.GHImage
+import com.devalr.framework.components.markedtext.TopTitleText
 import com.devalr.framework.theme.GreyHunterTheme
-
 
 @Composable
 fun AddMiniatureScreenContent(
     innerPadding: PaddingValues = PaddingValues(),
+    projectName: String?,
     miniatureName: String?,
     miniatureImage: String?,
     editMode: Boolean,
@@ -48,6 +50,14 @@ fun AddMiniatureScreenContent(
                 .padding(16.dp),
             onNavigateBack = onNavigateBack
         )
+        projectName?.let {
+            TopTitleText(
+                modifier = Modifier
+                    .padding(start = 50.dp)
+                    .align(Alignment.TopStart),
+                text = it
+            )
+        }
         Column(
             modifier = Modifier
                 .align(Alignment.Center)
@@ -89,6 +99,7 @@ fun AddMiniatureScreenContentPreviewLightMode() {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             AddMiniatureScreenContent(
+                projectName = hierotekCircleProject.name,
                 miniatureName = technomancer.name,
                 miniatureImage = null,
                 editMode = false,
@@ -119,6 +130,7 @@ fun AddMiniatureScreenContentPreviewDarkMode() {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             AddMiniatureScreenContent(
+                projectName = hierotekCircleProject.name + " Super special name",
                 miniatureName = technomancer.name,
                 miniatureImage = null,
                 editMode = false,

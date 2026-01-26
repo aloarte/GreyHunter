@@ -71,6 +71,7 @@ fun MiniatureDetailScreen(
             MiniatureDetailScreenContent(
                 innerPadding = innerPadding,
                 onlyUpdate = onlyUpdate,
+                parentProjectName = state.parentProject.name,
                 miniature = state.miniature,
                 onNavigateBack = {
                     viewModel.onAction(Return)

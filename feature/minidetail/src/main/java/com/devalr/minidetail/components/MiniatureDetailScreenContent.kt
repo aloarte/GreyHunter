@@ -22,9 +22,11 @@ import com.devalr.domain.enum.MilestoneType
 import com.devalr.domain.model.CompletionProportionsBo
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.helpers.chronomancer
+import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.framework.components.button.GHButton
-import com.devalr.framework.components.gh.GHImage
 import com.devalr.framework.components.button.TopButtons
+import com.devalr.framework.components.gh.GHImage
+import com.devalr.framework.components.markedtext.TopTitleText
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.minidetail.R
 
@@ -33,6 +35,7 @@ fun MiniatureDetailScreenContent(
     modifier: Modifier = Modifier,
     innerPadding: PaddingValues = PaddingValues(0.dp),
     onlyUpdate: Boolean,
+    parentProjectName: String,
     miniature: MiniatureBo,
     onNavigateBack: () -> Unit,
     onEdit: () -> Unit,
@@ -67,6 +70,12 @@ fun MiniatureDetailScreenContent(
                 onDelete = onDelete
             )
         }
+        TopTitleText(
+            modifier = Modifier
+                .padding(start = 50.dp)
+                .align(Alignment.TopStart),
+            text = parentProjectName
+        )
 
         LazyColumn(
             modifier = Modifier
@@ -124,6 +133,7 @@ private fun MiniatureDetailScreenContentPreviewDarkMode() {
     GreyHunterTheme(darkTheme = true) {
         MiniatureDetailScreenContent(
             miniature = chronomancer,
+            parentProjectName = hierotekCircleProject.name,
             onlyUpdate = false,
             onNavigateBack = {
                 // Do nothing
@@ -147,6 +157,7 @@ private fun MiniatureDetailScreenContentPreviewLightMode() {
     GreyHunterTheme(darkTheme = false) {
         MiniatureDetailScreenContent(
             miniature = chronomancer,
+            parentProjectName = hierotekCircleProject.name,
             onlyUpdate = false,
             onNavigateBack = {
                 // Do nothing
@@ -171,6 +182,7 @@ private fun MiniatureDetailScreenContentPreviewOnlyUpdateLightMode() {
     GreyHunterTheme(darkTheme = false) {
         MiniatureDetailScreenContent(
             miniature = chronomancer,
+            parentProjectName = hierotekCircleProject.name,
             onlyUpdate = true,
             onNavigateBack = {
                 // Do nothing
@@ -194,6 +206,7 @@ private fun MiniatureDetailScreenContentPreviewOnlyUpdateDarkMode() {
     GreyHunterTheme(darkTheme = true) {
         MiniatureDetailScreenContent(
             miniature = chronomancer,
+            parentProjectName = hierotekCircleProject.name,
             onlyUpdate = true,
             onNavigateBack = {
                 // Do nothing
