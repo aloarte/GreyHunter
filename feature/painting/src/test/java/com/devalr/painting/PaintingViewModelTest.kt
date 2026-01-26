@@ -3,7 +3,6 @@ package com.devalr.painting
 
 import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.model.MiniatureBo
-import com.devalr.painting.interactions.Action
 import com.devalr.painting.interactions.Action.Load
 import com.devalr.painting.interactions.Action.FinishPainting
 import com.devalr.painting.interactions.Action.Return

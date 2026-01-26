@@ -5,7 +5,6 @@ import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
-import com.devalr.home.interactions.Action
 import com.devalr.home.interactions.Action.AddProject
 import com.devalr.home.interactions.Action.Load
 import com.devalr.home.interactions.Action.OpenProjectDetail

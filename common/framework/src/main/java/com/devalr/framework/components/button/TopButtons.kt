@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -23,7 +23,7 @@ fun TopButtons(
     onDelete: (() -> Unit)? = null
 ) {
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        GHIconButton(icon = Icons.Default.ArrowBack, onButtonClicked = onNavigateBack)
+        GHIconButton(icon = Icons.AutoMirrored.Outlined.KeyboardArrowLeft, onButtonClicked = onNavigateBack)
         Row {
             if (onEdit != null) {
                 Spacer(modifier = Modifier.width(10.dp))

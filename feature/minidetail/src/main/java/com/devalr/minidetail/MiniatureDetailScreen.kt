@@ -20,7 +20,6 @@ import com.devalr.minidetail.interactions.Action.Load
 import com.devalr.minidetail.interactions.Action.Return
 import com.devalr.minidetail.interactions.Action.DeleteMiniature
 import com.devalr.minidetail.interactions.Action.UpdateMilestone
-import com.devalr.minidetail.interactions.Event
 import com.devalr.minidetail.interactions.Event.NavigateBack
 import com.devalr.minidetail.interactions.Event.NavigateToEditMiniature
 import org.koin.compose.koinInject
