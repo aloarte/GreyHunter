@@ -29,10 +29,10 @@ fun ProjectDetailScreenContent(
     innerPadding: PaddingValues = PaddingValues(0.dp),
     project: ProjectBo,
     onNavigateToMiniature: (Long) -> Unit,
+    onNavigateBack: () -> Unit,
     onCreateMiniature: () -> Unit,
-    onBackPressed: () -> Unit,
-    onEditPressed: () -> Unit,
-    onDeletePressed: () -> Unit
+    onEditProject: () -> Unit,
+    onDeleteProject: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -56,9 +56,9 @@ fun ProjectDetailScreenContent(
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
                 .padding(16.dp),
-            onBackPressed = onBackPressed,
-            onEditPressed = onEditPressed,
-            onDeletePressed = onDeletePressed
+            onNavigateBack = onNavigateBack,
+            onEdit = onEditProject,
+            onDelete = onDeleteProject
         )
 
         LazyColumn(
@@ -119,13 +119,13 @@ private fun ProjectDetailScreenContentPreviewLightTheme() {
             onCreateMiniature = {
                 // Do nothing
             },
-            onBackPressed = {
+            onNavigateBack = {
                 // Do nothing
             },
-            onEditPressed = {
+            onEditProject = {
                 // Do nothing
             },
-            onDeletePressed = {
+            onDeleteProject = {
                 // Do nothing
             }
         )

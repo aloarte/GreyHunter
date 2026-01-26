@@ -26,7 +26,7 @@ import com.devalr.home.components.cards.ProjectCard
 @Composable
 fun AlmostDoneProjects(
     projects: List<ProjectBo>,
-    onProjectClicked: (Long) -> Unit
+    onOpenProject: (Long) -> Unit
 ) {
     if (projects.isNotEmpty()) {
         Column(modifier = Modifier.padding(25.dp)) {
@@ -40,7 +40,7 @@ fun AlmostDoneProjects(
                     ProjectCard(
                         project = it,
                         cardType = CardType.Home,
-                        onProjectClicked = onProjectClicked
+                        onOpenProject = onOpenProject
                     )
                 }
             }
@@ -59,7 +59,7 @@ private fun AlmostDoneProjectsPreviewLightMode() {
         ) {
             AlmostDoneProjects(
                 projects = listOf(hierotekCircleProject, stormlightArchiveProject),
-                onProjectClicked = {
+                onOpenProject = {
                     // Do nothing
                 }
             )
@@ -78,7 +78,7 @@ private fun AlmostDoneProjectsPreviewDarkMode() {
         ) {
             AlmostDoneProjects(
                 projects = listOf(hierotekCircleProject, stormlightArchiveProject),
-                onProjectClicked = {
+                onOpenProject = {
                     // Do nothing
                 }
             )

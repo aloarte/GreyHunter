@@ -20,13 +20,13 @@ import com.devalr.framework.enum.CardType
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.home.components.cards.ProjectCard
 import com.devalr.home.model.ProjectVo
-import com.devalr.home.model.ProjectVo.AddProject
+import com.devalr.home.model.ProjectVo.AddProjectItem
 import com.devalr.home.model.ProjectVo.ProjectItem
 
 @Composable
 fun ProjectsCarousel(
     projects: List<ProjectVo>,
-    onProjectClicked: (Long) -> Unit,
+    onOpenProject: (Long) -> Unit,
     onCreateProject: () -> Unit
 ) {
     Column {
@@ -40,10 +40,10 @@ fun ProjectsCarousel(
             when (item) {
                 is ProjectItem -> ProjectCard(
                     project = item.project,
-                    onProjectClicked = onProjectClicked
+                    onOpenProject = onOpenProject
                 )
 
-                is AddProject -> AddCard(
+                is AddProjectItem -> AddCard(
                     type = CardType.Project,
                     onCreate = onCreateProject
                 )
@@ -65,12 +65,12 @@ private fun ProjectsCarouselPreviewLightMode() {
                 projects = listOf(
                     ProjectItem(hierotekCircleProject),
                     ProjectItem(stormlightArchiveProject),
-                    AddProject
+                    AddProjectItem
                 ),
                 onCreateProject = {
                     // Do nothing
                 },
-                onProjectClicked = {
+                onOpenProject = {
                     // Do nothing
                 }
             )
@@ -91,12 +91,12 @@ private fun ProjectsCarouselPreviewDarkMode() {
                 projects = listOf(
                     ProjectItem(hierotekCircleProject),
                     ProjectItem(stormlightArchiveProject),
-                    AddProject
+                    AddProjectItem
                 ),
                 onCreateProject = {
                     // Do nothing
                 },
-                onProjectClicked = {
+                onOpenProject = {
                     // Do nothing
                 }
             )

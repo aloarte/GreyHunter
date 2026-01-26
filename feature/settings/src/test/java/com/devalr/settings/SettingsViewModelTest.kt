@@ -8,11 +8,11 @@ import com.devalr.domain.model.ProjectBo
 import com.devalr.framework.components.snackbar.SnackBarType.ERROR
 import com.devalr.framework.components.snackbar.SnackBarType.SUCCESS
 import com.devalr.settings.interactions.Action
-import com.devalr.settings.interactions.Action.OnAppear
-import com.devalr.settings.interactions.Action.OnBackPressed
-import com.devalr.settings.interactions.Action.OnChangeAppearance
-import com.devalr.settings.interactions.Action.OnChangeProgressColors
-import com.devalr.settings.interactions.Action.OnImportPressed
+import com.devalr.settings.interactions.Action.Load
+import com.devalr.settings.interactions.Action.Return
+import com.devalr.settings.interactions.Action.ChangeAppearance
+import com.devalr.settings.interactions.Action.ChangeProgressColors
+import com.devalr.settings.interactions.Action.ImportProjects
 import com.devalr.settings.interactions.Event
 import com.devalr.settings.interactions.Event.LaunchSnackBar
 import com.devalr.settings.interactions.Event.NavigateBack
@@ -72,7 +72,7 @@ class SettingsViewModelTest {
             advanceUntilIdle()
 
             // WHEN
-            viewModel.onAction(OnAppear)
+            viewModel.onAction(Load)
             advanceUntilIdle()
 
             // THEN
@@ -89,7 +89,7 @@ class SettingsViewModelTest {
 
 
     @Test
-    fun `WHEN OnBackPressed is triggered THEN NavigateBack event is raised`() =
+    fun `WHEN Return is triggered THEN NavigateBack event is raised`() =
         runTest {
             // GIVEN
             val events = mutableListOf<Event>()
@@ -98,7 +98,7 @@ class SettingsViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnBackPressed)
+            viewModel.onAction(Return)
             advanceUntilIdle()
 
             // THEN
@@ -114,7 +114,7 @@ class SettingsViewModelTest {
             coEvery { repository.setAppearanceConfiguration(Dark) } just Runs
 
             // WHEN
-            viewModel.onAction(OnChangeAppearance(Dark))
+            viewModel.onAction(ChangeAppearance(Dark))
             advanceUntilIdle()
 
             // THEN
@@ -128,7 +128,7 @@ class SettingsViewModelTest {
             coEvery { repository.setProgressColorConfiguration(TrafficLight) } just Runs
 
             // WHEN
-            viewModel.onAction(OnChangeProgressColors(TrafficLight))
+            viewModel.onAction(ChangeProgressColors(TrafficLight))
             advanceUntilIdle()
 
             // THEN
@@ -137,7 +137,7 @@ class SettingsViewModelTest {
 
 
     @Test
-    fun `WHEN OnImportPressed is triggered THEN repository importing is called with a success result and LaunchSnackBar event is triggered`() =
+    fun `WHEN OnImport is triggered THEN repository importing is called with a success result and LaunchSnackBar event is triggered`() =
         runTest {
             // GIVEN
             val events = mutableListOf<Event>()
@@ -147,7 +147,7 @@ class SettingsViewModelTest {
             coEvery { repository.importData(uri) } returns true
 
             // WHEN
-            viewModel.onAction(OnImportPressed(uri))
+            viewModel.onAction(ImportProjects(uri))
             advanceUntilIdle()
 
             // THEN
@@ -158,7 +158,7 @@ class SettingsViewModelTest {
         }
 
     @Test
-    fun `WHEN OnImportPressed is triggered THEN repository importing is called with an error result and LaunchSnackBar event is triggered`() =
+    fun `WHEN OnImportProjects is triggered THEN repository importing is called with an error result and LaunchSnackBar event is triggered`() =
         runTest {
             // GIVEN
             val events = mutableListOf<Event>()
@@ -168,7 +168,7 @@ class SettingsViewModelTest {
             coEvery { repository.importData(uri) } returns false
 
             // WHEN
-            viewModel.onAction(OnImportPressed(uri))
+            viewModel.onAction(ImportProjects(uri))
             advanceUntilIdle()
 
             // THEN
@@ -180,7 +180,7 @@ class SettingsViewModelTest {
 
 
     @Test
-    fun `WHEN OnExportPressed is triggered THEN repository exporting is called with a success result and LaunchSnackBar event is triggered`() =
+    fun `WHEN ExportProjects is triggered THEN repository exporting is called with a success result and LaunchSnackBar event is triggered`() =
         runTest {
             // GIVEN
             val events = mutableListOf<Event>()
@@ -190,7 +190,7 @@ class SettingsViewModelTest {
             coEvery { repository.exportData(uri) } returns true
 
             // WHEN
-            viewModel.onAction(Action.OnExportPressed(uri))
+            viewModel.onAction(Action.ExportProjects(uri))
             advanceUntilIdle()
 
             // THEN
@@ -202,7 +202,7 @@ class SettingsViewModelTest {
 
 
     @Test
-    fun `WHEN OnExportPressed is triggered THEN repository exporting is called with an error result and LaunchSnackBar event is triggered`() =
+    fun `WHEN ExportProjects is triggered THEN repository exporting is called with an error result and LaunchSnackBar event is triggered`() =
         runTest {
             // GIVEN
             val events = mutableListOf<Event>()
@@ -212,7 +212,7 @@ class SettingsViewModelTest {
             coEvery { repository.exportData(uri) } returns false
 
             // WHEN
-            viewModel.onAction(Action.OnExportPressed(uri))
+            viewModel.onAction(Action.ExportProjects(uri))
             advanceUntilIdle()
 
             // THEN

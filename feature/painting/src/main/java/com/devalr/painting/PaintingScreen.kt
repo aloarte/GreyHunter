@@ -6,9 +6,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import com.devalr.framework.components.anim.LoadingIndicator
 import com.devalr.painting.components.PaintingScreenContent
-import com.devalr.painting.interactions.Action.OnAppear
-import com.devalr.painting.interactions.Action.OnBackPressed
-import com.devalr.painting.interactions.Action.OnDonePainting
+import com.devalr.painting.interactions.Action.FinishPainting
+import com.devalr.painting.interactions.Action.Load
+import com.devalr.painting.interactions.Action.Return
 import com.devalr.painting.interactions.Event.NavigateBack
 import com.devalr.painting.interactions.Event.NavigateToUpdateMiniatures
 import org.koin.compose.koinInject
@@ -17,7 +17,7 @@ import org.koin.compose.koinInject
 fun PaintingScreen(
     viewModel: PaintingViewModel = koinInject(),
     minisIds: List<Long>,
-    onBackPressed: () -> Unit,
+    onNavigateBack: () -> Unit,
     onNavigateToUpdateMiniatures: (List<Long>) -> Unit
 
 ) {
@@ -25,13 +25,13 @@ fun PaintingScreen(
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                NavigateBack -> onBackPressed()
+                NavigateBack -> onNavigateBack()
                 is NavigateToUpdateMiniatures -> onNavigateToUpdateMiniatures(event.miniatureIds)
             }
 
         }
     }
-    LaunchedEffect(true) { viewModel.onAction(OnAppear(minisIds)) }
+    LaunchedEffect(true) { viewModel.onAction(Load(minisIds)) }
 
 
     Scaffold(
@@ -42,8 +42,8 @@ fun PaintingScreen(
                 PaintingScreenContent(
                     innerPadding = innerPadding,
                     miniatures = state.miniatures,
-                    onBackPressed = { viewModel.onAction(OnBackPressed) },
-                    onDonePaintingPressed = { viewModel.onAction(OnDonePainting(minisIds)) }
+                    onNavigateBack = { viewModel.onAction(Return) },
+                    onFinishPainting = { viewModel.onAction(FinishPainting(minisIds)) }
                 )
             } else {
                 //TODO: Display error

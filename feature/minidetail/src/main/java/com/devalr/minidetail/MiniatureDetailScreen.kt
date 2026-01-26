@@ -15,11 +15,12 @@ import com.devalr.framework.R
 import com.devalr.framework.components.anim.LoadingIndicator
 import com.devalr.framework.components.bottomsheet.ConfirmBottomSheetContent
 import com.devalr.minidetail.components.MiniatureDetailScreenContent
-import com.devalr.minidetail.interactions.Action.OnAppear
-import com.devalr.minidetail.interactions.Action.OnBackPressed
-import com.devalr.minidetail.interactions.Action.OnDeleteMiniature
-import com.devalr.minidetail.interactions.Action.OnMilestone
-import com.devalr.minidetail.interactions.Action.OnNavigateToEditMiniature
+import com.devalr.minidetail.interactions.Action
+import com.devalr.minidetail.interactions.Action.Load
+import com.devalr.minidetail.interactions.Action.Return
+import com.devalr.minidetail.interactions.Action.DeleteMiniature
+import com.devalr.minidetail.interactions.Action.UpdateMilestone
+import com.devalr.minidetail.interactions.Event
 import com.devalr.minidetail.interactions.Event.NavigateBack
 import com.devalr.minidetail.interactions.Event.NavigateToEditMiniature
 import org.koin.compose.koinInject
@@ -30,8 +31,8 @@ fun MiniatureDetailScreen(
     viewModel: MiniatureDetailViewModel = koinInject(),
     miniatureId: Long,
     onlyUpdate: Boolean,
-    onBackPressed: () -> Unit,
-    onEditMiniaturePressed: (Long, Long) -> Unit
+    onNavigateBack: () -> Unit,
+    onEditMiniature: (Long, Long) -> Unit
 ) {
     val state = viewModel.uiState.collectAsState().value
     var showConfirmDelete by remember { mutableStateOf(false) }
@@ -39,16 +40,16 @@ fun MiniatureDetailScreen(
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                NavigateBack -> onBackPressed()
-                is NavigateToEditMiniature -> onEditMiniaturePressed(
+                is NavigateToEditMiniature -> onEditMiniature(
                     event.miniatureId,
                     event.projectId
                 )
+                NavigateBack -> onNavigateBack()
             }
 
         }
     }
-    LaunchedEffect(true) { viewModel.onAction(OnAppear(miniatureId)) }
+    LaunchedEffect(true) { viewModel.onAction(Load(miniatureId)) }
     if (showConfirmDelete) {
         ModalBottomSheet(onDismissRequest = { showConfirmDelete = false }) {
             ConfirmBottomSheetContent(
@@ -56,7 +57,7 @@ fun MiniatureDetailScreen(
                 okButtonText = stringResource(R.string.btn_delete),
                 onConfirmDelete = {
                     showConfirmDelete = false
-                    viewModel.onAction(OnDeleteMiniature(state.miniature!!.id))
+                    viewModel.onAction(DeleteMiniature(state.miniature!!.id))
                 },
                 onDeny = {
                     showConfirmDelete = false
@@ -72,21 +73,21 @@ fun MiniatureDetailScreen(
                 innerPadding = innerPadding,
                 onlyUpdate = onlyUpdate,
                 miniature = state.miniature,
-                onBackPressed = {
-                    viewModel.onAction(OnBackPressed)
+                onNavigateBack = {
+                    viewModel.onAction(Return)
                 },
-                onEditPressed = {
+                onEdit = {
                     viewModel.onAction(
-                        OnNavigateToEditMiniature(
+                        Action.EditMiniature(
                             miniatureId = state.miniature.id,
                             projectId = state.miniature.projectId
                         )
                     )
                 },
-                onMilestone = { type, enabled ->
-                    viewModel.onAction(OnMilestone(type = type, enable = enabled))
+                onUpdateMilestone = { type, enabled ->
+                    viewModel.onAction(UpdateMilestone(type = type, enable = enabled))
                 },
-                onDeletePressed = {
+                onDelete = {
                     showConfirmDelete = true
                 }
             )

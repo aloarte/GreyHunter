@@ -8,12 +8,12 @@ import com.devalr.domain.enum.ThemeType
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.settings.interactions.Action
-import com.devalr.settings.interactions.Action.OnAppear
-import com.devalr.settings.interactions.Action.OnBackPressed
-import com.devalr.settings.interactions.Action.OnChangeAppearance
-import com.devalr.settings.interactions.Action.OnChangeProgressColors
-import com.devalr.settings.interactions.Action.OnExportPressed
-import com.devalr.settings.interactions.Action.OnImportPressed
+import com.devalr.settings.interactions.Action.Load
+import com.devalr.settings.interactions.Action.Return
+import com.devalr.settings.interactions.Action.ChangeAppearance
+import com.devalr.settings.interactions.Action.ChangeProgressColors
+import com.devalr.settings.interactions.Action.ExportProjects
+import com.devalr.settings.interactions.Action.ImportProjects
 import com.devalr.settings.interactions.ErrorType
 import com.devalr.settings.interactions.Event
 import com.devalr.settings.interactions.Event.LaunchSnackBar
@@ -28,12 +28,12 @@ class SettingsViewModel(
 ) : BaseViewModel<State, Action, Event>(initialState = State()) {
     override fun onAction(action: Action) {
         when (action) {
-            is OnAppear -> onLoadScreen()
-            OnBackPressed -> sendEvent(NavigateBack)
-            is OnChangeAppearance -> onChangeDarkMode(action.mode)
-            is OnChangeProgressColors -> onChangeProgressColors(action.colorType)
-            is OnImportPressed -> onImportPressed(action.uri)
-            is OnExportPressed -> onExportPressed(action.uri)
+            is Load -> onLoadScreen()
+            Return -> sendEvent(NavigateBack)
+            is ChangeAppearance -> changeDarkMode(action.mode)
+            is ChangeProgressColors -> changeProgressColors(action.colorType)
+            is ImportProjects -> importProjects(action.uri)
+            is ExportProjects -> exportProjects(action.uri)
         }
     }
 
@@ -55,15 +55,15 @@ class SettingsViewModel(
 
     }
 
-    private fun onChangeDarkMode(mode: ThemeType) = viewModelScope.launch {
+    private fun changeDarkMode(mode: ThemeType) = viewModelScope.launch {
         settingsRepository.setAppearanceConfiguration(mode)
     }
 
-    private fun onChangeProgressColors(colorType: ProgressColorType) = viewModelScope.launch {
+    private fun changeProgressColors(colorType: ProgressColorType) = viewModelScope.launch {
         settingsRepository.setProgressColorConfiguration(colorType)
     }
 
-    private fun onImportPressed(uri: Uri) =
+    private fun importProjects(uri: Uri) =
         viewModelScope.launch {
             if (settingsRepository.importData(uri)) {
                 sendEvent(LaunchSnackBar(true, SnackBarType.SUCCESS))
@@ -72,7 +72,7 @@ class SettingsViewModel(
             }
         }
 
-    private fun onExportPressed(uri: Uri) = viewModelScope.launch {
+    private fun exportProjects(uri: Uri) = viewModelScope.launch {
         if (settingsRepository.exportData(uri)) {
             sendEvent(LaunchSnackBar(false, SnackBarType.SUCCESS))
         } else {

@@ -1,7 +1,7 @@
 package com.devalr.painting.interactions
 
 sealed interface Action {
-    data class OnAppear(val minisIds: List<Long>) : Action
-    data object OnBackPressed : Action
-    data class OnDonePainting(val miniatureIds: List<Long>) : Action
+    data class Load(val minisIds: List<Long>) : Action
+    data object Return : Action
+    data class FinishPainting(val miniatureIds: List<Long>) : Action
 }

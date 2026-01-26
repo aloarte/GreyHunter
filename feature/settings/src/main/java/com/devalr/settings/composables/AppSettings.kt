@@ -37,8 +37,8 @@ import com.devalr.settings.R
 fun AppSettings(
     currentThemeType: ThemeType,
     currentProgressColorType: ProgressColorType,
-    onThemeClicked: (ThemeType) -> Unit,
-    onChangeColorClicked: (ProgressColorType) -> Unit,
+    onChangeTheme: (ThemeType) -> Unit,
+    onChangeProgressColor: (ProgressColorType) -> Unit,
 ) {
 
     var displayThemeSelector by remember { mutableStateOf(false) }
@@ -52,8 +52,8 @@ fun AppSettings(
                 label = stringResource(R.string.label_settings_theme),
                 optionList = getThemeNameList(themeOptions),
                 selectedIndex = themeOptions.indexOf(currentThemeType),
-                onOptionClicked = { themeOption ->
-                    onThemeClicked(themeOptions[themeOption])
+                onOptionSelected = { themeOption ->
+                    onChangeTheme(themeOptions[themeOption])
                     displayThemeSelector = false
                 }
             )
@@ -71,8 +71,8 @@ fun AppSettings(
                 label = stringResource(R.string.label_settings_theme),
                 optionList = getProgressColorNameList(progressColorOptions),
                 selectedIndex = progressColorOptions.indexOf(currentProgressColorType),
-                onOptionClicked = { themeOption ->
-                    onChangeColorClicked(progressColorOptions[themeOption])
+                onOptionSelected = { themeOption ->
+                    onChangeProgressColor(progressColorOptions[themeOption])
                     displayProgressColorSelector = false
                 }
             )
@@ -96,13 +96,13 @@ fun AppSettings(
                     iconPainter = painterResource(com.devalr.framework.R.drawable.ic_dark_mode),
                     label = stringResource(R.string.label_settings_theme),
                     currentValue = currentThemeType.name,
-                    onSettingsItemClicked = { displayThemeSelector = true }
+                    onOpenSettings = { displayThemeSelector = true }
                 )
                 SettingsItem(
                     iconPainter = painterResource(com.devalr.framework.R.drawable.ic_colors),
                     label = stringResource(R.string.label_settings_colors),
                     currentValue = currentProgressColorType.name,
-                    onSettingsItemClicked = { displayProgressColorSelector = true }
+                    onOpenSettings = { displayProgressColorSelector = true }
                 )
             }
         }
@@ -141,10 +141,10 @@ fun AppSettingsPreviewLightMode() {
             AppSettings(
                 currentThemeType = ThemeType.Light,
                 currentProgressColorType = ProgressColorType.Monochrome,
-                onThemeClicked = {
+                onChangeTheme = {
                     // Do nothing
                 },
-                onChangeColorClicked = {
+                onChangeProgressColor = {
                     // Do nothing
                 }
             )
@@ -164,10 +164,10 @@ fun AppSettingsPreviewDarkMode() {
             AppSettings(
                 currentThemeType = ThemeType.System,
                 currentProgressColorType = ProgressColorType.TrafficLight,
-                onThemeClicked = {
+                onChangeTheme = {
                     // Do nothing
                 },
-                onChangeColorClicked = {
+                onChangeProgressColor = {
                     // Do nothing
                 }
             )

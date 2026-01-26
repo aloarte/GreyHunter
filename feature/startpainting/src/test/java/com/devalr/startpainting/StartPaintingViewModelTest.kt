@@ -8,7 +8,7 @@ import com.devalr.startpainting.interactions.Action.*
 import com.devalr.startpainting.interactions.ErrorType
 import com.devalr.startpainting.interactions.Event
 import com.devalr.startpainting.interactions.Event.NavigateBack
-import com.devalr.startpainting.interactions.Event.NavigatePaintMiniatures
+import com.devalr.startpainting.interactions.Event.NavigateToPaintMiniatures
 import com.devalr.startpainting.mapper.StartPaintMiniatureVoMapper
 import com.devalr.startpainting.mapper.StartPaintProjectVoMapper
 import com.devalr.startpainting.model.StartPaintMiniatureVo
@@ -86,7 +86,7 @@ class StartPaintingViewModelTest {
             advanceUntilIdle()
 
             // WHEN
-            viewModel.onAction(OnAppear)
+            viewModel.onAction(Load)
             advanceUntilIdle()
 
             // THEN
@@ -108,7 +108,7 @@ class StartPaintingViewModelTest {
             advanceUntilIdle()
 
             // WHEN
-            viewModel.onAction(OnAppear)
+            viewModel.onAction(Load)
             advanceUntilIdle()
 
             // THEN
@@ -120,7 +120,7 @@ class StartPaintingViewModelTest {
         }
 
     @Test
-    fun `WHEN OnBackPressed is triggered THEN NavigateBack event is raised`() =
+    fun `WHEN Return is triggered THEN NavigateBack event is raised`() =
         runTest {
             // GIVEN
             val events = mutableListOf<Event>()
@@ -129,7 +129,7 @@ class StartPaintingViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnBackPressed)
+            viewModel.onAction(Return)
             advanceUntilIdle()
 
             // THEN
@@ -144,11 +144,11 @@ class StartPaintingViewModelTest {
             // GIVEN
             coEvery { projectsRepository.getAllProjects() } returns flowOf(listOf(filledProject))
             coEvery { projectVoMapper.transform(filledProject) } returns filledProjectVo
-            viewModel.onAction(OnAppear)
+            viewModel.onAction(Load)
             advanceUntilIdle()
 
             // WHEN
-            viewModel.onAction(OnSelectMiniature(miniature1Vo))
+            viewModel.onAction(SelectMiniature(miniature1Vo))
             advanceUntilIdle()
 
             // THEN
@@ -170,14 +170,14 @@ class StartPaintingViewModelTest {
             coEvery { projectVoMapper.transform(filledProject) } returns filledProjectVo
             coEvery { miniatureVoMapper.transformReverse(miniature1Vo.copy(isSelected = true)) } returns miniature1
             coEvery { miniatureVoMapper.transformReverse(miniature2Vo.copy(isSelected = true)) } returns miniature2
-            viewModel.onAction(OnAppear)
+            viewModel.onAction(Load)
             advanceUntilIdle()
-            viewModel.onAction(OnSelectMiniature(miniature1Vo))
-            viewModel.onAction(OnSelectMiniature(miniature2Vo))
+            viewModel.onAction(SelectMiniature(miniature1Vo))
+            viewModel.onAction(SelectMiniature(miniature2Vo))
             advanceUntilIdle()
 
             // WHEN
-            viewModel.onAction(OnStartPainting)
+            viewModel.onAction(StartPainting)
             advanceUntilIdle()
 
             // THEN
@@ -185,7 +185,7 @@ class StartPaintingViewModelTest {
             coVerify(exactly = 1) { projectVoMapper.transform(filledProject) }
             coVerify(exactly = 2) { miniatureVoMapper.transformReverse(any()) }
             assertEquals(1, events.size)
-            assertEquals(NavigatePaintMiniatures(listOf(miniId1,miniId2)), events.first())
+            assertEquals(NavigateToPaintMiniatures(listOf(miniId1,miniId2)), events.first())
             job.cancel()
         }
 
@@ -199,7 +199,7 @@ class StartPaintingViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnStartPainting)
+            viewModel.onAction(StartPainting)
             advanceUntilIdle()
 
             // THEN

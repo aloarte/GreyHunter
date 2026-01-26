@@ -90,7 +90,7 @@ fun NavHost() {
                         onCreateMiniature = {
                             backStack.add(AddMiniature(projectId = key.projectId))
                         },
-                        onBackPressed = { backStack.removeLastOrNull() },
+                        onNavigateBack = { backStack.removeLastOrNull() },
                         onEditProject = { projectId ->
                             backStack.add(AddProject(projectId = projectId))
                         }
@@ -101,8 +101,8 @@ fun NavHost() {
                     MiniatureDetailScreen(
                         miniatureId = key.miniatureId,
                         onlyUpdate = key.onlyUpdate,
-                        onBackPressed = { backStack.removeLastOrNull() },
-                        onEditMiniaturePressed = { miniatureId, projectId ->
+                        onNavigateBack = { backStack.removeLastOrNull() },
+                        onEditMiniature = { miniatureId, projectId ->
                             backStack.add(
                                 AddMiniature(
                                     projectId = projectId,
@@ -119,7 +119,7 @@ fun NavHost() {
                 ) {
                     AddProjectScreen(
                         projectId = key.projectId,
-                        onBackPressed = { backStack.removeLastOrNull() }
+                        onBack = { backStack.removeLastOrNull() }
                     )
                 }
 
@@ -130,13 +130,13 @@ fun NavHost() {
                     AddMiniatureScreen(
                         projectId = key.projectId,
                         miniatureId = key.miniatureId,
-                        onBackPressed = { backStack.removeLastOrNull() }
+                        onBack = { backStack.removeLastOrNull() }
                     )
                 }
 
                 is StartPainting -> NavEntry(key) {
                     StartPaintingScreen(
-                        onBackPressed = { backStack.removeLastOrNull() },
+                        onNavigateBack = { backStack.removeLastOrNull() },
                         onNavigateToPaintMinis = { backStack.add(Painting(minisIds = it)) }
                     )
                 }
@@ -144,7 +144,7 @@ fun NavHost() {
                 is Painting -> NavEntry(key) {
                     PaintingScreen(
                         minisIds = key.minisIds,
-                        onBackPressed = { backStack.removeLastOrNull() },
+                        onNavigateBack = { backStack.removeLastOrNull() },
                         onNavigateToUpdateMiniatures = { miniaturesToUpdate ->
                             val homeIndex = backStack.indexOfFirst { it is Home }
                             if (homeIndex >= 0) {
@@ -166,7 +166,7 @@ fun NavHost() {
 
                 is Settings -> NavEntry(key) {
                     SettingsScreen(
-                        onBackPressed = { backStack.removeLastOrNull() }
+                        onNavigateBack = { backStack.removeLastOrNull() }
                     )
                 }
 

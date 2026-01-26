@@ -35,14 +35,14 @@ fun ProjectCard(
     modifier: Modifier = Modifier,
     project: ProjectBo,
     cardType: CardType = CardType.Project,
-    onProjectClicked: (Long) -> Unit
+    onOpenProject: (Long) -> Unit
 ) {
     Card(
         modifier = modifier
             .width(getCardWidth(cardType))
             .aspectRatio(1.6f),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
-        onClick = { onProjectClicked(project.id) }
+        onClick = { onOpenProject(project.id) }
     ) {
         Column(
             modifier = Modifier
@@ -88,14 +88,14 @@ private fun ProjectCardPreviewInHorizontalRow() {
                 ProjectCard(
                     modifier = Modifier.fillMaxSize(),
                     project = hierotekCircleProject,
-                    onProjectClicked = {}
+                    onOpenProject = {}
                 )
             }
             item {
                 ProjectCard(
                     modifier = Modifier.fillMaxSize(),
                     project = stormlightArchiveProject,
-                    onProjectClicked = {}
+                    onOpenProject = {}
                 )
             }
         }
@@ -117,14 +117,14 @@ private fun ProjectCardPreviewInVerticalColumn() {
                 ProjectCard(
                     modifier = Modifier.fillMaxSize(),
                     project = hierotekCircleProject,
-                    onProjectClicked = {}
+                    onOpenProject = {}
                 )
             }
             item {
                 ProjectCard(
                     modifier = Modifier.fillMaxSize(),
                     project = stormlightArchiveProject,
-                    onProjectClicked = {}
+                    onOpenProject = {}
                 )
             }
         }

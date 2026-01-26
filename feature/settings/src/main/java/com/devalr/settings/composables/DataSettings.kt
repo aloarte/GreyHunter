@@ -33,8 +33,8 @@ import com.devalr.settings.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DataSettings(
-    onImportDataClicked: () -> Unit,
-    onExportDataClicked: () -> Unit
+    onImportProjects: () -> Unit,
+    onExportProjects: () -> Unit
 ) {
     var displayConfirmExport by remember { mutableStateOf(false) }
     if (displayConfirmExport) {
@@ -43,7 +43,7 @@ fun DataSettings(
                 description = stringResource(R.string.bottom_sheet_confirm_export),
                 okButtonText = stringResource(R.string.bottom_sheet_confirm_export_btn),
                 onConfirmDelete = {
-                    onExportDataClicked()
+                    onExportProjects()
                     displayConfirmExport = false
                 },
                 onDeny = {
@@ -73,12 +73,12 @@ fun DataSettings(
                 SettingsItem(
                     iconPainter = painterResource(com.devalr.framework.R.drawable.ic_import),
                     label = stringResource(R.string.label_settings_import),
-                    onSettingsItemClicked = onImportDataClicked
+                    onOpenSettings = onImportProjects
                 )
                 SettingsItem(
                     iconPainter = painterResource(com.devalr.framework.R.drawable.ic_export),
                     label = stringResource(R.string.label_settings_export),
-                    onSettingsItemClicked = { displayConfirmExport = true }
+                    onOpenSettings = { displayConfirmExport = true }
                 )
             }
         }
@@ -95,10 +95,10 @@ fun DataSettingsPreviewLightMode() {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             DataSettings(
-                onImportDataClicked = {
+                onImportProjects = {
                     // Do nothing
                 },
-                onExportDataClicked = {
+                onExportProjects = {
                     // Do nothing
                 }
             )
@@ -116,10 +116,10 @@ fun DataSettingsPreviewDarkMode() {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             DataSettings(
-                onImportDataClicked = {
+                onImportProjects = {
                     // Do nothing
                 },
-                onExportDataClicked = {
+                onExportProjects = {
                     // Do nothing
                 }
             )

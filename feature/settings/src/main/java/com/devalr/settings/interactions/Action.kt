@@ -5,11 +5,11 @@ import com.devalr.domain.enum.ProgressColorType
 import com.devalr.domain.enum.ThemeType
 
 sealed interface Action {
-    data object OnAppear : Action
-    data object OnBackPressed : Action
-    data class OnChangeAppearance(val mode: ThemeType) : Action
-    data class OnChangeProgressColors(val colorType: ProgressColorType) : Action
-    data class OnExportPressed(val uri: Uri) : Action
-    data class OnImportPressed(val uri: Uri) : Action
+    data object Load : Action
+    data object Return : Action
+    data class ChangeAppearance(val mode: ThemeType) : Action
+    data class ChangeProgressColors(val colorType: ProgressColorType) : Action
+    data class ExportProjects(val uri: Uri) : Action
+    data class ImportProjects(val uri: Uri) : Action
 
 }

@@ -31,11 +31,11 @@ fun SettingsItem(
     iconPainter: Painter,
     label: String,
     currentValue: String? = null,
-    onSettingsItemClicked: () -> Unit
+    onOpenSettings: () -> Unit
 ) {
     Row(
         modifier = Modifier
-            .clickable { onSettingsItemClicked() }
+            .clickable { onOpenSettings() }
             .padding(horizontal = 20.dp, vertical = 10.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
@@ -78,7 +78,7 @@ fun SettingsItemPreviewLightMode() {
                 iconPainter = painterResource(com.devalr.framework.R.drawable.ic_paint),
                 label = "Appearance",
                 currentValue = "System",
-                onSettingsItemClicked = { }
+                onOpenSettings = { }
             )
         }
     }
@@ -97,7 +97,7 @@ fun SettingsItemPreviewDarkMode() {
                 iconPainter = painterResource(com.devalr.framework.R.drawable.ic_paint),
                 label = "Appearance",
                 currentValue = "System",
-                onSettingsItemClicked = { }
+                onOpenSettings = { }
             )
         }
     }
@@ -115,7 +115,7 @@ fun SettingsItemNoCurrentValuePreviewLightMode() {
             SettingsItem(
                 iconPainter = painterResource(com.devalr.framework.R.drawable.ic_gallery),
                 label = "Export",
-                onSettingsItemClicked = { }
+                onOpenSettings = { }
             )
         }
     }
@@ -133,7 +133,7 @@ fun SettingsItemNoCurrentValuePreviewDarkMode() {
             SettingsItem(
                 iconPainter = painterResource(com.devalr.framework.R.drawable.ic_gallery),
                 label = "Export",
-                onSettingsItemClicked = { }
+                onOpenSettings = { }
             )
         }
     }

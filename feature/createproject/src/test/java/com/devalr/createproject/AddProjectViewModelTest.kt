@@ -4,14 +4,14 @@ import android.app.Application
 import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
-import com.devalr.createproject.interactions.Action.OnAddProject
-import com.devalr.createproject.interactions.Action.OnAppear
-import com.devalr.createproject.interactions.Action.OnDescriptionChanged
-import com.devalr.createproject.interactions.Action.OnImageChanged
-import com.devalr.createproject.interactions.Action.OnNameChanged
+import com.devalr.createproject.interactions.Action.AddProject
+import com.devalr.createproject.interactions.Action.Load
+import com.devalr.createproject.interactions.Action.ChangeDescription
+import com.devalr.createproject.interactions.Action.ChangeImage
+import com.devalr.createproject.interactions.Action.ChangeName
 import com.devalr.createproject.interactions.ErrorType
 import com.devalr.createproject.interactions.Event
-import com.devalr.createproject.interactions.Event.OnAddedSuccessfully
+import com.devalr.createproject.interactions.Event.NavigateBack
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.ProjectBo
 import io.mockk.coEvery
@@ -79,7 +79,7 @@ class AddProjectViewModelTest {
             coEvery { repository.getProject(PROJECT_ID) } returns flow { emit(projectBo) }
 
             // WHEN
-            viewModel.onAction(OnAppear(projectId = PROJECT_ID))
+            viewModel.onAction(Load(projectId = PROJECT_ID))
             advanceUntilIdle()
 
             // THEN
@@ -96,7 +96,7 @@ class AddProjectViewModelTest {
     fun `GIVEN new project WHEN OnAppear THEN project is not loaded from database`() =
         runTest {
             // GIVEN & WHEN
-            viewModel.onAction(OnAppear())
+            viewModel.onAction(Load())
 
             // THEN
             val state = viewModel.uiState.value
@@ -112,7 +112,7 @@ class AddProjectViewModelTest {
     fun `GIVEN user inputs name WHEN OnNameChanged is triggered THEN state updates with project name`() =
         runTest {
             // GIVEN & WHEN
-            viewModel.onAction(OnNameChanged(PROJECT_NAME))
+            viewModel.onAction(ChangeName(PROJECT_NAME))
             advanceUntilIdle()
 
             // THEN
@@ -124,7 +124,7 @@ class AddProjectViewModelTest {
     fun `GIVEN user inputs description WHEN OnNameChanged is triggered THEN state updates with project description`() =
         runTest {
             // GIVEN & WHEN
-            viewModel.onAction(OnDescriptionChanged(PROJECT_DESCRIPTION))
+            viewModel.onAction(ChangeDescription(PROJECT_DESCRIPTION))
             advanceUntilIdle()
 
             // THEN
@@ -135,7 +135,7 @@ class AddProjectViewModelTest {
     @Test
     fun `GIVEN empty name WHEN add button is clicked THEN state updates with error message`() =
         runTest {
-            viewModel.onAction(OnAddProject)
+            viewModel.onAction(AddProject)
             advanceUntilIdle()
 
             val state = viewModel.uiState.value
@@ -152,12 +152,12 @@ class AddProjectViewModelTest {
             val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                 viewModel.events.collect { events.add(it) }
             }
-            viewModel.onAction(OnNameChanged(PROJECT_NAME))
-            viewModel.onAction(OnDescriptionChanged(PROJECT_DESCRIPTION))
+            viewModel.onAction(ChangeName(PROJECT_NAME))
+            viewModel.onAction(ChangeDescription(PROJECT_DESCRIPTION))
             advanceUntilIdle()
 
             // WHEN
-            viewModel.onAction(OnAddProject)
+            viewModel.onAction(AddProject)
             advanceUntilIdle()
 
             // THEN
@@ -166,7 +166,7 @@ class AddProjectViewModelTest {
             coVerify(exactly = 1) { repository.addProject(any()) }
             coVerify(exactly = 0) { repository.updateProject(any()) }
             assertEquals(1, events.size)
-            assertEquals(OnAddedSuccessfully, events.first())
+            assertEquals(NavigateBack, events.first())
             job.cancel()
         }
 
@@ -178,12 +178,12 @@ class AddProjectViewModelTest {
             val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                 viewModel.events.collect { events.add(it) }
             }
-            viewModel.onAction(OnNameChanged(PROJECT_NAME))
-            viewModel.onAction(OnDescriptionChanged(PROJECT_DESCRIPTION))
+            viewModel.onAction(ChangeName(PROJECT_NAME))
+            viewModel.onAction(ChangeDescription(PROJECT_DESCRIPTION))
             coEvery { repository.addProject(any()) } returns 0
 
             // WHEN
-            viewModel.onAction(OnAddProject)
+            viewModel.onAction(AddProject)
             advanceUntilIdle()
 
             // THEN
@@ -206,13 +206,13 @@ class AddProjectViewModelTest {
             }
             coEvery { repository.getProject(PROJECT_ID) } returns flow { emit(projectBo) }
             coEvery { repository.updateProject(any()) } returns false
-            viewModel.onAction(OnAppear(PROJECT_ID))
-            viewModel.onAction(OnNameChanged(PROJECT_NAME))
-            viewModel.onAction(OnDescriptionChanged(PROJECT_DESCRIPTION))
+            viewModel.onAction(Load(PROJECT_ID))
+            viewModel.onAction(ChangeName(PROJECT_NAME))
+            viewModel.onAction(ChangeDescription(PROJECT_DESCRIPTION))
             advanceUntilIdle()
 
             // WHEN
-            viewModel.onAction(OnAddProject)
+            viewModel.onAction(AddProject)
             advanceUntilIdle()
 
             // THEN
@@ -237,13 +237,13 @@ class AddProjectViewModelTest {
             }
             coEvery { repository.getProject(PROJECT_ID) } returns flow { emit(projectBo) }
             coEvery { repository.updateProject(any()) } returns true
-            viewModel.onAction(OnAppear(PROJECT_ID))
-            viewModel.onAction(OnNameChanged(PROJECT_NAME))
-            viewModel.onAction(OnDescriptionChanged(PROJECT_DESCRIPTION))
+            viewModel.onAction(Load(PROJECT_ID))
+            viewModel.onAction(ChangeName(PROJECT_NAME))
+            viewModel.onAction(ChangeDescription(PROJECT_DESCRIPTION))
             advanceUntilIdle()
 
             // WHEN
-            viewModel.onAction(OnAddProject)
+            viewModel.onAction(AddProject)
             advanceUntilIdle()
 
             // THEN
@@ -253,7 +253,7 @@ class AddProjectViewModelTest {
             coVerify(exactly = 0) { repository.addProject(any()) }
             coVerify(exactly = 1) { repository.updateProject(any()) }
             assertEquals(1, events.size)
-            assertEquals(OnAddedSuccessfully, events.first())
+            assertEquals(NavigateBack, events.first())
             job.cancel()
         }
 
@@ -267,7 +267,7 @@ class AddProjectViewModelTest {
             every { Uri.parse(galleryUriString) } returns galleryUri
             every { galleryUri.toString() } returns galleryUriString
             // WHEN
-            viewModel.onAction(OnImageChanged(galleryUri))
+            viewModel.onAction(ChangeImage(galleryUri))
 
             // THEN
             verify(exactly = 1) {
@@ -291,7 +291,7 @@ class AddProjectViewModelTest {
             every { cameraUri.toString() } returns cameraUriString
 
             // WHEN
-            viewModel.onAction(OnImageChanged(cameraUri))
+            viewModel.onAction(ChangeImage(cameraUri))
 
             // THEN
             verify(exactly = 0) {

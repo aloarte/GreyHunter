@@ -45,8 +45,8 @@ import kotlinx.coroutines.delay
 fun PaintingScreenContent(
     innerPadding: PaddingValues = PaddingValues(0.dp),
     miniatures: List<MiniatureBo>,
-    onBackPressed: () -> Unit,
-    onDonePaintingPressed: () -> Unit
+    onNavigateBack: () -> Unit,
+    onFinishPainting: () -> Unit
 ) {
     var seconds by remember { mutableIntStateOf(0) }
     var timerStopped by remember { mutableStateOf(false) }
@@ -104,7 +104,7 @@ fun PaintingScreenContent(
                 GHButton(
                     text = stringResource(R.string.btn_stop_painting),
                     invertColors = true,
-                    onClick = onDonePaintingPressed
+                    onClick = onFinishPainting
                 )
             }
 
@@ -114,7 +114,7 @@ fun PaintingScreenContent(
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
                 .padding(16.dp),
-            onBackPressed = onBackPressed
+            onNavigateBack = onNavigateBack
         )
     }
 }
@@ -141,10 +141,10 @@ private fun PaintingScreenContentLightModePreview() {
                 immortal,
                 deathmark
             ),
-            onBackPressed = {
+            onNavigateBack = {
                 // Do nothing
             },
-            onDonePaintingPressed = {
+            onFinishPainting = {
                 // Do nothing
             }
         )
@@ -162,10 +162,10 @@ private fun PaintingScreenContentDarkModePreview() {
                 immortal,
                 deathmark
             ),
-            onBackPressed = {
+            onNavigateBack = {
                 // Do nothing
             },
-            onDonePaintingPressed = {
+            onFinishPainting = {
                 // Do nothing
             }
         )

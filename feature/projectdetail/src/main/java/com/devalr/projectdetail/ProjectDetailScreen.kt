@@ -15,10 +15,10 @@ import com.devalr.framework.R
 import com.devalr.framework.components.anim.LoadingIndicator
 import com.devalr.framework.components.bottomsheet.ConfirmBottomSheetContent
 import com.devalr.projectdetail.components.ProjectDetailScreenContent
-import com.devalr.projectdetail.interactions.Action.OnAppear
-import com.devalr.projectdetail.interactions.Action.OnBackPressed
-import com.devalr.projectdetail.interactions.Action.OnDeleteProject
-import com.devalr.projectdetail.interactions.Action.OnNavigateToEditProject
+import com.devalr.projectdetail.interactions.Action.Load
+import com.devalr.projectdetail.interactions.Action.Return
+import com.devalr.projectdetail.interactions.Action.DeleteProject
+import com.devalr.projectdetail.interactions.Action.EditProject
 import com.devalr.projectdetail.interactions.Event.NavigateBack
 import com.devalr.projectdetail.interactions.Event.NavigateToEditProject
 import org.koin.compose.koinInject
@@ -29,8 +29,8 @@ fun ProjectDetailScreen(
     viewModel: ProjectDetailViewModel = koinInject(),
     projectId: Long,
     onNavigateToMiniature: (Long) -> Unit,
+    onNavigateBack: () -> Unit,
     onCreateMiniature: () -> Unit,
-    onBackPressed: () -> Unit,
     onEditProject: (Long) -> Unit
 
 ) {
@@ -40,13 +40,13 @@ fun ProjectDetailScreen(
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                NavigateBack -> onBackPressed()
+                NavigateBack -> onNavigateBack()
                 is NavigateToEditProject -> onEditProject(event.projectId)
             }
 
         }
     }
-    LaunchedEffect(true) { viewModel.onAction(OnAppear(projectId = projectId)) }
+    LaunchedEffect(true) { viewModel.onAction(Load(projectId = projectId)) }
     if (showConfirmDelete) {
         ModalBottomSheet(onDismissRequest = { showConfirmDelete = false }) {
             ConfirmBottomSheetContent(
@@ -54,7 +54,7 @@ fun ProjectDetailScreen(
                 okButtonText = stringResource(R.string.btn_delete),
                 onConfirmDelete = {
                     showConfirmDelete = false
-                    viewModel.onAction(OnDeleteProject(state.project!!.id))
+                    viewModel.onAction(DeleteProject(state.project!!.id))
                 },
                 onDeny = {
                     showConfirmDelete = false
@@ -72,13 +72,13 @@ fun ProjectDetailScreen(
                 project = state.project,
                 onNavigateToMiniature = onNavigateToMiniature,
                 onCreateMiniature = onCreateMiniature,
-                onBackPressed = {
-                    viewModel.onAction(OnBackPressed)
+                onNavigateBack = {
+                    viewModel.onAction(Return)
                 },
-                onEditPressed = {
-                    viewModel.onAction(OnNavigateToEditProject(projectId = projectId))
+                onEditProject = {
+                    viewModel.onAction(EditProject(projectId = projectId))
                 },
-                onDeletePressed = {
+                onDeleteProject = {
                     showConfirmDelete = true
                 }
             )

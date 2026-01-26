@@ -25,7 +25,7 @@ import com.devalr.home.components.cards.MiniatureCard
 @Composable
 fun LastUpdatedMiniatures(
     miniatures: List<MiniatureBo>,
-    onMiniatureClicked: (Long) -> Unit
+    onOpenMiniature: (Long) -> Unit
 ) {
     if (miniatures.isNotEmpty()) {
         Column(modifier = Modifier.padding(25.dp)) {
@@ -38,7 +38,7 @@ fun LastUpdatedMiniatures(
                 miniatures.forEach {
                     MiniatureCard(
                         miniature = it,
-                        onMiniatureClicked = onMiniatureClicked
+                        onOpenMiniature = onOpenMiniature
                     )
                 }
             }
@@ -57,7 +57,7 @@ private fun LastUpdatedMiniaturesPreviewLightMode() {
         ) {
             LastUpdatedMiniatures(
                 miniatures = listOf(immortal, chronomancer),
-                onMiniatureClicked = {
+                onOpenMiniature = {
                     // Do nothing
                 }
             )
@@ -76,7 +76,7 @@ private fun LastUpdatedMiniaturesPreviewDarkMode() {
         ) {
             LastUpdatedMiniatures(
                 miniatures = listOf(immortal, chronomancer),
-                onMiniatureClicked = {
+                onOpenMiniature = {
                     // Do nothing
                 }
             )

@@ -3,9 +3,10 @@ package com.devalr.painting
 
 import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.model.MiniatureBo
-import com.devalr.painting.interactions.Action.OnAppear
-import com.devalr.painting.interactions.Action.OnBackPressed
-import com.devalr.painting.interactions.Action.OnDonePainting
+import com.devalr.painting.interactions.Action
+import com.devalr.painting.interactions.Action.Load
+import com.devalr.painting.interactions.Action.FinishPainting
+import com.devalr.painting.interactions.Action.Return
 import com.devalr.painting.interactions.ErrorType
 import com.devalr.painting.interactions.Event
 import com.devalr.painting.interactions.Event.NavigateBack
@@ -66,7 +67,7 @@ class PaintingViewModelTest {
             advanceUntilIdle()
 
             // WHEN
-            viewModel.onAction(OnAppear(miniIds))
+            viewModel.onAction(Load(miniIds))
             advanceUntilIdle()
 
             // THEN
@@ -86,7 +87,7 @@ class PaintingViewModelTest {
             advanceUntilIdle()
 
             // WHEN
-            viewModel.onAction(OnAppear(miniIds))
+            viewModel.onAction(Load(miniIds))
             advanceUntilIdle()
 
             // THEN
@@ -97,7 +98,7 @@ class PaintingViewModelTest {
         }
 
     @Test
-    fun `WHEN OnBackPressed is triggered THEN NavigateBack event is raised`() =
+    fun `WHEN Return is triggered THEN NavigateBack event is raised`() =
         runTest {
             // GIVEN
             val events = mutableListOf<Event>()
@@ -106,7 +107,7 @@ class PaintingViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnBackPressed)
+            viewModel.onAction(Return)
             advanceUntilIdle()
 
             // THEN
@@ -125,7 +126,7 @@ class PaintingViewModelTest {
             }
 
             // WHEN
-            viewModel.onAction(OnDonePainting(miniatureIds = miniIds))
+            viewModel.onAction(FinishPainting(miniatureIds = miniIds))
             advanceUntilIdle()
 
             // THEN

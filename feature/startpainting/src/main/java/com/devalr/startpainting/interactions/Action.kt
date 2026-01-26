@@ -3,10 +3,10 @@ package com.devalr.startpainting.interactions
 import com.devalr.startpainting.model.StartPaintMiniatureVo
 
 sealed interface Action {
-    data object OnAppear : Action
-    data object OnBackPressed : Action
+    data object Load : Action
+    data object Return : Action
 
-    data object OnStartPainting : Action
+    data object StartPainting : Action
 
-    data class OnSelectMiniature(val miniature: StartPaintMiniatureVo) : Action
+    data class SelectMiniature(val miniature: StartPaintMiniatureVo) : Action
 }

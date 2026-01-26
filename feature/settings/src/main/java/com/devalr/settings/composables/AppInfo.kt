@@ -76,7 +76,7 @@ fun AppInfo(appVersion: String) {
                 SettingsItem(
                     iconPainter = painterResource(com.devalr.framework.R.drawable.ic_import),
                     label = stringResource(R.string.label_settings_changelog),
-                    onSettingsItemClicked = { displayChangeLog = true }
+                    onOpenSettings = { displayChangeLog = true }
                 )
             }
         }

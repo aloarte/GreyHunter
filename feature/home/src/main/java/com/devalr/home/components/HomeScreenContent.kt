@@ -29,7 +29,7 @@ import com.devalr.home.model.GamificationMessageType.EmptyProjects
 import com.devalr.home.model.GamificationMessageType.None
 import com.devalr.home.model.GamificationMessageType.ProgressRange
 import com.devalr.home.model.ProjectVo
-import com.devalr.home.model.ProjectVo.AddProject
+import com.devalr.home.model.ProjectVo.AddProjectItem
 import com.devalr.home.model.ProjectVo.ProjectItem
 
 @Composable
@@ -41,7 +41,7 @@ fun HomeScreenContent(
     onOpenProjectDetail: (Long) -> Unit,
     onOpenMiniatureDetail: (Long) -> Unit,
     onAddProject: () -> Unit,
-    onSettingsClicked: () -> Unit
+    onNavigateToSettings: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -49,11 +49,11 @@ fun HomeScreenContent(
             .padding(10.dp),
         verticalArrangement = spacedBy(10.dp)
     ) {
-        item { AppTitle(onSettingsClicked = onSettingsClicked) }
+        item { AppTitle(onNavigateToSettings = onNavigateToSettings) }
         item {
             ProjectsCarousel(
                 projects = projects,
-                onProjectClicked = { projectId ->
+                onOpenProject = { projectId ->
                     onOpenProjectDetail(projectId)
                 },
                 onCreateProject = {
@@ -71,7 +71,7 @@ fun HomeScreenContent(
         item {
             LastUpdatedMiniatures(
                 miniatures = lastUpdatedMinis,
-                onMiniatureClicked = { miniatureId ->
+                onOpenMiniature = { miniatureId ->
                     onOpenMiniatureDetail(miniatureId)
                 }
             )
@@ -79,7 +79,7 @@ fun HomeScreenContent(
         item {
             AlmostDoneProjects(
                 projects = almostDoneProjects,
-                onProjectClicked = { projectId ->
+                onOpenProject = { projectId ->
                     onOpenProjectDetail(projectId)
                 }
             )
@@ -113,7 +113,7 @@ private fun HomeScreenContentPreviewLightMode() {
                 onOpenMiniatureDetail = {
                     // Do nothing
                 },
-                onSettingsClicked = {
+                onNavigateToSettings = {
                     // Do nothing
                 }
             )
@@ -147,7 +147,7 @@ private fun HomeScreenContentPreviewDarkMode() {
                 onOpenMiniatureDetail = {
                     // Do nothing
                 },
-                onSettingsClicked = {
+                onNavigateToSettings = {
                     // Do nothing
                 }
             )
@@ -165,7 +165,7 @@ private fun HomeScreenContentNoProjectsPreviewLightMode() {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             HomeScreenContent(
-                projects = listOf(AddProject),
+                projects = listOf(AddProjectItem),
                 lastUpdatedMinis = emptyList(),
                 almostDoneProjects = emptyList(),
                 gamificationMessage = EmptyProjects,
@@ -178,7 +178,7 @@ private fun HomeScreenContentNoProjectsPreviewLightMode() {
                 onOpenMiniatureDetail = {
                     // Do nothing
                 },
-                onSettingsClicked = {
+                onNavigateToSettings = {
                     // Do nothing
                 }
             )
@@ -196,7 +196,7 @@ private fun HomeScreenContentNoProjectsPreviewDarkMode() {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             HomeScreenContent(
-                projects = listOf(AddProject),
+                projects = listOf(AddProjectItem),
                 lastUpdatedMinis = emptyList(),
                 almostDoneProjects = emptyList(),
                 gamificationMessage = EmptyProjects,
@@ -209,7 +209,7 @@ private fun HomeScreenContentNoProjectsPreviewDarkMode() {
                 onOpenMiniatureDetail = {
                     // Do nothing
                 },
-                onSettingsClicked = {
+                onNavigateToSettings = {
                     // Do nothing
                 }
             )

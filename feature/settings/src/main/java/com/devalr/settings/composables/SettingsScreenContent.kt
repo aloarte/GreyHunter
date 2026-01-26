@@ -21,28 +21,28 @@ fun SettingsScreenContent(
     currentThemeType: ThemeType,
     progressColorType: ProgressColorType,
     appVersion: String,
-    onBackClicked: () -> Unit,
-    onThemeClicked: (ThemeType) -> Unit,
-    onProgressColorClicked: (ProgressColorType) -> Unit,
-    onImportDataClicked: () -> Unit,
-    onExportDataClicked: () -> Unit
+    onNavigateBack: () -> Unit,
+    onChangeTheme: (ThemeType) -> Unit,
+    onChangeProgressColor: (ProgressColorType) -> Unit,
+    onImportProjects: () -> Unit,
+    onExportProjects: () -> Unit
 ) {
     Column(modifier = Modifier.padding(innerPadding)) {
         TopButtons(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            onBackPressed = onBackClicked
+            onNavigateBack = onNavigateBack
         )
         AppSettings(
             currentThemeType = currentThemeType,
             currentProgressColorType = progressColorType,
-            onThemeClicked = onThemeClicked,
-            onChangeColorClicked = onProgressColorClicked
+            onChangeTheme = onChangeTheme,
+            onChangeProgressColor = onChangeProgressColor
         )
         DataSettings(
-            onImportDataClicked = onImportDataClicked,
-            onExportDataClicked = onExportDataClicked
+            onImportProjects = onImportProjects,
+            onExportProjects = onExportProjects
         )
         AppInfo(appVersion = appVersion)
     }
@@ -61,19 +61,19 @@ fun SettingsScreenContentPreviewLightMode() {
                 currentThemeType = ThemeType.Light,
                 progressColorType = ProgressColorType.TrafficLight,
                 appVersion = "26.1.0",
-                onBackClicked = {
+                onNavigateBack = {
                     // Do nothing
                 },
-                onThemeClicked = {
+                onChangeTheme = {
                     // Do nothing
                 },
-                onProgressColorClicked = {
+                onChangeProgressColor = {
                     // Do nothing
                 },
-                onImportDataClicked = {
+                onImportProjects = {
                     // Do nothing
                 },
-                onExportDataClicked = {
+                onExportProjects = {
                     // Do nothing
                 }
             )
@@ -94,19 +94,19 @@ fun SettingsScreenContentPreviewDarkMode() {
                 currentThemeType = ThemeType.Dark,
                 progressColorType = ProgressColorType.TrafficLight,
                 appVersion = "26.1.0",
-                onBackClicked = {
+                onNavigateBack = {
                     // Do nothing
                 },
-                onThemeClicked = {
+                onChangeTheme = {
                     // Do nothing
                 },
-                onProgressColorClicked = {
+                onChangeProgressColor = {
                     // Do nothing
                 },
-                onImportDataClicked = {
+                onImportProjects = {
                     // Do nothing
                 },
-                onExportDataClicked = {
+                onExportProjects = {
                     // Do nothing
                 }
             )

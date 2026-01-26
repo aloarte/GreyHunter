@@ -6,15 +6,15 @@ import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.ProjectBo
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.home.interactions.Action
-import com.devalr.home.interactions.Action.OnAddProject
-import com.devalr.home.interactions.Action.OnAppear
-import com.devalr.home.interactions.Action.OnOpenMiniatureDetail
-import com.devalr.home.interactions.Action.OnOpenProjectDetail
-import com.devalr.home.interactions.Action.OnOpenSettings
-import com.devalr.home.interactions.Action.OnStartPainting
-import com.devalr.home.interactions.Action.OnUploadGamificationMessage
+import com.devalr.home.interactions.Action.AddProject
+import com.devalr.home.interactions.Action.Load
+import com.devalr.home.interactions.Action.OpenMiniatureDetail
+import com.devalr.home.interactions.Action.OpenProjectDetail
+import com.devalr.home.interactions.Action.OpenSettings
+import com.devalr.home.interactions.Action.StartPainting
+import com.devalr.home.interactions.Action.UpdateGamificationMessage
 import com.devalr.home.interactions.Event
-import com.devalr.home.interactions.Event.NavigateStartPaint
+import com.devalr.home.interactions.Event.NavigateToStartPaint
 import com.devalr.home.interactions.Event.NavigateToAddProject
 import com.devalr.home.interactions.Event.NavigateToMiniature
 import com.devalr.home.interactions.Event.NavigateToProject
@@ -25,7 +25,7 @@ import com.devalr.home.model.GamificationMessageType.EmptyProjects
 import com.devalr.home.model.GamificationMessageType.None
 import com.devalr.home.model.GamificationMessageType.ProgressRange
 import com.devalr.home.model.ProjectVo
-import com.devalr.home.model.ProjectVo.AddProject
+import com.devalr.home.model.ProjectVo.AddProjectItem
 import com.devalr.home.model.ProjectVo.ProjectItem
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
@@ -38,17 +38,17 @@ class HomeViewModel(
 
     override fun onAction(action: Action) {
         when (action) {
-            is OnAppear -> initHomeData()
-            is OnOpenProjectDetail -> sendEvent(NavigateToProject(projectId = action.projectId))
-            is OnOpenMiniatureDetail -> sendEvent(NavigateToMiniature(miniatureId = action.miniatureId))
-            is OnStartPainting -> sendEvent(NavigateStartPaint)
-            is OnUploadGamificationMessage -> updateGamificationMessage(
+            is Load -> initHomeData()
+            is OpenProjectDetail -> sendEvent(NavigateToProject(projectId = action.projectId))
+            is OpenMiniatureDetail -> sendEvent(NavigateToMiniature(miniatureId = action.miniatureId))
+            is StartPainting -> sendEvent(NavigateToStartPaint)
+            is UpdateGamificationMessage -> updateGamificationMessage(
                 projects = action.projects,
                 almostDoneProjects = action.almostDoneProjects
             )
 
-            OnAddProject -> sendEvent(NavigateToAddProject)
-            OnOpenSettings -> sendEvent(NavigateToSettings)
+            OpenSettings -> sendEvent(NavigateToSettings)
+            AddProject -> sendEvent(NavigateToAddProject)
         }
     }
 
@@ -61,8 +61,8 @@ class HomeViewModel(
             ) { projects, almostDoneProjects, lastMinis ->
                 val voProjects: MutableList<ProjectVo> =
                     projects.map { ProjectItem(it) }.toMutableList()
-                voProjects.add(AddProject)
-                onAction(OnUploadGamificationMessage(projects, almostDoneProjects))
+                voProjects.add(AddProjectItem)
+                onAction(UpdateGamificationMessage(projects, almostDoneProjects))
                 uiState.value.copy(
                     projects = voProjects,
                     almostDoneProjects = almostDoneProjects,

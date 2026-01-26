@@ -18,25 +18,25 @@ import com.devalr.framework.theme.GreyHunterTheme
 @Composable
 fun TopButtons(
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit,
-    onEditPressed: (() -> Unit)? = null,
-    onDeletePressed: (() -> Unit)? = null
+    onNavigateBack: () -> Unit,
+    onEdit: (() -> Unit)? = null,
+    onDelete: (() -> Unit)? = null
 ) {
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        GHIconButton(icon = Icons.Default.ArrowBack, onButtonClicked = onBackPressed)
+        GHIconButton(icon = Icons.Default.ArrowBack, onButtonClicked = onNavigateBack)
         Row {
-            if (onEditPressed != null) {
+            if (onEdit != null) {
                 Spacer(modifier = Modifier.width(10.dp))
                 GHIconButton(
                     painter = painterResource(R.drawable.ic_edit),
-                    onButtonClicked = onEditPressed
+                    onButtonClicked = onEdit
                 )
             }
-            if (onDeletePressed != null) {
+            if (onDelete != null) {
                 Spacer(modifier = Modifier.width(10.dp))
                 GHIconButton(
                     painter = painterResource(R.drawable.ic_delete),
-                    onButtonClicked = onDeletePressed
+                    onButtonClicked = onDelete
                 )
             }
         }
@@ -48,13 +48,13 @@ fun TopButtons(
 private fun TopButtonsPreviewLightMode() {
     GreyHunterTheme(darkTheme = false) {
         TopButtons(
-            onBackPressed = {
+            onNavigateBack = {
                 // Do nothing
             },
-            onEditPressed = {
+            onEdit = {
                 // Do nothing
             },
-            onDeletePressed = {
+            onDelete = {
                 // Do nothing
             }
         )
@@ -66,13 +66,13 @@ private fun TopButtonsPreviewLightMode() {
 private fun TopButtonsPreviewDarkMode() {
     GreyHunterTheme(darkTheme = true) {
         TopButtons(
-            onBackPressed = {
+            onNavigateBack = {
                 // Do nothing
             },
-            onEditPressed = {
+            onEdit = {
                 // Do nothing
             },
-            onDeletePressed = {
+            onDelete = {
                 // Do nothing
             }
         )
@@ -84,7 +84,7 @@ private fun TopButtonsPreviewDarkMode() {
 private fun TopButtonsPreviewOnlyBack() {
     GreyHunterTheme(darkTheme = false) {
         TopButtons(
-            onBackPressed = {
+            onNavigateBack = {
                 // Do nothing
             }
         )
