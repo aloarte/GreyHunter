@@ -5,14 +5,17 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import com.devalr.createminiature.interactions.Action.AddMiniature
-import com.devalr.createminiature.interactions.Action.Load
 import com.devalr.createminiature.interactions.Action.ChangeImage
 import com.devalr.createminiature.interactions.Action.ChangeName
+import com.devalr.createminiature.interactions.Action.Load
+import com.devalr.createminiature.interactions.Action.Return
 import com.devalr.createminiature.interactions.ErrorType
+import com.devalr.createminiature.interactions.Event
 import com.devalr.createminiature.interactions.Event.NavigateBack
 import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.MiniatureBo
+import com.devalr.domain.model.ProjectBo
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -60,6 +63,10 @@ class AddMiniatureViewModelTest {
             name = MINI_NAME,
             imageUri = MINI_IMAGE
         )
+        val project = ProjectBo(
+            id = PROJECT_ID,
+            name = "Project name"
+        )
     }
 
     @Before
@@ -67,6 +74,7 @@ class AddMiniatureViewModelTest {
         Dispatchers.setMain(testDispatcher)
         every { application.contentResolver } returns contentResolver
         mockkStatic(Uri::class)
+        coEvery { projectRepository.getProject(PROJECT_ID) } returns flow { emit(project) }
         viewModel = AddMiniatureViewModel(application, miniatureRepository, projectRepository)
     }
 
@@ -92,6 +100,7 @@ class AddMiniatureViewModelTest {
 
             // THEN
             val state = viewModel.uiState.value
+            coVerify(exactly = 1) { projectRepository.getProject(PROJECT_ID) }
             coVerify(exactly = 0) { miniatureRepository.getMiniature(any()) }
             assertEquals(PROJECT_ID, state.projectId)
             assertFalse(state.editMode)
@@ -114,6 +123,7 @@ class AddMiniatureViewModelTest {
             assertEquals(MINI_IMAGE, state.miniatureImage)
             assertEquals(existentMini, state.miniatureToUpdate)
             assertTrue(state.editMode)
+            coVerify(exactly = 1) { projectRepository.getProject(PROJECT_ID) }
             coVerify(exactly = 1) { miniatureRepository.getMiniature(MINI_ID) }
         }
 
@@ -146,6 +156,7 @@ class AddMiniatureViewModelTest {
         runTest {
             // GIVEN
             viewModel.onAction(Load(projectId = PROJECT_ID))
+            advanceUntilIdle()
             viewModel.onAction(ChangeName(""))
 
             // WHEN
@@ -162,6 +173,7 @@ class AddMiniatureViewModelTest {
         runTest {
             // GIVEN
             viewModel.onAction(Load(projectId = PROJECT_ID))
+            advanceUntilIdle()
             viewModel.onAction(ChangeName(MINI_NAME))
             coEvery { miniatureRepository.addMiniature(any()) } returns 0L
 
@@ -179,6 +191,7 @@ class AddMiniatureViewModelTest {
         runTest {
             // GIVEN
             viewModel.onAction(Load(projectId = PROJECT_ID))
+            advanceUntilIdle()
             viewModel.onAction(ChangeName(MINI_NAME))
             coEvery { miniatureRepository.addMiniature(any()) } returns 1L
             coEvery { projectRepository.updateProjectProgress(any(), any()) } returns false
@@ -200,10 +213,11 @@ class AddMiniatureViewModelTest {
         runTest {
             // GIVEN
             viewModel.onAction(Load(projectId = PROJECT_ID))
+            advanceUntilIdle()
             viewModel.onAction(ChangeName(MINI_NAME))
             coEvery { miniatureRepository.addMiniature(any()) } returns 10L
             coEvery { projectRepository.updateProjectProgress(PROJECT_ID, any()) } returns true
-            val events = mutableListOf<com.devalr.createminiature.interactions.Event>()
+            val events = mutableListOf<Event>()
             val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                 viewModel.events.collect { events.add(it) }
             }
@@ -253,11 +267,12 @@ class AddMiniatureViewModelTest {
             coEvery { miniatureRepository.updateMiniature(any()) } returns true
             coEvery { projectRepository.updateProjectProgress(PROJECT_ID) } returns true
             viewModel.onAction(Load(projectId = PROJECT_ID, miniatureId = MINI_ID))
+            advanceUntilIdle()
             viewModel.onAction(ChangeName(NEW_MINI_NAME))
             viewModel.onAction(ChangeName(NEW_MINI_IMAGE))
 
             advanceUntilIdle()
-            val events = mutableListOf<com.devalr.createminiature.interactions.Event>()
+            val events = mutableListOf<Event>()
             val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                 viewModel.events.collect { events.add(it) }
             }
@@ -268,6 +283,7 @@ class AddMiniatureViewModelTest {
 
             // THEN
             coVerify(exactly = 1) { miniatureRepository.getMiniature(MINI_ID) }
+            coVerify(exactly = 1) { projectRepository.getProject(PROJECT_ID) }
             coVerify(exactly = 0) { miniatureRepository.addMiniature(any()) }
             coVerify(exactly = 1) { miniatureRepository.updateMiniature(any()) }
             coVerify(exactly = 1) { projectRepository.updateProjectProgress(PROJECT_ID) }
@@ -319,5 +335,24 @@ class AddMiniatureViewModelTest {
             }
             val state = viewModel.uiState.value
             assertEquals(cameraUriString, state.miniatureImage)
+        }
+
+    @Test
+    fun `WHEN Return action is triggered THEN NavigateBack event is raised`() =
+        runTest {
+            // GIVEN
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
+
+            // WHEN
+            viewModel.onAction(Return)
+            advanceUntilIdle()
+
+            // THEN
+            assertEquals(1, events.size)
+            assertTrue(events.contains(NavigateBack))
+            job.cancel()
         }
 }

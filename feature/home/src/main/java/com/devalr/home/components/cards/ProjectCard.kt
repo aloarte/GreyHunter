@@ -22,7 +22,6 @@ import com.devalr.domain.model.ProjectBo
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.stormlightArchiveProject
 import com.devalr.framework.components.cards.getCardWidth
-import com.devalr.framework.components.gh.GHImage
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.components.progress.GHProgressBar
@@ -52,18 +51,11 @@ fun ProjectCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-
-            if (cardType == CardType.Project && project.imageUri != null) {
-                GHImage(imageUri = project.imageUri, size = 60.dp, borderRadius = 10.dp)
-            }
             GHText(text = project.name.capitalize(), type = TextType.Title)
             if (cardType == CardType.Project) GHText(
                 text = "${project.minis.size} Miniatures",
                 type = TextType.LabelM
             )
-            project.description?.let { description ->
-                GHText(text = description, type = TextType.Description, singleLane = true)
-            }
             GHProgressBar(
                 percentage = project.progress,
                 spectrum = LocalProgressColors.current,

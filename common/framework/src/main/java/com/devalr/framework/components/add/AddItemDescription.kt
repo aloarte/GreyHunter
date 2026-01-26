@@ -13,11 +13,11 @@ import com.devalr.framework.components.gh.TextType
 fun AddItemDescription(
     description: String?,
     label: String,
-    onDescriptionChange: (String) -> Unit
+    onChangeDescription: (String) -> Unit
 ) {
     OutlinedTextField(
         value = description.orEmpty(),
-        onValueChange = onDescriptionChange,
+        onValueChange = onChangeDescription,
         singleLine = false,
         label = { GHText(text = label, type = TextType.LabelM) },
         modifier = Modifier

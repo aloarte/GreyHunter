@@ -4,8 +4,8 @@
     <string name="error_add_profile_empty_name">Profile name cannot be empty</string>
 
     <!-- Buttons -->
-    <string name="button_add_project">Create</string>
-    <string name="button_edit_project">Save</string>
+    <string name="button_add_project">Create project</string>
+    <string name="button_edit_project">Save project</string>
 
     <!-- Labels -->
     <string name="label_project_name">Project name</string>

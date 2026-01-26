@@ -6,9 +6,10 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.devalr.createminiature.interactions.Action
 import com.devalr.createminiature.interactions.Action.AddMiniature
-import com.devalr.createminiature.interactions.Action.Load
 import com.devalr.createminiature.interactions.Action.ChangeImage
 import com.devalr.createminiature.interactions.Action.ChangeName
+import com.devalr.createminiature.interactions.Action.Load
+import com.devalr.createminiature.interactions.Action.Return
 import com.devalr.createminiature.interactions.ErrorType
 import com.devalr.createminiature.interactions.Event
 import com.devalr.createminiature.interactions.Event.NavigateBack
@@ -18,6 +19,8 @@ import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.framework.base.BaseViewModel
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 class AddMiniatureViewModel(
@@ -36,6 +39,7 @@ class AddMiniatureViewModel(
             is ChangeName -> updateState { copy(miniatureName = action.name) }
             is ChangeImage -> updateImage(action.imageUri)
             is AddMiniature -> addEditMiniature()
+            is Return -> sendEvent(NavigateBack)
         }
     }
 
@@ -58,25 +62,40 @@ class AddMiniatureViewModel(
     private fun onLoadScreen(projectId: Long, miniatureId: Long?) {
         if (miniatureId != null) {
             viewModelScope.launch {
-                miniatureRepository.getMiniature(miniatureId)
-                    .catch {
-                        updateState { copy(errorType = ErrorType.BadId) }
+                combine(
+                    miniatureRepository.getMiniature(miniatureId),
+                    projectRepository.getProject(projectId)
+                ) { miniature, project ->
+                    if (miniature == null || project == null) {
+                        null
+                    } else {
+                        uiState.value.copy(
+                            projectId = miniature.projectId,
+                            projectName = project.name,
+                            miniatureName = miniature.name,
+                            miniatureImage = miniature.imageUri,
+                            miniatureToUpdate = miniature,
+                            editMode = true
+                        )
                     }
-                    .collect {
-                        if(it == null ) return@collect
-                        updateState {
-                            copy(
-                                projectId = it.projectId,
-                                miniatureName = it.name,
-                                miniatureImage = it.imageUri,
-                                miniatureToUpdate = it,
-                                editMode = true
-                            )
-                        }
-                    }
+                }.filterNotNull().catch { error ->
+                    updateState { copy(errorType = ErrorType.BadId) }
+                }.collect { newState ->
+                    updateState { newState }
+                }
             }
         } else {
-            updateState { copy(projectId = projectId) }
+            viewModelScope.launch {
+                projectRepository.getProject(projectId).collect { project ->
+                    updateState {
+                        copy(
+                            projectId = projectId,
+                            projectName = project?.name,
+                            editMode = false
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -113,7 +132,10 @@ class AddMiniatureViewModel(
         viewModelScope.launch {
             val miniatureAdded = miniatureRepository.addMiniature(miniature) > 0
             if (miniatureAdded) {
-                val projectUpdated = projectRepository.updateProjectProgress(projectId = projectId, avoidLastUpdate = true)
+                val projectUpdated = projectRepository.updateProjectProgress(
+                    projectId = projectId,
+                    avoidLastUpdate = true
+                )
                 updateState { copy(errorType = if (projectUpdated) null else ErrorType.ErrorUpdatingProgress) }
                 sendEvent(NavigateBack)
 

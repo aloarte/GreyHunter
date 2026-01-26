@@ -5,16 +5,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -63,7 +65,8 @@ fun GHImage(
     } ?: run {
         Box(
             modifier = modifier
-                .background(Color.LightGray)
+                .clip(RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colorScheme.surfaceContainer)
                 .then(
                     if (onImageClick != null) {
                         Modifier.clickable { onImageClick.invoke() }
@@ -78,8 +81,10 @@ fun GHImage(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Icon(imageVector = Icons.Default.Create, contentDescription = "")
-                if (showMessage) GHText(text = "Add a picture", type = TextType.LabelM)
+                if (showMessage){
+                    Icon(imageVector = Icons.Default.Create, contentDescription = "")
+                    GHText(text = "Add a picture", type = TextType.LabelM)
+                }
 
             }
         }
@@ -88,9 +93,35 @@ fun GHImage(
 
 @Preview
 @Composable
-private fun GHImagePreview() {
-    GreyHunterTheme {
-        GHImage(imageUri = null, size = 80.dp, showMessage = true)
+private fun GHImagePreviewDarkMode() {
+    GreyHunterTheme(darkTheme = true) {
+        Column(
+            modifier = Modifier
+                .width(120.dp)
+                .height(120.dp)
+                .background(MaterialTheme.colorScheme.background),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            GHImage(imageUri = null, size = 80.dp, showMessage = true)
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun GHImagePreviewLightMode() {
+    GreyHunterTheme(darkTheme = false) {
+        Column(
+            modifier = Modifier
+                .width(120.dp)
+                .height(120.dp)
+                .background(MaterialTheme.colorScheme.background),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            GHImage(imageUri = null, size = 80.dp, showMessage = true)
+        }
     }
 }
 

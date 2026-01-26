@@ -15,11 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.ProjectBo
+import com.devalr.framework.components.ScreenSize.LARGE
+import com.devalr.framework.components.ScreenSize.MEDIUM
+import com.devalr.framework.components.ScreenSize.SMALL
+import com.devalr.framework.components.getScreenSize
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.components.markedtext.MarkedText
 import com.devalr.framework.components.progress.GHProgressBar
 import com.devalr.framework.components.progress.LocalProgressColors
+import com.devalr.framework.limitSize
 import com.devalr.framework.theme.GreyHunterTheme
 
 
@@ -36,7 +41,14 @@ fun ProjectInfo(project: ProjectBo) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             MarkedText(
-                text = project.name.capitalize(),
+                text = project.name
+                    .limitSize(
+                        when (getScreenSize()) {
+                            SMALL -> 20
+                            MEDIUM -> 25
+                            LARGE -> 30
+                        }
+                    ).capitalize(),
                 title = true
             )
             GHText(text = "${(project.progress * 100).toInt()}%", type = TextType.Featured)
@@ -50,7 +62,7 @@ fun ProjectInfo(project: ProjectBo) {
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
-        GHProgressBar(percentage = project.progress,spectrum = LocalProgressColors.current)
+        GHProgressBar(percentage = project.progress, spectrum = LocalProgressColors.current)
         Spacer(modifier = Modifier.height(10.dp))
 
     }

@@ -5,10 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,12 +23,13 @@ import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.helpers.deathmark
 import com.devalr.domain.model.helpers.immortal
+import com.devalr.framework.components.cards.getCardWidth
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
-import com.devalr.framework.components.cards.getCardWidth
 import com.devalr.framework.components.progress.GHCircularProgress
 import com.devalr.framework.components.progress.LocalProgressColors
 import com.devalr.framework.enum.CardType
+import com.devalr.framework.limitSize
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
@@ -49,36 +48,28 @@ fun MiniatureCard(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(vertical = 10.dp, horizontal = 20.dp),
+                .background(MaterialTheme.colorScheme.surface),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+            Box(
+                modifier = Modifier.size(40.dp),
+                contentAlignment = Alignment.Center
             ) {
                 GHText(
-                    modifier = Modifier.fillMaxWidth(0.70f),
-                    text = miniature.name.capitalize(),
-                    type = TextType.Title
+                    text = "${(miniature.percentage * 100).toInt()}%",
+                    type = TextType.LabelS,
+                    singleLane = true
                 )
-                Box(
-                    modifier = Modifier.size(40.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    GHText(
-                        text = "${(miniature.percentage * 100).toInt()}%",
-                        type = TextType.LabelS,
-                        singleLane = true
-                    )
-                    GHCircularProgress(
-                        percentage = miniature.percentage,
-                        spectrum = LocalProgressColors.current
-                    )
-                }
+                GHCircularProgress(
+                    percentage = miniature.percentage,
+                    spectrum = LocalProgressColors.current
+                )
             }
+            GHText(
+                text = miniature.name.limitSize(15).capitalize(),
+                type = TextType.LabelMBold
+            )
         }
     }
 }

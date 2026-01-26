@@ -11,11 +11,11 @@ import com.devalr.framework.components.gh.TextType
 @Composable
 fun AddItemName(
     name: String?, label: String,
-    onNameChange: (String) -> Unit
+    onChangeName: (String) -> Unit
 ) {
     OutlinedTextField(
         value = name.orEmpty(),
-        onValueChange = onNameChange,
+        onValueChange = onChangeName,
         singleLine = true,
         label = { GHText(text = label, type = TextType.LabelM) },
         modifier = Modifier.fillMaxWidth()

@@ -5,10 +5,11 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import com.devalr.createproject.interactions.Action.AddProject
-import com.devalr.createproject.interactions.Action.Load
 import com.devalr.createproject.interactions.Action.ChangeDescription
 import com.devalr.createproject.interactions.Action.ChangeImage
 import com.devalr.createproject.interactions.Action.ChangeName
+import com.devalr.createproject.interactions.Action.Load
+import com.devalr.createproject.interactions.Action.Return
 import com.devalr.createproject.interactions.ErrorType
 import com.devalr.createproject.interactions.Event
 import com.devalr.createproject.interactions.Event.NavigateBack
@@ -50,7 +51,8 @@ class AddProjectViewModelTest {
         private const val PROJECT_ID = 10L
         private const val PROJECT_NAME = "Hierotek Circle"
         private const val PROJECT_DESCRIPTION = "Project description."
-        private const val PROJECT_IMAGE = "content://com.devalr.greyhunter.fileprovider/shared_images/photo.jpg"
+        private const val PROJECT_IMAGE =
+            "content://com.devalr.greyhunter.fileprovider/shared_images/photo.jpg"
         private val projectBo = ProjectBo(
             id = PROJECT_ID,
             name = PROJECT_NAME,
@@ -299,5 +301,24 @@ class AddProjectViewModelTest {
             }
             val state = viewModel.uiState.value
             assertEquals(cameraUriString, state.projectImage)
+        }
+
+    @Test
+    fun `WHEN Return action is triggered THEN NavigateBack event is raised`() =
+        runTest {
+            // GIVEN
+            val events = mutableListOf<Event>()
+            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.events.collect { events.add(it) }
+            }
+
+            // WHEN
+            viewModel.onAction(Return)
+            advanceUntilIdle()
+
+            // THEN
+            assertEquals(1, events.size)
+            assertTrue(events.contains(NavigateBack))
+            job.cancel()
         }
 }
