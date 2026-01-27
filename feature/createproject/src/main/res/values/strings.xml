@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Errors -->
-    <string name="error_add_profile_empty_name">Profile name cannot be empty</string>
-
+    <string name="error_add_project_empty_name">Project name cannot be empty</string>
+    <string name="error_add_project_bad_id">Something went wrong. Please try again.</string>
+    <string name="error_add_project_add_database">Could not create the project. Please try again.</string>
+    <string name="error_add_project_edit_database">Could not save the changes. Please try again.</string>
     <!-- Buttons -->
     <string name="button_add_project">Create project</string>
     <string name="button_edit_project">Save project</string>

@@ -10,19 +10,25 @@ import com.devalr.createproject.interactions.Action.ChangeDescription
 import com.devalr.createproject.interactions.Action.ChangeImage
 import com.devalr.createproject.interactions.Action.ChangeName
 import com.devalr.createproject.interactions.Action.Load
+import com.devalr.createproject.interactions.Action.RaiseError
 import com.devalr.createproject.interactions.Action.Return
 import com.devalr.createproject.interactions.ErrorType
+import com.devalr.createproject.interactions.ErrorType.AddDatabase
+import com.devalr.createproject.interactions.ErrorType.BadId
 import com.devalr.createproject.interactions.Event
+import com.devalr.createproject.interactions.Event.LaunchSnackBarError
 import com.devalr.createproject.interactions.Event.NavigateBack
 import com.devalr.createproject.interactions.State
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.ProjectBo
+import com.devalr.framework.AppTracer
 import com.devalr.framework.base.BaseViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class AddProjectViewModel(
     private val application: Application,
+    private val tracer: AppTracer,
     val projectRepository: ProjectRepository
 ) :
     BaseViewModel<State, Action, Event>(initialState = State()) {
@@ -34,6 +40,7 @@ class AddProjectViewModel(
             is ChangeImage -> updateImage(action.imageUri)
             is AddProject -> addEditProject()
             Return -> sendEvent(NavigateBack)
+            is RaiseError -> submitError(action.error, action.errorType)
         }
     }
 
@@ -41,7 +48,9 @@ class AddProjectViewModel(
         projectId?.let {
             viewModelScope.launch {
                 projectRepository.getProject(projectId)
-                    .catch { updateState { copy(errorType = ErrorType.BadId) } }
+                    .catch {
+                        submitError(it, BadId)
+                    }
                     .collect {
                         if (it == null) return@collect
                         updateState {
@@ -78,7 +87,7 @@ class AddProjectViewModel(
     private fun addEditProject() {
         with(uiState.value) {
             if (projectName.isNullOrEmpty()) {
-                updateState { copy(errorType = ErrorType.EmptyTitle) }
+                submitError(Exception("addEditProject empty title"), ErrorType.EmptyTitle)
                 return
             }
 
@@ -114,24 +123,29 @@ class AddProjectViewModel(
                     imageUri = newProjectImage
                 )
             if (projectRepository.updateProject(updatedProject)) {
-                updateState { copy(errorType = null) }
                 sendEvent(NavigateBack)
             } else {
-                updateState { copy(errorType = ErrorType.EditDatabase) }
+                submitError(
+                    Exception("editProject error updating project on database"),
+                    ErrorType.EditDatabase
+                )
             }
         } ?: run {
-            updateState { copy(errorType = ErrorType.BadId) }
+            submitError(Exception("editProject empty project to update"), BadId)
         }
     }
 
     private fun addProject(project: ProjectBo) = viewModelScope.launch {
         val projectAdded = projectRepository.addProject(project) > 0
         if (projectAdded) {
-            updateState { copy(errorType = null) }
             sendEvent(NavigateBack)
         } else {
-            updateState { copy(errorType = ErrorType.AddDatabase) }
+            submitError(Exception("addProject project not added"), AddDatabase)
         }
     }
 
+    private fun submitError(error: Throwable, errorType: ErrorType? = null) {
+        tracer.recordError(error)
+        errorType?.let { sendEvent(LaunchSnackBarError(errorType)) }
+    }
 }

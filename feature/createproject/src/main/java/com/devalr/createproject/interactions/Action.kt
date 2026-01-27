@@ -8,5 +8,6 @@ sealed interface Action {
     data class ChangeName(val name: String) : Action
     data class ChangeDescription(val description: String) : Action
     data class ChangeImage(val imageUri: Uri) : Action
+    data class RaiseError(val error: Exception, val errorType: ErrorType) : Action
     data object AddProject : Action
 }
