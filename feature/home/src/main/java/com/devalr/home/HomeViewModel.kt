@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.ProjectBo
+import com.devalr.framework.AppTracer
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.home.interactions.Action
 import com.devalr.home.interactions.Action.AddProject
@@ -32,11 +33,13 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
+    private val tracer: AppTracer,
     val projectRepository: ProjectRepository,
     val miniatureRepository: MiniatureRepository
 ) : BaseViewModel<State, Action, Event>(initialState = State()) {
 
     override fun onAction(action: Action) {
+        tracer.log("HomeViewModel.onAction: ${action::class.simpleName}")
         when (action) {
             is Load -> initHomeData()
             is OpenProjectDetail -> sendEvent(NavigateToProject(projectId = action.projectId))
@@ -68,9 +71,9 @@ class HomeViewModel(
                     almostDoneProjects = almostDoneProjects,
                     lastUpdatedMinis = lastMinis,
                     loaded = true,
-                    error = null
                 )
             }.catch { error ->
+                tracer.recordError(error)
                 updateState { copy(error = error.message, loaded = true) }
             }.collect { newState ->
                 updateState { newState }

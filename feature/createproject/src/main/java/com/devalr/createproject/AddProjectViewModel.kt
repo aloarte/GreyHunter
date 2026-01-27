@@ -33,6 +33,7 @@ class AddProjectViewModel(
 ) :
     BaseViewModel<State, Action, Event>(initialState = State()) {
     override fun onAction(action: Action) {
+        tracer.log("AddProjectViewModel.onAction: ${action::class.simpleName}")
         when (action) {
             is Load -> onLoadScreen(projectId = action.projectId)
             is ChangeName -> updateState { copy(projectName = action.name) }

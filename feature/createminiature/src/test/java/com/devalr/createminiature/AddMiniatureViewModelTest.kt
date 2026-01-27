@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
+import app.cash.turbine.test
 import com.devalr.createminiature.interactions.Action.AddMiniature
 import com.devalr.createminiature.interactions.Action.ChangeImage
 import com.devalr.createminiature.interactions.Action.ChangeName
@@ -65,12 +66,14 @@ class AddMiniatureViewModelTest {
         const val MINI_IMAGE = "URI/example/1"
         const val NEW_MINI_NAME = "Space Assaulter"
         const val NEW_MINI_IMAGE = "URI/example/2"
+
         val existentMini = MiniatureBo(
             id = MINI_ID,
             projectId = PROJECT_ID,
             name = MINI_NAME,
             imageUri = MINI_IMAGE
         )
+
         val project = ProjectBo(
             id = PROJECT_ID,
             name = "Project name"
@@ -103,7 +106,7 @@ class AddMiniatureViewModelTest {
     @Test
     fun `GIVEN a projectId and empty miniId WHEN OnAppear is triggered THEN state updates with projectId`() =
         runTest {
-            // GIVEN & WHEN
+            // WHEN
             viewModel.onAction(Load(projectId = PROJECT_ID))
             advanceUntilIdle()
 
@@ -132,6 +135,7 @@ class AddMiniatureViewModelTest {
             assertEquals(MINI_IMAGE, state.miniatureImage)
             assertEquals(existentMini, state.miniatureToUpdate)
             assertTrue(state.editMode)
+
             coVerify(exactly = 1) { projectRepository.getProject(PROJECT_ID) }
             coVerify(exactly = 1) { miniatureRepository.getMiniature(MINI_ID) }
         }
@@ -151,22 +155,21 @@ class AddMiniatureViewModelTest {
             // GIVEN
             viewModel.onAction(ChangeName(MINI_NAME))
             every { tracer.recordError(any()) } just Runs
-            val events = mutableListOf<Event>()
-            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                viewModel.events.collect { events.add(it) }
+
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(AddMiniature)
+                advanceUntilIdle()
+
+                // THEN
+                verify(exactly = 1) { tracer.recordError(any()) }
+                coVerify(exactly = 0) { miniatureRepository.addMiniature(any()) }
+                assertEquals(
+                    LaunchSnackBarError(BadId),
+                    awaitItem()
+                )
+                cancelAndIgnoreRemainingEvents()
             }
-
-            // WHEN
-            viewModel.onAction(AddMiniature)
-            advanceUntilIdle()
-
-
-            // THEN
-            verify(exactly = 1) { tracer.recordError(any()) }
-            coVerify(exactly = 0) { miniatureRepository.addMiniature(any()) }
-            assertEquals(1, events.size)
-            assertTrue(events.contains(LaunchSnackBarError(BadId)))
-            job.cancel()
         }
 
     @Test
@@ -174,24 +177,24 @@ class AddMiniatureViewModelTest {
         runTest {
             // GIVEN
             every { tracer.recordError(any()) } just Runs
-            val events = mutableListOf<Event>()
-            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                viewModel.events.collect { events.add(it) }
-            }
             viewModel.onAction(Load(projectId = PROJECT_ID))
             advanceUntilIdle()
             viewModel.onAction(ChangeName(""))
 
-            // WHEN
-            viewModel.onAction(AddMiniature)
-            advanceUntilIdle()
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(AddMiniature)
+                advanceUntilIdle()
 
-            // THEN
-            coVerify(exactly = 0) { miniatureRepository.addMiniature(any()) }
-            verify(exactly = 1) { tracer.recordError(any()) }
-            assertEquals(1, events.size)
-            assertTrue(events.contains(LaunchSnackBarError(EmptyTitle)))
-            job.cancel()
+                // THEN
+                verify(exactly = 1) { tracer.recordError(any()) }
+                coVerify(exactly = 0) { miniatureRepository.addMiniature(any()) }
+                assertEquals(
+                    LaunchSnackBarError(EmptyTitle),
+                    awaitItem()
+                )
+                cancelAndIgnoreRemainingEvents()
+            }
         }
 
     @Test
@@ -199,24 +202,24 @@ class AddMiniatureViewModelTest {
         runTest {
             // GIVEN
             every { tracer.recordError(any()) } just Runs
-            val events = mutableListOf<Event>()
-            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                viewModel.events.collect { events.add(it) }
-            }
             viewModel.onAction(Load(projectId = PROJECT_ID))
             advanceUntilIdle()
             viewModel.onAction(ChangeName(MINI_NAME))
             coEvery { miniatureRepository.addMiniature(any()) } returns 0L
 
-            // WHEN
-            viewModel.onAction(AddMiniature)
-            advanceUntilIdle()
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(AddMiniature)
+                advanceUntilIdle()
 
-            // THEN
-            verify(exactly = 1) { tracer.recordError(any()) }
-            assertEquals(1, events.size)
-            assertTrue(events.contains(LaunchSnackBarError(AddDatabase)))
-            job.cancel()
+                // THEN
+                verify(exactly = 1) { tracer.recordError(any()) }
+                assertEquals(
+                    LaunchSnackBarError(AddDatabase),
+                    awaitItem()
+                )
+                cancelAndIgnoreRemainingEvents()
+            }
         }
 
     @Test
@@ -224,28 +227,28 @@ class AddMiniatureViewModelTest {
         runTest {
             // GIVEN
             every { tracer.recordError(any()) } just Runs
-            val events = mutableListOf<Event>()
-            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                viewModel.events.collect { events.add(it) }
-            }
             viewModel.onAction(Load(projectId = PROJECT_ID))
             advanceUntilIdle()
             viewModel.onAction(ChangeName(MINI_NAME))
             coEvery { miniatureRepository.addMiniature(any()) } returns 1L
             coEvery { projectRepository.updateProjectProgress(any(), any()) } returns false
 
-            // WHEN
-            viewModel.onAction(AddMiniature)
-            advanceUntilIdle()
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(AddMiniature)
+                advanceUntilIdle()
 
-            // THEN
-            coVerify(exactly = 1) { miniatureRepository.addMiniature(any()) }
-            coVerify(exactly = 0) { miniatureRepository.updateMiniature(any()) }
-            coVerify(exactly = 1) { projectRepository.updateProjectProgress(any(), any()) }
-            verify(exactly = 1) { tracer.recordError(any()) }
-            assertEquals(1, events.size)
-            assertTrue(events.contains(LaunchSnackBarError(ErrorUpdatingProgress)))
-            job.cancel()
+                // THEN
+                coVerify(exactly = 1) { miniatureRepository.addMiniature(any()) }
+                coVerify(exactly = 0) { miniatureRepository.updateMiniature(any()) }
+                coVerify(exactly = 1) { projectRepository.updateProjectProgress(any(), any()) }
+                verify(exactly = 1) { tracer.recordError(any()) }
+                assertEquals(
+                    LaunchSnackBarError(ErrorUpdatingProgress),
+                    awaitItem()
+                )
+                cancelAndIgnoreRemainingEvents()
+            }
         }
 
     @Test
@@ -257,22 +260,22 @@ class AddMiniatureViewModelTest {
             viewModel.onAction(ChangeName(MINI_NAME))
             coEvery { miniatureRepository.addMiniature(any()) } returns 10L
             coEvery { projectRepository.updateProjectProgress(PROJECT_ID, any()) } returns true
-            val events = mutableListOf<Event>()
-            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                viewModel.events.collect { events.add(it) }
+
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(AddMiniature)
+                advanceUntilIdle()
+
+                // THEN
+                coVerify(exactly = 1) { miniatureRepository.addMiniature(any()) }
+                coVerify(exactly = 0) { miniatureRepository.updateMiniature(any()) }
+                coVerify(exactly = 1) { projectRepository.updateProjectProgress(PROJECT_ID, any()) }
+                assertEquals(
+                    NavigateBack,
+                    awaitItem()
+                )
+                cancelAndIgnoreRemainingEvents()
             }
-
-            // WHEN
-            viewModel.onAction(AddMiniature)
-            advanceUntilIdle()
-
-            // THEN
-            coVerify(exactly = 1) { miniatureRepository.addMiniature(any()) }
-            coVerify(exactly = 0) { miniatureRepository.updateMiniature(any()) }
-            coVerify(exactly = 1) { projectRepository.updateProjectProgress(PROJECT_ID, any()) }
-            assertEquals(1, events.size)
-            assertTrue(events.contains(NavigateBack))
-            job.cancel()
         }
 
     @Test
@@ -280,29 +283,30 @@ class AddMiniatureViewModelTest {
         runTest {
             // GIVEN
             every { tracer.recordError(any()) } just Runs
-            val events = mutableListOf<Event>()
-            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                viewModel.events.collect { events.add(it) }
-            }
             coEvery { miniatureRepository.getMiniature(MINI_ID) } returns flow { emit(existentMini) }
             coEvery { miniatureRepository.updateMiniature(any()) } returns true
-            coEvery { projectRepository.updateProjectProgress(any()) } returns false
+            coEvery { projectRepository.updateProjectProgress(any(), any()) } returns false
+
             viewModel.onAction(Load(projectId = PROJECT_ID, miniatureId = MINI_ID))
             viewModel.onAction(ChangeName(NEW_MINI_NAME))
             advanceUntilIdle()
 
-            // WHEN
-            viewModel.onAction(AddMiniature)
-            advanceUntilIdle()
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(AddMiniature)
+                advanceUntilIdle()
 
-            // THEN
-            coVerify(exactly = 1) { miniatureRepository.getMiniature(MINI_ID) }
-            coVerify(exactly = 0) { miniatureRepository.addMiniature(any()) }
-            coVerify(exactly = 1) { miniatureRepository.updateMiniature(any()) }
-            verify(exactly = 1) { tracer.recordError(any()) }
-            assertEquals(1, events.size)
-            assertTrue(events.contains(LaunchSnackBarError(ErrorUpdatingProgress)))
-            job.cancel()
+                // THEN
+                coVerify(exactly = 1) { miniatureRepository.getMiniature(MINI_ID) }
+                coVerify(exactly = 0) { miniatureRepository.addMiniature(any()) }
+                coVerify(exactly = 1) { miniatureRepository.updateMiniature(any()) }
+                verify(exactly = 1) { tracer.recordError(any()) }
+                assertEquals(
+                    LaunchSnackBarError(ErrorUpdatingProgress),
+                    awaitItem()
+                )
+                cancelAndIgnoreRemainingEvents()
+            }
         }
 
     @Test
@@ -312,30 +316,30 @@ class AddMiniatureViewModelTest {
             coEvery { miniatureRepository.getMiniature(MINI_ID) } returns flow { emit(existentMini) }
             coEvery { miniatureRepository.updateMiniature(any()) } returns true
             coEvery { projectRepository.updateProjectProgress(PROJECT_ID) } returns true
+
             viewModel.onAction(Load(projectId = PROJECT_ID, miniatureId = MINI_ID))
             advanceUntilIdle()
             viewModel.onAction(ChangeName(NEW_MINI_NAME))
             viewModel.onAction(ChangeName(NEW_MINI_IMAGE))
-
             advanceUntilIdle()
-            val events = mutableListOf<Event>()
-            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                viewModel.events.collect { events.add(it) }
+
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(AddMiniature)
+                advanceUntilIdle()
+
+                // THEN
+                coVerify(exactly = 1) { miniatureRepository.getMiniature(MINI_ID) }
+                coVerify(exactly = 1) { projectRepository.getProject(PROJECT_ID) }
+                coVerify(exactly = 0) { miniatureRepository.addMiniature(any()) }
+                coVerify(exactly = 1) { miniatureRepository.updateMiniature(any()) }
+                coVerify(exactly = 1) { projectRepository.updateProjectProgress(PROJECT_ID) }
+                assertEquals(
+                    NavigateBack,
+                    awaitItem()
+                )
+                cancelAndIgnoreRemainingEvents()
             }
-
-            // WHEN
-            viewModel.onAction(AddMiniature)
-            advanceUntilIdle()
-
-            // THEN
-            coVerify(exactly = 1) { miniatureRepository.getMiniature(MINI_ID) }
-            coVerify(exactly = 1) { projectRepository.getProject(PROJECT_ID) }
-            coVerify(exactly = 0) { miniatureRepository.addMiniature(any()) }
-            coVerify(exactly = 1) { miniatureRepository.updateMiniature(any()) }
-            coVerify(exactly = 1) { projectRepository.updateProjectProgress(PROJECT_ID) }
-            assertEquals(1, events.size)
-            assertTrue(events.contains(NavigateBack))
-            job.cancel()
         }
 
     @Test
@@ -347,6 +351,7 @@ class AddMiniatureViewModelTest {
             val galleryUri: Uri = mockk()
             every { Uri.parse(galleryUriString) } returns galleryUri
             every { galleryUri.toString() } returns galleryUriString
+
             // WHEN
             viewModel.onAction(ChangeImage(galleryUri))
 
@@ -357,6 +362,7 @@ class AddMiniatureViewModelTest {
                     Intent.FLAG_GRANT_READ_URI_PERMISSION
                 )
             }
+
             val state = viewModel.uiState.value
             assertEquals(galleryUriString, state.miniatureImage)
         }
@@ -378,6 +384,7 @@ class AddMiniatureViewModelTest {
             verify(exactly = 0) {
                 contentResolver.takePersistableUriPermission(any(), any())
             }
+
             val state = viewModel.uiState.value
             assertEquals(cameraUriString, state.miniatureImage)
         }
@@ -385,19 +392,17 @@ class AddMiniatureViewModelTest {
     @Test
     fun `WHEN Return action is triggered THEN NavigateBack event is raised`() =
         runTest {
-            // GIVEN
-            val events = mutableListOf<Event>()
-            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                viewModel.events.collect { events.add(it) }
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(Return)
+
+                // THEN
+                assertEquals(
+                    NavigateBack,
+                    awaitItem()
+                )
+
+                cancelAndIgnoreRemainingEvents()
             }
-
-            // WHEN
-            viewModel.onAction(Return)
-            advanceUntilIdle()
-
-            // THEN
-            assertEquals(1, events.size)
-            assertTrue(events.contains(NavigateBack))
-            job.cancel()
         }
 }
