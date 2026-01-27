@@ -11,20 +11,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
 import com.devalr.settings.composables.SettingsScreenContent
-import com.devalr.settings.interactions.Action.Load
-import com.devalr.settings.interactions.Action.Return
 import com.devalr.settings.interactions.Action.ChangeAppearance
 import com.devalr.settings.interactions.Action.ChangeProgressColors
 import com.devalr.settings.interactions.Action.ExportProjects
 import com.devalr.settings.interactions.Action.ImportProjects
+import com.devalr.settings.interactions.Action.Load
+import com.devalr.settings.interactions.Action.Return
 import com.devalr.settings.interactions.Event.LaunchSnackBar
 import com.devalr.settings.interactions.Event.NavigateBack
+import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
 @Composable
@@ -34,7 +34,6 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val state = viewModel.uiState.collectAsState().value
-    rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
@@ -42,12 +41,14 @@ fun SettingsScreen(
             when (event) {
                 NavigateBack -> onNavigateBack()
                 is LaunchSnackBar -> {
-                    snackBarHostState.showSnackbar(
-                        SnackBarVisualsCustom(
-                            message = getSnackBarMessage(context, event),
-                            type = event.type
+                    launch {
+                        snackBarHostState.showSnackbar(
+                            SnackBarVisualsCustom(
+                                message = getSnackBarMessage(context, event),
+                                type = event.type
+                            )
                         )
-                    )
+                    }
                 }
             }
         }

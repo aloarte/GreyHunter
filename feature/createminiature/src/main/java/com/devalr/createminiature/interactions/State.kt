@@ -17,6 +17,5 @@ data class State(
     val miniatureToUpdate: MiniatureBo? = null,
     val miniatureName: String? = null,
     val miniatureImage: String? = null,
-    val editMode: Boolean = false,
-    val errorType: ErrorType? = null
+    val editMode: Boolean = false
 )

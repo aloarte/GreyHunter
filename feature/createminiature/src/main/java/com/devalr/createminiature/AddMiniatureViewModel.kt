@@ -9,14 +9,22 @@ import com.devalr.createminiature.interactions.Action.AddMiniature
 import com.devalr.createminiature.interactions.Action.ChangeImage
 import com.devalr.createminiature.interactions.Action.ChangeName
 import com.devalr.createminiature.interactions.Action.Load
+import com.devalr.createminiature.interactions.Action.RaiseError
 import com.devalr.createminiature.interactions.Action.Return
 import com.devalr.createminiature.interactions.ErrorType
+import com.devalr.createminiature.interactions.ErrorType.AddDatabase
+import com.devalr.createminiature.interactions.ErrorType.BadId
+import com.devalr.createminiature.interactions.ErrorType.EditDatabase
+import com.devalr.createminiature.interactions.ErrorType.EmptyTitle
+import com.devalr.createminiature.interactions.ErrorType.ErrorUpdatingProgress
 import com.devalr.createminiature.interactions.Event
+import com.devalr.createminiature.interactions.Event.LaunchSnackBarError
 import com.devalr.createminiature.interactions.Event.NavigateBack
 import com.devalr.createminiature.interactions.State
 import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.MiniatureBo
+import com.devalr.framework.AppTracer
 import com.devalr.framework.base.BaseViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
@@ -25,11 +33,12 @@ import kotlinx.coroutines.launch
 
 class AddMiniatureViewModel(
     private val application: Application,
+    private val tracer: AppTracer,
     val miniatureRepository: MiniatureRepository,
     val projectRepository: ProjectRepository
-) :
-    BaseViewModel<State, Action, Event>(initialState = State()) {
+) : BaseViewModel<State, Action, Event>(initialState = State()) {
     override fun onAction(action: Action) {
+        tracer.log("AddMiniatureViewModel.onAction: ${action::class.simpleName}")
         when (action) {
             is Load -> onLoadScreen(
                 miniatureId = action.miniatureId,
@@ -40,6 +49,7 @@ class AddMiniatureViewModel(
             is ChangeImage -> updateImage(action.imageUri)
             is AddMiniature -> addEditMiniature()
             is Return -> sendEvent(NavigateBack)
+            is RaiseError -> submitError(action.error, action.errorType)
         }
     }
 
@@ -53,9 +63,8 @@ class AddMiniatureViewModel(
                 )
             }
             updateState { copy(miniatureImage = imageUri.toString()) }
-
         } catch (e: SecurityException) {
-            e.printStackTrace()
+            submitError(e)
         }
     }
 
@@ -78,11 +87,12 @@ class AddMiniatureViewModel(
                             editMode = true
                         )
                     }
-                }.filterNotNull().catch { error ->
-                    updateState { copy(errorType = ErrorType.BadId) }
-                }.collect { newState ->
-                    updateState { newState }
-                }
+                }.filterNotNull()
+                    .catch { error ->
+                        submitError(error, BadId)
+                    }.collect { newState ->
+                        updateState { newState }
+                    }
             }
         } else {
             viewModelScope.launch {
@@ -102,11 +112,11 @@ class AddMiniatureViewModel(
     private fun addEditMiniature() {
         with(uiState.value) {
             if (projectId == null) {
-                updateState { copy(errorType = ErrorType.BadId) }
+                submitError(Exception("addEditMiniature null projectId"), BadId)
                 return
             }
             if (miniatureName.isNullOrEmpty()) {
-                updateState { copy(errorType = ErrorType.EmptyTitle) }
+                submitError(Exception("addEditMiniature null miniatureName"), EmptyTitle)
                 return
             }
 
@@ -136,35 +146,52 @@ class AddMiniatureViewModel(
                     projectId = projectId,
                     avoidLastUpdate = true
                 )
-                updateState { copy(errorType = if (projectUpdated) null else ErrorType.ErrorUpdatingProgress) }
-                sendEvent(NavigateBack)
-
-            } else {
-                updateState { copy(errorType = ErrorType.AddDatabase) }
-            }
+                if (!projectUpdated) {
+                    submitError(
+                        Exception("addMiniature project update error"),
+                        ErrorUpdatingProgress
+                    )
+                } else {
+                    sendEvent(NavigateBack)
+                }
+            } else submitError(
+                Exception("addMiniature Miniature not added"),
+                AddDatabase
+            )
         }
+
 
     private fun editMiniature(
         miniatureToUpdate: MiniatureBo?,
         projectId: Long,
         miniatureName: String,
         miniatureImage: String?
-    ) =
-        viewModelScope.launch {
-            miniatureToUpdate?.let {
-                val newMiniature =
-                    miniatureToUpdate.copy(name = miniatureName, imageUri = miniatureImage)
-                if (miniatureRepository.updateMiniature(newMiniature)) {
-                    val projectUpdated =
-                        projectRepository.updateProjectProgress(projectId = projectId)
-                    updateState { copy(errorType = if (projectUpdated) null else ErrorType.ErrorUpdatingProgress) }
-                    sendEvent(NavigateBack)
-
+    ) = viewModelScope.launch {
+        miniatureToUpdate?.let {
+            val newMiniature =
+                miniatureToUpdate.copy(name = miniatureName, imageUri = miniatureImage)
+            if (miniatureRepository.updateMiniature(newMiniature)) {
+                val projectUpdated =
+                    projectRepository.updateProjectProgress(projectId = projectId)
+                if (!projectUpdated) {
+                    submitError(
+                        Exception("editMiniature project update error"),
+                        ErrorUpdatingProgress
+                    )
                 } else {
-                    updateState { copy(errorType = ErrorType.EditDatabase) }
+                    sendEvent(NavigateBack)
                 }
-            } ?: run {
-                updateState { copy(errorType = ErrorType.BadId) }
+            } else {
+                submitError(Exception("editMiniature database update error"), EditDatabase)
             }
+        } ?: run {
+            submitError(Exception("editMiniature null miniature to updater"), BadId)
         }
+    }
+
+    private fun submitError(error: Throwable, errorType: ErrorType? = null) {
+        tracer.recordError(error)
+        errorType?.let { sendEvent(LaunchSnackBarError(errorType)) }
+    }
+
 }
