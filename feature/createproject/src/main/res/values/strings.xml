@@ -5,6 +5,8 @@
     <string name="error_add_project_bad_id">Something went wrong. Please try again.</string>
     <string name="error_add_project_add_database">Could not create the project. Please try again.</string>
     <string name="error_add_project_edit_database">Could not save the changes. Please try again.</string>
+    <string name="error_add_project_import_images">Image could not be imported. Please try again.</string>
+
     <!-- Buttons -->
     <string name="button_add_project">Create project</string>
     <string name="button_edit_project">Save project</string>

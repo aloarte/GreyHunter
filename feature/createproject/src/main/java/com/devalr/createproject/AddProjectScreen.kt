@@ -110,4 +110,6 @@ private fun getSnackBarMessage(context: Context, error: ErrorType): String =
         ErrorType.EmptyTitle -> context.getString(R.string.error_add_project_empty_name)
         ErrorType.AddDatabase -> context.getString(R.string.error_add_project_add_database)
         ErrorType.EditDatabase -> context.getString(R.string.error_add_project_edit_database)
+        ErrorType.ImportImage ->  context.getString(R.string.error_add_project_import_images)
+
     }

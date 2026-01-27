@@ -7,7 +7,8 @@ enum class ErrorType {
     EmptyTitle,
     AddDatabase,
     BadId,
-    EditDatabase
+    EditDatabase,
+    ImportImage
 }
 
 data class State(

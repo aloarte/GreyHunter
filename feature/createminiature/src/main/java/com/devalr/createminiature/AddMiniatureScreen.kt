@@ -25,6 +25,7 @@ import com.devalr.createminiature.interactions.ErrorType.BadId
 import com.devalr.createminiature.interactions.ErrorType.EditDatabase
 import com.devalr.createminiature.interactions.ErrorType.EmptyTitle
 import com.devalr.createminiature.interactions.ErrorType.ErrorUpdatingProgress
+import com.devalr.createminiature.interactions.ErrorType.ImportImage
 import com.devalr.createminiature.interactions.Event.LaunchSnackBarError
 import com.devalr.createminiature.interactions.Event.NavigateBack
 import com.devalr.framework.components.bottomsheet.ImagePickerHandler
@@ -120,5 +121,6 @@ private fun getSnackBarMessage(context: Context, error: ErrorType): String =
         AddDatabase -> context.getString(R.string.error_add_miniature_add_database)
         EditDatabase -> context.getString(R.string.error_add_miniature_edit_database)
         ErrorUpdatingProgress -> context.getString(R.string.error_add_miniature_update_progress)
+        ImportImage -> context.getString(R.string.error_add_miniature_import_images)
     }
 

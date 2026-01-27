@@ -17,6 +17,7 @@ import com.devalr.createminiature.interactions.ErrorType.BadId
 import com.devalr.createminiature.interactions.ErrorType.EditDatabase
 import com.devalr.createminiature.interactions.ErrorType.EmptyTitle
 import com.devalr.createminiature.interactions.ErrorType.ErrorUpdatingProgress
+import com.devalr.createminiature.interactions.ErrorType.ImportImage
 import com.devalr.createminiature.interactions.Event
 import com.devalr.createminiature.interactions.Event.LaunchSnackBarError
 import com.devalr.createminiature.interactions.Event.NavigateBack
@@ -64,7 +65,7 @@ class AddMiniatureViewModel(
             }
             updateState { copy(miniatureImage = imageUri.toString()) }
         } catch (e: SecurityException) {
-            submitError(e)
+            submitError(e, ImportImage)
         }
     }
 

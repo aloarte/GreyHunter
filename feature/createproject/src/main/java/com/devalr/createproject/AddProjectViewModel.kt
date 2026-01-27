@@ -15,6 +15,8 @@ import com.devalr.createproject.interactions.Action.Return
 import com.devalr.createproject.interactions.ErrorType
 import com.devalr.createproject.interactions.ErrorType.AddDatabase
 import com.devalr.createproject.interactions.ErrorType.BadId
+import com.devalr.createproject.interactions.ErrorType.EditDatabase
+import com.devalr.createproject.interactions.ErrorType.ImportImage
 import com.devalr.createproject.interactions.Event
 import com.devalr.createproject.interactions.Event.LaunchSnackBarError
 import com.devalr.createproject.interactions.Event.NavigateBack
@@ -78,12 +80,10 @@ class AddProjectViewModel(
                 )
             }
             updateState { copy(projectImage = imageUri.toString()) }
-
         } catch (e: SecurityException) {
-            e.printStackTrace()
+            submitError(e, ImportImage)
         }
     }
-
 
     private fun addEditProject() {
         with(uiState.value) {
@@ -128,7 +128,7 @@ class AddProjectViewModel(
             } else {
                 submitError(
                     Exception("editProject error updating project on database"),
-                    ErrorType.EditDatabase
+                    EditDatabase
                 )
             }
         } ?: run {
