@@ -72,7 +72,6 @@ fun MiniatureDetailScreen(
                     )
                 }
             }
-
         }
     }
     LaunchedEffect(true) { viewModel.onAction(Load(miniatureId)) }

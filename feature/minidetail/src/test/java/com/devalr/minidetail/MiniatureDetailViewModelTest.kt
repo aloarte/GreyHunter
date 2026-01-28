@@ -178,10 +178,7 @@ class MiniatureDetailViewModelTest {
                 advanceUntilIdle()
 
                 // THEN
-                assertEquals(
-                    LaunchSnackBarError(ErrorType.CompletePreviousSteps),
-                    awaitItem()
-                )
+                assertEquals(LaunchSnackBarError(ErrorType.CompletePreviousSteps), awaitItem())
                 cancelAndIgnoreRemainingEvents()
             }
             // THEN
@@ -200,10 +197,7 @@ class MiniatureDetailViewModelTest {
             advanceUntilIdle()
 
             // THEN
-            assertEquals(
-                LaunchSnackBarError(ErrorType.EmptyMiniature),
-                awaitItem()
-            )
+            assertEquals(LaunchSnackBarError(ErrorType.EmptyMiniature), awaitItem())
             cancelAndIgnoreRemainingEvents()
         }
     }
