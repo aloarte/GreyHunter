@@ -242,12 +242,10 @@ class AddProjectViewModelTest {
                 coVerify(exactly = 1) { repository.getProject(PROJECT_ID) }
                 coVerify(exactly = 0) { repository.addProject(any()) }
                 coVerify(exactly = 1) { repository.updateProject(any()) }
-
                 assertEquals(
                     LaunchSnackBarError(EditDatabase),
                     awaitItem()
                 )
-
                 cancelAndIgnoreRemainingEvents()
             }
         }

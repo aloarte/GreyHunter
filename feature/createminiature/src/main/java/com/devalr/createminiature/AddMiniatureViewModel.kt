@@ -9,7 +9,6 @@ import com.devalr.createminiature.interactions.Action.AddMiniature
 import com.devalr.createminiature.interactions.Action.ChangeImage
 import com.devalr.createminiature.interactions.Action.ChangeName
 import com.devalr.createminiature.interactions.Action.Load
-import com.devalr.createminiature.interactions.Action.RaiseError
 import com.devalr.createminiature.interactions.Action.Return
 import com.devalr.createminiature.interactions.ErrorType
 import com.devalr.createminiature.interactions.ErrorType.AddDatabase
@@ -35,8 +34,8 @@ import kotlinx.coroutines.launch
 class AddMiniatureViewModel(
     private val application: Application,
     private val tracer: AppTracer,
-    val miniatureRepository: MiniatureRepository,
-    val projectRepository: ProjectRepository
+    private val miniatureRepository: MiniatureRepository,
+    private val projectRepository: ProjectRepository
 ) : BaseViewModel<State, Action, Event>(initialState = State()) {
     override fun onAction(action: Action) {
         tracer.log("AddMiniatureViewModel.onAction: ${action::class.simpleName}")
@@ -50,7 +49,6 @@ class AddMiniatureViewModel(
             is ChangeImage -> updateImage(action.imageUri)
             is AddMiniature -> addEditMiniature()
             is Return -> sendEvent(NavigateBack)
-            is RaiseError -> submitError(action.error, action.errorType)
         }
     }
 
@@ -88,12 +86,12 @@ class AddMiniatureViewModel(
                             editMode = true
                         )
                     }
-                }.filterNotNull()
-                    .catch { error ->
-                        submitError(error, BadId)
-                    }.collect { newState ->
-                        updateState { newState }
-                    }
+                }.filterNotNull().catch { error ->
+                    // TODO: Display a empty screen
+                    submitError(error, BadId)
+                }.collect { newState ->
+                    updateState { newState }
+                }
             }
         } else {
             viewModelScope.launch {

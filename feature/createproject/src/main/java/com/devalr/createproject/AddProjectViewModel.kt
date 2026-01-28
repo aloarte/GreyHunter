@@ -10,7 +10,6 @@ import com.devalr.createproject.interactions.Action.ChangeDescription
 import com.devalr.createproject.interactions.Action.ChangeImage
 import com.devalr.createproject.interactions.Action.ChangeName
 import com.devalr.createproject.interactions.Action.Load
-import com.devalr.createproject.interactions.Action.RaiseError
 import com.devalr.createproject.interactions.Action.Return
 import com.devalr.createproject.interactions.ErrorType
 import com.devalr.createproject.interactions.ErrorType.AddDatabase
@@ -31,9 +30,8 @@ import kotlinx.coroutines.launch
 class AddProjectViewModel(
     private val application: Application,
     private val tracer: AppTracer,
-    val projectRepository: ProjectRepository
-) :
-    BaseViewModel<State, Action, Event>(initialState = State()) {
+    private val projectRepository: ProjectRepository
+) : BaseViewModel<State, Action, Event>(initialState = State()) {
     override fun onAction(action: Action) {
         tracer.log("AddProjectViewModel.onAction: ${action::class.simpleName}")
         when (action) {
@@ -43,7 +41,6 @@ class AddProjectViewModel(
             is ChangeImage -> updateImage(action.imageUri)
             is AddProject -> addEditProject()
             Return -> sendEvent(NavigateBack)
-            is RaiseError -> submitError(action.error, action.errorType)
         }
     }
 
@@ -52,6 +49,7 @@ class AddProjectViewModel(
             viewModelScope.launch {
                 projectRepository.getProject(projectId)
                     .catch {
+                        // TODO: Display a empty screen
                         submitError(it, BadId)
                     }
                     .collect {

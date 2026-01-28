@@ -73,6 +73,7 @@ class HomeViewModel(
                     loaded = true,
                 )
             }.catch { error ->
+                // TODO: Display a empty screen
                 tracer.recordError(error)
                 updateState { copy(error = error.message, loaded = true) }
             }.collect { newState ->
