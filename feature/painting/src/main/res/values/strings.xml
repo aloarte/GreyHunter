@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Errors -->
+    <string name="error_painting_load_database">An error occurred while loading the miniatures. Please try again.</string>
 
     <!-- Buttons -->
     <string name="btn_stop_painting">Done painting</string>

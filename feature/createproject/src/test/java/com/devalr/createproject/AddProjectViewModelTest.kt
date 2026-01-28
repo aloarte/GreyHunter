@@ -11,7 +11,6 @@ import com.devalr.createproject.interactions.Action.ChangeImage
 import com.devalr.createproject.interactions.Action.ChangeName
 import com.devalr.createproject.interactions.Action.Load
 import com.devalr.createproject.interactions.Action.Return
-import com.devalr.createproject.interactions.ErrorType
 import com.devalr.createproject.interactions.ErrorType.AddDatabase
 import com.devalr.createproject.interactions.ErrorType.EditDatabase
 import com.devalr.createproject.interactions.ErrorType.EmptyTitle
@@ -153,16 +152,12 @@ class AddProjectViewModelTest {
                 viewModel.onAction(AddProject)
 
                 // THEN
-                verify(exactly = 1) { tracer.recordError(any()) }
-                coVerify(exactly = 0) { repository.addProject(any()) }
-
-                assertEquals(
-                    LaunchSnackBarError(EmptyTitle),
-                    awaitItem()
-                )
-
+                assertEquals(LaunchSnackBarError(EmptyTitle), awaitItem())
                 cancelAndIgnoreRemainingEvents()
             }
+            //THEN
+            verify(exactly = 1) { tracer.recordError(any()) }
+            coVerify(exactly = 0) { repository.addProject(any()) }
         }
 
     @Test
@@ -172,6 +167,7 @@ class AddProjectViewModelTest {
             coEvery { repository.addProject(any()) } returns 1
 
             viewModel.events.test {
+                // GIVEN
                 viewModel.onAction(ChangeName(PROJECT_NAME))
                 viewModel.onAction(ChangeDescription(PROJECT_DESCRIPTION))
                 advanceUntilIdle()
@@ -181,16 +177,13 @@ class AddProjectViewModelTest {
                 advanceUntilIdle()
 
                 // THEN
-                coVerify(exactly = 1) { repository.addProject(any()) }
-                coVerify(exactly = 0) { repository.updateProject(any()) }
-
-                assertEquals(
-                    NavigateBack,
-                    awaitItem()
-                )
-
+                assertEquals(NavigateBack, awaitItem())
                 cancelAndIgnoreRemainingEvents()
             }
+            // THEN
+            coVerify(exactly = 1) { repository.addProject(any()) }
+            coVerify(exactly = 0) { repository.updateProject(any()) }
+
         }
 
     @Test
@@ -201,6 +194,7 @@ class AddProjectViewModelTest {
             every { tracer.recordError(any()) } just Runs
 
             viewModel.events.test {
+                // GIVEN
                 viewModel.onAction(ChangeName(PROJECT_NAME))
                 viewModel.onAction(ChangeDescription(PROJECT_DESCRIPTION))
 
@@ -208,14 +202,11 @@ class AddProjectViewModelTest {
                 viewModel.onAction(AddProject)
 
                 // THEN
-                assertEquals(
-                    LaunchSnackBarError(AddDatabase),
-                    awaitItem()
-                )
-
+                assertEquals(LaunchSnackBarError(AddDatabase), awaitItem())
                 cancelAndIgnoreRemainingEvents()
             }
 
+            // THEN
             coVerify(exactly = 1) { repository.addProject(any()) }
             coVerify(exactly = 0) { repository.updateProject(any()) }
         }
@@ -229,6 +220,7 @@ class AddProjectViewModelTest {
             every { tracer.recordError(any()) } just Runs
 
             viewModel.events.test {
+                // GIVEN
                 viewModel.onAction(Load(PROJECT_ID))
                 viewModel.onAction(ChangeName(PROJECT_NAME))
                 viewModel.onAction(ChangeDescription(PROJECT_DESCRIPTION))
@@ -239,15 +231,14 @@ class AddProjectViewModelTest {
                 advanceUntilIdle()
 
                 // THEN
-                coVerify(exactly = 1) { repository.getProject(PROJECT_ID) }
-                coVerify(exactly = 0) { repository.addProject(any()) }
-                coVerify(exactly = 1) { repository.updateProject(any()) }
-                assertEquals(
-                    LaunchSnackBarError(EditDatabase),
-                    awaitItem()
-                )
+                assertEquals(LaunchSnackBarError(EditDatabase), awaitItem())
                 cancelAndIgnoreRemainingEvents()
             }
+
+            // THEN
+            coVerify(exactly = 1) { repository.getProject(PROJECT_ID) }
+            coVerify(exactly = 0) { repository.addProject(any()) }
+            coVerify(exactly = 1) { repository.updateProject(any()) }
         }
 
     @Test
@@ -269,12 +260,14 @@ class AddProjectViewModelTest {
                 advanceUntilIdle()
 
                 // THEN
-                coVerify(exactly = 1) { repository.getProject(PROJECT_ID) }
-                coVerify(exactly = 0) { repository.addProject(any()) }
-                coVerify(exactly = 1) { repository.updateProject(any()) }
                 assertEquals(NavigateBack, awaitItem())
                 cancelAndIgnoreRemainingEvents()
             }
+
+            // THEN
+            coVerify(exactly = 1) { repository.getProject(PROJECT_ID) }
+            coVerify(exactly = 0) { repository.addProject(any()) }
+            coVerify(exactly = 1) { repository.updateProject(any()) }
         }
 
     @Test
@@ -314,9 +307,7 @@ class AddProjectViewModelTest {
             viewModel.onAction(ChangeImage(cameraUri))
 
             // THEN
-            verify(exactly = 0) {
-                contentResolver.takePersistableUriPermission(any(), any())
-            }
+            verify(exactly = 0) { contentResolver.takePersistableUriPermission(any(), any()) }
             val state = viewModel.uiState.value
             assertEquals(cameraUriString, state.projectImage)
         }
@@ -333,7 +324,6 @@ class AddProjectViewModelTest {
                     NavigateBack,
                     awaitItem()
                 )
-
                 cancelAndIgnoreRemainingEvents()
             }
         }

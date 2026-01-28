@@ -2,23 +2,28 @@ package com.devalr.painting
 
 import androidx.lifecycle.viewModelScope
 import com.devalr.domain.MiniatureRepository
+import com.devalr.framework.AppTracer
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.painting.interactions.Action
 import com.devalr.painting.interactions.Action.FinishPainting
 import com.devalr.painting.interactions.Action.Load
 import com.devalr.painting.interactions.Action.Return
-import com.devalr.painting.interactions.ErrorType
+import com.devalr.painting.interactions.ErrorType.RetrievingDatabase
 import com.devalr.painting.interactions.Event
+import com.devalr.painting.interactions.Event.LaunchSnackBarError
 import com.devalr.painting.interactions.Event.NavigateBack
 import com.devalr.painting.interactions.Event.NavigateToUpdateMiniatures
 import com.devalr.painting.interactions.State
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class PaintingViewModel(val minisRepository: MiniatureRepository) :
-    BaseViewModel<State, Action, Event>(initialState = State()) {
+class PaintingViewModel(
+    private val tracer: AppTracer,
+    private val minisRepository: MiniatureRepository,
+) : BaseViewModel<State, Action, Event>(initialState = State()) {
 
     override fun onAction(action: Action) {
+        tracer.log("PaintingViewModel.onAction: ${action::class.simpleName}")
         when (action) {
             is Load -> fetchMiniatures(action.minisIds)
             Return -> sendEvent(NavigateBack)
@@ -29,7 +34,10 @@ class PaintingViewModel(val minisRepository: MiniatureRepository) :
     private fun fetchMiniatures(minisIds: List<Long>) {
         viewModelScope.launch {
             minisRepository.getMiniatures(miniaturesId = minisIds)
-                .catch { updateState { copy(error = ErrorType.RetrievingDatabase) } }
+                .catch { error ->
+                    tracer.recordError(error)
+                    sendEvent(LaunchSnackBarError(RetrievingDatabase))
+                }
                 .collect {
                     updateState {
                         copy(
