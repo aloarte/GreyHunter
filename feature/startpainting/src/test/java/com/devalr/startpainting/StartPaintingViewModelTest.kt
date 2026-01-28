@@ -1,28 +1,34 @@
 package com.devalr.startpainting
 
 
+import app.cash.turbine.test
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
-import com.devalr.startpainting.interactions.Action.*
+import com.devalr.framework.AppTracer
+import com.devalr.startpainting.interactions.Action.Load
+import com.devalr.startpainting.interactions.Action.Return
+import com.devalr.startpainting.interactions.Action.SelectMiniature
+import com.devalr.startpainting.interactions.Action.StartPainting
 import com.devalr.startpainting.interactions.ErrorType
-import com.devalr.startpainting.interactions.Event
+import com.devalr.startpainting.interactions.Event.LaunchErrorSnackBar
 import com.devalr.startpainting.interactions.Event.NavigateBack
 import com.devalr.startpainting.interactions.Event.NavigateToPaintMiniatures
 import com.devalr.startpainting.mapper.StartPaintMiniatureVoMapper
 import com.devalr.startpainting.mapper.StartPaintProjectVoMapper
 import com.devalr.startpainting.model.StartPaintMiniatureVo
 import com.devalr.startpainting.model.StartPaintProjectVo
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -39,6 +45,7 @@ class StartPaintingViewModelTest {
     private val projectsRepository: ProjectRepository = mockk()
     private val projectVoMapper: StartPaintProjectVoMapper = mockk()
     private val miniatureVoMapper: StartPaintMiniatureVoMapper = mockk()
+    private val tracer: AppTracer = mockk()
 
     private lateinit var viewModel: StartPaintingViewModel
 
@@ -62,18 +69,18 @@ class StartPaintingViewModelTest {
     private val filledProjectVo =
         StartPaintProjectVo(id = 1, name = "Warhammer Army", minis = miniaturesVo)
 
-
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        viewModel = StartPaintingViewModel(projectsRepository, projectVoMapper, miniatureVoMapper)
+        every { tracer.log(any()) } just Runs
+        viewModel =
+            StartPaintingViewModel(tracer, projectsRepository, projectVoMapper, miniatureVoMapper)
     }
 
     @After
     fun tearDown() {
         Dispatchers.resetMain()
     }
-
 
     @Test
     fun `GIVEN a valid project WHEN OnAppear is triggered THEN state updates with the project and its miniatures`() =
@@ -83,59 +90,63 @@ class StartPaintingViewModelTest {
                 listOf(filledProject, emptyProject)
             )
             coEvery { projectVoMapper.transform(filledProject) } returns filledProjectVo
-            advanceUntilIdle()
 
-            // WHEN
-            viewModel.onAction(Load)
-            advanceUntilIdle()
+            viewModel.uiState.test {
+                // initial state
+                awaitItem()
+
+                // WHEN
+                viewModel.onAction(Load)
+                advanceUntilIdle()
+
+                // THEN
+                val state = awaitItem()
+                assertTrue(state.projectsLoaded)
+                assertEquals(listOf(filledProjectVo), state.projectList)
+                cancelAndIgnoreRemainingEvents()
+            }
 
             // THEN
-            val state = viewModel.uiState.value
             coVerify(exactly = 1) { projectsRepository.getAllProjects() }
             coVerify(exactly = 1) { projectVoMapper.transform(filledProject) }
-            coVerify(exactly = 0) { projectVoMapper.transform(emptyProject) } // shouldn't be called because we filter empty projects
-            assertTrue(state.projectsLoaded)
-            assertEquals(listOf(filledProjectVo), state.projectList)
+            coVerify(exactly = 0) { projectVoMapper.transform(emptyProject) }
         }
 
     @Test
     fun `GIVEN a error in database WHEN OnAppear is triggered THEN error is raised`() =
         runTest {
             // GIVEN
+            every { tracer.recordError(any()) } just Runs
             coEvery { projectsRepository.getAllProjects() } returns flow {
                 throw RuntimeException("Database error")
             }
-            advanceUntilIdle()
 
-            // WHEN
-            viewModel.onAction(Load)
-            advanceUntilIdle()
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(Load)
+                advanceUntilIdle()
+
+                // THEN
+                assertEquals(LaunchErrorSnackBar(ErrorType.RetrievingDatabase), awaitItem())
+                cancelAndIgnoreRemainingEvents()
+            }
 
             // THEN
-            val state = viewModel.uiState.value
             coVerify(exactly = 1) { projectsRepository.getAllProjects() }
             coVerify(exactly = 0) { projectVoMapper.transform(any()) }
-            assertEquals(ErrorType.RetrievingDatabase, state.error)
-
         }
 
     @Test
     fun `WHEN Return is triggered THEN NavigateBack event is raised`() =
         runTest {
-            // GIVEN
-            val events = mutableListOf<Event>()
-            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                viewModel.events.collect { events.add(it) }
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(Return)
+
+                // THEN
+                assertEquals(NavigateBack, awaitItem())
+                cancelAndIgnoreRemainingEvents()
             }
-
-            // WHEN
-            viewModel.onAction(Return)
-            advanceUntilIdle()
-
-            // THEN
-            assertEquals(1, events.size)
-            assertEquals(NavigateBack, events.first())
-            job.cancel()
         }
 
     @Test
@@ -144,72 +155,93 @@ class StartPaintingViewModelTest {
             // GIVEN
             coEvery { projectsRepository.getAllProjects() } returns flowOf(listOf(filledProject))
             coEvery { projectVoMapper.transform(filledProject) } returns filledProjectVo
-            viewModel.onAction(Load)
-            advanceUntilIdle()
 
-            // WHEN
-            viewModel.onAction(SelectMiniature(miniature1Vo))
-            advanceUntilIdle()
+            viewModel.uiState.test {
+                // initial
+                awaitItem()
+
+                viewModel.onAction(Load)
+                advanceUntilIdle()
+                awaitItem()
+
+                // WHEN
+                viewModel.onAction(SelectMiniature(miniature1Vo))
+                advanceUntilIdle()
+
+                // THEN
+                val state = awaitItem()
+                assertTrue(state.paintButtonEnabled)
+
+                val updatedProject = filledProjectVo.copy(
+                    minis = listOf(
+                        miniature1Vo.copy(isSelected = true),
+                        miniature2Vo
+                    )
+                )
+                assertEquals(listOf(updatedProject), state.projectList)
+
+                cancelAndIgnoreRemainingEvents()
+            }
 
             // THEN
-            val state = viewModel.uiState.value
-            assertTrue(state.paintButtonEnabled)
-            val updatedProject = filledProjectVo.copy(minis = listOf(miniature1Vo.copy(isSelected = true), miniature2Vo))
-            assertEquals(listOf(updatedProject), state.projectList)
+            coVerify(exactly = 1) { projectsRepository.getAllProjects() }
+            coVerify(exactly = 1) { projectVoMapper.transform(filledProject) }
         }
 
     @Test
     fun `WHEN OnStartPainting is triggered and 2 minis were selected previously THEN NavigatePaintMiniatures event is raised`() =
         runTest {
             // GIVEN
-            val events = mutableListOf<Event>()
-            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                viewModel.events.collect { events.add(it) }
-            }
             coEvery { projectsRepository.getAllProjects() } returns flowOf(listOf(filledProject))
             coEvery { projectVoMapper.transform(filledProject) } returns filledProjectVo
-            coEvery { miniatureVoMapper.transformReverse(miniature1Vo.copy(isSelected = true)) } returns miniature1
-            coEvery { miniatureVoMapper.transformReverse(miniature2Vo.copy(isSelected = true)) } returns miniature2
-            viewModel.onAction(Load)
-            advanceUntilIdle()
-            viewModel.onAction(SelectMiniature(miniature1Vo))
-            viewModel.onAction(SelectMiniature(miniature2Vo))
-            advanceUntilIdle()
+            coEvery {
+                miniatureVoMapper.transformReverse(miniature1Vo.copy(isSelected = true))
+            } returns miniature1
+            coEvery {
+                miniatureVoMapper.transformReverse(miniature2Vo.copy(isSelected = true))
+            } returns miniature2
 
-            // WHEN
-            viewModel.onAction(StartPainting)
-            advanceUntilIdle()
+            viewModel.events.test {
+                viewModel.onAction(Load)
+                advanceUntilIdle()
+                viewModel.onAction(SelectMiniature(miniature1Vo))
+                viewModel.onAction(SelectMiniature(miniature2Vo))
+                advanceUntilIdle()
+
+                // WHEN
+                viewModel.onAction(StartPainting)
+                advanceUntilIdle()
+
+                // THEN
+                assertEquals(NavigateToPaintMiniatures(listOf(miniId1, miniId2)), awaitItem())
+                cancelAndIgnoreRemainingEvents()
+            }
 
             // THEN
             coVerify(exactly = 1) { projectsRepository.getAllProjects() }
             coVerify(exactly = 1) { projectVoMapper.transform(filledProject) }
             coVerify(exactly = 2) { miniatureVoMapper.transformReverse(any()) }
-            assertEquals(1, events.size)
-            assertEquals(NavigateToPaintMiniatures(listOf(miniId1,miniId2)), events.first())
-            job.cancel()
         }
 
     @Test
     fun `WHEN OnStartPainting is triggered and 0 minis were selected previously THEN error is raised`() =
         runTest {
             // GIVEN
-            val events = mutableListOf<Event>()
-            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                viewModel.events.collect { events.add(it) }
+            every { tracer.recordError(any()) } just Runs
+
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(StartPainting)
+                advanceUntilIdle()
+
+                // THEN
+                assertEquals(LaunchErrorSnackBar(ErrorType.NoMinisToPaint), awaitItem())
+                cancelAndIgnoreRemainingEvents()
             }
 
-            // WHEN
-            viewModel.onAction(StartPainting)
-            advanceUntilIdle()
-
             // THEN
-            val state = viewModel.uiState.value
             coVerify(exactly = 0) { projectsRepository.getAllProjects() }
-            coVerify(exactly = 0) { projectVoMapper.transform(filledProject) }
+            coVerify(exactly = 0) { projectVoMapper.transform(any()) }
             coVerify(exactly = 0) { miniatureVoMapper.transformReverse(any()) }
-            assertEquals(0, events.size)
-            assertEquals(ErrorType.NoMinisToPaint, state.error)
-            job.cancel()
         }
-
 }

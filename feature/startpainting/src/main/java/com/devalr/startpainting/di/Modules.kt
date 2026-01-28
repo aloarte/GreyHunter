@@ -16,6 +16,7 @@ private val viewModelModules = module {
     factory {
         StartPaintingViewModel(
             get(),
+            get(),
             get(named("PaintProjectVoMapper")),
             get(named("PaintMiniatureVoMapper"))
         )

@@ -9,6 +9,5 @@ enum class ErrorType {
 data class State(
     val projectsLoaded: Boolean = false,
     val projectList: List<StartPaintProjectVo> = emptyList(),
-    val paintButtonEnabled: Boolean = false,
-    val error: ErrorType? = null
+    val paintButtonEnabled: Boolean = false
 )
