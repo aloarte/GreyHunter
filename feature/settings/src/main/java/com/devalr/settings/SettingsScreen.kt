@@ -22,8 +22,12 @@ import com.devalr.settings.interactions.Action.ExportProjects
 import com.devalr.settings.interactions.Action.ImportProjects
 import com.devalr.settings.interactions.Action.Load
 import com.devalr.settings.interactions.Action.Return
+import com.devalr.settings.interactions.ErrorType.DatastoreRetrieval
+import com.devalr.settings.interactions.ErrorType.Export
+import com.devalr.settings.interactions.ErrorType.Import
 import com.devalr.settings.interactions.Event.LaunchSnackBar
 import com.devalr.settings.interactions.Event.NavigateBack
+import com.devalr.settings.interactions.OperationType
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
@@ -35,7 +39,6 @@ fun SettingsScreen(
     val context = LocalContext.current
     val state = viewModel.uiState.collectAsState().value
     val snackBarHostState = remember { SnackbarHostState() }
-
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
@@ -103,14 +106,16 @@ fun SettingsScreen(
 }
 
 private fun getSnackBarMessage(context: Context, event: LaunchSnackBar): String =
-    if (event.import) {
-        when (event.type) {
-            SnackBarType.SUCCESS -> context.getString(R.string.snack_bar_imported_success)
-            SnackBarType.ERROR -> context.getString(R.string.snack_bar_imported_error)
+    if (event.errorType != null && event.type == SnackBarType.ERROR) {
+        when (event.errorType) {
+            DatastoreRetrieval -> context.getString(R.string.snack_bar_datastore_retrieval_error)
+            Import -> context.getString(R.string.snack_bar_imported_error)
+            Export -> context.getString(R.string.snack_bar_imported_error)
         }
     } else {
-        when (event.type) {
-            SnackBarType.SUCCESS -> context.getString(R.string.snack_bar_exported_success)
-            SnackBarType.ERROR -> context.getString(R.string.snack_bar_exported_error)
+        when (event.operation) {
+            OperationType.Import -> context.getString(R.string.snack_bar_imported_success)
+            OperationType.Export -> context.getString(R.string.snack_bar_exported_success)
         }
+
     }
