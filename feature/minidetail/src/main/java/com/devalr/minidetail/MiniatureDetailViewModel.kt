@@ -7,6 +7,7 @@ import com.devalr.domain.enum.MilestoneType
 import com.devalr.domain.extension.isMilestoneAchievable
 import com.devalr.domain.extension.recalculateProgress
 import com.devalr.domain.extension.toggle
+import com.devalr.framework.AppTracer
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.minidetail.interactions.Action
 import com.devalr.minidetail.interactions.Action.DeleteMiniature
@@ -16,22 +17,27 @@ import com.devalr.minidetail.interactions.Action.Return
 import com.devalr.minidetail.interactions.Action.UpdateMilestone
 import com.devalr.minidetail.interactions.ErrorType
 import com.devalr.minidetail.interactions.Event
+import com.devalr.minidetail.interactions.Event.LaunchSnackBarError
 import com.devalr.minidetail.interactions.Event.NavigateBack
 import com.devalr.minidetail.interactions.Event.NavigateToEditMiniature
 import com.devalr.minidetail.interactions.State
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 
 class MiniatureDetailViewModel(
-    val miniatureRepository: MiniatureRepository,
-    val projectRepository: ProjectRepository
+    private val tracer: AppTracer,
+    private val miniatureRepository: MiniatureRepository,
+    private val projectRepository: ProjectRepository
 ) : BaseViewModel<State, Action, Event>(initialState = State()) {
 
     override fun onAction(action: Action) {
+        tracer.log("MiniatureDetailViewModel.onAction: ${action::class.simpleName}")
         when (action) {
             is Load -> loadMiniature(action.miniatureId)
             is UpdateMilestone -> updateMiniatureMilestone(action.type, action.enable)
@@ -59,14 +65,14 @@ class MiniatureDetailViewModel(
                     } ?: emptyFlow()
                 }
                 .catch { error ->
-                    updateState { copy(error = ErrorType.RetrievingDatabase) }
+                    updateState { copy(error = true) }
+                    submitError(error, ErrorType.RetrievingDatabase)
                 }.collect { (miniature, project) ->
                     updateState {
                         copy(
                             miniatureLoaded = true,
                             miniature = miniature,
-                            parentProject = project,
-                            error = null
+                            parentProject = project
                         )
                     }
                 }
@@ -84,10 +90,16 @@ class MiniatureDetailViewModel(
                     projectRepository.updateProjectProgress(updatedMiniature.projectId)
                 }
             } else {
-                updateState { copy(error = ErrorType.CompletePreviousSteps) }
+                submitError(
+                    Exception("updateMiniatureMilestone previous steps not completed"),
+                    ErrorType.CompletePreviousSteps
+                )
             }
         } ?: run {
-            updateState { copy(error = ErrorType.EmptyMiniature) }
+            submitError(
+                Exception("updateMiniatureMilestone empty miniature"),
+                ErrorType.EmptyMiniature
+            )
         }
     }
 
@@ -96,8 +108,13 @@ class MiniatureDetailViewModel(
             if (miniatureRepository.deleteMiniature(miniatureId)) {
                 sendEvent(NavigateBack)
             } else {
-                //TODO: Handle error
+                submitError(Exception("deleteMiniature miniature not deleted"), ErrorType.Delete)
             }
         }
+    }
+
+    private fun submitError(error: Throwable, errorType: ErrorType? = null) {
+        tracer.recordError(error)
+        errorType?.let { sendEvent(LaunchSnackBarError(errorType)) }
     }
 }

@@ -26,6 +26,8 @@ uiTooling = "1.7.8"
 uiGraphicsAndroid = "1.7.2"
 accompanist = "0.34.0"
 nav3Core = "1.0.0"
+google-services = "4.4.0"
+firebase-crashlytics-gradle = "2.9.9"
 
 [libraries]
 
@@ -60,8 +62,11 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-
+firebase-bom = { module = "com.google.firebase:firebase-bom", version = "32.7.0" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-analytics   = { module = "com.google.firebase:firebase-analytics-ktx" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+turbine = "app.cash.turbine:turbine:1.1.0"
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
@@ -75,3 +80,5 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 android-library = { id = "com.android.library", version.ref = "agp" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
 room = { id = "androidx.room", version.ref = "room" }
+google-services     = { id = "com.google.gms.google-services", version.ref = "google-services" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics-gradle" }

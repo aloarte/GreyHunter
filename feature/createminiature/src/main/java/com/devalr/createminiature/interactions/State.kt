@@ -8,15 +8,16 @@ enum class ErrorType {
     EmptyTitle,
     AddDatabase,
     EditDatabase,
-    ErrorUpdatingProgress
+    ErrorUpdatingProgress,
+    ImportImage
 }
 
 data class State(
+    val error: Boolean = false,
     val projectId: Long? = null,
     val projectName: String? = null,
     val miniatureToUpdate: MiniatureBo? = null,
     val miniatureName: String? = null,
     val miniatureImage: String? = null,
-    val editMode: Boolean = false,
-    val errorType: ErrorType? = null
+    val editMode: Boolean = false
 )

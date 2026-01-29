@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Errors -->
+    <string name="error_mini_detail_retrieving">An error occurred while loading the miniature. Please try again.</string>
+    <string name="error_mini_detail_previous_steps">Please complete the previous steps before proceeding.</string>
+    <string name="error_mini_detail_empty_mini">An unexpected error occurred. Please try again.</string>
+    <string name="error_mini_detail_delete">Unable to delete the miniature. Please try again.</string>
 
     <!-- Buttons -->
 

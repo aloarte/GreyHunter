@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Errors -->
-    <string name="error_add_miniature_empty_name">Profile name cannot be empty</string>
+    <string name="error_add_miniature_empty_name">Miniature name cannot be empty</string>
+    <string name="error_add_miniature_bad_id">Something went wrong. Please try again.</string>
+    <string name="error_add_miniature_empty_title">The title cannot be empty.</string>
+    <string name="error_add_miniature_add_database">Could not create the miniature. Please try again.</string>
+    <string name="error_add_miniature_edit_database">Could not save the changes. Please try again.</string>
+    <string name="error_add_miniature_update_progress">Could not update the progress. Please try again later.</string>
+    <string name="error_add_miniature_import_images">Image could not be imported. Please try again.</string>
 
     <!-- Buttons -->
     <string name="button_add_miniature">Create miniature</string>

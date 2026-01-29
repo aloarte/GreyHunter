@@ -5,6 +5,7 @@ import com.devalr.data.database.miniature.MiniatureEntity
 import com.devalr.domain.mappers.Mapper
 import com.devalr.domain.model.MiniatureBo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import java.time.Clock
 
@@ -19,19 +20,19 @@ class MiniatureRepositoryImpl(
     }
 
     override suspend fun getMiniature(miniatureId: Long): Flow<MiniatureBo?> =
-        miniatureDao.getMiniatureById(miniatureId).map { entity ->
+        miniatureDao.getMiniatureById(miniatureId).filterNotNull().map { entity ->
             miniatureDatabaseMapper.transform(entity)
         }
 
     override suspend fun getLastUpdatedMiniatures(miniatureNumber: Int): Flow<List<MiniatureBo>> =
-        miniatureDao.getLastUpdatedMiniatures(miniatureNumber).map { entityList ->
+        miniatureDao.getLastUpdatedMiniatures(miniatureNumber).filterNotNull().map { entityList ->
             entityList.map { entity ->
                 miniatureDatabaseMapper.transform(entity)
             }
         }
 
     override suspend fun getMiniatures(miniaturesId: List<Long>): Flow<List<MiniatureBo>> =
-        miniatureDao.getMiniaturesByIds(miniaturesId).map { entityList ->
+        miniatureDao.getMiniaturesByIds(miniaturesId).filterNotNull().map { entityList ->
             entityList.map { entity ->
                 miniatureDatabaseMapper.transform(entity)
             }
@@ -39,6 +40,7 @@ class MiniatureRepositoryImpl(
 
     override suspend fun getMiniaturesFromProject(projectId: Long): Flow<List<MiniatureBo>> =
         miniatureDao.getMiniaturesByProject(projectId)
+            .filterNotNull()
             .map { entityList ->
                 entityList.map { entity ->
                     miniatureDatabaseMapper.transform(entity)

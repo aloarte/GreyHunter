@@ -12,6 +12,7 @@ import com.devalr.domain.model.ProjectEntityData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -27,7 +28,7 @@ class ProjectRepositoryImpl(
 ) : ProjectRepository {
 
     override suspend fun getAllProjects(): Flow<List<ProjectBo>> =
-        projectDao.getAllProjects().flatMapLatest { projectEntities ->
+        projectDao.getAllProjects().filterNotNull().flatMapLatest { projectEntities ->
             if (projectEntities.isEmpty()) {
                 return@flatMapLatest flowOf(emptyList())
             }
@@ -50,11 +51,13 @@ class ProjectRepositoryImpl(
 
     override suspend fun getProject(projectId: Long): Flow<ProjectBo?> =
         projectDao.getProjectById(projectId)
+            .filterNotNull()
             .flatMapLatest { projectEntity ->
                 if (projectEntity == null) {
                     return@flatMapLatest flowOf(null)
                 }
                 miniatureDao.getMiniaturesByProject(projectEntity.id)
+                    .filterNotNull()
                     .map { miniatureList ->
                         projectDatabaseMapper.transform(
                             ProjectEntityData(
@@ -71,6 +74,7 @@ class ProjectRepositoryImpl(
                 return@flatMapLatest flowOf(null)
             }
             miniatureDao.getMiniaturesByProject(projectEntity.id)
+                .filterNotNull()
                 .map { miniatureList ->
                     projectDatabaseMapper.transform(
                         ProjectEntityData(
@@ -82,7 +86,9 @@ class ProjectRepositoryImpl(
         }
 
     override suspend fun getAlmostDoneProjects(projectsNumber: Int): Flow<List<ProjectBo>> =
-        projectDao.getAlmostDoneProjects(projectsNumber).map { projectList ->
+        projectDao.getAlmostDoneProjects(projectsNumber)
+            .filterNotNull()
+            .map { projectList ->
             projectList.map {
                 projectDatabaseMapper.transform(
                     ProjectEntityData(
