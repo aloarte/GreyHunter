@@ -18,9 +18,6 @@ import org.koin.core.context.startKoin
 class GreyHunterApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        FirebaseCrashlytics.getInstance()
-            .setCrashlyticsCollectionEnabled(true)
-
         startKoin {
             // Log Koin into Android logger
             androidLogger()
