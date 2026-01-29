@@ -87,7 +87,7 @@ class AddMiniatureViewModel(
                         )
                     }
                 }.filterNotNull().catch { error ->
-                    // TODO: Display a empty screen
+                    updateState { copy(error = true) }
                     submitError(error, BadId)
                 }.collect { newState ->
                     updateState { newState }

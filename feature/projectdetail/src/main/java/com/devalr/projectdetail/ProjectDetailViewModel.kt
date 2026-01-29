@@ -39,7 +39,7 @@ class ProjectDetailViewModel(
         viewModelScope.launch {
             projectRepository.getProject(projectId)
                 .catch { error ->
-                    // TODO: Display a empty screen
+                    updateState { copy(error = true) }
                     submitError(error, RetrievingDatabase)
                 }
                 .collect { project ->

@@ -122,8 +122,7 @@ fun MiniatureDetailScreen(
                     showConfirmDelete = true
                 }
             )
-        }
-        if (state.error) {
+        }else if (state.error) {
             EmptyScreen { viewModel.onAction(Return) }
         } else {
             LoadingIndicator()

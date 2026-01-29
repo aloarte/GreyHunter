@@ -24,8 +24,10 @@ import com.devalr.minidetail.interactions.State
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 
 class MiniatureDetailViewModel(
@@ -46,6 +48,7 @@ class MiniatureDetailViewModel(
                     projectId = action.projectId
                 )
             )
+
             Return -> sendEvent(NavigateBack)
         }
     }
@@ -62,7 +65,7 @@ class MiniatureDetailViewModel(
                     } ?: emptyFlow()
                 }
                 .catch { error ->
-                    // TODO: Display a empty screen
+                    updateState { copy(error = true) }
                     submitError(error, ErrorType.RetrievingDatabase)
                 }.collect { (miniature, project) ->
                     updateState {

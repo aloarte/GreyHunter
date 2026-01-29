@@ -73,10 +73,7 @@ fun PaintingScreen(
                     onNavigateBack = { viewModel.onAction(Return) },
                     onFinishPainting = { viewModel.onAction(FinishPainting(minisIds)) }
                 )
-            } else {
-                //TODO: Display error
             }
-
         } else {
             LoadingIndicator()
         }

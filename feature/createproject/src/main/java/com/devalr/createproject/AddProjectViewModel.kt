@@ -49,7 +49,7 @@ class AddProjectViewModel(
             viewModelScope.launch {
                 projectRepository.getProject(projectId)
                     .catch {
-                        // TODO: Display a empty screen
+                        updateState { copy(error = true) }
                         submitError(it, BadId)
                     }
                     .collect {

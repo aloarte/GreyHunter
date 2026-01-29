@@ -43,7 +43,10 @@ class StartPaintingViewModel(
     private fun loadProjects() {
         viewModelScope.launch {
             projectRepository.getAllProjects()
-                .catch { error -> submitError(error, ErrorType.RetrievingDatabase) }
+                .catch { error ->
+                    updateState { copy(error = true) }
+                    submitError(error, ErrorType.RetrievingDatabase)
+                }
                 .collect { projects ->
                     updateState {
                         copy(

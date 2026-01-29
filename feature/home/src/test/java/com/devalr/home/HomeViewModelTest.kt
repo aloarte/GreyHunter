@@ -39,7 +39,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -122,7 +122,7 @@ class HomeViewModelTest {
             assertEquals(expectedProjects, state.projects)
             assertEquals(listOf(miniature), state.lastUpdatedMinis)
             assertEquals(listOf(projects[1]), state.almostDoneProjects)
-            assertNull(state.error)
+            assertFalse(state.error)
         }
 
     @Test
@@ -153,7 +153,7 @@ class HomeViewModelTest {
             assertEquals(expectedProjects, state.projects)
             assertEquals(emptyList<MiniatureBo>(), state.lastUpdatedMinis)
             assertEquals(emptyList<ProjectBo>(), state.almostDoneProjects)
-            assertNull(state.error)
+            assertFalse(state.error)
         }
 
     @Test
@@ -178,7 +178,7 @@ class HomeViewModelTest {
 
             // THEN
             val state = viewModel.uiState.value
-            assertEquals(errorMessage, state.error)
+            assertTrue(state.error)
         }
 
     @Test

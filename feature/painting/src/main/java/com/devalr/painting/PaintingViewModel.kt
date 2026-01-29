@@ -35,6 +35,7 @@ class PaintingViewModel(
         viewModelScope.launch {
             minisRepository.getMiniatures(miniaturesId = minisIds)
                 .catch { error ->
+                    updateState { copy(error = true) }
                     tracer.recordError(error)
                     sendEvent(LaunchSnackBarError(RetrievingDatabase))
                 }

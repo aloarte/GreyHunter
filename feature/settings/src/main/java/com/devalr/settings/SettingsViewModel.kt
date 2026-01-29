@@ -54,6 +54,7 @@ class SettingsViewModel(
                 appVersion = appVersion
             )
         }.catch { error ->
+            updateState { copy(error = true) }
             submitError(error, ErrorType.DatastoreRetrieval)
         }.collect { newState -> updateState { newState } }
 
