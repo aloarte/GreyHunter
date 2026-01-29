@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.devalr.framework.components.anim.LoadingIndicator
 import com.devalr.framework.components.bottomsheet.ConfirmBottomSheetContent
+import com.devalr.framework.components.empty.EmptyScreen
 import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
@@ -94,7 +95,9 @@ fun ProjectDetailScreen(
             }
         }
     ) { innerPadding ->
-        if (state.projectLoaded && state.project != null) {
+        if (state.error) {
+            EmptyScreen { viewModel.onAction(Return) }
+        } else if (state.projectLoaded && state.project != null) {
             ProjectDetailScreenContent(
                 innerPadding = innerPadding,
                 project = state.project,

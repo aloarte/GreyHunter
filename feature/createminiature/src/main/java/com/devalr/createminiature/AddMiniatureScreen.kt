@@ -29,6 +29,7 @@ import com.devalr.createminiature.interactions.ErrorType.ImportImage
 import com.devalr.createminiature.interactions.Event.LaunchSnackBarError
 import com.devalr.createminiature.interactions.Event.NavigateBack
 import com.devalr.framework.components.bottomsheet.ImagePickerHandler
+import com.devalr.framework.components.empty.EmptyScreen
 import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
@@ -92,25 +93,29 @@ fun AddMiniatureScreen(
             }
         }
     ) { innerPadding ->
-        AddMiniatureScreenContent(
-            innerPadding = innerPadding,
-            projectName = state.projectName,
-            miniatureName = state.miniatureName,
-            miniatureImage = state.miniatureImage,
-            editMode = state.editMode,
-            onNavigateBack = {
-                viewModel.onAction(Return)
-            },
-            onPickImage = {
-                showImagePicker = true
-            },
-            onChangeName = {
-                viewModel.onAction(ChangeName(it))
-            },
-            onAddMiniature = {
-                viewModel.onAction(AddMiniature)
-            }
-        )
+        if (state.error) {
+            EmptyScreen { viewModel.onAction(Return) }
+        } else {
+            AddMiniatureScreenContent(
+                innerPadding = innerPadding,
+                projectName = state.projectName,
+                miniatureName = state.miniatureName,
+                miniatureImage = state.miniatureImage,
+                editMode = state.editMode,
+                onNavigateBack = {
+                    viewModel.onAction(Return)
+                },
+                onPickImage = {
+                    showImagePicker = true
+                },
+                onChangeName = {
+                    viewModel.onAction(ChangeName(it))
+                },
+                onAddMiniature = {
+                    viewModel.onAction(AddMiniature)
+                }
+            )
+        }
     }
 }
 

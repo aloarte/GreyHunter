@@ -11,11 +11,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.devalr.framework.components.anim.LoadingIndicator
+import com.devalr.framework.components.empty.EmptyScreen
 import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
 import com.devalr.startpainting.components.StartPaintingScreenContent
 import com.devalr.startpainting.interactions.Action
+import com.devalr.startpainting.interactions.Action.Return
 import com.devalr.startpainting.interactions.Action.SelectMiniature
 import com.devalr.startpainting.interactions.Action.StartPainting
 import com.devalr.startpainting.interactions.ErrorType
@@ -65,7 +67,9 @@ fun StartPaintingScreen(
         }
     ) { innerPadding ->
         if (state.projectsLoaded) {
-            if (state.projectList.isNotEmpty()) {
+            if (state.error) {
+                EmptyScreen { viewModel.onAction(Return) }
+            } else if (state.projectList.isNotEmpty()) {
                 StartPaintingScreenContent(
                     innerPadding = innerPadding,
                     projectList = state.projectList,
@@ -78,11 +82,7 @@ fun StartPaintingScreen(
                         viewModel.onAction(SelectMiniature(miniature))
                     }
                 )
-
-            } else {
-                //TODO: Display error
             }
-
         } else {
             LoadingIndicator()
         }

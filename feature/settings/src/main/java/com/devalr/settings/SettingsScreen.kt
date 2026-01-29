@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import com.devalr.framework.components.empty.EmptyScreen
 import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
@@ -87,21 +88,25 @@ fun SettingsScreen(
             }
         }
     ) { innerPadding ->
-        SettingsScreenContent(
-            innerPadding = innerPadding,
-            currentThemeType = state.themeType,
-            progressColorType = state.progressColorConfigType,
-            appVersion = state.appVersion,
-            onNavigateBack = { viewModel.onAction(Return) },
-            onChangeTheme = { viewModel.onAction(ChangeAppearance(it)) },
-            onChangeProgressColor = { viewModel.onAction(ChangeProgressColors(it)) },
-            onImportProjects = {
-                importLauncher.launch(arrayOf("*/*"))
-            },
-            onExportProjects = {
-                exportProjectsLauncher.launch("backup_projects.csv")
-            }
-        )
+        if (state.error) {
+            EmptyScreen { viewModel.onAction(Return) }
+        } else {
+            SettingsScreenContent(
+                innerPadding = innerPadding,
+                currentThemeType = state.themeType,
+                progressColorType = state.progressColorConfigType,
+                appVersion = state.appVersion,
+                onNavigateBack = { viewModel.onAction(Return) },
+                onChangeTheme = { viewModel.onAction(ChangeAppearance(it)) },
+                onChangeProgressColor = { viewModel.onAction(ChangeProgressColors(it)) },
+                onImportProjects = {
+                    importLauncher.launch(arrayOf("*/*"))
+                },
+                onExportProjects = {
+                    exportProjectsLauncher.launch("backup_projects.csv")
+                }
+            )
+        }
     }
 }
 

@@ -7,6 +7,7 @@ enum class ErrorType {
     Delete
 }
 data class State(
+    val error: Boolean = false,
     val projectLoaded: Boolean = false,
     val project: ProjectBo? = null
 )

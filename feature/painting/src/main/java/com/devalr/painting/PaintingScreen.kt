@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.devalr.framework.components.anim.LoadingIndicator
+import com.devalr.framework.components.empty.EmptyScreen
 import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
@@ -62,7 +63,9 @@ fun PaintingScreen(
             }
         }
     ) { innerPadding ->
-        if (state.minisLoaded) {
+        if (state.error) {
+            EmptyScreen { viewModel.onAction(Return) }
+        } else if (state.minisLoaded) {
             if (state.miniatures.isNotEmpty()) {
                 PaintingScreenContent(
                     innerPadding = innerPadding,

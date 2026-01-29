@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.devalr.framework.components.anim.LoadingIndicator
 import com.devalr.framework.components.bottomsheet.ConfirmBottomSheetContent
+import com.devalr.framework.components.empty.EmptyScreen
 import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
@@ -121,6 +122,9 @@ fun MiniatureDetailScreen(
                     showConfirmDelete = true
                 }
             )
+        }
+        if (state.error) {
+            EmptyScreen { viewModel.onAction(Return) }
         } else {
             LoadingIndicator()
         }

@@ -14,7 +14,10 @@ import com.devalr.home.interactions.Action.OpenProjectDetail
 import com.devalr.home.interactions.Action.OpenSettings
 import com.devalr.home.interactions.Action.StartPainting
 import com.devalr.home.interactions.Action.UpdateGamificationMessage
+import com.devalr.home.interactions.ErrorType
+import com.devalr.home.interactions.ErrorType.RetrievingDatabase
 import com.devalr.home.interactions.Event
+import com.devalr.home.interactions.Event.LaunchSnackBarError
 import com.devalr.home.interactions.Event.NavigateToStartPaint
 import com.devalr.home.interactions.Event.NavigateToAddProject
 import com.devalr.home.interactions.Event.NavigateToMiniature
@@ -73,9 +76,9 @@ class HomeViewModel(
                     loaded = true,
                 )
             }.catch { error ->
-                // TODO: Display a empty screen
                 tracer.recordError(error)
-                updateState { copy(error = error.message, loaded = true) }
+                sendEvent(LaunchSnackBarError(RetrievingDatabase))
+                updateState { copy(error = true) }
             }.collect { newState ->
                 updateState { newState }
             }

@@ -24,6 +24,7 @@ import com.devalr.createproject.interactions.ErrorType
 import com.devalr.createproject.interactions.Event.LaunchSnackBarError
 import com.devalr.createproject.interactions.Event.NavigateBack
 import com.devalr.framework.components.bottomsheet.ImagePickerHandler
+import com.devalr.framework.components.empty.EmptyScreen
 import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
@@ -79,28 +80,32 @@ fun AddProjectScreen(
             }
         }
     ) { innerPadding ->
-        AddProjectScreenContent(
-            innerPadding = innerPadding,
-            projectName = state.projectName,
-            projectDescription = state.projectDescription,
-            projectImage = state.projectImage,
-            editMode = state.editMode,
-            onPickImage = {
-                showImagePicker = true
-            },
-            onChangeName = {
-                viewModel.onAction(ChangeName(it))
-            },
-            onChangeDescription = {
-                viewModel.onAction(ChangeDescription(it))
-            },
-            onAddProject = {
-                viewModel.onAction(AddProject)
-            },
-            onNavigateBack = {
-                viewModel.onAction(Return)
-            }
-        )
+        if (state.error) {
+            EmptyScreen { viewModel.onAction(Return) }
+        } else {
+            AddProjectScreenContent(
+                innerPadding = innerPadding,
+                projectName = state.projectName,
+                projectDescription = state.projectDescription,
+                projectImage = state.projectImage,
+                editMode = state.editMode,
+                onPickImage = {
+                    showImagePicker = true
+                },
+                onChangeName = {
+                    viewModel.onAction(ChangeName(it))
+                },
+                onChangeDescription = {
+                    viewModel.onAction(ChangeDescription(it))
+                },
+                onAddProject = {
+                    viewModel.onAction(AddProject)
+                },
+                onNavigateBack = {
+                    viewModel.onAction(Return)
+                }
+            )
+        }
     }
 }
 
@@ -110,6 +115,6 @@ private fun getSnackBarMessage(context: Context, error: ErrorType): String =
         ErrorType.EmptyTitle -> context.getString(R.string.error_add_project_empty_name)
         ErrorType.AddDatabase -> context.getString(R.string.error_add_project_add_database)
         ErrorType.EditDatabase -> context.getString(R.string.error_add_project_edit_database)
-        ErrorType.ImportImage ->  context.getString(R.string.error_add_project_import_images)
+        ErrorType.ImportImage -> context.getString(R.string.error_add_project_import_images)
 
     }

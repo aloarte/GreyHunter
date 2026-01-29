@@ -12,6 +12,7 @@ enum class ErrorType {
 }
 
 data class State(
+    val error: Boolean = false,
     val projectMinis: List<MiniatureVo>? = null,
     val projectName: String? = null,
     val projectDescription: String? = null,

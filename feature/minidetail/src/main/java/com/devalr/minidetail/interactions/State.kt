@@ -12,7 +12,7 @@ enum class ErrorType {
 
 data class State(
     val miniatureLoaded: Boolean = false,
+    val error: Boolean = false,
     val miniature: MiniatureBo? = null,
     val parentProject: ProjectBo? = null
-
 )

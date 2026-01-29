@@ -8,6 +8,7 @@ enum class ErrorType {
 }
 
 data class State(
+    val error: Boolean = false,
     val minisLoaded: Boolean = false,
     val miniatures: List<MiniatureBo> = emptyList(),
 )
