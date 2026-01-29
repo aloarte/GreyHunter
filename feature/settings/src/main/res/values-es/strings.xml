@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Bottom sheet -->
+    <string name="bottom_sheet_confirm_export">
+        Al exportar tus datos se generará un archivo CSV. Podrás importarlo más adelante si cambias de app o reinstalas GreyHunter.
+
+        Las imágenes no se incluyen en la exportación.
+
+        ¿Quieres continuar?
+    </string>
+    <string name="bottom_sheet_confirm_export_btn">Continuar</string>
+
+    <!-- Labels -->
+    <string name="label_title_app_settings">Ajustes de la app</string>
+    <string name="label_settings_theme">Tema</string>
+    <string name="label_settings_theme_light">Claro</string>
+    <string name="label_settings_theme_dark">Oscuro</string>
+    <string name="label_settings_theme_system">Predeterminado</string>
+
+    <string name="label_settings_colors">Colores de progreso</string>
+    <string name="label_settings_colors_brand">Por defecto</string>
+    <string name="label_settings_colors_traffic">Escala de colores</string>
+
+    <string name="label_title_data_settings">Datos</string>
+    <string name="label_description_data_settings">Descarga tus datos en un archivo CSV para poder importarlos más adelante si cambias de dispositivo o reinstalas.</string>
+    <string name="label_settings_import">Importar</string>
+    <string name="label_settings_export">Exportar</string>
+
+    <string name="label_title_app_info_settings">Información de la app</string>
+    <string name="label_settings_version">Versión %s</string>
+    <string name="label_settings_changelog">Registro de cambios</string>
+
+    <!-- Changelog -->
+    <string name="changelog_26_1_0">Versión inicial.</string>
+
+    <!-- SnackBar -->
+    <string name="snack_bar_datastore_retrieval_error">No se pudieron cargar las preferencias. Inténtalo de nuevo.</string>
+    <string name="snack_bar_imported_success">Proyectos importados correctamente.</string>
+    <string name="snack_bar_imported_error">No se pudieron importar los proyectos. Revisa el formato del archivo.</string>
+    <string name="snack_bar_exported_success">Proyectos exportados correctamente.</string>
+    <string name="snack_bar_exported_error">No se pudieron exportar los proyectos. Inténtalo más tarde.</string>
+</resources>

@@ -12,9 +12,8 @@ import com.devalr.createminiature.interactions.Action.Load
 import com.devalr.createminiature.interactions.Action.Return
 import com.devalr.createminiature.interactions.ErrorType.AddDatabase
 import com.devalr.createminiature.interactions.ErrorType.BadId
-import com.devalr.createminiature.interactions.ErrorType.EmptyTitle
+import com.devalr.createminiature.interactions.ErrorType.EmptyName
 import com.devalr.createminiature.interactions.ErrorType.ErrorUpdatingProgress
-import com.devalr.createminiature.interactions.Event
 import com.devalr.createminiature.interactions.Event.LaunchSnackBarError
 import com.devalr.createminiature.interactions.Event.NavigateBack
 import com.devalr.domain.MiniatureRepository
@@ -33,9 +32,7 @@ import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -190,7 +187,7 @@ class AddMiniatureViewModelTest {
                 verify(exactly = 1) { tracer.recordError(any()) }
                 coVerify(exactly = 0) { miniatureRepository.addMiniature(any()) }
                 assertEquals(
-                    LaunchSnackBarError(EmptyTitle),
+                    LaunchSnackBarError(EmptyName),
                     awaitItem()
                 )
                 cancelAndIgnoreRemainingEvents()

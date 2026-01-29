@@ -2,7 +2,7 @@
 <resources>
     <!-- Errors -->
     <string name="error_project_detail_retrieving">An error occurred while loading the project. Please try again.</string>
-    <string name="error_project_detail_delete">Unable to delete the project. Please try again.</string>
+    <string name="error_project_detail_delete">Couldn’t delete the project. Please try again.</string>
 
     <!-- Buttons -->
 

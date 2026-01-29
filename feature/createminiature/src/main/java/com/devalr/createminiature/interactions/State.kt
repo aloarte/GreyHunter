@@ -5,7 +5,7 @@ import com.devalr.domain.model.MiniatureBo
 
 enum class ErrorType {
     BadId,
-    EmptyTitle,
+    EmptyName,
     AddDatabase,
     EditDatabase,
     ErrorUpdatingProgress,

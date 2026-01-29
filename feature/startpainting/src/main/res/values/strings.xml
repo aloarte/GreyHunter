@@ -2,12 +2,12 @@
 <resources>
     <!-- Errors -->
     <string name="error_start_painting_retrieving">An error occurred while loading the miniatures. Please try again.</string>
-    <string name="error_start_painting_no_minis">Empty miniatures selected. Please try again.</string>
+    <string name="error_start_painting_no_minis">No miniatures selected. Please try again.</string>
 
     <!-- Buttons -->
     <string name="btn_start_painting">Start painting</string>
 
     <!-- Labels -->
-    <string name="start_painting_title">Start painting miniatures</string>
-    <string name="start_painting_message">Browse from your projects and pick the miniature or miniatures. Then, click the button to start the timer and start with your art.</string>
+    <string name="start_painting_title">Start painting</string>
+    <string name="start_painting_message">Browse your projects and select one or more miniatures. Then tap the button to start the timer and begin your painting session.</string>
 </resources>

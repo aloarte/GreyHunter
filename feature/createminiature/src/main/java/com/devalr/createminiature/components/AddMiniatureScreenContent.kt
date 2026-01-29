@@ -72,6 +72,7 @@ fun AddMiniatureScreenContent(
                     imageUri = miniatureImage,
                     size = 250.dp,
                     showMessage = true,
+                    showIcon = true,
                     onImageClick = onPickImage
                 )
             }

@@ -14,7 +14,7 @@ import com.devalr.createminiature.interactions.ErrorType
 import com.devalr.createminiature.interactions.ErrorType.AddDatabase
 import com.devalr.createminiature.interactions.ErrorType.BadId
 import com.devalr.createminiature.interactions.ErrorType.EditDatabase
-import com.devalr.createminiature.interactions.ErrorType.EmptyTitle
+import com.devalr.createminiature.interactions.ErrorType.EmptyName
 import com.devalr.createminiature.interactions.ErrorType.ErrorUpdatingProgress
 import com.devalr.createminiature.interactions.ErrorType.ImportImage
 import com.devalr.createminiature.interactions.Event
@@ -115,7 +115,7 @@ class AddMiniatureViewModel(
                 return
             }
             if (miniatureName.isNullOrEmpty()) {
-                submitError(Exception("addEditMiniature null miniatureName"), EmptyTitle)
+                submitError(Exception("addEditMiniature null miniatureName"), EmptyName)
                 return
             }
 
