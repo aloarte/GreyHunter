@@ -10,6 +10,7 @@ import com.devalr.painting.di.featurePaintingModules
 import com.devalr.projectdetail.di.featureProjectDetailModules
 import com.devalr.settings.di.featureSettingsModules
 import com.devalr.startpainting.di.featureStartPaintingModules
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -17,7 +18,6 @@ import org.koin.core.context.startKoin
 class GreyHunterApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-
         startKoin {
             // Log Koin into Android logger
             androidLogger()

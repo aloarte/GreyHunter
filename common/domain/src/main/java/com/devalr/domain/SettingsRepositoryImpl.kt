@@ -71,7 +71,6 @@ class SettingsRepositoryImpl(
             csvManager.writeProjectsToCSV(outputStream, projects)
         } ?: false
     } catch (e: Exception) {
-        //TODO Error, output stream wasn't opened
         false
     }
 
@@ -85,7 +84,6 @@ class SettingsRepositoryImpl(
         } ?: false
 
     } catch (e: Exception) {
-        //TODO Error, input stream wasn't opened
         false
     }
 

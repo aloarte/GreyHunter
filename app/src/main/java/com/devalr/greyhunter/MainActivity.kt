@@ -17,6 +17,7 @@ import com.devalr.framework.components.progress.ProvideProgressColors
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.greyhunter.composables.InitProgressColors
 import com.devalr.greyhunter.navigation.NavHost
+import com.devalr.greyhunter.tracer.FirebaseTracer
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -49,7 +50,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background,
                     ) {
-                        NavHost()
+                        NavHost(FirebaseTracer())
                     }
                 }
             }

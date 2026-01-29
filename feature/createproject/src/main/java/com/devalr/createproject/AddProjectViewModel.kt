@@ -12,21 +12,28 @@ import com.devalr.createproject.interactions.Action.ChangeName
 import com.devalr.createproject.interactions.Action.Load
 import com.devalr.createproject.interactions.Action.Return
 import com.devalr.createproject.interactions.ErrorType
+import com.devalr.createproject.interactions.ErrorType.AddDatabase
+import com.devalr.createproject.interactions.ErrorType.BadId
+import com.devalr.createproject.interactions.ErrorType.EditDatabase
+import com.devalr.createproject.interactions.ErrorType.ImportImage
 import com.devalr.createproject.interactions.Event
+import com.devalr.createproject.interactions.Event.LaunchSnackBarError
 import com.devalr.createproject.interactions.Event.NavigateBack
 import com.devalr.createproject.interactions.State
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.ProjectBo
+import com.devalr.framework.AppTracer
 import com.devalr.framework.base.BaseViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class AddProjectViewModel(
     private val application: Application,
-    val projectRepository: ProjectRepository
-) :
-    BaseViewModel<State, Action, Event>(initialState = State()) {
+    private val tracer: AppTracer,
+    private val projectRepository: ProjectRepository
+) : BaseViewModel<State, Action, Event>(initialState = State()) {
     override fun onAction(action: Action) {
+        tracer.log("AddProjectViewModel.onAction: ${action::class.simpleName}")
         when (action) {
             is Load -> onLoadScreen(projectId = action.projectId)
             is ChangeName -> updateState { copy(projectName = action.name) }
@@ -41,7 +48,10 @@ class AddProjectViewModel(
         projectId?.let {
             viewModelScope.launch {
                 projectRepository.getProject(projectId)
-                    .catch { updateState { copy(errorType = ErrorType.BadId) } }
+                    .catch {
+                        updateState { copy(error = true) }
+                        submitError(it, BadId)
+                    }
                     .collect {
                         if (it == null) return@collect
                         updateState {
@@ -68,17 +78,15 @@ class AddProjectViewModel(
                 )
             }
             updateState { copy(projectImage = imageUri.toString()) }
-
         } catch (e: SecurityException) {
-            e.printStackTrace()
+            submitError(e, ImportImage)
         }
     }
-
 
     private fun addEditProject() {
         with(uiState.value) {
             if (projectName.isNullOrEmpty()) {
-                updateState { copy(errorType = ErrorType.EmptyTitle) }
+                submitError(Exception("addEditProject empty title"), ErrorType.EmptyTitle)
                 return
             }
 
@@ -114,24 +122,30 @@ class AddProjectViewModel(
                     imageUri = newProjectImage
                 )
             if (projectRepository.updateProject(updatedProject)) {
-                updateState { copy(errorType = null) }
                 sendEvent(NavigateBack)
             } else {
-                updateState { copy(errorType = ErrorType.EditDatabase) }
+                submitError(
+                    Exception("editProject error updating project on database"),
+                    EditDatabase
+                )
             }
         } ?: run {
-            updateState { copy(errorType = ErrorType.BadId) }
+            submitError(Exception("editProject empty project to update"), BadId)
         }
     }
 
     private fun addProject(project: ProjectBo) = viewModelScope.launch {
         val projectAdded = projectRepository.addProject(project) > 0
         if (projectAdded) {
-            updateState { copy(errorType = null) }
             sendEvent(NavigateBack)
         } else {
-            updateState { copy(errorType = ErrorType.AddDatabase) }
+            submitError(Exception("addProject project not added"), AddDatabase)
         }
     }
 
+    private fun submitError(error: Throwable, errorType: ErrorType? = null) {
+        updateState { copy(error = true) }
+        tracer.recordError(error)
+        errorType?.let { sendEvent(LaunchSnackBarError(errorType)) }
+    }
 }

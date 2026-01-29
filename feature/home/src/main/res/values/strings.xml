@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="error_home_retrieving">An error occurred while loading the screen. Please try again.</string>
+
     <string name="title_almost_done_projects">Nearly Completed Projects</string>
     <string name="title_last_updated_miniatures">Recently Updated</string>
     <string name="title_empty_projects_description">Tap \'Create project\' and bring color to the gray</string>

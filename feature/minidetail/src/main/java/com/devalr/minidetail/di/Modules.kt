@@ -6,7 +6,7 @@ import org.koin.dsl.module
 
 private val viewModelModules = module {
     factory {
-        MiniatureDetailViewModel(get(), get())
+        MiniatureDetailViewModel(get(), get(), get())
     }
 
 }

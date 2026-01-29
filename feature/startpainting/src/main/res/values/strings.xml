@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Errors -->
+    <string name="error_start_painting_retrieving">An error occurred while loading the miniatures. Please try again.</string>
+    <string name="error_start_painting_no_minis">Empty miniatures selected. Please try again.</string>
 
     <!-- Buttons -->
     <string name="btn_start_painting">Start painting</string>

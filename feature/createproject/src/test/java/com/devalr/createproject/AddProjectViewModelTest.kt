@@ -4,29 +4,33 @@ import android.app.Application
 import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
+import app.cash.turbine.test
 import com.devalr.createproject.interactions.Action.AddProject
 import com.devalr.createproject.interactions.Action.ChangeDescription
 import com.devalr.createproject.interactions.Action.ChangeImage
 import com.devalr.createproject.interactions.Action.ChangeName
 import com.devalr.createproject.interactions.Action.Load
 import com.devalr.createproject.interactions.Action.Return
-import com.devalr.createproject.interactions.ErrorType
-import com.devalr.createproject.interactions.Event
+import com.devalr.createproject.interactions.ErrorType.AddDatabase
+import com.devalr.createproject.interactions.ErrorType.EditDatabase
+import com.devalr.createproject.interactions.ErrorType.EmptyTitle
+import com.devalr.createproject.interactions.Event.LaunchSnackBarError
 import com.devalr.createproject.interactions.Event.NavigateBack
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.ProjectBo
+import com.devalr.framework.AppTracer
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -41,8 +45,10 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AddProjectViewModelTest {
+
     private val application: Application = mockk(relaxed = true)
     private val contentResolver: ContentResolver = mockk(relaxed = true)
+    private val tracer: AppTracer = mockk()
     private val repository: ProjectRepository = mockk()
     private lateinit var viewModel: AddProjectViewModel
     private val testDispatcher = StandardTestDispatcher()
@@ -65,8 +71,9 @@ class AddProjectViewModelTest {
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         every { application.contentResolver } returns contentResolver
+        every { tracer.log(any()) } just Runs
         mockkStatic(Uri::class)
-        viewModel = AddProjectViewModel(application, repository)
+        viewModel = AddProjectViewModel(application, tracer, repository)
     }
 
     @After
@@ -137,11 +144,19 @@ class AddProjectViewModelTest {
     @Test
     fun `GIVEN empty name WHEN add button is clicked THEN state updates with error message`() =
         runTest {
-            viewModel.onAction(AddProject)
-            advanceUntilIdle()
+            // GIVEN
+            every { tracer.recordError(any()) } just Runs
 
-            val state = viewModel.uiState.value
-            assertEquals(ErrorType.EmptyTitle, state.errorType)
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(AddProject)
+
+                // THEN
+                assertEquals(LaunchSnackBarError(EmptyTitle), awaitItem())
+                cancelAndIgnoreRemainingEvents()
+            }
+            //THEN
+            verify(exactly = 1) { tracer.recordError(any()) }
             coVerify(exactly = 0) { repository.addProject(any()) }
         }
 
@@ -149,114 +164,110 @@ class AddProjectViewModelTest {
     fun `GIVEN filled fields WHEN add button is clicked THEN OnAddedSuccessfully event is dispatched and database is updated`() =
         runTest {
             // GIVEN
-            val events = mutableListOf<Event>()
             coEvery { repository.addProject(any()) } returns 1
-            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                viewModel.events.collect { events.add(it) }
+
+            viewModel.events.test {
+                // GIVEN
+                viewModel.onAction(ChangeName(PROJECT_NAME))
+                viewModel.onAction(ChangeDescription(PROJECT_DESCRIPTION))
+                advanceUntilIdle()
+
+                // WHEN
+                viewModel.onAction(AddProject)
+                advanceUntilIdle()
+
+                // THEN
+                assertEquals(NavigateBack, awaitItem())
+                cancelAndIgnoreRemainingEvents()
             }
-            viewModel.onAction(ChangeName(PROJECT_NAME))
-            viewModel.onAction(ChangeDescription(PROJECT_DESCRIPTION))
-            advanceUntilIdle()
-
-            // WHEN
-            viewModel.onAction(AddProject)
-            advanceUntilIdle()
-
             // THEN
-            val state = viewModel.uiState.value
-            assertNull(state.errorType)
             coVerify(exactly = 1) { repository.addProject(any()) }
             coVerify(exactly = 0) { repository.updateProject(any()) }
-            assertEquals(1, events.size)
-            assertEquals(NavigateBack, events.first())
-            job.cancel()
+
         }
 
     @Test
     fun `GIVEN filled fields WHEN add button is clicked and the database fails THEN AddDatabase error is raised`() =
         runTest {
             // GIVEN
-            val events = mutableListOf<Event>()
-            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                viewModel.events.collect { events.add(it) }
-            }
-            viewModel.onAction(ChangeName(PROJECT_NAME))
-            viewModel.onAction(ChangeDescription(PROJECT_DESCRIPTION))
             coEvery { repository.addProject(any()) } returns 0
+            every { tracer.recordError(any()) } just Runs
 
-            // WHEN
-            viewModel.onAction(AddProject)
-            advanceUntilIdle()
+            viewModel.events.test {
+                // GIVEN
+                viewModel.onAction(ChangeName(PROJECT_NAME))
+                viewModel.onAction(ChangeDescription(PROJECT_DESCRIPTION))
+
+                // WHEN
+                viewModel.onAction(AddProject)
+
+                // THEN
+                assertEquals(LaunchSnackBarError(AddDatabase), awaitItem())
+                cancelAndIgnoreRemainingEvents()
+            }
 
             // THEN
-            val state = viewModel.uiState.value
-            assertEquals(ErrorType.AddDatabase, state.errorType)
             coVerify(exactly = 1) { repository.addProject(any()) }
             coVerify(exactly = 0) { repository.updateProject(any()) }
-            assertEquals(0, events.size)
-            assertNull(events.firstOrNull())
-            job.cancel()
         }
 
     @Test
     fun `GIVEN filled fields WHEN edit button is clicked and the database fails THEN AddDatabase error is raised`() =
         runTest {
             // GIVEN
-            val events = mutableListOf<Event>()
-            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                viewModel.events.collect { events.add(it) }
-            }
             coEvery { repository.getProject(PROJECT_ID) } returns flow { emit(projectBo) }
             coEvery { repository.updateProject(any()) } returns false
-            viewModel.onAction(Load(PROJECT_ID))
-            viewModel.onAction(ChangeName(PROJECT_NAME))
-            viewModel.onAction(ChangeDescription(PROJECT_DESCRIPTION))
-            advanceUntilIdle()
+            every { tracer.recordError(any()) } just Runs
 
-            // WHEN
-            viewModel.onAction(AddProject)
-            advanceUntilIdle()
+            viewModel.events.test {
+                // GIVEN
+                viewModel.onAction(Load(PROJECT_ID))
+                viewModel.onAction(ChangeName(PROJECT_NAME))
+                viewModel.onAction(ChangeDescription(PROJECT_DESCRIPTION))
+                advanceUntilIdle()
+
+                // WHEN
+                viewModel.onAction(AddProject)
+                advanceUntilIdle()
+
+                // THEN
+                assertEquals(LaunchSnackBarError(EditDatabase), awaitItem())
+                cancelAndIgnoreRemainingEvents()
+            }
 
             // THEN
-            val state = viewModel.uiState.value
-            assertEquals(ErrorType.EditDatabase, state.errorType)
             coVerify(exactly = 1) { repository.getProject(PROJECT_ID) }
             coVerify(exactly = 0) { repository.addProject(any()) }
             coVerify(exactly = 1) { repository.updateProject(any()) }
-            assertEquals(0, events.size)
-            assertNull(events.firstOrNull())
-            job.cancel()
         }
-
 
     @Test
     fun `GIVEN filled fields WHEN edit button is clicked THEN event is dispatched and database is updated`() =
         runTest {
             // GIVEN
-            val events = mutableListOf<Event>()
-            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                viewModel.events.collect { events.add(it) }
-            }
             coEvery { repository.getProject(PROJECT_ID) } returns flow { emit(projectBo) }
             coEvery { repository.updateProject(any()) } returns true
-            viewModel.onAction(Load(PROJECT_ID))
-            viewModel.onAction(ChangeName(PROJECT_NAME))
-            viewModel.onAction(ChangeDescription(PROJECT_DESCRIPTION))
-            advanceUntilIdle()
 
-            // WHEN
-            viewModel.onAction(AddProject)
-            advanceUntilIdle()
+            viewModel.events.test {
+                // GIVEN
+                viewModel.onAction(Load(PROJECT_ID))
+                viewModel.onAction(ChangeName(PROJECT_NAME))
+                viewModel.onAction(ChangeDescription(PROJECT_DESCRIPTION))
+                advanceUntilIdle()
+
+                // WHEN
+                viewModel.onAction(AddProject)
+                advanceUntilIdle()
+
+                // THEN
+                assertEquals(NavigateBack, awaitItem())
+                cancelAndIgnoreRemainingEvents()
+            }
 
             // THEN
-            val state = viewModel.uiState.value
-            assertNull(state.errorType)
             coVerify(exactly = 1) { repository.getProject(PROJECT_ID) }
             coVerify(exactly = 0) { repository.addProject(any()) }
             coVerify(exactly = 1) { repository.updateProject(any()) }
-            assertEquals(1, events.size)
-            assertEquals(NavigateBack, events.first())
-            job.cancel()
         }
 
     @Test
@@ -296,9 +307,7 @@ class AddProjectViewModelTest {
             viewModel.onAction(ChangeImage(cameraUri))
 
             // THEN
-            verify(exactly = 0) {
-                contentResolver.takePersistableUriPermission(any(), any())
-            }
+            verify(exactly = 0) { contentResolver.takePersistableUriPermission(any(), any()) }
             val state = viewModel.uiState.value
             assertEquals(cameraUriString, state.projectImage)
         }
@@ -306,19 +315,16 @@ class AddProjectViewModelTest {
     @Test
     fun `WHEN Return action is triggered THEN NavigateBack event is raised`() =
         runTest {
-            // GIVEN
-            val events = mutableListOf<Event>()
-            val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                viewModel.events.collect { events.add(it) }
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(Return)
+
+                // THEN
+                assertEquals(
+                    NavigateBack,
+                    awaitItem()
+                )
+                cancelAndIgnoreRemainingEvents()
             }
-
-            // WHEN
-            viewModel.onAction(Return)
-            advanceUntilIdle()
-
-            // THEN
-            assertEquals(1, events.size)
-            assertTrue(events.contains(NavigateBack))
-            job.cancel()
         }
 }

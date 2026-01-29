@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.model.ProjectBo
+import com.devalr.framework.AppTracer
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.home.interactions.Action
 import com.devalr.home.interactions.Action.AddProject
@@ -13,7 +14,10 @@ import com.devalr.home.interactions.Action.OpenProjectDetail
 import com.devalr.home.interactions.Action.OpenSettings
 import com.devalr.home.interactions.Action.StartPainting
 import com.devalr.home.interactions.Action.UpdateGamificationMessage
+import com.devalr.home.interactions.ErrorType
+import com.devalr.home.interactions.ErrorType.RetrievingDatabase
 import com.devalr.home.interactions.Event
+import com.devalr.home.interactions.Event.LaunchSnackBarError
 import com.devalr.home.interactions.Event.NavigateToStartPaint
 import com.devalr.home.interactions.Event.NavigateToAddProject
 import com.devalr.home.interactions.Event.NavigateToMiniature
@@ -32,11 +36,13 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
+    private val tracer: AppTracer,
     val projectRepository: ProjectRepository,
     val miniatureRepository: MiniatureRepository
 ) : BaseViewModel<State, Action, Event>(initialState = State()) {
 
     override fun onAction(action: Action) {
+        tracer.log("HomeViewModel.onAction: ${action::class.simpleName}")
         when (action) {
             is Load -> initHomeData()
             is OpenProjectDetail -> sendEvent(NavigateToProject(projectId = action.projectId))
@@ -68,10 +74,11 @@ class HomeViewModel(
                     almostDoneProjects = almostDoneProjects,
                     lastUpdatedMinis = lastMinis,
                     loaded = true,
-                    error = null
                 )
             }.catch { error ->
-                updateState { copy(error = error.message, loaded = true) }
+                tracer.recordError(error)
+                sendEvent(LaunchSnackBarError(RetrievingDatabase))
+                updateState { copy(error = true) }
             }.collect { newState ->
                 updateState { newState }
             }

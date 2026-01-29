@@ -5,6 +5,7 @@ import com.devalr.domain.ProjectRepository
 import com.devalr.domain.mappers.Mapper
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
+import com.devalr.framework.AppTracer
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.startpainting.interactions.Action
 import com.devalr.startpainting.interactions.Action.Load
@@ -13,6 +14,7 @@ import com.devalr.startpainting.interactions.Action.SelectMiniature
 import com.devalr.startpainting.interactions.Action.StartPainting
 import com.devalr.startpainting.interactions.ErrorType
 import com.devalr.startpainting.interactions.Event
+import com.devalr.startpainting.interactions.Event.LaunchErrorSnackBar
 import com.devalr.startpainting.interactions.Event.NavigateBack
 import com.devalr.startpainting.interactions.Event.NavigateToPaintMiniatures
 import com.devalr.startpainting.interactions.State
@@ -22,12 +24,14 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class StartPaintingViewModel(
-    val projectRepository: ProjectRepository,
-    val projectVoMapper: Mapper<ProjectBo, StartPaintProjectVo>,
-    val miniatureVoMapper: Mapper<MiniatureBo, StartPaintMiniatureVo>
+    private val tracer: AppTracer,
+    private val projectRepository: ProjectRepository,
+    private val projectVoMapper: Mapper<ProjectBo, StartPaintProjectVo>,
+    private val miniatureVoMapper: Mapper<MiniatureBo, StartPaintMiniatureVo>
 ) : BaseViewModel<State, Action, Event>(initialState = State()) {
 
     override fun onAction(action: Action) {
+        tracer.log("StartPaintingViewModel.onAction: ${action::class.simpleName}")
         when (action) {
             is Load -> loadProjects()
             Return -> sendEvent(NavigateBack)
@@ -39,7 +43,10 @@ class StartPaintingViewModel(
     private fun loadProjects() {
         viewModelScope.launch {
             projectRepository.getAllProjects()
-                .catch { updateState { copy(error = ErrorType.RetrievingDatabase) } }
+                .catch { error ->
+                    updateState { copy(error = true) }
+                    submitError(error, ErrorType.RetrievingDatabase)
+                }
                 .collect { projects ->
                     updateState {
                         copy(
@@ -91,8 +98,16 @@ class StartPaintingViewModel(
             sendEvent(NavigateToPaintMiniatures(miniatureBoList.map { it.id }))
 
         } else {
-            updateState { copy(error = ErrorType.NoMinisToPaint) }
+            submitError(
+                Exception("startPainting. Button submited no minis to paint"),
+                ErrorType.NoMinisToPaint
+            )
         }
+    }
+
+    private fun submitError(error: Throwable, errorType: ErrorType? = null) {
+        tracer.recordError(error)
+        errorType?.let { sendEvent(LaunchErrorSnackBar(errorType)) }
     }
 
 }

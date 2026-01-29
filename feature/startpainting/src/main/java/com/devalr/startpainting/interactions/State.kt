@@ -7,8 +7,8 @@ enum class ErrorType {
 }
 
 data class State(
+    val error: Boolean = false,
     val projectsLoaded: Boolean = false,
     val projectList: List<StartPaintProjectVo> = emptyList(),
-    val paintButtonEnabled: Boolean = false,
-    val error: ErrorType? = null
+    val paintButtonEnabled: Boolean = false
 )

@@ -28,6 +28,7 @@
     <string name="changelog_26_1_0">Launch version.</string>
 
     <!-- SnackBar -->
+    <string name="snack_bar_datastore_retrieval_error">Preferences could not be loaded. Please try again.</string>
     <string name="snack_bar_imported_success">Projects imported successfully.</string>
     <string name="snack_bar_imported_error">Error: Could not import projects. Check the file format.</string>
     <string name="snack_bar_exported_success">Projects exported successfully.</string>

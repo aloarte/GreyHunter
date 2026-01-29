@@ -6,4 +6,7 @@ sealed interface Event {
     data class NavigateToMiniature(val miniatureId: Long) : Event
     data object NavigateToAddProject : Event
     data object NavigateToSettings : Event
+
+    data class LaunchSnackBarError(val error: ErrorType) :Event
+
 }
