@@ -23,7 +23,7 @@ import com.devalr.createminiature.interactions.ErrorType
 import com.devalr.createminiature.interactions.ErrorType.AddDatabase
 import com.devalr.createminiature.interactions.ErrorType.BadId
 import com.devalr.createminiature.interactions.ErrorType.EditDatabase
-import com.devalr.createminiature.interactions.ErrorType.EmptyTitle
+import com.devalr.createminiature.interactions.ErrorType.EmptyName
 import com.devalr.createminiature.interactions.ErrorType.ErrorUpdatingProgress
 import com.devalr.createminiature.interactions.ErrorType.ImportImage
 import com.devalr.createminiature.interactions.Event.LaunchSnackBarError
@@ -122,7 +122,7 @@ fun AddMiniatureScreen(
 private fun getSnackBarMessage(context: Context, error: ErrorType): String =
     when (error) {
         BadId -> context.getString(R.string.error_add_miniature_bad_id)
-        EmptyTitle -> context.getString(R.string.error_add_miniature_empty_title)
+        EmptyName -> context.getString(R.string.error_add_miniature_empty_name)
         AddDatabase -> context.getString(R.string.error_add_miniature_add_database)
         EditDatabase -> context.getString(R.string.error_add_miniature_edit_database)
         ErrorUpdatingProgress -> context.getString(R.string.error_add_miniature_update_progress)

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Bottom sheet -->
-    <string name="bs_permission_denied">Permission Denied</string>
-    <string name="bs_permission_required_camera">Camera Permission Required</string>
-    <string name="bs_permission_denied_description">You have permanently denied camera permission. To use this feature, you must enable it manually in the application settings.</string>
-    <string name="bs_permission_required_description">To take photos of your miniatures, the application needs access to the camera.</string>
-    <string name="bs_confirm_delete_description">Are you sure that you want to delete it? Remember that it\'s a permanent decision</string>
-    <string name="bs_pick_picture_description">Choose how you\’d like to add a photo. You can take a new one or select one from your gallery.</string>
+    <string name="bs_permission_denied">Permission denied</string>
+    <string name="bs_permission_required_camera">Camera access required</string>
+    <string name="bs_permission_denied_description">You’ve permanently denied camera access. To use this feature, please enable it in the app settings.</string>
+    <string name="bs_permission_required_description">The app needs access to your camera to take photos of your miniatures.</string>
+    <string name="bs_confirm_delete_description">Are you sure you want to delete this? This action cannot be undone.</string>
+    <string name="bs_pick_picture_description">Choose how you’d like to add a photo. You can take a new one or pick one from your gallery.</string>
+    <string name="label_add_picture">Click to add a photo</string>
 
     <!-- Buttons -->
     <string name="btn_cancel">Cancel</string>
-    <string name="btn_go_settings">Go to settings</string>
-    <string name="btn_accept">Ok</string>
+    <string name="btn_go_settings">Open settings</string>
+    <string name="btn_accept">OK</string>
     <string name="btn_delete">Delete</string>
     <string name="btn_camera">Camera</string>
     <string name="btn_gallery">Gallery</string>

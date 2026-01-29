@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Errores -->
+    <string name="error_add_project_empty_name">El nombre del proyecto no puede estar vacío.</string>
+    <string name="error_add_project_bad_id">Algo salió mal. Por favor, inténtalo de nuevo.</string>
+    <string name="error_add_project_add_database">No se pudo crear el proyecto. Por favor, inténtalo de nuevo.</string>
+    <string name="error_add_project_edit_database">No se pudieron guardar los cambios. Por favor, inténtalo de nuevo.</string>
+    <string name="error_add_project_import_images">No se pudo importar la imagen. Por favor, inténtalo de nuevo.</string>
+
+    <!-- Botones -->
+    <string name="button_add_project">Crear proyecto</string>
+    <string name="button_edit_project">Guardar cambios</string>
+
+    <!-- Etiquetas -->
+    <string name="label_project_name">Nombre del proyecto</string>
+    <string name="label_project_description">Descripción del proyecto</string>
+</resources>

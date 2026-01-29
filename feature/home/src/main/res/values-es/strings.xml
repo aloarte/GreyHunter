@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_home_retrieving">Se produjo un error al cargar esta pantalla. Inténtalo de nuevo.</string>
+    <string name="title_projects">Proyectos</string>
+    <string name="title_almost_done_projects">Proyectos casi terminados</string>
+    <string name="title_last_updated_miniatures">Actualizados recientemente</string>
+    <string name="title_empty_projects_description">Pulsa «Crear proyecto» y da color a lo gris.</string>
+
+    <string name="label_empty_projects_description">Aún no hay proyectos</string>
+
+    <string name="label_gamification_0">Toda colección comienza con una sola miniatura.</string>
+    <string name="label_gamification_1_20">Las primeras pinceladas ya están dadas. Proyectos nuevos, potencial infinito.</string>
+    <string name="label_gamification_20_50">El trabajo crece con cada sesión. El progreso está en marcha.</string>
+    <string name="label_gamification_50_70">La visión de tener tu ejército terminado empieza a tomar forma. Los proyectos van a buen ritmo, sigue así.</string>
+    <string name="label_gamification_70_90">El final se acerca. Ahora presta atención a los detalles.</string>
+    <string name="label_gamification_90_99">Solo faltan los últimos retoques.</string>
+    <string name="label_gamification_100">Todo está terminado. Las miniaturas están listas para su próxima campaña.</string>
+
+    <string name="label_gamification_project">Un proyecto lleva el estandarte: %s está casi terminado.</string>
+</resources>

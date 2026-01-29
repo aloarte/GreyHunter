@@ -12,11 +12,6 @@ import com.devalr.framework.theme.ProgressYellow
 fun InitProgressColors(progressColorType: ProgressColorType) {
     val colors = when (progressColorType) {
         ProgressColorType.Brand -> listOf(MaterialTheme.colorScheme.primary)
-        ProgressColorType.Monochrome -> listOf(
-            MaterialTheme.colorScheme.background,
-            MaterialTheme.colorScheme.primary
-        )
-
         ProgressColorType.TrafficLight -> listOf(
             ProgressRed,
             ProgressYellow,

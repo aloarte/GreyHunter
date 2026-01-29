@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Errors -->
+    <string name="error_add_miniature_empty_name">El nombre de la miniatura no puede estar vacío.</string>
+    <string name="error_add_miniature_bad_id">Algo ha salido mal. Inténtalo de nuevo.</string>
+    <string name="error_add_miniature_add_database">No se pudo crear la miniatura. Inténtalo de nuevo.</string>
+    <string name="error_add_miniature_edit_database">No se pudieron guardar los cambios. Inténtalo de nuevo.</string>
+    <string name="error_add_miniature_update_progress">No se pudo actualizar el progreso. Inténtalo más tarde.</string>
+    <string name="error_add_miniature_import_images">No se pudo importar la imagen. Inténtalo de nuevo.</string>
+
+    <!-- Buttons -->
+    <string name="button_add_miniature">Crear miniatura</string>
+    <string name="button_edit_miniature">Guardar cambios</string>
+
+    <!-- Labels -->
+    <string name="label_miniature_name">Nombre de la miniatura</string>
+    <string name="label_miniature_description">Descripción de la miniatura</string>
+</resources>

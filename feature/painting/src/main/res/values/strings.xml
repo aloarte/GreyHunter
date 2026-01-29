@@ -4,11 +4,11 @@
     <string name="error_painting_load_database">An error occurred while loading the miniatures. Please try again.</string>
 
     <!-- Buttons -->
-    <string name="btn_stop_painting">Done painting</string>
+    <string name="btn_stop_painting">Finish painting</string>
     <string name="btn_stop_timer">Stop timer</string>
     <string name="btn_resume_timer">Resume timer</string>
 
     <!-- Labels -->
     <string name="painting_title">Painting %s miniatures</string>
-    <string name="painting_message">Take your time and paint the miniatures. Enjoy the journey.</string>
+    <string name="painting_message">Take your time and enjoy painting. Every brushstroke counts.</string>
 </resources>

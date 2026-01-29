@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Errors -->
+    <string name="error_project_detail_retrieving">Se produjo un error al cargar el proyecto. Inténtalo de nuevo.</string>
+    <string name="error_project_detail_delete">No se pudo eliminar el proyecto. Inténtalo de nuevo.</string>
+
+    <!-- Buttons -->
+
+    <!-- Labels -->
+</resources>

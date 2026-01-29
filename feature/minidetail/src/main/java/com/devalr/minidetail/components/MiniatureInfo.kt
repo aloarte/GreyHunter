@@ -62,6 +62,7 @@ fun MiniatureInfo(miniature: MiniatureBo, onlyUpdate: Boolean) {
             )
         } else {
             GHText(
+                modifier = Modifier.height(50.dp),
                 text = getMiniatureProgressMessage(progress = miniature.percentage),
                 type = TextType.Description,
                 italic = true
@@ -73,8 +74,8 @@ fun MiniatureInfo(miniature: MiniatureBo, onlyUpdate: Boolean) {
 @Composable
 private fun getMiniatureProgressMessage(progress: Float): String {
     val res = when (progress) {
-        0f -> R.string.label_miniature_progress_gamification_0
-        in 0.01f..0.50f -> R.string.label_miniature_progress_gamification_25
+        in 0f .. 0.25f-> R.string.label_miniature_progress_gamification_0
+        in 0.25f..0.50f -> R.string.label_miniature_progress_gamification_25
         in 0.50f..0.75f -> R.string.label_miniature_progress_gamification_50
         in 0.75f..0.99f -> R.string.label_miniature_progress_gamification_75
         1.0f -> R.string.label_miniature_progress_gamification_100

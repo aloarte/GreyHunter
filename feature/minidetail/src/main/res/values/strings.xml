@@ -2,25 +2,23 @@
 <resources>
     <!-- Errors -->
     <string name="error_mini_detail_retrieving">An error occurred while loading the miniature. Please try again.</string>
-    <string name="error_mini_detail_previous_steps">Please complete the previous steps before proceeding.</string>
+    <string name="error_mini_detail_previous_steps">Please complete the previous steps before continuing.</string>
     <string name="error_mini_detail_empty_mini">An unexpected error occurred. Please try again.</string>
-    <string name="error_mini_detail_delete">Unable to delete the miniature. Please try again.</string>
-
-    <!-- Buttons -->
+    <string name="error_mini_detail_delete">Couldn’t delete the miniature. Please try again.</string>
 
     <!-- Labels -->
     <string name="label_miniature_assembled">Assembled</string>
     <string name="label_miniature_primed">Primed</string>
-    <string name="label_miniature_base_colored">Base Colored</string>
+    <string name="label_miniature_base_colored">Color base coated</string>
     <string name="label_miniature_details">Details</string>
     <string name="label_miniature_base">Base Finished</string>
     <string name="label_miniature_progress_gamification_0">A blank canvas awaits! Every great army starts with a single model.</string>
     <string name="label_miniature_progress_gamification_25">The foundations are set! The miniature is starting to show its character.</string>
-    <string name="label_miniature_progress_gamification_50">Over halfway there! The main colors are down and it already looks great on the table.</string>
-    <string name="label_miniature_progress_gamification_75">Just the final touches left! The details are what will make this piece truly shine.</string>
-    <string name="label_miniature_progress_gamification_100">Battle-ready and glorious! A masterpiece for your collection. Congratulations!</string>
-    <string name="label_miniature_progress_gamification_error">Oops its seems that your progress has any kind of error.</string>
-    <string name="label_milestones_description">Mark the milestones you have reached in painting your miniature. Each milestone contributes to the total progress of the miniature and its sized based on the preferences of the app.</string>
-    <string name="label_miniature_update">Please, update the painting progress of your miniature to continue.</string>
+    <string name="label_miniature_progress_gamification_50">More than halfway there! The main colors are down and it already looks great on the table.</string>
+    <string name="label_miniature_progress_gamification_75">Just the final touches left! Details are what will make this piece truly shine.</string>
+    <string name="label_miniature_progress_gamification_100">Battle-ready and glorious! A true centerpiece for your collection. Congratulations!</string>
+    <string name="label_miniature_progress_gamification_error">Oops! It looks like there’s an issue with your progress.</string>
+    <string name="label_milestones_description">Mark the painting milestones you’ve completed. Each milestone contributes to the miniature’s overall progress, based on your app preferences.</string>
+    <string name="label_miniature_update">Please update your miniature’s painting progress to continue.</string>
     <string name="label_save_continue">Save and continue</string>
 </resources>

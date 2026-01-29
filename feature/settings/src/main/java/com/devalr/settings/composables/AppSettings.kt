@@ -63,7 +63,6 @@ fun AppSettings(
         val progressColorOptions =
             listOf(
                 ProgressColorType.Brand,
-                ProgressColorType.Monochrome,
                 ProgressColorType.TrafficLight
             )
         ModalBottomSheet(onDismissRequest = { displayProgressColorSelector = false }) {
@@ -95,13 +94,13 @@ fun AppSettings(
                 SettingsItem(
                     iconPainter = painterResource(com.devalr.framework.R.drawable.ic_dark_mode),
                     label = stringResource(R.string.label_settings_theme),
-                    currentValue = currentThemeType.name,
+                    currentValue = getThemeName(currentThemeType),
                     onOpenSettings = { displayThemeSelector = true }
                 )
                 SettingsItem(
                     iconPainter = painterResource(com.devalr.framework.R.drawable.ic_colors),
                     label = stringResource(R.string.label_settings_colors),
-                    currentValue = currentProgressColorType.name,
+                    currentValue = getProgressColorName(currentProgressColorType),
                     onOpenSettings = { displayProgressColorSelector = true }
                 )
             }
@@ -111,23 +110,24 @@ fun AppSettings(
 
 @Composable
 private fun getThemeNameList(themeOptions: List<ThemeType>): List<String> =
-    themeOptions.map {
-        when (it) {
-            ThemeType.Light -> stringResource(R.string.label_settings_theme_light)
-            ThemeType.Dark -> stringResource(R.string.label_settings_theme_dark)
-            ThemeType.System -> stringResource(R.string.label_settings_theme_system)
-        }
-    }
+    themeOptions.map { getThemeName(it) }
+
+@Composable
+private fun getThemeName(themeType: ThemeType): String = when (themeType) {
+    ThemeType.Light -> stringResource(R.string.label_settings_theme_light)
+    ThemeType.Dark -> stringResource(R.string.label_settings_theme_dark)
+    ThemeType.System -> stringResource(R.string.label_settings_theme_system)
+}
 
 @Composable
 private fun getProgressColorNameList(colorOptions: List<ProgressColorType>): List<String> =
-    colorOptions.map {
-        when (it) {
-            ProgressColorType.Brand -> stringResource(R.string.label_settings_colors_brand)
-            ProgressColorType.Monochrome -> stringResource(R.string.label_settings_colors_monochrome)
-            ProgressColorType.TrafficLight -> stringResource(R.string.label_settings_colors_traffic)
-        }
-    }
+    colorOptions.map { getProgressColorName(it) }
+
+@Composable
+private fun getProgressColorName(colorType: ProgressColorType): String = when (colorType) {
+    ProgressColorType.Brand -> stringResource(R.string.label_settings_colors_brand)
+    ProgressColorType.TrafficLight -> stringResource(R.string.label_settings_colors_traffic)
+}
 
 @Preview(showBackground = true)
 @Composable
@@ -140,7 +140,7 @@ fun AppSettingsPreviewLightMode() {
         ) {
             AppSettings(
                 currentThemeType = ThemeType.Light,
-                currentProgressColorType = ProgressColorType.Monochrome,
+                currentProgressColorType = ProgressColorType.TrafficLight,
                 onChangeTheme = {
                     // Do nothing
                 },

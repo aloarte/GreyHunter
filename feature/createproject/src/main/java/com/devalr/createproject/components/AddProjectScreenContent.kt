@@ -63,6 +63,7 @@ fun AddProjectScreenContent(
                 GHImage(
                     imageUri = projectImage,
                     size = 250.dp,
+                    showIcon = true,
                     showMessage = true,
                     onImageClick = onPickImage
                 )

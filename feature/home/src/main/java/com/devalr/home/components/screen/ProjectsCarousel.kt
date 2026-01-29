@@ -9,15 +9,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.stormlightArchiveProject
-import com.devalr.framework.components.carousel.HorizontalCarousel
 import com.devalr.framework.components.cards.AddCard
+import com.devalr.framework.components.carousel.HorizontalCarousel
 import com.devalr.framework.components.markedtext.MarkedText
 import com.devalr.framework.enum.CardType
 import com.devalr.framework.theme.GreyHunterTheme
+import com.devalr.home.R
 import com.devalr.home.components.cards.ProjectCard
 import com.devalr.home.model.ProjectVo
 import com.devalr.home.model.ProjectVo.AddProjectItem
@@ -32,7 +34,7 @@ fun ProjectsCarousel(
     Column {
         MarkedText(
             modifier = Modifier.padding(horizontal = 20.dp),
-            text = "Projects",
+            text = stringResource(R.string.title_projects),
             title = true
         )
         Spacer(modifier = Modifier.height(20.dp))

@@ -83,6 +83,7 @@ fun PaintingScreenContent(
                 color = MaterialTheme.colorScheme.background,
                 barsSize = 50.dp
             )
+            Spacer(modifier = Modifier.height(10.dp))
             PaintingMinisCarousel(miniatures = miniatures)
             Spacer(modifier = Modifier.height(10.dp))
             GHText(
@@ -91,9 +92,10 @@ fun PaintingScreenContent(
                 textColor = Color.White
             )
             Spacer(modifier = Modifier.height(30.dp))
-            Row(
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
                 GHButton(
                     text = if (timerStopped) stringResource(R.string.btn_resume_timer)

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Errors -->
+    <string name="error_painting_load_database">Se produjo un error al cargar las miniaturas. Inténtalo de nuevo.</string>
+
+    <!-- Buttons -->
+    <string name="btn_stop_painting">Finalizar pintado</string>
+    <string name="btn_stop_timer">Detener temporizador</string>
+    <string name="btn_resume_timer">Reanudar temporizador</string>
+
+    <!-- Labels -->
+    <string name="painting_title">Pintando %s miniaturas</string>
+    <string name="painting_message">Tómate tu tiempo y disfruta del proceso. Cada pincelada cuenta.</string>
+</resources>

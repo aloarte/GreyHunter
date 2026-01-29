@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Bottom sheet -->
+    <string name="bs_permission_denied">Permiso denegado</string>
+    <string name="bs_permission_required_camera">Se requiere permiso de cámara</string>
+    <string name="bs_permission_denied_description">Has denegado permanentemente el permiso de cámara. Para usar esta función, debes habilitarlo manualmente en la configuración de la aplicación.</string>
+    <string name="bs_permission_required_description">Para tomar fotos de tus miniaturas, la aplicación necesita acceso a la cámara.</string>
+    <string name="bs_confirm_delete_description">¿Estás seguro de que quieres eliminarlo? Recuerda que es una decisión permanente.</string>
+    <string name="bs_pick_picture_description">Elige cómo deseas añadir una foto. Puedes tomar una nueva o seleccionar una de tu galería.</string>
+    <string name="label_add_picture">Haz click para seleccionar una imagen</string>
+
+    <!-- Botones -->
+    <string name="btn_cancel">Cancelar</string>
+    <string name="btn_go_settings">Ir a configuración</string>
+    <string name="btn_accept">Aceptar</string>
+    <string name="btn_delete">Eliminar</string>
+    <string name="btn_camera">Cámara</string>
+    <string name="btn_gallery">Galería</string>
+    <string name="btn_create_project">Crear proyecto</string>
+</resources>

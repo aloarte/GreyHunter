@@ -45,7 +45,7 @@ fun ProjectDetailScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp),
-            showMessage = true,
+            showIcon = true,
             borderRadius = 0.dp,
             imageUri = project.imageUri,
             size = 160.dp

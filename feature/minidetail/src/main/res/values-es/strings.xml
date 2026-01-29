@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Errors -->
+    <string name="error_mini_detail_retrieving">Se produjo un error al cargar la miniatura. Inténtalo de nuevo.</string>
+    <string name="error_mini_detail_previous_steps">Completa los pasos anteriores antes de continuar.</string>
+    <string name="error_mini_detail_empty_mini">Se produjo un error inesperado. Inténtalo de nuevo.</string>
+    <string name="error_mini_detail_delete">No se pudo eliminar la miniatura. Inténtalo de nuevo.</string>
+
+    <!-- Labels -->
+    <string name="label_miniature_assembled">Montada</string>
+    <string name="label_miniature_primed">Imprimada</string>
+    <string name="label_miniature_base_colored">Capa base</string>
+    <string name="label_miniature_details">Detalles</string>
+    <string name="label_miniature_base">Peana terminada</string>
+    <string name="label_miniature_progress_gamification_0">¡Un lienzo en blanco te espera! Todo gran ejército comienza con una sola miniatura.</string>
+    <string name="label_miniature_progress_gamification_25">La miniatura empieza a mostrar su carácter.</string>
+    <string name="label_miniature_progress_gamification_50">¡Más de la mitad completada! Empieza a verse genial para jugar con ella.</string>
+    <string name="label_miniature_progress_gamification_75">¡Solo faltan los últimos retoques! Los detalles harán que esta pieza brille de verdad.</string>
+    <string name="label_miniature_progress_gamification_100">¡Lista para la batalla y gloriosa! Una pieza central para tu colección. Enhorabuena.</string>
+    <string name="label_miniature_progress_gamification_error">¡Ups! Parece que hay un problema con el progreso.</string>
+    <string name="label_milestones_description">Marca los hitos de pintado que hayas completado. Cada hito contribuye al progreso total de la miniatura según las preferencias de la app.</string>
+    <string name="label_miniature_update">Actualiza el progreso de pintado de tu miniatura para continuar.</string>
+    <string name="label_save_continue">Guardar y continuar</string>
+</resources>
