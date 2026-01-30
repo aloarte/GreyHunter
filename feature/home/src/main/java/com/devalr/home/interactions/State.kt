@@ -5,6 +5,7 @@ import com.devalr.domain.model.ProjectBo
 import com.devalr.home.model.GamificationMessageType
 import com.devalr.home.model.GamificationMessageType.None
 import com.devalr.home.model.ProjectVo
+import com.devalr.home.model.ProjectsStats
 
 enum class ErrorType {
     RetrievingDatabase
@@ -16,5 +17,6 @@ data class State(
     val projects: List<ProjectVo> = emptyList(),
     val almostDoneProjects: List<ProjectBo> = emptyList(),
     val lastUpdatedMinis: List<MiniatureBo> = emptyList(),
+    val stats: ProjectsStats = ProjectsStats(),
     val gamificationSentence: GamificationMessageType = None
 )

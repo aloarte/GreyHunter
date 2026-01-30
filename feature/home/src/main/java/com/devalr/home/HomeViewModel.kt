@@ -14,15 +14,14 @@ import com.devalr.home.interactions.Action.OpenProjectDetail
 import com.devalr.home.interactions.Action.OpenSettings
 import com.devalr.home.interactions.Action.StartPainting
 import com.devalr.home.interactions.Action.UpdateGamificationMessage
-import com.devalr.home.interactions.ErrorType
 import com.devalr.home.interactions.ErrorType.RetrievingDatabase
 import com.devalr.home.interactions.Event
 import com.devalr.home.interactions.Event.LaunchSnackBarError
-import com.devalr.home.interactions.Event.NavigateToStartPaint
 import com.devalr.home.interactions.Event.NavigateToAddProject
 import com.devalr.home.interactions.Event.NavigateToMiniature
 import com.devalr.home.interactions.Event.NavigateToProject
 import com.devalr.home.interactions.Event.NavigateToSettings
+import com.devalr.home.interactions.Event.NavigateToStartPaint
 import com.devalr.home.interactions.State
 import com.devalr.home.model.GamificationMessageType.AlmostDone
 import com.devalr.home.model.GamificationMessageType.EmptyProjects
@@ -31,6 +30,7 @@ import com.devalr.home.model.GamificationMessageType.ProgressRange
 import com.devalr.home.model.ProjectVo
 import com.devalr.home.model.ProjectVo.AddProjectItem
 import com.devalr.home.model.ProjectVo.ProjectItem
+import com.devalr.home.model.ProjectsStats
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -58,32 +58,41 @@ class HomeViewModel(
         }
     }
 
-    private fun initHomeData() {
-        viewModelScope.launch {
-            combine(
-                projectRepository.getAllProjects(),
-                projectRepository.getAlmostDoneProjects(),
-                miniatureRepository.getLastUpdatedMiniatures()
-            ) { projects, almostDoneProjects, lastMinis ->
-                val voProjects: MutableList<ProjectVo> =
-                    projects.map { ProjectItem(it) }.toMutableList()
-                voProjects.add(AddProjectItem)
-                onAction(UpdateGamificationMessage(projects, almostDoneProjects))
-                uiState.value.copy(
-                    projects = voProjects,
-                    almostDoneProjects = almostDoneProjects,
-                    lastUpdatedMinis = lastMinis,
-                    loaded = true,
-                )
-            }.catch { error ->
-                tracer.recordError(error)
-                sendEvent(LaunchSnackBarError(RetrievingDatabase))
-                updateState { copy(error = true) }
-            }.collect { newState ->
-                updateState { newState }
-            }
+    private fun initHomeData() = viewModelScope.launch {
+        combine(
+            projectRepository.getAllProjects(),
+            projectRepository.getAlmostDoneProjects(),
+            miniatureRepository.getLastUpdatedMiniatures()
+        ) { projects, almostDoneProjects, lastMinis ->
+            val voProjects: MutableList<ProjectVo> =
+                projects.map { ProjectItem(it) }.toMutableList()
+            voProjects.add(AddProjectItem)
+            onAction(UpdateGamificationMessage(projects, almostDoneProjects))
+            uiState.value.copy(
+                projects = voProjects,
+                almostDoneProjects = almostDoneProjects,
+                lastUpdatedMinis = lastMinis,
+                stats = calculateProjectStats(projects),
+                loaded = true
+            )
+        }.catch { error ->
+            tracer.recordError(error)
+            sendEvent(LaunchSnackBarError(RetrievingDatabase))
+            updateState { copy(error = true) }
+        }.collect { newState ->
+            updateState { newState }
         }
     }
+
+    private fun calculateProjectStats(projects: List<ProjectBo>): ProjectsStats = ProjectsStats(
+        totalProgress = if (projects.isNotEmpty()) {
+            projects.sumOf { it.progress.toDouble() }.div(projects.size).times(100).toInt()
+        } else 0,
+        minisFinished = projects.sumOf { it.minis.count { it.percentage == 1f } },
+        totalMinis = projects.sumOf { it.minis.size },
+        projectsFinished = projects.count { it.progress == 1f },
+        totalProjects = projects.size
+    )
 
     fun updateGamificationMessage(
         projects: List<ProjectBo>,
@@ -93,17 +102,17 @@ class HomeViewModel(
             AlmostDone(almostDoneProjects.first().name)
         } else if (projects.isNotEmpty()) {
             val progressAverage = projects
-                .removeOutliers()
+                //.removeOutliers()
                 .map { it.progress }
                 .average()
                 .toFloat()
             when (progressAverage) {
                 0f -> EmptyProjects
                 in 0.01f..0.2f -> ProgressRange(0.2f)
-                in 0.21f..0.5f -> ProgressRange(0.5f)
-                in 0.51f..0.7f -> ProgressRange(0.7f)
-                in 0.71f..0.9f -> ProgressRange(0.9f)
-                in 0.91f..0.99f -> ProgressRange(0.99f)
+                in 0.2f..0.5f -> ProgressRange(0.5f)
+                in 0.5f..0.7f -> ProgressRange(0.7f)
+                in 0.7f..0.9f -> ProgressRange(0.9f)
+                in 0.9f..0.99f -> ProgressRange(0.99f)
                 1f -> ProgressRange(1f)
                 else -> None
             }

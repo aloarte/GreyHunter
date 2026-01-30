@@ -22,6 +22,7 @@ import com.devalr.home.model.GamificationMessageType.ProgressRange
 import com.devalr.home.model.ProjectVo
 import com.devalr.home.model.ProjectVo.AddProjectItem
 import com.devalr.home.model.ProjectVo.ProjectItem
+import com.devalr.home.model.ProjectsStats
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -97,9 +98,7 @@ class HomeViewModelTest {
             coEvery { projectRepository.getAllProjects() } returns flowOf(projects)
             coEvery { projectRepository.getAlmostDoneProjects() } returns flowOf(listOf(projects[1]))
             coEvery { miniatureRepository.getLastUpdatedMiniatures() } returns flowOf(
-                listOf(
-                    miniature
-                )
+                listOf(                    miniature)
             )
 
             // WHEN
@@ -122,6 +121,7 @@ class HomeViewModelTest {
             assertEquals(expectedProjects, state.projects)
             assertEquals(listOf(miniature), state.lastUpdatedMinis)
             assertEquals(listOf(projects[1]), state.almostDoneProjects)
+            assertEquals(ProjectsStats(75,0,0,1,2), state.stats)
             assertFalse(state.error)
         }
 

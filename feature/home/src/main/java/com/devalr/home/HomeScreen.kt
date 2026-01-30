@@ -111,6 +111,7 @@ fun HomeScreen(
                     almostDoneProjects = state.almostDoneProjects,
                     lastUpdatedMinis = state.lastUpdatedMinis,
                     gamificationMessage = state.gamificationSentence,
+                    stats = state.stats,
                     onOpenProjectDetail = { projectId ->
                         viewModel.onAction(OpenProjectDetail(projectId = projectId))
                     },

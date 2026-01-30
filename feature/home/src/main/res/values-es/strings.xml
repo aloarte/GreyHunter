@@ -5,8 +5,12 @@
     <string name="title_almost_done_projects">Proyectos casi terminados</string>
     <string name="title_last_updated_miniatures">Actualizados recientemente</string>
     <string name="title_empty_projects_description">Pulsa «Crear proyecto» y da color a lo gris.</string>
+    <string name="title_stats">Estadísticas</string>
 
     <string name="label_empty_projects_description">Aún no hay proyectos</string>
+    <string name="label_stats_total">Progreso total:</string>
+    <string name="label_stats_projects">Proyectos terminados:</string>
+    <string name="label_stats_miniatures">Miniaturas terminadas:</string>
 
     <string name="label_gamification_0">Toda colección comienza con una sola miniatura.</string>
     <string name="label_gamification_1_20">Las primeras pinceladas ya están dadas. Proyectos nuevos, potencial infinito.</string>
@@ -16,5 +20,5 @@
     <string name="label_gamification_90_99">Solo faltan los últimos retoques.</string>
     <string name="label_gamification_100">Todo está terminado. Las miniaturas están listas para su próxima campaña.</string>
 
-    <string name="label_gamification_project">Un proyecto lleva el estandarte: %s está casi terminado.</string>
+    <string name="label_gamification_project">Hay un proyecto que lleva el estandarte al frente: %s está casi terminado.</string>
 </resources>
