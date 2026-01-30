@@ -42,10 +42,9 @@ class MainActivity : ComponentActivity() {
                     SideEffect {
                         systemUiController.setSystemBarsColor(
                             color = Color.Transparent,
-                            darkIcons = true
+                            darkIcons = !isDarkTheme
                         )
                     }
-
                     Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background,
