@@ -21,9 +21,9 @@ import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.home.components.anim.EmptyProjects
 import com.devalr.home.components.screen.AlmostDoneProjects
 import com.devalr.home.components.screen.AppTitle
-import com.devalr.home.components.screen.GamificationMessage
 import com.devalr.home.components.screen.LastUpdatedMiniatures
 import com.devalr.home.components.screen.ProjectsCarousel
+import com.devalr.home.components.screen.StatsAndGamificationMessage
 import com.devalr.home.model.GamificationMessageType
 import com.devalr.home.model.GamificationMessageType.EmptyProjects
 import com.devalr.home.model.GamificationMessageType.None
@@ -31,6 +31,7 @@ import com.devalr.home.model.GamificationMessageType.ProgressRange
 import com.devalr.home.model.ProjectVo
 import com.devalr.home.model.ProjectVo.AddProjectItem
 import com.devalr.home.model.ProjectVo.ProjectItem
+import com.devalr.home.model.ProjectsStats
 
 @Composable
 fun HomeScreenContent(
@@ -38,6 +39,7 @@ fun HomeScreenContent(
     lastUpdatedMinis: List<MiniatureBo>,
     almostDoneProjects: List<ProjectBo>,
     gamificationMessage: GamificationMessageType,
+    stats: ProjectsStats,
     onOpenProjectDetail: (Long) -> Unit,
     onOpenMiniatureDetail: (Long) -> Unit,
     onAddProject: () -> Unit,
@@ -63,7 +65,7 @@ fun HomeScreenContent(
         }
         item {
             if (projects.size > 1 && gamificationMessage != None) {
-                GamificationMessage(gamificationMessage)
+                StatsAndGamificationMessage(gamificationMessage, stats)
             } else {
                 EmptyProjects()
             }
@@ -104,6 +106,7 @@ private fun HomeScreenContentPreviewLightMode() {
                 lastUpdatedMinis = listOf(immortal, alethi),
                 almostDoneProjects = listOf(hierotekCircleProject, stormlightArchiveProject),
                 gamificationMessage = ProgressRange(0.4f),
+                stats = ProjectsStats(),
                 onAddProject = {
                     // Do nothing
                 },
@@ -138,6 +141,7 @@ private fun HomeScreenContentPreviewDarkMode() {
                 lastUpdatedMinis = listOf(immortal, alethi),
                 almostDoneProjects = listOf(hierotekCircleProject, stormlightArchiveProject),
                 gamificationMessage = ProgressRange(0.4f),
+                stats = ProjectsStats(),
                 onAddProject = {
                     // Do nothing
                 },
@@ -169,6 +173,7 @@ private fun HomeScreenContentNoProjectsPreviewLightMode() {
                 lastUpdatedMinis = emptyList(),
                 almostDoneProjects = emptyList(),
                 gamificationMessage = EmptyProjects,
+                stats = ProjectsStats(),
                 onAddProject = {
                     // Do nothing
                 },
@@ -200,6 +205,7 @@ private fun HomeScreenContentNoProjectsPreviewDarkMode() {
                 lastUpdatedMinis = emptyList(),
                 almostDoneProjects = emptyList(),
                 gamificationMessage = EmptyProjects,
+                stats = ProjectsStats(),
                 onAddProject = {
                     // Do nothing
                 },
