@@ -5,14 +5,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -23,7 +24,7 @@ import com.devalr.framework.R
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.theme.GreyHunterTheme
-import com.devalr.framework.theme.LightGray
+import com.devalr.framework.theme.HunterGreen
 
 @Composable
 fun GHButton(
@@ -39,19 +40,22 @@ fun GHButton(
         enabled = enabled,
         shape = RoundedCornerShape(30),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (invertColors) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = if (invertColors) MaterialTheme.colorScheme.surfaceVariant else /*MaterialTheme.colorScheme.onPrimary*/ Color.White
+            containerColor = if (invertColors)
+                MaterialTheme.colorScheme.onSurface
+            else
+                MaterialTheme.colorScheme.primary,
         ),
         onClick = onClick
     ) {
+        val color = if (invertColors) MaterialTheme.colorScheme.surface else Color.White
         if (icon != null) {
-            Icon(painter = icon, contentDescription = "")
+            Icon(painter = icon, contentDescription = "", tint = color)
             Spacer(modifier = Modifier.width(15.dp))
         }
         GHText(
             text = text.uppercase(),
             type = TextType.Title,
-            textColor = if (invertColors) Color.Black else Color.White
+            textColor = color
         )
     }
 }
@@ -62,18 +66,21 @@ fun GHButton(
 private fun GHButtonPreviewsDarkMode() {
     GreyHunterTheme(darkTheme = true) {
         Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
         ) {
             GHButton(text = "Retry", onClick = {})
-            VerticalDivider(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             GHButton(text = "Retry again with logout", onClick = {})
-            VerticalDivider(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             GHButton(
                 text = "Button with icon",
                 icon = painterResource(R.drawable.ic_check),
-                onClick = {}
+                onClick = {
+                    // Do nothing
+                }
             )
         }
     }
@@ -81,25 +88,26 @@ private fun GHButtonPreviewsDarkMode() {
 
 @Preview(showBackground = true)
 @Composable
-private fun GHButtonInvertedPreviewsDarkMode() {
-    GreyHunterTheme(darkTheme = true) {
+private fun GHButtonPreviewsLightMode() {
+    GreyHunterTheme(darkTheme = false) {
         Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
+                .padding(10.dp)
         ) {
-            Column(modifier = Modifier.background(LightGray)) {
-                GHButton(text = "Retry", invertColors = true, onClick = {})
-                VerticalDivider(modifier = Modifier.height(20.dp))
-                GHButton(text = "Retry again with logout", invertColors = true, onClick = {})
-                VerticalDivider(modifier = Modifier.height(20.dp))
-                GHButton(
-                    text = "Button with icon",
-                    invertColors = true,
-                    icon = painterResource(R.drawable.ic_check),
-                    onClick = {}
-                )
-            }
+            GHButton(text = "Retry", onClick = {})
+            Spacer(modifier = Modifier.height(20.dp))
+            GHButton(text = "Retry again with logout", onClick = {})
+            Spacer(modifier = Modifier.height(20.dp))
+            GHButton(
+                text = "Button with icon",
+                icon = painterResource(R.drawable.ic_check),
+                onClick = {
+                    // Do nothing
+                }
+            )
         }
     }
 }
@@ -107,21 +115,26 @@ private fun GHButtonInvertedPreviewsDarkMode() {
 
 @Preview(showBackground = true)
 @Composable
-private fun GHButtonPreviewsLightMode() {
-    GreyHunterTheme(darkTheme = false) {
+private fun GHButtonInvertedPreviewsDarkMode() {
+    GreyHunterTheme(darkTheme = true) {
         Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.background)
+                .background(HunterGreen)
+                .padding(10.dp)
         ) {
-            GHButton(text = "Retry", onClick = {})
-            VerticalDivider(modifier = Modifier.height(20.dp))
-            GHButton(text = "Retry again with logout", onClick = {})
-            VerticalDivider(modifier = Modifier.height(20.dp))
+            GHButton(text = "Retry", invertColors = true, onClick = {})
+            Spacer(modifier = Modifier.height(20.dp))
+            GHButton(text = "Retry again with logout", invertColors = true, onClick = {})
+            Spacer(modifier = Modifier.height(20.dp))
             GHButton(
                 text = "Button with icon",
+                invertColors = true,
                 icon = painterResource(R.drawable.ic_check),
-                onClick = {}
+                onClick = {
+                    // Do nothing
+                }
             )
         }
     }
@@ -132,22 +145,24 @@ private fun GHButtonPreviewsLightMode() {
 private fun GHButtonInvertedPreviewsLightMode() {
     GreyHunterTheme(darkTheme = false) {
         Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.background)
+                .background(HunterGreen)
+                .padding(10.dp)
         ) {
-            Column(modifier = Modifier.background(LightGray)) {
-                GHButton(text = "Retry", invertColors = true, onClick = {})
-                VerticalDivider(modifier = Modifier.height(20.dp))
-                GHButton(text = "Retry again with logout", invertColors = true, onClick = {})
-                VerticalDivider(modifier = Modifier.height(20.dp))
-                GHButton(
-                    text = "Button with icon",
-                    invertColors = true,
-                    icon = painterResource(R.drawable.ic_check),
-                    onClick = {}
-                )
-            }
+            GHButton(text = "Retry", invertColors = true, onClick = {})
+            Spacer(modifier = Modifier.height(20.dp))
+            GHButton(text = "Retry again with logout", invertColors = true, onClick = {})
+            Spacer(modifier = Modifier.height(20.dp))
+            GHButton(
+                text = "Button with icon",
+                invertColors = true,
+                icon = painterResource(R.drawable.ic_check),
+                onClick = {
+                    // Do nothing
+                }
+            )
         }
     }
 }

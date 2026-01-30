@@ -1,11 +1,14 @@
 package com.devalr.painting
 
+import android.app.Activity
 import android.content.Context
+import android.view.WindowManager
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -36,6 +39,18 @@ fun PaintingScreen(
     val state = viewModel.uiState.collectAsState().value
     val snackBarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
+    val activity = context as? Activity
+    DisposableEffect(Unit) {
+        activity?.window?.addFlags(
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+        )
+        onDispose {
+            activity?.window?.clearFlags(
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+            )
+        }
+    }
+
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
