@@ -83,7 +83,7 @@ fun HomeScreen(
             }
         },
         floatingActionButton = {
-            if (state.loaded && state.projects.any { (it.hasMinis()) }) {
+            if (state.loaded && state.projects.any { it.hasMinis() && it.hasUnfinishedMinis() }) {
                 FloatingActionButton(
                     onClick = { viewModel.onAction(StartPainting) },
                     containerColor = MaterialTheme.colorScheme.primary,
