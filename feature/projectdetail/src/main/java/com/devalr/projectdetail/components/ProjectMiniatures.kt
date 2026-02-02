@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,7 +41,7 @@ fun ProjectMiniatures(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 10.dp, vertical = 10.dp),
+            .padding(horizontal = 10.dp, vertical = 20.dp),
         verticalArrangement = Arrangement.spacedBy(5.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -91,6 +92,7 @@ fun ProjectMiniatures(
                 }
             }
         }
+        Spacer(modifier = Modifier.height(10.dp))
         FloatingActionButton(
             shape = CircleShape,
             containerColor = MaterialTheme.colorScheme.primary,
@@ -99,6 +101,7 @@ fun ProjectMiniatures(
         ) {
             Icon(imageVector = Icons.Default.Add, contentDescription = "")
         }
+        Spacer(modifier = Modifier.height(10.dp))
     }
 }
 
