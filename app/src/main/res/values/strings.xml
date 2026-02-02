@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GreyHunter</string>
+    <string name="snackbar_error_back_mini_detail">Back is disabled here. Please, click on the button to update the progress of the miniature.</string>
 </resources>

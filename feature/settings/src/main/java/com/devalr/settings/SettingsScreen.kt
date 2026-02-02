@@ -10,10 +10,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.devalr.framework.components.empty.EmptyScreen
-import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
 import com.devalr.settings.composables.SettingsScreenContent
@@ -35,11 +33,11 @@ import org.koin.compose.koinInject
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = koinInject(),
+    snackBarHostState: SnackbarHostState,
     onNavigateBack: () -> Unit
 ) {
     val context = LocalContext.current
     val state = viewModel.uiState.collectAsState().value
-    val snackBarHostState = remember { SnackbarHostState() }
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
@@ -81,13 +79,7 @@ fun SettingsScreen(
         }
     }
     LaunchedEffect(true) { viewModel.onAction(Load) }
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState) { data ->
-                GHSnackBar(snackBarData = data)
-            }
-        }
-    ) { innerPadding ->
+    Scaffold { innerPadding ->
         if (state.error) {
             EmptyScreen { viewModel.onAction(Return) }
         } else {

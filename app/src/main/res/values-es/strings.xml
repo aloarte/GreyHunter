@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GreyHunter</string>
+    <string name="snackbar_error_back_mini_detail">La navegación hacia atrás está deshabilitada. Por favor, actualiza el progreso de tu miniatura y haz click en el botón para guardar tus cambios.</string>
+</resources>

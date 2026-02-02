@@ -5,7 +5,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import com.devalr.framework.components.anim.LoadingIndicator
 import com.devalr.framework.components.bottomsheet.ConfirmBottomSheetContent
 import com.devalr.framework.components.empty.EmptyScreen
-import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
 import com.devalr.minidetail.components.MiniatureDetailScreenContent
@@ -43,6 +41,7 @@ import org.koin.compose.koinInject
 @Composable
 fun MiniatureDetailScreen(
     viewModel: MiniatureDetailViewModel = koinInject(),
+    snackBarHostState: SnackbarHostState,
     miniatureId: Long,
     onlyUpdate: Boolean,
     onNavigateBack: () -> Unit,
@@ -50,7 +49,6 @@ fun MiniatureDetailScreen(
 ) {
     val state = viewModel.uiState.collectAsState().value
     var showConfirmDelete by remember { mutableStateOf(false) }
-    val snackBarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
@@ -91,13 +89,7 @@ fun MiniatureDetailScreen(
             )
         }
     }
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState) { data ->
-                GHSnackBar(snackBarData = data)
-            }
-        }
-    ) { innerPadding ->
+    Scaffold { innerPadding ->
         if (state.miniatureLoaded && state.miniature != null && state.parentProject != null) {
             MiniatureDetailScreenContent(
                 innerPadding = innerPadding,
@@ -122,7 +114,7 @@ fun MiniatureDetailScreen(
                     showConfirmDelete = true
                 }
             )
-        }else if (state.error) {
+        } else if (state.error) {
             EmptyScreen { viewModel.onAction(Return) }
         } else {
             LoadingIndicator()

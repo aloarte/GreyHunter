@@ -6,6 +6,8 @@
     <string name="title_last_updated_miniatures">Recently Updated</string>
     <string name="title_empty_projects_description">Tap “Create project” and bring color to the gray.</string>
     <string name="title_stats">Stats</string>
+    <string name="bs_confirm_exit_description">Do you want to exit the app?</string>
+    <string name="btn_exit">Exit</string>
     <string name="label_stats_total">Overall Progress:</string>
     <string name="label_stats_projects">Projects Completed:</string>
     <string name="label_stats_miniatures">Miniatures Completed:</string>

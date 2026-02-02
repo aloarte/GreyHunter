@@ -3,7 +3,6 @@ package com.devalr.createminiature
 import android.content.Context
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,7 +29,6 @@ import com.devalr.createminiature.interactions.Event.LaunchSnackBarError
 import com.devalr.createminiature.interactions.Event.NavigateBack
 import com.devalr.framework.components.bottomsheet.ImagePickerHandler
 import com.devalr.framework.components.empty.EmptyScreen
-import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
 import kotlinx.coroutines.launch
@@ -39,13 +37,13 @@ import org.koin.compose.koinInject
 @Composable
 fun AddMiniatureScreen(
     viewModel: AddMiniatureViewModel = koinInject(),
+    snackBarHostState: SnackbarHostState,
     projectId: Long,
     miniatureId: Long?,
     onBack: () -> Unit
 ) {
     var showImagePicker by remember { mutableStateOf(false) }
     val state = viewModel.uiState.collectAsState().value
-    val snackBarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -86,13 +84,7 @@ fun AddMiniatureScreen(
         )
     }
 
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState) { data ->
-                GHSnackBar(snackBarData = data)
-            }
-        }
-    ) { innerPadding ->
+    Scaffold { innerPadding ->
         if (state.error) {
             EmptyScreen { viewModel.onAction(Return) }
         } else {

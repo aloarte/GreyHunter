@@ -3,16 +3,13 @@ package com.devalr.startpainting
 import android.content.Context
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.devalr.framework.components.anim.LoadingIndicator
 import com.devalr.framework.components.empty.EmptyScreen
-import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
 import com.devalr.startpainting.components.StartPaintingScreenContent
@@ -32,12 +29,12 @@ import org.koin.compose.koinInject
 @Composable
 fun StartPaintingScreen(
     viewModel: StartPaintingViewModel = koinInject(),
+    snackBarHostState: SnackbarHostState,
     onNavigateToPaintMinis: (List<Long>) -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val state = viewModel.uiState.collectAsState().value
     val context = LocalContext.current
-    val snackBarHostState = remember { SnackbarHostState() }
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
@@ -59,13 +56,7 @@ fun StartPaintingScreen(
         }
     }
     LaunchedEffect(true) { viewModel.onAction(Action.Load) }
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState) { data ->
-                GHSnackBar(snackBarData = data)
-            }
-        }
-    ) { innerPadding ->
+    Scaffold { innerPadding ->
         if (state.projectsLoaded) {
             if (state.error) {
                 EmptyScreen { viewModel.onAction(Return) }

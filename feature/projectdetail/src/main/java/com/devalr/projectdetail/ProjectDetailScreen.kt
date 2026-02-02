@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import com.devalr.framework.components.anim.LoadingIndicator
 import com.devalr.framework.components.bottomsheet.ConfirmBottomSheetContent
 import com.devalr.framework.components.empty.EmptyScreen
-import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
 import com.devalr.projectdetail.components.ProjectDetailScreenContent
@@ -40,6 +39,7 @@ import org.koin.compose.koinInject
 @Composable
 fun ProjectDetailScreen(
     viewModel: ProjectDetailViewModel = koinInject(),
+    snackBarHostState: SnackbarHostState,
     projectId: Long,
     onNavigateToMiniature: (Long) -> Unit,
     onNavigateBack: () -> Unit,
@@ -49,9 +49,7 @@ fun ProjectDetailScreen(
 ) {
     val state = viewModel.uiState.collectAsState().value
     var showConfirmDelete by remember { mutableStateOf(false) }
-    val snackBarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
-
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
@@ -88,13 +86,7 @@ fun ProjectDetailScreen(
         }
     }
 
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState) { data ->
-                GHSnackBar(snackBarData = data)
-            }
-        }
-    ) { innerPadding ->
+    Scaffold { innerPadding ->
         if (state.error) {
             EmptyScreen { viewModel.onAction(Return) }
         } else if (state.projectLoaded && state.project != null) {

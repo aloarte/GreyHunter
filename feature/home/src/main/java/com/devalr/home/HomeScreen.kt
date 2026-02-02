@@ -1,26 +1,32 @@
 package com.devalr.home
 
 import android.content.Context
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.devalr.framework.components.anim.LoadingIndicator
+import com.devalr.framework.components.bottomsheet.ConfirmBottomSheetContent
 import com.devalr.framework.components.empty.EmptyScreen
-import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
 import com.devalr.home.components.HomeScreenContent
@@ -41,19 +47,24 @@ import com.devalr.home.interactions.Event.NavigateToStartPaint
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = koinInject(),
+    snackBarHostState: SnackbarHostState,
     onNavigateToProject: (Long) -> Unit,
     onNavigateToMiniature: (Long) -> Unit,
     onNavigateToAddProject: () -> Unit,
     onNavigateToStartPainting: () -> Unit,
-    onNavigateToSettings: () -> Unit
+    onNavigateToSettings: () -> Unit,
+    onExit:()->Unit
 ) {
     val state = viewModel.uiState.collectAsState().value
-    val snackBarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
-
+    var showConfirmExit by remember { mutableStateOf(false) }
+    BackHandler(enabled = true) {
+        showConfirmExit = true
+    }
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
@@ -76,12 +87,23 @@ fun HomeScreen(
         }
     }
     LaunchedEffect(true) { viewModel.onAction(Load) }
+    if (showConfirmExit) {
+        ModalBottomSheet(onDismissRequest = { showConfirmExit = false }) {
+            ConfirmBottomSheetContent(
+                description = stringResource(R.string.bs_confirm_exit_description),
+                okButtonText = stringResource(R.string.btn_exit),
+                onConfirmDelete = {
+                    showConfirmExit = false
+                    onExit()
+                },
+                onDeny = {
+                    showConfirmExit = false
+                }
+            )
+        }
+    }
+
     Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState) { data ->
-                GHSnackBar(snackBarData = data)
-            }
-        },
         floatingActionButton = {
             if (state.loaded && state.projects.any { it.hasMinis() && it.hasUnfinishedMinis() }) {
                 FloatingActionButton(
