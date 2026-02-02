@@ -27,6 +27,7 @@ import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.components.progress.GHProgressBar
 import com.devalr.framework.components.progress.LocalProgressColors
 import com.devalr.framework.enum.CardType
+import com.devalr.framework.limitSize
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
@@ -51,7 +52,13 @@ fun ProjectCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            GHText(text = project.name.capitalize(), type = TextType.Title)
+
+            GHText(
+                text = project.name
+                    .capitalize()
+                    .let { if (cardType != CardType.Project) it.limitSize(22) else it },
+                type = TextType.Title
+            )
             if (cardType == CardType.Project) GHText(
                 text = "${project.minis.size} Miniatures",
                 type = TextType.LabelM

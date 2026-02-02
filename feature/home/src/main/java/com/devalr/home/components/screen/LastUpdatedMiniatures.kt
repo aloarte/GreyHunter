@@ -1,9 +1,7 @@
 package com.devalr.home.components.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +16,7 @@ import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.helpers.chronomancer
 import com.devalr.domain.model.helpers.immortal
 import com.devalr.framework.components.markedtext.MarkedText
+import com.devalr.framework.components.row.TwoItemRow
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.home.R
 import com.devalr.home.components.cards.MiniatureCard
@@ -31,16 +30,11 @@ fun LastUpdatedMiniatures(
         Column(modifier = Modifier.padding(25.dp)) {
             MarkedText(text = stringResource(R.string.title_last_updated_miniatures), title = true)
             Spacer(modifier = Modifier.height(20.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                miniatures.forEach {
-                    MiniatureCard(
-                        miniature = it,
-                        onOpenMiniature = onOpenMiniature
-                    )
-                }
+            TwoItemRow(items = miniatures) { miniature ->
+                MiniatureCard(
+                    miniature = miniature,
+                    onOpenMiniature = onOpenMiniature
+                )
             }
         }
     }
@@ -67,6 +61,25 @@ private fun LastUpdatedMiniaturesPreviewLightMode() {
 
 @Preview(showBackground = true)
 @Composable
+private fun LastUpdatedMiniaturesPreviewLightModeOneMiniature() {
+    GreyHunterTheme(darkTheme = false) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            LastUpdatedMiniatures(
+                miniatures = listOf(immortal),
+                onOpenMiniature = {
+                    // Do nothing
+                }
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
 private fun LastUpdatedMiniaturesPreviewDarkMode() {
     GreyHunterTheme(darkTheme = true) {
         Column(
@@ -76,6 +89,26 @@ private fun LastUpdatedMiniaturesPreviewDarkMode() {
         ) {
             LastUpdatedMiniatures(
                 miniatures = listOf(immortal, chronomancer),
+                onOpenMiniature = {
+                    // Do nothing
+                }
+            )
+        }
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+private fun LastUpdatedMiniaturesPreviewDarkModeZeroMiniatures() {
+    GreyHunterTheme(darkTheme = true) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            LastUpdatedMiniatures(
+                miniatures = emptyList(),
                 onOpenMiniature = {
                     // Do nothing
                 }
