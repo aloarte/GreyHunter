@@ -66,7 +66,7 @@ fun ProjectMiniatures(
                         modifier = Modifier,
                         imageUri = miniature.imageUri,
                         size = 80.dp,
-                        borderRadius = 6.dp
+                        borderRadius = 0.dp
                     )
                     GHText(
                         modifier = Modifier.fillMaxWidth(.5f),

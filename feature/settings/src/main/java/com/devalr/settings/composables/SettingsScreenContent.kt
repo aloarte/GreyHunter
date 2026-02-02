@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,24 +28,30 @@ fun SettingsScreenContent(
     onImportProjects: () -> Unit,
     onExportProjects: () -> Unit
 ) {
-    Column(modifier = Modifier.padding(innerPadding)) {
-        TopButtons(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            onNavigateBack = onNavigateBack
-        )
-        AppSettings(
-            currentThemeType = currentThemeType,
-            currentProgressColorType = progressColorType,
-            onChangeTheme = onChangeTheme,
-            onChangeProgressColor = onChangeProgressColor
-        )
-        DataSettings(
-            onImportProjects = onImportProjects,
-            onExportProjects = onExportProjects
-        )
-        AppInfo(appVersion = appVersion)
+    LazyColumn(modifier = Modifier.padding(innerPadding)) {
+        item {
+            TopButtons(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                onNavigateBack = onNavigateBack
+            )
+        }
+        item {
+            AppSettings(
+                currentThemeType = currentThemeType,
+                currentProgressColorType = progressColorType,
+                onChangeTheme = onChangeTheme,
+                onChangeProgressColor = onChangeProgressColor
+            )
+        }
+        item {
+            DataSettings(
+                onImportProjects = onImportProjects,
+                onExportProjects = onExportProjects
+            )
+        }
+        item { AppInfo(appVersion = appVersion) }
     }
 }
 
