@@ -52,8 +52,11 @@ class StartPaintingViewModel(
                         copy(
                             projectList = projects
                                 .filter { it.minis.isNotEmpty() }
+                                .filter { it.progress < 1f }
                                 .map { projectBo ->
-                                    projectVoMapper.transform(projectBo)
+                                    projectVoMapper.transform(
+                                        projectBo.copy(minis = projectBo.minis.filter { it.percentage < 1f })
+                                    )
                                 },
                             projectsLoaded = true
                         )

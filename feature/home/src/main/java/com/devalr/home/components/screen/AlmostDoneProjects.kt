@@ -1,9 +1,7 @@
 package com.devalr.home.components.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +16,7 @@ import com.devalr.domain.model.ProjectBo
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.stormlightArchiveProject
 import com.devalr.framework.components.markedtext.MarkedText
+import com.devalr.framework.components.row.TwoItemRow
 import com.devalr.framework.enum.CardType
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.home.R
@@ -32,17 +31,12 @@ fun AlmostDoneProjects(
         Column(modifier = Modifier.padding(25.dp)) {
             MarkedText(text = stringResource(R.string.title_almost_done_projects), title = true)
             Spacer(modifier = Modifier.height(20.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                projects.forEach {
-                    ProjectCard(
-                        project = it,
-                        cardType = CardType.Home,
-                        onOpenProject = onOpenProject
-                    )
-                }
+            TwoItemRow(items = projects) { project ->
+                ProjectCard(
+                    project = project,
+                    cardType = CardType.Home,
+                    onOpenProject = onOpenProject
+                )
             }
         }
     }
@@ -69,6 +63,25 @@ private fun AlmostDoneProjectsPreviewLightMode() {
 
 @Preview(showBackground = true)
 @Composable
+private fun AlmostDoneProjectsPreviewLightModeOneProject() {
+    GreyHunterTheme(darkTheme = false) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            AlmostDoneProjects(
+                projects = listOf(hierotekCircleProject),
+                onOpenProject = {
+                    // Do nothing
+                }
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
 private fun AlmostDoneProjectsPreviewDarkMode() {
     GreyHunterTheme(darkTheme = true) {
         Column(
@@ -78,6 +91,25 @@ private fun AlmostDoneProjectsPreviewDarkMode() {
         ) {
             AlmostDoneProjects(
                 projects = listOf(hierotekCircleProject, stormlightArchiveProject),
+                onOpenProject = {
+                    // Do nothing
+                }
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AlmostDoneProjectsPreviewDarkModeZeroProjects() {
+    GreyHunterTheme(darkTheme = true) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            AlmostDoneProjects(
+                projects = emptyList(),
                 onOpenProject = {
                     // Do nothing
                 }

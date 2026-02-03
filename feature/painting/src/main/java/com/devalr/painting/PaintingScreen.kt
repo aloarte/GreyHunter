@@ -1,18 +1,18 @@
 package com.devalr.painting
 
+import android.app.Activity
 import android.content.Context
+import android.view.WindowManager
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.devalr.framework.components.anim.LoadingIndicator
 import com.devalr.framework.components.empty.EmptyScreen
-import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
 import com.devalr.painting.components.PaintingScreenContent
@@ -29,13 +29,25 @@ import org.koin.compose.koinInject
 @Composable
 fun PaintingScreen(
     viewModel: PaintingViewModel = koinInject(),
+    snackBarHostState: SnackbarHostState,
     minisIds: List<Long>,
     onNavigateBack: () -> Unit,
     onNavigateToUpdateMiniatures: (List<Long>) -> Unit
 ) {
     val state = viewModel.uiState.collectAsState().value
-    val snackBarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
+    val activity = context as? Activity
+    DisposableEffect(Unit) {
+        activity?.window?.addFlags(
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+        )
+        onDispose {
+            activity?.window?.clearFlags(
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+            )
+        }
+    }
+
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
@@ -56,13 +68,7 @@ fun PaintingScreen(
         }
     }
     LaunchedEffect(true) { viewModel.onAction(Load(minisIds)) }
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState) { data ->
-                GHSnackBar(snackBarData = data)
-            }
-        }
-    ) { innerPadding ->
+    Scaffold { innerPadding ->
         if (state.error) {
             EmptyScreen { viewModel.onAction(Return) }
         } else if (state.minisLoaded) {

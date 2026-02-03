@@ -6,15 +6,22 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import com.devalr.createminiature.AddMiniatureScreen
 import com.devalr.createproject.AddProjectScreen
 import com.devalr.framework.AppTracer
+import com.devalr.framework.components.snackbar.SnackBarType
+import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
+import com.devalr.greyhunter.R
 import com.devalr.greyhunter.navigation.NavScreen.AddMiniature
 import com.devalr.greyhunter.navigation.NavScreen.AddProject
 import com.devalr.greyhunter.navigation.NavScreen.Home
@@ -29,11 +36,18 @@ import com.devalr.painting.PaintingScreen
 import com.devalr.projectdetail.ProjectDetailScreen
 import com.devalr.settings.SettingsScreen
 import com.devalr.startpainting.StartPaintingScreen
+import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavHost(tracer: AppTracer) {
+fun NavHost(
+    snackBarHostState: SnackbarHostState,
+    tracer: AppTracer
+) {
+    val scope = rememberCoroutineScope()
     val backStack = remember { mutableStateListOf<Any>(Home) }
+    val context = LocalContext.current
     val addScreenAnimation = NavDisplay.transitionSpec {
         slideInVertically(
             initialOffsetY = { it },
@@ -53,13 +67,21 @@ fun NavHost(tracer: AppTracer) {
                 )
     }
 
-
     NavDisplay(
         backStack = backStack,
         onBack = {
             val topEntry = backStack.lastOrNull()
-            if (topEntry !is MiniDetail || !topEntry.onlyUpdate) {
-                backStack.removeLastOrNull()
+            when {
+                topEntry !is MiniDetail || !topEntry.onlyUpdate -> backStack.removeLastOrNull()
+                else -> scope.launch {
+                    snackBarHostState.showSnackbar(
+                        SnackBarVisualsCustom(
+                            duration = SnackbarDuration.Short,
+                            message = context.getString(R.string.snackbar_error_back_mini_detail),
+                            type = SnackBarType.ERROR
+                        )
+                    )
+                }
             }
         },
         entryProvider = { key ->
@@ -68,6 +90,7 @@ fun NavHost(tracer: AppTracer) {
             when (key) {
                 is Home -> NavEntry(key) {
                     HomeScreen(
+                        snackBarHostState = snackBarHostState,
                         onNavigateToProject = { projectId ->
                             backStack.add(ProjectDetail(projectId = projectId))
                         },
@@ -82,12 +105,14 @@ fun NavHost(tracer: AppTracer) {
                         },
                         onNavigateToSettings = {
                             backStack.add(Settings)
-                        }
+                        },
+                        onExit = { backStack.removeLastOrNull() }
                     )
                 }
 
                 is ProjectDetail -> NavEntry(key) {
                     ProjectDetailScreen(
+                        snackBarHostState = snackBarHostState,
                         projectId = key.projectId,
                         onNavigateToMiniature = { miniatureId ->
                             backStack.add(MiniDetail(miniatureId = miniatureId))
@@ -104,6 +129,7 @@ fun NavHost(tracer: AppTracer) {
 
                 is MiniDetail -> NavEntry(key) {
                     MiniatureDetailScreen(
+                        snackBarHostState = snackBarHostState,
                         miniatureId = key.miniatureId,
                         onlyUpdate = key.onlyUpdate,
                         onNavigateBack = { backStack.removeLastOrNull() },
@@ -123,6 +149,7 @@ fun NavHost(tracer: AppTracer) {
                     key = key
                 ) {
                     AddProjectScreen(
+                        snackBarHostState = snackBarHostState,
                         projectId = key.projectId,
                         onBack = { backStack.removeLastOrNull() }
                     )
@@ -133,6 +160,7 @@ fun NavHost(tracer: AppTracer) {
                     key = key
                 ) {
                     AddMiniatureScreen(
+                        snackBarHostState = snackBarHostState,
                         projectId = key.projectId,
                         miniatureId = key.miniatureId,
                         onBack = { backStack.removeLastOrNull() }
@@ -141,6 +169,7 @@ fun NavHost(tracer: AppTracer) {
 
                 is StartPainting -> NavEntry(key) {
                     StartPaintingScreen(
+                        snackBarHostState = snackBarHostState,
                         onNavigateBack = { backStack.removeLastOrNull() },
                         onNavigateToPaintMinis = { backStack.add(Painting(minisIds = it)) }
                     )
@@ -148,6 +177,7 @@ fun NavHost(tracer: AppTracer) {
 
                 is Painting -> NavEntry(key) {
                     PaintingScreen(
+                        snackBarHostState = snackBarHostState,
                         minisIds = key.minisIds,
                         onNavigateBack = { backStack.removeLastOrNull() },
                         onNavigateToUpdateMiniatures = { miniaturesToUpdate ->
@@ -171,6 +201,7 @@ fun NavHost(tracer: AppTracer) {
 
                 is Settings -> NavEntry(key) {
                     SettingsScreen(
+                        snackBarHostState = snackBarHostState,
                         onNavigateBack = { backStack.removeLastOrNull() }
                     )
                 }
@@ -179,4 +210,5 @@ fun NavHost(tracer: AppTracer) {
             }
         }
     )
+
 }

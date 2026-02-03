@@ -6,7 +6,8 @@
     <string name="title_last_updated_miniatures">Actualizados recientemente</string>
     <string name="title_empty_projects_description">Pulsa «Crear proyecto» y da color a lo gris.</string>
     <string name="title_stats">Estadísticas</string>
-
+    <string name="bs_confirm_exit_description">¿Quieres cerrar la aplicación?</string>
+    <string name="btn_exit">Cerrar</string>
     <string name="label_empty_projects_description">Aún no hay proyectos</string>
     <string name="label_stats_total">Progreso total:</string>
     <string name="label_stats_projects">Proyectos terminados:</string>

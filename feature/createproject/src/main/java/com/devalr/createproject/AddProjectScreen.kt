@@ -25,7 +25,6 @@ import com.devalr.createproject.interactions.Event.LaunchSnackBarError
 import com.devalr.createproject.interactions.Event.NavigateBack
 import com.devalr.framework.components.bottomsheet.ImagePickerHandler
 import com.devalr.framework.components.empty.EmptyScreen
-import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
 import kotlinx.coroutines.launch
@@ -34,12 +33,12 @@ import org.koin.compose.koinInject
 @Composable
 fun AddProjectScreen(
     viewModel: AddProjectViewModel = koinInject(),
+    snackBarHostState: SnackbarHostState,
     projectId: Long?,
     onBack: () -> Unit
 ) {
     var showImagePicker by remember { mutableStateOf(false) }
     val state = viewModel.uiState.collectAsState().value
-    val snackBarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -73,13 +72,7 @@ fun AddProjectScreen(
         )
     }
 
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState) { data ->
-                GHSnackBar(snackBarData = data)
-            }
-        }
-    ) { innerPadding ->
+    Scaffold{ innerPadding ->
         if (state.error) {
             EmptyScreen { viewModel.onAction(Return) }
         } else {

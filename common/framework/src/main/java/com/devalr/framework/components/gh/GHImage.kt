@@ -68,7 +68,8 @@ fun GHImage(
     } ?: run {
         Box(
             modifier = modifier
-                .clip(RoundedCornerShape(10.dp))
+                .size(size)
+                .clip(RoundedCornerShape(borderRadius))
                 .background(MaterialTheme.colorScheme.surfaceContainer)
                 .then(
                     if (onImageClick != null) {
