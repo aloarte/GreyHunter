@@ -17,7 +17,11 @@ fun AddItemDescription(
 ) {
     OutlinedTextField(
         value = description.orEmpty(),
-        onValueChange = onChangeDescription,
+        onValueChange = {
+            if (it.length <= 500) {
+                onChangeDescription(it)
+            }
+        },
         singleLine = false,
         label = { GHText(text = label, type = TextType.LabelM) },
         modifier = Modifier
