@@ -56,7 +56,7 @@ fun AddProjectScreenContent(
                 .align(Alignment.Center)
                 .fillMaxSize()
                 .padding(top = 60.dp)
-                .padding(all = 30.dp),
+                .padding(all = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {

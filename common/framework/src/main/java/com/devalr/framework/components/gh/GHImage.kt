@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -81,7 +82,7 @@ fun GHImage(
             Column(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(10.dp)
+                    .padding(20.dp)
                     .size(size),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -90,6 +91,7 @@ fun GHImage(
                     Icon(imageVector = Icons.Default.Create, contentDescription = "")
                 }
                 if (showMessage) {
+                    Spacer(modifier = Modifier.height(10.dp))
                     GHText(
                         text = stringResource(R.string.label_add_picture),
                         type = TextType.LabelM
