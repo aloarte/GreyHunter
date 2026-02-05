@@ -1,0 +1,5 @@
+-keep class com.devalr.createminiature.interactions.Action { *; }
+-keep class com.devalr.createminiature.interactions.Event { *; }
+-keep class com.devalr.createminiature.interactions.State { *; }
+-keep class com.devalr.createminiature.interactions.Action$* { *; }
+-keep class com.devalr.createminiature.interactions.Event$* { *; }

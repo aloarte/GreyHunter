@@ -1,0 +1,5 @@
+-keep class com.devalr.projectdetail.interactions.Action { *; }
+-keep class com.devalr.projectdetail.interactions.Event { *; }
+-keep class com.devalr.projectdetail.interactions.State { *; }
+-keep class com.devalr.projectdetail.interactions.Action$* { *; }
+-keep class com.devalr.projectdetail.interactions.Event$* { *; }

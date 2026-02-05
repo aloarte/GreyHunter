@@ -66,13 +66,17 @@ fun NavHost(
                     animationSpec = tween(300)
                 )
     }
+    // This case should not happen, but it's added to avoid potential crashes
+    if (backStack.isEmpty()) {
+        backStack.add(Home)
+    }
 
     NavDisplay(
         backStack = backStack,
         onBack = {
             val topEntry = backStack.lastOrNull()
             when {
-                topEntry !is MiniDetail || !topEntry.onlyUpdate -> backStack.removeLastOrNull()
+                topEntry !is MiniDetail || !topEntry.onlyUpdate -> backStack.popBackStackSafe()
                 else -> scope.launch {
                     snackBarHostState.showSnackbar(
                         SnackBarVisualsCustom(
@@ -106,7 +110,7 @@ fun NavHost(
                         onNavigateToSettings = {
                             backStack.add(Settings)
                         },
-                        onExit = { backStack.removeLastOrNull() }
+                        onExit = { backStack.popBackStackSafe() }
                     )
                 }
 
@@ -120,7 +124,7 @@ fun NavHost(
                         onCreateMiniature = {
                             backStack.add(AddMiniature(projectId = key.projectId))
                         },
-                        onNavigateBack = { backStack.removeLastOrNull() },
+                        onNavigateBack = { backStack.popBackStackSafe() },
                         onEditProject = { projectId ->
                             backStack.add(AddProject(projectId = projectId))
                         }
@@ -132,7 +136,7 @@ fun NavHost(
                         snackBarHostState = snackBarHostState,
                         miniatureId = key.miniatureId,
                         onlyUpdate = key.onlyUpdate,
-                        onNavigateBack = { backStack.removeLastOrNull() },
+                        onNavigateBack = { backStack.popBackStackSafe() },
                         onEditMiniature = { miniatureId, projectId ->
                             backStack.add(
                                 AddMiniature(
@@ -151,7 +155,7 @@ fun NavHost(
                     AddProjectScreen(
                         snackBarHostState = snackBarHostState,
                         projectId = key.projectId,
-                        onBack = { backStack.removeLastOrNull() }
+                        onBack = { backStack.popBackStackSafe() }
                     )
                 }
 
@@ -163,14 +167,14 @@ fun NavHost(
                         snackBarHostState = snackBarHostState,
                         projectId = key.projectId,
                         miniatureId = key.miniatureId,
-                        onBack = { backStack.removeLastOrNull() }
+                        onBack = { backStack.popBackStackSafe() }
                     )
                 }
 
                 is StartPainting -> NavEntry(key) {
                     StartPaintingScreen(
                         snackBarHostState = snackBarHostState,
-                        onNavigateBack = { backStack.removeLastOrNull() },
+                        onNavigateBack = { backStack.popBackStackSafe() },
                         onNavigateToPaintMinis = { backStack.add(Painting(minisIds = it)) }
                     )
                 }
@@ -179,21 +183,23 @@ fun NavHost(
                     PaintingScreen(
                         snackBarHostState = snackBarHostState,
                         minisIds = key.minisIds,
-                        onNavigateBack = { backStack.removeLastOrNull() },
+                        onNavigateBack = { backStack.popBackStackSafe() },
                         onNavigateToUpdateMiniatures = { miniaturesToUpdate ->
-                            val homeIndex = backStack.indexOfFirst { it is Home }
-                            if (homeIndex >= 0) {
-                                backStack.subList(homeIndex + 1, backStack.size).clear()
-                            } else {
-                                backStack.clear()
-                            }
-                            miniaturesToUpdate.forEach { miniatureId ->
-                                backStack.add(
-                                    MiniDetail(
-                                        miniatureId = miniatureId,
-                                        onlyUpdate = true
+                            backStack.apply {
+                                retainAll { it is Home }
+                                if (isEmpty()) {
+                                    add(Home)
+                                }
+                                /* When going back from PaintingScreen the detail of each of N mini painted is opened,
+                                * so it must display this N screens instead of HomeScreen */
+                                miniaturesToUpdate.forEach { miniatureId ->
+                                    add(
+                                        MiniDetail(
+                                            miniatureId = miniatureId,
+                                            onlyUpdate = true
+                                        )
                                     )
-                                )
+                                }
                             }
                         }
                     )
@@ -202,7 +208,7 @@ fun NavHost(
                 is Settings -> NavEntry(key) {
                     SettingsScreen(
                         snackBarHostState = snackBarHostState,
-                        onNavigateBack = { backStack.removeLastOrNull() }
+                        onNavigateBack = { backStack.popBackStackSafe() }
                     )
                 }
 
@@ -211,4 +217,10 @@ fun NavHost(
         }
     )
 
+}
+
+private fun <T> MutableList<T>.popBackStackSafe() {
+    if (size > 1) {
+        removeLastOrNull()
+    }
 }
