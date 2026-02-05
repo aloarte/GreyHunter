@@ -1,0 +1,5 @@
+-keep class com.devalr.settings.interactions.Action { *; }
+-keep class com.devalr.settings.interactions.Event { *; }
+-keep class com.devalr.settings.interactions.State { *; }
+-keep class com.devalr.settings.interactions.Action$* { *; }
+-keep class com.devalr.settings.interactions.Event$* { *; }

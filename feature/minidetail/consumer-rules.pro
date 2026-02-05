@@ -1,0 +1,5 @@
+-keep class com.devalr.minidetail.interactions.Action { *; }
+-keep class com.devalr.minidetail.interactions.Event { *; }
+-keep class com.devalr.minidetail.interactions.State { *; }
+-keep class com.devalr.minidetail.interactions.Action$* { *; }
+-keep class com.devalr.minidetail.interactions.Event$* { *; }

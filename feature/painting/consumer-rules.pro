@@ -1,0 +1,5 @@
+-keep class com.devalr.painting.interactions.Action { *; }
+-keep class com.devalr.painting.interactions.Event { *; }
+-keep class com.devalr.painting.interactions.State { *; }
+-keep class com.devalr.painting.interactions.Action$* { *; }
+-keep class com.devalr.painting.interactions.Event$* { *; }
