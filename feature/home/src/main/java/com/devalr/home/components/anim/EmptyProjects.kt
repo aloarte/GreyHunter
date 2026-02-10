@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,12 +23,19 @@ import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.home.R
 
 @Composable
-fun EmptyProjects() {
+fun EmptyProjects(hasAnyProject: Boolean = false) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lottie_empty))
     Column(
-        modifier = Modifier.fillMaxSize().padding(vertical = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        GHText(text = stringResource(R.string.title_empty_projects_description), type = TextType.Title)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(vertical = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        GHText(
+            text = if (hasAnyProject) stringResource(R.string.title_projects_empty_minis_description)
+            else stringResource(R.string.title_empty_projects_description),
+            type = TextType.Title
+        )
 
         LottieAnimation(
             modifier = Modifier.size(250.dp),
@@ -37,7 +43,8 @@ fun EmptyProjects() {
             iterations = LottieConstants.IterateForever,
         )
         GHText(
-            text = stringResource(R.string.label_empty_projects_description),
+            text = if (hasAnyProject) stringResource(R.string.label_empty_miniatures_description)
+            else stringResource(R.string.label_empty_projects_description),
             type = TextType.Description
         )
     }
@@ -69,6 +76,34 @@ private fun EmptyProjectsPreviewDarkMode() {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             EmptyProjects()
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ProjectsWithEmptyMinisPreviewLightMode() {
+    GreyHunterTheme(darkTheme = false) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            EmptyProjects(hasAnyProject = true)
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ProjectsWithEmptyMinisPreviewDarkMode() {
+    GreyHunterTheme(darkTheme = true) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            EmptyProjects(hasAnyProject = true)
         }
     }
 }

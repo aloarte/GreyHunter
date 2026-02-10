@@ -64,10 +64,10 @@ fun HomeScreenContent(
             )
         }
         item {
-            if (projects.size > 1 && gamificationMessage != None) {
+            if (projects.size > 1 && projects.any { it.hasMinis() } && gamificationMessage != None) {
                 StatsAndGamificationMessage(gamificationMessage, stats)
             } else {
-                EmptyProjects()
+                EmptyProjects(projects.size > 1)
             }
         }
         item {
