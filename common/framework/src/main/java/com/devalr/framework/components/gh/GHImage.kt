@@ -23,6 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -82,7 +83,7 @@ fun GHImage(
             Column(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(20.dp)
+                    .padding(40.dp)
                     .size(size),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -93,6 +94,7 @@ fun GHImage(
                 if (showMessage) {
                     Spacer(modifier = Modifier.height(10.dp))
                     GHText(
+                        textAlign = TextAlign.Center,
                         text = stringResource(R.string.label_add_picture),
                         type = TextType.LabelM
                     )
