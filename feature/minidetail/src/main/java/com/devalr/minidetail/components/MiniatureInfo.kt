@@ -17,13 +17,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.helpers.chronomancer
-import com.devalr.framework.components.ScreenSize.LARGE
+import com.devalr.framework.components.ScreenSize.COMPACT
+import com.devalr.framework.components.ScreenSize.EXPANDED
 import com.devalr.framework.components.ScreenSize.MEDIUM
-import com.devalr.framework.components.ScreenSize.SMALL
-import com.devalr.framework.components.getScreenSize
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.components.markedtext.MarkedText
+import com.devalr.framework.components.rememberScreenSize
 import com.devalr.framework.limitSize
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.framework.theme.ProgressYellow
@@ -44,12 +44,15 @@ fun MiniatureInfo(miniature: MiniatureBo, onlyUpdate: Boolean) {
             MarkedText(
                 title = true,
                 text = miniature.name
-                    .limitSize(when(getScreenSize()){
-                        SMALL -> 20
-                        MEDIUM -> 25
-                        LARGE -> 30
-                    })
-                    .capitalize())
+                    .limitSize(
+                        when (rememberScreenSize()) {
+                            COMPACT -> 20
+                            MEDIUM -> 25
+                            EXPANDED -> 30
+                        }
+                    )
+                    .capitalize()
+            )
             GHText(text = "${(miniature.percentage * 100).toInt()}%", type = TextType.Featured)
         }
         Spacer(modifier = Modifier.height(20.dp))
@@ -74,7 +77,7 @@ fun MiniatureInfo(miniature: MiniatureBo, onlyUpdate: Boolean) {
 @Composable
 private fun getMiniatureProgressMessage(progress: Float): String {
     val res = when (progress) {
-        in 0f .. 0.25f-> R.string.label_miniature_progress_gamification_0
+        in 0f..0.25f -> R.string.label_miniature_progress_gamification_0
         in 0.25f..0.50f -> R.string.label_miniature_progress_gamification_25
         in 0.50f..0.75f -> R.string.label_miniature_progress_gamification_50
         in 0.75f..0.99f -> R.string.label_miniature_progress_gamification_75

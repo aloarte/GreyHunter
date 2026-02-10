@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.helpers.deathmark
 import com.devalr.domain.model.helpers.immortal
-import com.devalr.framework.components.cards.getCardWidth
+import com.devalr.framework.components.cards.cardWidthFor
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.components.progress.GHCircularProgress
@@ -40,7 +40,7 @@ fun MiniatureCard(
 ) {
     Card(
         modifier = modifier
-            .width(getCardWidth(CardType.Home))
+            .width(cardWidthFor(CardType.Home))
             .aspectRatio(1.6f),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
         onClick = { onOpenMiniature(miniature.id) }
@@ -68,7 +68,7 @@ fun MiniatureCard(
             }
             GHText(
                 text = miniature.name.limitSize(15).capitalize(),
-                type = TextType.LabelMBold
+                type = TextType.Title
             )
         }
     }

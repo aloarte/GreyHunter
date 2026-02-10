@@ -28,6 +28,7 @@ accompanist = "0.34.0"
 nav3Core = "1.0.0"
 google-services = "4.4.0"
 firebase-crashlytics-gradle = "2.9.9"
+material3WindowSizeClass = "1.4.0"
 
 [libraries]
 
@@ -72,6 +73,7 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
 androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroid" }
+androidx-compose-material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "material3WindowSizeClass" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

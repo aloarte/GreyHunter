@@ -22,31 +22,35 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+private val CarouselHeight = 200.dp
+
 @Composable
 fun <T> HorizontalCarousel(
     modifier: Modifier = Modifier,
     items: List<T>,
-    pagerState: PagerState = rememberPagerState(pageCount = { items.size }),
+    pagerState: PagerState = rememberPagerState { items.size },
     dots: Boolean = false,
-    neighborDisplayMargin: Dp = 50.dp,
-    height: Dp = 200.dp,
+    neighborDisplayMargin: Dp = 24.dp,
+    minHeight: Dp = 180.dp,
     content: @Composable (T) -> Unit
 ) {
     Column(modifier = modifier) {
         HorizontalPager(
             state = pagerState,
-            contentPadding = PaddingValues(horizontal = neighborDisplayMargin),
-            pageSpacing = 5.dp,
+            contentPadding = PaddingValues(
+                horizontal = neighborDisplayMargin,
+                vertical = 8.dp
+            ),
+            pageSpacing = 12.dp,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(height)
+                .height(CarouselHeight)
         ) { page ->
             content(items[page])
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
-
         if (dots && items.size > 1) {
+            Spacer(modifier = Modifier.height(8.dp))
             Row(
                 Modifier
                     .height(20.dp)

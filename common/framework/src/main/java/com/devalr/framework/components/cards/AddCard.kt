@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -32,8 +33,7 @@ import com.devalr.framework.theme.GreyHunterTheme
 fun AddCard(modifier: Modifier = Modifier, type: CardType, onCreate: () -> Unit) {
     Card(
         modifier = modifier
-
-            .width(getCardWidth(type))
+            .width(cardWidthFor(type))
             .aspectRatio(1.6f),
         onClick = { onCreate() }
     ) {

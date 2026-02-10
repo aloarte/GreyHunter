@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.dp
 import com.devalr.framework.components.ScreenSize
 import com.devalr.framework.components.button.GHButton
 import com.devalr.framework.components.button.TopButtons
-import com.devalr.framework.components.getScreenSize
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
+import com.devalr.framework.components.rememberScreenSize
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.startpainting.R
 import com.devalr.startpainting.components.carousel.StartPantingProjectsCarousel
@@ -54,7 +54,7 @@ fun StartPaintingScreenContent(
                 type = TextType.Title
             )
             Spacer(modifier = Modifier.height(10.dp))
-            if (getScreenSize() != ScreenSize.SMALL) {
+            if (rememberScreenSize() != ScreenSize.COMPACT) {
                 GHText(
                     text = stringResource(R.string.start_painting_message),
                     type = TextType.Description

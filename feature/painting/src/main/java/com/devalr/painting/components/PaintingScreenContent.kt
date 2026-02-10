@@ -35,8 +35,8 @@ import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.ScreenSize
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.components.button.TopButtons
-import com.devalr.framework.components.getScreenSize
 import com.devalr.framework.components.markedtext.MarkedText
+import com.devalr.framework.components.rememberScreenSize
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.painting.R
 import kotlinx.coroutines.delay
@@ -71,7 +71,7 @@ fun PaintingScreenContent(
                 .align(Alignment.Center)
                 .fillMaxSize()
                 .padding(
-                    horizontal = if (getScreenSize() == ScreenSize.SMALL) 20.dp else 40.dp,
+                    horizontal = if (rememberScreenSize() == ScreenSize.COMPACT) 20.dp else 40.dp,
                     vertical = 40.dp
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -88,7 +88,7 @@ fun PaintingScreenContent(
             Spacer(modifier = Modifier.height(10.dp))
             GHText(
                 text = formatSecondsToHHMMSS(seconds),
-                type = if (getScreenSize() == ScreenSize.SMALL) TextType.Featured else TextType.UltraFeatured,
+                type = if (rememberScreenSize() == ScreenSize.COMPACT) TextType.Featured else TextType.UltraFeatured,
                 textColor = Color.White
             )
             Spacer(modifier = Modifier.height(30.dp))

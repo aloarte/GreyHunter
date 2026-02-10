@@ -15,15 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.ProjectBo
-import com.devalr.framework.components.ScreenSize.LARGE
-import com.devalr.framework.components.ScreenSize.MEDIUM
-import com.devalr.framework.components.ScreenSize.SMALL
-import com.devalr.framework.components.getScreenSize
+import com.devalr.framework.components.ScreenSize
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.components.markedtext.MarkedText
 import com.devalr.framework.components.progress.GHProgressBar
 import com.devalr.framework.components.progress.LocalProgressColors
+import com.devalr.framework.components.rememberScreenSize
 import com.devalr.framework.limitSize
 import com.devalr.framework.theme.GreyHunterTheme
 
@@ -43,10 +41,10 @@ fun ProjectInfo(project: ProjectBo) {
             MarkedText(
                 text = project.name
                     .limitSize(
-                        when (getScreenSize()) {
-                            SMALL -> 20
-                            MEDIUM -> 25
-                            LARGE -> 30
+                        when (rememberScreenSize()) {
+                            ScreenSize.COMPACT -> 20
+                            ScreenSize.MEDIUM -> 25
+                            ScreenSize.EXPANDED -> 30
                         }
                     ).capitalize(),
                 title = true

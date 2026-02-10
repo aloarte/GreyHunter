@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.devalr.framework.components.button.GHIconButton
 import com.devalr.framework.components.carousel.HorizontalCarousel
 import com.devalr.framework.components.ScreenSize
-import com.devalr.framework.components.getScreenSize
+import com.devalr.framework.components.rememberScreenSize
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.startpainting.components.cards.StartPaintingProjectCard
 import com.devalr.startpainting.model.StartPaintMiniatureVo
@@ -43,7 +43,7 @@ fun StartPantingProjectsCarousel(
     ) {
         HorizontalCarousel(
             items = projects,
-            height = calculateHeight(getScreenSize()),
+            //height = calculateHeight(getScreenSize()),
             pagerState = pagerState,
             neighborDisplayMargin = 0.dp,
             modifier = Modifier.fillMaxSize()
@@ -51,7 +51,7 @@ fun StartPantingProjectsCarousel(
             StartPaintingProjectCard(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(calculateHeight(getScreenSize())),
+                    .height(calculateHeight(rememberScreenSize())),
                 projectBo = item,
                 onMiniatureSelected = onMiniatureSelected
             )
@@ -90,7 +90,7 @@ fun StartPantingProjectsCarousel(
 
 @Composable
 private fun calculateHeight(screenSize: ScreenSize) = when (screenSize) {
-    ScreenSize.SMALL -> 300.dp
+    ScreenSize.COMPACT -> 300.dp
     ScreenSize.MEDIUM -> 600.dp
     else -> 600.dp
 }
