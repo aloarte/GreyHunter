@@ -18,9 +18,10 @@ import com.devalr.framework.components.carousel.InfiniteHorizontalCarousel
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
-fun PaintingMinisCarousel(miniatures: List<MiniatureBo>) {
+fun PaintingMinisCarousel(modifier: Modifier = Modifier, miniatures: List<MiniatureBo>) {
     InfiniteHorizontalCarousel(
-        modifier = Modifier.padding(vertical = 10.dp)
+        modifier = modifier
+            .padding(vertical = 10.dp)
             .fillMaxWidth()
             .height(200.dp),
         animationSpec = tween(

@@ -3,7 +3,7 @@ package com.devalr.home.interactions
 import com.devalr.domain.model.ProjectBo
 
 sealed interface Action {
-    data object Load : Action
+    data class Load(val bigScreen:Boolean) : Action
     data object StartPainting : Action
     data class OpenProjectDetail(val projectId: Long) : Action
     data class OpenMiniatureDetail(val miniatureId: Long) : Action

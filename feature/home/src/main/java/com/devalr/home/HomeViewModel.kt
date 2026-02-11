@@ -44,7 +44,7 @@ class HomeViewModel(
     override fun onAction(action: Action) {
         tracer.log("HomeViewModel.onAction: ${action::class.simpleName}")
         when (action) {
-            is Load -> initHomeData()
+            is Load -> initHomeData(action.bigScreen)
             is OpenProjectDetail -> sendEvent(NavigateToProject(projectId = action.projectId))
             is OpenMiniatureDetail -> sendEvent(NavigateToMiniature(miniatureId = action.miniatureId))
             is StartPainting -> sendEvent(NavigateToStartPaint)
@@ -58,11 +58,12 @@ class HomeViewModel(
         }
     }
 
-    private fun initHomeData() = viewModelScope.launch {
+    private fun initHomeData(bigScreen:Boolean) = viewModelScope.launch {
+        val columnNumber = if(bigScreen) 3 else 2
         combine(
             projectRepository.getAllProjects(),
-            projectRepository.getAlmostDoneProjects(),
-            miniatureRepository.getLastUpdatedMiniatures()
+            projectRepository.getAlmostDoneProjects(columnNumber),
+            miniatureRepository.getLastUpdatedMiniatures(columnNumber)
         ) { projects, almostDoneProjects, lastMinis ->
             val voProjects: MutableList<ProjectVo> =
                 projects.map { ProjectItem(it) }.toMutableList()

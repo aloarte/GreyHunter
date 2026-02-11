@@ -24,9 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.devalr.framework.components.ScreenSize
 import com.devalr.framework.components.anim.LoadingIndicator
 import com.devalr.framework.components.bottomsheet.ConfirmBottomSheetContent
 import com.devalr.framework.components.empty.EmptyScreen
+import com.devalr.framework.components.rememberScreenSize
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
 import com.devalr.home.components.HomeScreenContent
@@ -57,11 +59,12 @@ fun HomeScreen(
     onNavigateToAddProject: () -> Unit,
     onNavigateToStartPainting: () -> Unit,
     onNavigateToSettings: () -> Unit,
-    onExit:()->Unit
+    onExit: () -> Unit
 ) {
     val state = viewModel.uiState.collectAsState().value
     val context = LocalContext.current
     var showConfirmExit by remember { mutableStateOf(false) }
+    val screenSize = rememberScreenSize()
     BackHandler(enabled = true) {
         showConfirmExit = true
     }
@@ -86,7 +89,7 @@ fun HomeScreen(
             }
         }
     }
-    LaunchedEffect(true) { viewModel.onAction(Load) }
+    LaunchedEffect(true) { viewModel.onAction(Load(screenSize != ScreenSize.COMPACT)) }
     if (showConfirmExit) {
         ModalBottomSheet(onDismissRequest = { showConfirmExit = false }) {
             ConfirmBottomSheetContent(

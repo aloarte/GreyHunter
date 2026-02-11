@@ -16,7 +16,7 @@ import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.helpers.chronomancer
 import com.devalr.domain.model.helpers.immortal
 import com.devalr.framework.components.markedtext.MarkedText
-import com.devalr.framework.components.row.TwoItemRow
+import com.devalr.framework.components.row.ResponsiveRow
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.home.R
 import com.devalr.home.components.cards.MiniatureCard
@@ -30,7 +30,7 @@ fun LastUpdatedMiniatures(
         Column(modifier = Modifier.padding(25.dp)) {
             MarkedText(text = stringResource(R.string.title_last_updated_miniatures), title = true)
             Spacer(modifier = Modifier.height(20.dp))
-            TwoItemRow(items = miniatures) { miniature ->
+            ResponsiveRow(items = miniatures) { miniature ->
                 MiniatureCard(
                     miniature = miniature,
                     onOpenMiniature = onOpenMiniature

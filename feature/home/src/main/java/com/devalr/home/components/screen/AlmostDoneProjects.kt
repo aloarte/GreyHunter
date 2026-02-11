@@ -16,7 +16,7 @@ import com.devalr.domain.model.ProjectBo
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.stormlightArchiveProject
 import com.devalr.framework.components.markedtext.MarkedText
-import com.devalr.framework.components.row.TwoItemRow
+import com.devalr.framework.components.row.ResponsiveRow
 import com.devalr.framework.enum.CardType
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.home.R
@@ -31,7 +31,7 @@ fun AlmostDoneProjects(
         Column(modifier = Modifier.padding(25.dp)) {
             MarkedText(text = stringResource(R.string.title_almost_done_projects), title = true)
             Spacer(modifier = Modifier.height(20.dp))
-            TwoItemRow(items = projects) { project ->
+            ResponsiveRow(items = projects) { project ->
                 ProjectCard(
                     project = project,
                     cardType = CardType.Home,

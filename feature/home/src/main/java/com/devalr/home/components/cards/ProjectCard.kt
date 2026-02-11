@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Card
@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.ProjectBo
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.stormlightArchiveProject
-import com.devalr.framework.components.cards.getCardWidth
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.components.progress.GHProgressBar
@@ -39,8 +38,9 @@ fun ProjectCard(
 ) {
     Card(
         modifier = modifier
-            .width(getCardWidth(cardType))
+            .fillMaxWidth()
             .aspectRatio(1.6f),
+
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
         onClick = { onOpenProject(project.id) }
     ) {

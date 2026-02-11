@@ -23,14 +23,14 @@ import com.devalr.framework.components.gh.GHImage
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.ScreenSize
 import com.devalr.framework.components.gh.TextType
-import com.devalr.framework.components.getScreenSize
+import com.devalr.framework.components.rememberScreenSize
 import com.devalr.framework.theme.GreyHunterTheme
 
 @Composable
 fun PaintingMiniCard(miniature: MiniatureBo) {
     Box(
         modifier = Modifier
-            .size(calculateHeight(getScreenSize()))
+            .size(calculateHeight(rememberScreenSize()))
             .clip(RoundedCornerShape(5.dp))
     ) {
         GHImage(
@@ -39,7 +39,7 @@ fun PaintingMiniCard(miniature: MiniatureBo) {
                 .align(Alignment.Center),
             borderRadius = 0.dp,
             imageUri = miniature.imageUri,
-            size = calculateHeight(getScreenSize())
+            size = calculateHeight(rememberScreenSize())
         )
         Row(
             modifier = Modifier
@@ -67,7 +67,7 @@ fun PaintingMiniCard(miniature: MiniatureBo) {
 
 @Composable
 private fun calculateHeight(screenSize: ScreenSize) = when (screenSize) {
-    ScreenSize.SMALL -> 150.dp
+    ScreenSize.COMPACT -> 150.dp
     ScreenSize.MEDIUM -> 250.dp
     else -> 300.dp
 }
