@@ -41,7 +41,8 @@ fun cardWidthFor(type: CardType): Dp {
 enum class Columns(val count: Int) {
     One(1),
     Two(2),
-    Three(3)
+    Three(3),
+    Four (4)
 }
 
 @Composable
@@ -49,5 +50,5 @@ fun columnsForWidth(width: Dp): Columns =
     when {
         width < 600.dp -> Columns.Two
         width < 840.dp -> Columns.Three
-        else -> Columns.Three
+        else -> Columns.Four
     }

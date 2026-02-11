@@ -1,6 +1,8 @@
 package com.devalr.home.components.screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.stormlightArchiveProject
 import com.devalr.framework.components.cards.AddCard
+import com.devalr.framework.components.cards.columnsForWidth
 import com.devalr.framework.components.carousel.HorizontalCarousel
 import com.devalr.framework.components.markedtext.MarkedText
 import com.devalr.framework.enum.CardType
@@ -38,17 +41,27 @@ fun ProjectsCarousel(
             title = true
         )
         Spacer(modifier = Modifier.height(20.dp))
-        HorizontalCarousel(items = projects, dots = true) { item ->
-            when (item) {
-                is ProjectItem -> ProjectCard(
-                    project = item.project,
-                    onOpenProject = onOpenProject
-                )
+        BoxWithConstraints {
+            val columns = columnsForWidth(this@BoxWithConstraints.maxWidth).count
+            val itemsPerPage = if (columns >= 3) 2 else 1
+            HorizontalCarousel(
+                items = projects,
+                itemsPerPage = itemsPerPage,
+                dots = true
+            ) { item ->
+                when (item) {
+                    is ProjectItem -> ProjectCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        project = item.project,
+                        onOpenProject = onOpenProject
+                    )
 
-                is AddProjectItem -> AddCard(
-                    type = CardType.Project,
-                    onCreate = onCreateProject
-                )
+                    is AddProjectItem -> AddCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        type = CardType.Project,
+                        onCreate = onCreateProject
+                    )
+                }
             }
         }
     }

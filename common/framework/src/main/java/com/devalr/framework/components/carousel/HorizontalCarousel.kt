@@ -3,15 +3,18 @@ package com.devalr.framework.components.carousel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -21,52 +24,67 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-
-private val CarouselHeight = 200.dp
+import androidx.compose.ui.unit.min
 
 @Composable
 fun <T> HorizontalCarousel(
     modifier: Modifier = Modifier,
     items: List<T>,
-    pagerState: PagerState = rememberPagerState { items.size },
+    itemsPerPage: Int = 1,
+    aspectRatio: Float = 1.6f,
     dots: Boolean = false,
+    maxItemWidth: Dp = 320.dp,
     neighborDisplayMargin: Dp = 24.dp,
-    minHeight: Dp = 180.dp,
+    pageSpacing: Dp = 12.dp,
     content: @Composable (T) -> Unit
 ) {
-    Column(modifier = modifier) {
-        HorizontalPager(
-            state = pagerState,
-            contentPadding = PaddingValues(
-                horizontal = neighborDisplayMargin,
-                vertical = 8.dp
-            ),
-            pageSpacing = 12.dp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(CarouselHeight)
-        ) { page ->
-            content(items[page])
-        }
+    val pagerState: PagerState = rememberPagerState { items.size }
+    BoxWithConstraints(modifier = modifier) {
+        val availableWidth = this@BoxWithConstraints.maxWidth - neighborDisplayMargin * 2
+        val calculatedWidth =
+            (availableWidth - pageSpacing * (itemsPerPage - 1)) / itemsPerPage
+        val pageWidth = min(calculatedWidth, maxItemWidth)
+        val pageHeight = pageWidth / aspectRatio
 
-        if (dots && items.size > 1) {
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                Modifier
-                    .height(20.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                repeat(items.size) { iteration ->
-                    val color =
-                        if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
-                    Box(
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .clip(CircleShape)
-                            .background(color)
-                            .size(8.dp)
-                    )
+        Column(modifier = modifier) {
+            HorizontalPager(
+                state = pagerState,
+                contentPadding = PaddingValues(horizontal = neighborDisplayMargin),
+                pageSpacing = pageSpacing,
+                pageSize = PageSize.Fixed(pageWidth),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(pageHeight)
+            ) { page ->
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(aspectRatio)
+                ) {
+                    content(items[page])
+                }
+            }
+
+            if (dots && items.size > 1) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    repeat(items.size) { index ->
+                        val selected = pagerState.currentPage == index
+                        Box(
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .size(if (selected) 10.dp else 8.dp)
+                                .clip(CircleShape)
+                                .background(
+                                    if (selected) Color.DarkGray
+                                    else Color.LightGray
+                                )
+                        )
+                    }
                 }
             }
         }

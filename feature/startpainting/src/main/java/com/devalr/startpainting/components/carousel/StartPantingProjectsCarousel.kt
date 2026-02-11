@@ -15,9 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.devalr.framework.components.button.GHIconButton
-import com.devalr.framework.components.carousel.HorizontalCarousel
 import com.devalr.framework.components.ScreenSize
+import com.devalr.framework.components.button.GHIconButton
+import com.devalr.framework.components.carousel.SinglePageCarousel
 import com.devalr.framework.components.rememberScreenSize
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.startpainting.components.cards.StartPaintingProjectCard
@@ -41,9 +41,8 @@ fun StartPantingProjectsCarousel(
             .fillMaxWidth()
             .height(400.dp)
     ) {
-        HorizontalCarousel(
+        SinglePageCarousel(
             items = projects,
-            //height = calculateHeight(getScreenSize()),
             pagerState = pagerState,
             neighborDisplayMargin = 0.dp,
             modifier = Modifier.fillMaxSize()
@@ -57,7 +56,7 @@ fun StartPantingProjectsCarousel(
             )
         }
 
-        if(pagerState.currentPage > 0){
+        if (pagerState.currentPage > 0) {
             GHIconButton(
                 enabled = pagerState.currentPage > 0,
                 modifier = Modifier
@@ -71,7 +70,7 @@ fun StartPantingProjectsCarousel(
                 }
             )
         }
-        if(pagerState.currentPage < projects.lastIndex){
+        if (pagerState.currentPage < projects.lastIndex) {
             GHIconButton(
                 enabled = pagerState.currentPage < projects.lastIndex,
                 modifier = Modifier
