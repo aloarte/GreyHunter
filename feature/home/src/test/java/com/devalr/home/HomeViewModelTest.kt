@@ -96,19 +96,19 @@ class HomeViewModelTest {
         runTest {
             // GIVEN
             coEvery { projectRepository.getAllProjects() } returns flowOf(projects)
-            coEvery { projectRepository.getAlmostDoneProjects() } returns flowOf(listOf(projects[1]))
-            coEvery { miniatureRepository.getLastUpdatedMiniatures() } returns flowOf(
+            coEvery { projectRepository.getAlmostDoneProjects(3) } returns flowOf(listOf(projects[1]))
+            coEvery { miniatureRepository.getLastUpdatedMiniatures(3) } returns flowOf(
                 listOf(                    miniature)
             )
 
             // WHEN
-            viewModel.onAction(Load)
+            viewModel.onAction(Load(true))
             advanceUntilIdle()
 
             // THEN
             coVerify(exactly = 1) { projectRepository.getAllProjects() }
-            coVerify(exactly = 1) { projectRepository.getAlmostDoneProjects() }
-            coVerify(exactly = 1) { miniatureRepository.getLastUpdatedMiniatures() }
+            coVerify(exactly = 1) { projectRepository.getAlmostDoneProjects(3) }
+            coVerify(exactly = 1) { miniatureRepository.getLastUpdatedMiniatures(3) }
 
             val expectedProjects: List<ProjectVo> = listOf(
                 ProjectItem(projects[0]),
@@ -130,17 +130,17 @@ class HomeViewModelTest {
         runTest {
             // GIVEN
             coEvery { projectRepository.getAllProjects() } returns flowOf(projects)
-            coEvery { projectRepository.getAlmostDoneProjects() } returns flowOf(emptyList())
-            coEvery { miniatureRepository.getLastUpdatedMiniatures() } returns flowOf(emptyList())
+            coEvery { projectRepository.getAlmostDoneProjects(2) } returns flowOf(emptyList())
+            coEvery { miniatureRepository.getLastUpdatedMiniatures(2) } returns flowOf(emptyList())
 
             // WHEN
-            viewModel.onAction(Load)
+            viewModel.onAction(Load(false))
             advanceUntilIdle()
 
             // THEN
             coVerify(exactly = 1) { projectRepository.getAllProjects() }
-            coVerify(exactly = 1) { projectRepository.getAlmostDoneProjects() }
-            coVerify(exactly = 1) { miniatureRepository.getLastUpdatedMiniatures() }
+            coVerify(exactly = 1) { projectRepository.getAlmostDoneProjects(2) }
+            coVerify(exactly = 1) { miniatureRepository.getLastUpdatedMiniatures(2) }
 
             val expectedProjects: List<ProjectVo> = listOf(
                 ProjectItem(projects[0]),
@@ -165,18 +165,20 @@ class HomeViewModelTest {
             coEvery { projectRepository.getAllProjects() } returns flow {
                 throw Exception(errorMessage)
             }
-            coEvery { projectRepository.getAlmostDoneProjects() } returns flow {
+            coEvery { projectRepository.getAlmostDoneProjects(3) } returns flow {
                 throw Exception(errorMessage)
             }
-            coEvery { miniatureRepository.getLastUpdatedMiniatures() } returns flow {
+            coEvery { miniatureRepository.getLastUpdatedMiniatures(3) } returns flow {
                 throw Exception(errorMessage)
             }
 
             // WHEN
-            viewModel.onAction(Load)
+            viewModel.onAction(Load(true))
             advanceUntilIdle()
 
             // THEN
+            coVerify(exactly = 1){ projectRepository.getAlmostDoneProjects(3) }
+            coVerify(exactly = 1){ miniatureRepository.getLastUpdatedMiniatures(3) }
             val state = viewModel.uiState.value
             assertTrue(state.error)
         }
