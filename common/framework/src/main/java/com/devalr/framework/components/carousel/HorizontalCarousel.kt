@@ -19,12 +19,14 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import kotlin.math.ceil
 
 @Composable
 fun <T> HorizontalCarousel(
@@ -56,7 +58,6 @@ fun <T> HorizontalCarousel(
                     .fillMaxWidth()
                     .height(pageHeight)
             ) { page ->
-
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -66,11 +67,12 @@ fun <T> HorizontalCarousel(
                 }
             }
 
-            if (dots && items.size > 1) {
+            if (dots && items.size > 1 && itemsPerPage == 1) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     repeat(items.size) { index ->
                         val selected = pagerState.currentPage == index

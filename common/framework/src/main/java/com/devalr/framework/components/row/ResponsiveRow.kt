@@ -2,7 +2,6 @@
 
 package com.devalr.framework.components.row
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -15,7 +14,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.devalr.framework.components.cards.columnsForWidth
 
-@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun <T> ResponsiveRow(
     items: List<T>,
@@ -25,7 +23,7 @@ fun <T> ResponsiveRow(
     itemContent: @Composable (T) -> Unit
 ) {
     BoxWithConstraints(modifier = modifier) {
-        val columns = columnsForWidth(maxWidth).count
+        val columns = columnsForWidth(this@BoxWithConstraints.maxWidth).count
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(spacing)
