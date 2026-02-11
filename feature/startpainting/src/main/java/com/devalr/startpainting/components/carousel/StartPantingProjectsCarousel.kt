@@ -1,24 +1,24 @@
 package com.devalr.startpainting.components.carousel
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.devalr.framework.components.ScreenSize
 import com.devalr.framework.components.button.GHIconButton
 import com.devalr.framework.components.carousel.SinglePageCarousel
-import com.devalr.framework.components.rememberScreenSize
 import com.devalr.framework.theme.GreyHunterTheme
 import com.devalr.startpainting.components.cards.StartPaintingProjectCard
 import com.devalr.startpainting.model.StartPaintMiniatureVo
@@ -39,18 +39,16 @@ fun StartPantingProjectsCarousel(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(400.dp)
     ) {
         SinglePageCarousel(
             items = projects,
             pagerState = pagerState,
             neighborDisplayMargin = 0.dp,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
         ) { item ->
             StartPaintingProjectCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(calculateHeight(rememberScreenSize())),
+                modifier = Modifier.fillMaxSize(),
                 projectBo = item,
                 onMiniatureSelected = onMiniatureSelected
             )
@@ -87,26 +85,22 @@ fun StartPantingProjectsCarousel(
     }
 }
 
-@Composable
-private fun calculateHeight(screenSize: ScreenSize) = when (screenSize) {
-    ScreenSize.COMPACT -> 300.dp
-    ScreenSize.MEDIUM -> 600.dp
-    else -> 600.dp
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun ProjectsCarouselLightModePreview() {
     GreyHunterTheme(darkTheme = false) {
-        StartPantingProjectsCarousel(
-            projects = listOf(
-                hierotekCircleProjectVo,
-                stormlightArchiveProjectVo,
-            ),
-            onMiniatureSelected = {
-                //Do nothing
-            }
-        )
+        Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+
+            StartPantingProjectsCarousel(
+                projects = listOf(
+                    hierotekCircleProjectVo,
+                    stormlightArchiveProjectVo,
+                ),
+                onMiniatureSelected = {
+                    //Do nothing
+                }
+            )
+        }
     }
 }
 
@@ -114,14 +108,17 @@ private fun ProjectsCarouselLightModePreview() {
 @Composable
 private fun ProjectsCarouselDarkModePreview() {
     GreyHunterTheme(darkTheme = true) {
-        StartPantingProjectsCarousel(
-            projects = listOf(
-                hierotekCircleProjectVo,
-                stormlightArchiveProjectVo,
-            ),
-            onMiniatureSelected = {
-                //Do nothing
-            }
-        )
+        Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+
+            StartPantingProjectsCarousel(
+                projects = listOf(
+                    hierotekCircleProjectVo,
+                    stormlightArchiveProjectVo,
+                ),
+                onMiniatureSelected = {
+                    //Do nothing
+                }
+            )
+        }
     }
 }

@@ -5,11 +5,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -36,9 +34,8 @@ fun StartPaintingProjectCard(
 ) {
     Card(
         modifier = modifier
-            .width(500.dp)
-            .fillMaxHeight()
-            .padding(horizontal = 40.dp),
+            .fillMaxSize()
+            .padding(horizontal = 20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
         Column(
@@ -52,7 +49,7 @@ fun StartPaintingProjectCard(
             GHText(text = projectBo.name, type = TextType.Title)
             Spacer(modifier = Modifier.height(20.dp))
             LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
+                columns = GridCells.Adaptive(minSize = 120.dp),
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -65,7 +62,6 @@ fun StartPaintingProjectCard(
                     )
                 }
             }
-
         }
     }
 }
