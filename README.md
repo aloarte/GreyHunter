@@ -50,7 +50,14 @@ Switch between light and dark mode or change the color of the progress bars.
 
 # Screenshots & demo
 
-[TBC]
+<p align="center">
+  <img src="/captures/screenshot-1.png" width="15%">
+  <img src="/captures/screenshot-2.png" width="15%">
+  <img src="/captures/screenshot-3.png" width="15%">
+  <img src="/captures/screenshot-4.png" width="15%">
+  <img src="/captures/screenshot-5.png" width="15%">
+  <img src="/captures/screenshot-6.png" width="15%">
+</p>
 
 # App download
 
