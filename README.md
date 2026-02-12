@@ -59,11 +59,24 @@ Switch between light and dark mode or change the color of the progress bars.
 
 # Demo
 
-<p align="center">
-  <img src="captures/record-home.gif" width="30%">
+### Home and main features
+
+Watch at a glance the progress of your projects or click to see the details of any project or miniature.
+
+<img src="captures/record-home.gif" width="30%">
+
+### Paint mode 
+
+Select miniatures and start a zen mode to paint the selected miniatures. After the painting session the status of the miniature can be updated.
+
   <img src="captures/record-paint.gif" width="30%">
-  <img src="captures/record-settings.gif" width="30%">
-</p>
+
+### Settings and customisation 
+
+The dark/light mode can be changed, as well as the color of the progress bars. Also the data stored in the app can be exported into a CSV.
+
+<img src="captures/record-settings.gif" width="30%">
+
 
 # App download
 
