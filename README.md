@@ -60,9 +60,9 @@ Switch between light and dark mode or change the color of the progress bars.
 # Demo
 
 <p align="center">
-  <img src="assets/record-home.gif" width="250">
-  <img src="assets/record-paint.gif" width="250">
-  <img src="assets/record-settings.gif" width="250">
+  <img src="captures/record-home.gif" width="30%">
+  <img src="captures/record-paint.gif" width="30%">
+  <img src="captures/record-settings.gif" width="30%">
 </p>
 
 # App download
