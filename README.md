@@ -12,6 +12,15 @@
 > 
 > Finish what you started.
 
+<p align="center">
+  <img src="/captures/screenshot-1.png" width="15%">
+  <img src="/captures/screenshot-2.png" width="15%">
+  <img src="/captures/screenshot-3.png" width="15%">
+  <img src="/captures/screenshot-4.png" width="15%">
+  <img src="/captures/screenshot-5.png" width="15%">
+  <img src="/captures/screenshot-6.png" width="15%">
+</p>
+
 # The problem (grey shame)
 
 We all have it.
@@ -48,15 +57,12 @@ Save your data into a .csv file and restore it afterwards. This is useful if you
 ### ⚙️ Customisation
 Switch between light and dark mode or change the color of the progress bars.
 
-# Screenshots & demo
+# Demo
 
 <p align="center">
-  <img src="/captures/screenshot-1.png" width="15%">
-  <img src="/captures/screenshot-2.png" width="15%">
-  <img src="/captures/screenshot-3.png" width="15%">
-  <img src="/captures/screenshot-4.png" width="15%">
-  <img src="/captures/screenshot-5.png" width="15%">
-  <img src="/captures/screenshot-6.png" width="15%">
+  <img src="assets/record-home.gif" width="250">
+  <img src="assets/record-paint.gif" width="250">
+  <img src="assets/record-settings.gif" width="250">
 </p>
 
 # App download
