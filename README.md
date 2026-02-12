@@ -63,7 +63,9 @@ Switch between light and dark mode or change the color of the progress bars.
   <tr>
     <td width="60%">
 Get an instant overview of all your projects.  
+
 Track progress visually and jump into any project or miniature with a single tap.
+
 Stay focused, stay organized, and always know what’s next.
     </td>
     <td width="40%">
@@ -76,7 +78,14 @@ Stay focused, stay organized, and always know what’s next.
   <tr>
     <td width="60%">
 Select your miniatures and enter a distraction-free **Zen Mode** to fully focus on painting.
+
 After each session, you can easily update the miniature’s status and keep your progress accurate and up to date.
+
+**Key highlights:**
+- Select one or multiple miniatures
+- Distraction-free painting session
+- Quick status updates after finishing
+
 Perfect for hobbyists who want structure without losing their creative flow.
     </td>
     <td width="40%">
@@ -89,7 +98,14 @@ Perfect for hobbyists who want structure without losing their creative flow.
   <tr>
     <td width="60%">
 Make the app truly yours with flexible customization options.
+
 Easily adapt the experience to your preferences and manage your data safely.
+
+**You can:**
+- 🌗 Switch between Dark and Light mode
+- 🎨 Customize progress bar colors
+- 📊 Export all your data to CSV format
+
 Simple, clean, and fully under your control.
     </td>
     <td width="40%">
