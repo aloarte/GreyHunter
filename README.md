@@ -61,14 +61,19 @@ Switch between light and dark mode or change the color of the progress bars.
 
 <table>
   <tr>
-    <td width="60%">
-Get an instant overview of all your projects.  
-
-Track progress visually and jump into any project or miniature with a single tap.
-
-Stay focused, stay organized, and always know what’s next.
+    <td width="60%" valign="top">
+      <h3>Home – Overview at a Glance</h3>
+      <p>Get an instant overview of all your projects and track their progress visually.</p>
+      <p>Quickly access any project or miniature with a single tap and stay focused on what matters most.</p>
+      <h4>Main Features</h4>
+      <ul>
+        <li><strong>Visual progress tracking</strong> for all projects</li>
+        <li>Quick navigation to project details</li>
+        <li>Clean and intuitive dashboard layout</li>
+      </ul>
+      <p>Stay organized, stay motivated, and always know what’s next.</p>
     </td>
-    <td width="40%">
+    <td width="40%" valign="top">
       <img src="captures/record-home.gif" width="100%">
     </td>
   </tr>
@@ -76,19 +81,19 @@ Stay focused, stay organized, and always know what’s next.
 
 <table>
   <tr>
-    <td width="60%">
-Select your miniatures and enter a distraction-free **Zen Mode** to fully focus on painting.
-
-After each session, you can easily update the miniature’s status and keep your progress accurate and up to date.
-
-**Key highlights:**
-- Select one or multiple miniatures
-- Distraction-free painting session
-- Quick status updates after finishing
-
-Perfect for hobbyists who want structure without losing their creative flow.
+    <td width="60%" valign="top">
+      <h3>Paint Mode</h3>
+      <p>Select your miniatures and enter a distraction-free <strong>Zen Mode</strong> to fully focus on painting.</p>
+      <p>After each session, you can easily update the miniature’s status and keep your progress accurate and up to date.</p>
+      <h4>Key Highlights</h4>
+      <ul>
+        <li><strong>Select</strong> one or multiple miniatures</li>
+        <li>Distraction-free painting session</li>
+        <li>Quick status updates after finishing</li>
+      </ul>
+      <p>Perfect for hobbyists who want structure without losing their creative flow.</p>
     </td>
-    <td width="40%">
+    <td width="40%" valign="top">
       <img src="captures/record-paint.gif" width="100%">
     </td>
   </tr>
@@ -96,42 +101,22 @@ Perfect for hobbyists who want structure without losing their creative flow.
 
 <table>
   <tr>
-    <td width="60%">
-Make the app truly yours with flexible customization options.
-
-Easily adapt the experience to your preferences and manage your data safely.
-
-**You can:**
-- 🌗 Switch between Dark and Light mode
-- 🎨 Customize progress bar colors
-- 📊 Export all your data to CSV format
-
-Simple, clean, and fully under your control.
+    <td width="60%" valign="top">
+      <h3>Settings & Customization</h3>
+      <p>Make the app truly yours with flexible customization options.</p>
+      <h4>Available Options</h4>
+      <ul>
+        <li><strong>Dark / Light Mode</strong></li>
+        <li>Customizable progress bar colors</li>
+        <li>Export all data to <strong>CSV</strong></li>
+      </ul>
+      <p>Simple, clean, and fully under your control.</p>
     </td>
-    <td width="40%">
+    <td width="40%" valign="top">
       <img src="captures/record-settings.gif" width="100%">
     </td>
   </tr>
 </table>
-
-### Home and main features
-
-Watch at a glance the progress of your projects or click to see the details of any project or miniature.
-
-<img src="captures/record-home.gif" width="30%">
-
-### Paint mode 
-
-Select miniatures and start a zen mode to paint the selected miniatures. After the painting session the status of the miniature can be updated.
-
-  <img src="captures/record-paint.gif" width="30%">
-
-### Settings and customisation 
-
-The dark/light mode can be changed, as well as the color of the progress bars. Also the data stored in the app can be exported into a CSV.
-
-<img src="captures/record-settings.gif" width="30%">
-
 
 # App download
 
