@@ -12,6 +12,15 @@
 > 
 > Finish what you started.
 
+<p align="center">
+  <img src="/captures/screenshot-1.png" width="15%">
+  <img src="/captures/screenshot-2.png" width="15%">
+  <img src="/captures/screenshot-3.png" width="15%">
+  <img src="/captures/screenshot-4.png" width="15%">
+  <img src="/captures/screenshot-5.png" width="15%">
+  <img src="/captures/screenshot-6.png" width="15%">
+</p>
+
 # The problem (grey shame)
 
 We all have it.
@@ -35,22 +44,66 @@ Grey Hunter is an Android app designed to help miniature painters:
 
 No more forgotten units. No more eternal grey armies.
 
-# Features
+# Features & Demo
 
-### 📁 Create and manage projects with its miniatures
-Create the number of project that you need and add them your miniatures. You can add images of the whole project or to each miniature to keep your motivation.
-### 📊 Visual progress
-Keep the track of your projects at a glance with visual progress bars that resume the status.
-### 🖌️ Paint mode
-Focus mode to enhance the painting activity. Select the miniatures to be paint and just paint. After it, update the progress of each of the painted miniatures.
-### 💾 Import / Export
-Save your data into a .csv file and restore it afterwards. This is useful if you change your phone or if you need to share your data.
-### ⚙️ Customisation
-Switch between light and dark mode or change the color of the progress bars.
+<table>
+  <tr>
+    <td width="60%" valign="top">
+      <h3>Home – Overview at a Glance</h3>
+      <p>Get an instant overview of all your projects and track their progress visually.</p>
+      <p>Quickly access any project or miniature with a single tap and stay focused on what matters most.</p>
+      <h4>Main Features</h4>
+      <ul>
+        <li><strong>Visual progress tracking</strong> for all projects</li>
+        <li>Quick navigation to project details</li>
+        <li>Clean and intuitive dashboard layout</li>
+      </ul>
+      <p>Stay organized, stay motivated, and always know what’s next.</p>
+    </td>
+    <td width="40%" valign="top">
+      <img src="captures/record-home.gif" width="100%">
+    </td>
+  </tr>
+</table>
 
-# Screenshots & demo
+<table>
+  <tr>
+    <td width="60%" valign="top">
+      <h3>Paint Mode</h3>
+      <p>Select your miniatures and enter a distraction-free <strong>Zen Mode</strong> to fully focus on painting.</p>
+      <p>After each session, you can easily update the miniature’s status and keep your progress accurate and up to date.</p>
+      <h4>Key Highlights</h4>
+      <ul>
+        <li><strong>Select</strong> one or multiple miniatures</li>
+        <li>Distraction-free painting session</li>
+        <li>Quick status updates after finishing</li>
+      </ul>
+      <p>Perfect for hobbyists who want structure without losing their creative flow.</p>
+    </td>
+    <td width="40%" valign="top">
+      <img src="captures/record-paint.gif" width="100%">
+    </td>
+  </tr>
+</table>
 
-[TBC]
+<table>
+  <tr>
+    <td width="60%" valign="top">
+      <h3>Settings & Customization</h3>
+      <p>Make the app truly yours with flexible customization options.</p>
+      <h4>Available Options</h4>
+      <ul>
+        <li><strong>Dark / Light Mode</strong></li>
+        <li>Customizable progress bar colors</li>
+        <li>Export all data to <strong>CSV</strong></li>
+      </ul>
+      <p>Simple, clean, and fully under your control.</p>
+    </td>
+    <td width="40%" valign="top">
+      <img src="captures/record-settings.gif" width="100%">
+    </td>
+  </tr>
+</table>
 
 # App download
 
@@ -58,94 +111,51 @@ Download the app from the playstore following this [link](https://play.google.co
 
 # Tech Stack
 
-- 100% Kotlin
-- 100% Jetpack Compose
-- Koin
-- Navigation 3 API
-- Clean architecture
-- Modular architecture
-- Room
-- Datastore
-
-# Architecture
-
 This project is built in **Kotlin** and uses **Koin** as an injection framework, building its views
 with **Jetpack Compose**.
 
-The application follows a clean, modular architecture with clearly separated responsibilities across modules:
+- 100% Kotlin
+- 100% Jetpack Compose
+- Dependency injection with Koin
+- Navigation 3 API
+- Coroutines + Flow
+- Clean & modular architecture
+- Data: Room & Datastore
+- CI/CD: Github Actions (build/test)
+- Testing: JUnit, Turbine, MockK
+- Firebase Crashlytics
 
-### app
-Entry point of the application.
+# Architecture
 
-Contains the single `MainActivity`, navigation setup, and dependency injection configuration.
+The application follows a clean and modular architecture with clearly separated responsibilities across modules. The `app` module acts as the main entry point of the application and orchestrates the build configuration. 
+Core modules (`common`) provide shared functionality across features. Each screen is implemented as an independent `feature` module, encapsulating its own UI and ViewModel.
 
-Depends on `feature modules`.
+## Core Modules
 
-### common/domain
-Contains the core business logic of the application:
-- Domain models
-- Repository interfaces
-
-### common/data
-Implements the domain layer contracts:
-- Repository implementations
-- Room database
-- DataStore
-- Mappers
-
-The project doesn't rely on external API's.
-
-Depends on: `common/domain`.
-
-### common/framework
-Shared UI components and utilities used across feature modules:
--Reusable composables
--UI helpers
-
-Design system elements (if applicable)### feature/createminiature
-UI and ViewModel responsible for the miniature creation flow.
-
-### feature/createminiature
-UI and ViewModel responsible for the miniature creation flow.
-
-Depends on `common modules`.
-
-### feature/createproject
-UI and ViewModel responsible for the project creation flow.
-
-Depends on `common modules`.
-
-### feature/home
-UI and ViewModel for the home screen.
-
-Depends on `common modules`.
-
-### feature/minidetail
-UI and ViewModel responsible for displaying miniature details.
-
-Depends on `common modules`.
-
-### feature/painting
-UI and ViewModel related to the miniature painting workflow.
-
-Depends on `common modules`.
-
-### feature/projectdetail
-UI and ViewModel responsible for displaying project details.
-
-Depends on `common modules`.
-
-### feature/settings
-UI and ViewModel for application settings and customization options.
-
-Depends on `common modules`.
-
-### feature/startpainting 
-UI and ViewModel responsible for selecting miniatures to begin a painting session.
-
-Depends on `common modules`.
+| Module | Responsibility                                       | Depends On |
+|--------|------------------------------------------------------|------------|
+| `app` | Entry point, navigation setup, DI configuration      | feature modules |
+| `common/domain` | Business logic, domain models, repository contracts  | — |
+| `common/data` | Repository implementations, Room, DataStore, mappers | common/domain |
+| `common/framework` | Shared composables, UI utilities.                    | — |
 
 
+## Feature Modules
+
+Each feature module depends only on the common modules.
+
+| Module | Responsibility |
+|--------|---------------|
+| `feature/home` | Home screen UI and ViewModel |
+| `feature/createproject` | Project creation flow |
+| `feature/createminiature` | Miniature creation flow |
+| `feature/projectdetail` | Project details screen |
+| `feature/minidetail` | Miniature details screen |
+| `feature/startpainting` | Miniature selection before painting |
+| `feature/painting` | Painting session workflow |
+| `feature/settings` | App settings and customization |
+
+## Visual representation
 
 ```mermaid
 graph TD
