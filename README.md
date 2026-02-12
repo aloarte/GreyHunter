@@ -127,16 +127,17 @@ with **Jetpack Compose**.
 
 # Architecture
 
-The application follows a clean and modular architecture with clearly separated responsibilities across modules. The `app` module acts as the main entry point of the application and orchestrates the build configuration. Core modules (`common`) provide shared functionality across features. Each screen is implemented as an independent `feature` module, encapsulating its own UI and ViewModel.
+The application follows a clean and modular architecture with clearly separated responsibilities across modules. The `app` module acts as the main entry point of the application and orchestrates the build configuration. 
+Core modules (`common`) provide shared functionality across features. Each screen is implemented as an independent `feature` module, encapsulating its own UI and ViewModel.
 
 ## Core Modules
 
-| Module | Responsibility | Depends On |
-|--------|---------------|------------|
-| `app` | Entry point, navigation setup, DI configuration | feature modules |
-| `common/domain` | Business logic, domain models, repository contracts | — |
+| Module | Responsibility                                       | Depends On |
+|--------|------------------------------------------------------|------------|
+| `app` | Entry point, navigation setup, DI configuration      | feature modules |
+| `common/domain` | Business logic, domain models, repository contracts  | — |
 | `common/data` | Repository implementations, Room, DataStore, mappers | common/domain |
-| `common/framework` | Shared composables, UI utilities, design system | — |
+| `common/framework` | Shared composables, UI utilities.                    | — |
 
 
 ## Feature Modules
