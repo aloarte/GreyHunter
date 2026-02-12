@@ -111,21 +111,23 @@ Download the app from the playstore following this [link](https://play.google.co
 
 # Tech Stack
 
-- 100% Kotlin
-- 100% Jetpack Compose
-- Koin
-- Navigation 3 API
-- Clean architecture
-- Modular architecture
-- Room
-- Datastore
-
-# Architecture
-
 This project is built in **Kotlin** and uses **Koin** as an injection framework, building its views
 with **Jetpack Compose**.
 
-The application follows a clean, modular architecture with clearly separated responsibilities across modules:
+- 100% Kotlin
+- 100% Jetpack Compose
+- Dependency injection with Koin
+- Navigation 3 API
+- Coroutines + Flow
+- Clean & modular architecture
+- Data: Room & Datastore
+- CI/CD: Github Actions (build/test)
+- Testing: JUnit, Turbine, MockK
+- Firebase Crashlytics
+
+# Architecture
+
+The application follows a clean and modular architecture with clearly separated responsibilities across modules. The `app` module acts as the main entry point of the application and orchestrates the build configuration. Core modules (`common`) provide shared functionality across features. Each screen is implemented as an independent `feature` module, encapsulating its own UI and ViewModel.
 
 ## Core Modules
 
