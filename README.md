@@ -44,20 +44,7 @@ Grey Hunter is an Android app designed to help miniature painters:
 
 No more forgotten units. No more eternal grey armies.
 
-# Features
-
-### 📁 Create and manage projects with its miniatures
-Create the number of project that you need and add them your miniatures. You can add images of the whole project or to each miniature to keep your motivation.
-### 📊 Visual progress
-Keep the track of your projects at a glance with visual progress bars that resume the status.
-### 🖌️ Paint mode
-Focus mode to enhance the painting activity. Select the miniatures to be paint and just paint. After it, update the progress of each of the painted miniatures.
-### 💾 Import / Export
-Save your data into a .csv file and restore it afterwards. This is useful if you change your phone or if you need to share your data.
-### ⚙️ Customisation
-Switch between light and dark mode or change the color of the progress bars.
-
-# Demo
+# Features & Demo
 
 <table>
   <tr>
@@ -140,78 +127,32 @@ with **Jetpack Compose**.
 
 The application follows a clean, modular architecture with clearly separated responsibilities across modules:
 
-### app
-Entry point of the application.
+## Core Modules
 
-Contains the single `MainActivity`, navigation setup, and dependency injection configuration.
-
-Depends on `feature modules`.
-
-### common/domain
-Contains the core business logic of the application:
-- Domain models
-- Repository interfaces
-
-### common/data
-Implements the domain layer contracts:
-- Repository implementations
-- Room database
-- DataStore
-- Mappers
-
-The project doesn't rely on external API's.
-
-Depends on: `common/domain`.
-
-### common/framework
-Shared UI components and utilities used across feature modules:
--Reusable composables
--UI helpers
-
-Design system elements (if applicable)### feature/createminiature
-UI and ViewModel responsible for the miniature creation flow.
-
-### feature/createminiature
-UI and ViewModel responsible for the miniature creation flow.
-
-Depends on `common modules`.
-
-### feature/createproject
-UI and ViewModel responsible for the project creation flow.
-
-Depends on `common modules`.
-
-### feature/home
-UI and ViewModel for the home screen.
-
-Depends on `common modules`.
-
-### feature/minidetail
-UI and ViewModel responsible for displaying miniature details.
-
-Depends on `common modules`.
-
-### feature/painting
-UI and ViewModel related to the miniature painting workflow.
-
-Depends on `common modules`.
-
-### feature/projectdetail
-UI and ViewModel responsible for displaying project details.
-
-Depends on `common modules`.
-
-### feature/settings
-UI and ViewModel for application settings and customization options.
-
-Depends on `common modules`.
-
-### feature/startpainting 
-UI and ViewModel responsible for selecting miniatures to begin a painting session.
-
-Depends on `common modules`.
+| Module | Responsibility | Depends On |
+|--------|---------------|------------|
+| `app` | Entry point, navigation setup, DI configuration | feature modules |
+| `common/domain` | Business logic, domain models, repository contracts | — |
+| `common/data` | Repository implementations, Room, DataStore, mappers | common/domain |
+| `common/framework` | Shared composables, UI utilities, design system | — |
 
 
+## Feature Modules
+
+Each feature module depends only on the common modules.
+
+| Module | Responsibility |
+|--------|---------------|
+| `feature/home` | Home screen UI and ViewModel |
+| `feature/createproject` | Project creation flow |
+| `feature/createminiature` | Miniature creation flow |
+| `feature/projectdetail` | Project details screen |
+| `feature/minidetail` | Miniature details screen |
+| `feature/startpainting` | Miniature selection before painting |
+| `feature/painting` | Painting session workflow |
+| `feature/settings` | App settings and customization |
+
+## Visual representation
 
 ```mermaid
 graph TD
