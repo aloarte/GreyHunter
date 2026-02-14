@@ -23,7 +23,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":common:data"))
     testImplementation(libs.androidx.datastore.preferences)
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.core)

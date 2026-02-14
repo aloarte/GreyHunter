@@ -1,8 +1,8 @@
 package com.devalr.domain
 
 import android.net.Uri
-import com.devalr.domain.enum.ProgressColorType
-import com.devalr.domain.enum.ThemeType
+import com.devalr.domain.enums.ProgressColorType
+import com.devalr.domain.enums.ThemeType
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {

@@ -1,8 +1,9 @@
-package com.devalr.domain
+package com.devalr.data.repository
 
 import com.devalr.data.database.miniature.MiniatureDao
 import com.devalr.data.database.miniature.MiniatureEntity
 import com.devalr.domain.mappers.Mapper
+import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.model.MiniatureBo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull

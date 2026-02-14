@@ -3,8 +3,8 @@ package com.devalr.settings
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.devalr.domain.SettingsRepository
-import com.devalr.domain.enum.ProgressColorType
-import com.devalr.domain.enum.ThemeType
+import com.devalr.domain.enums.ProgressColorType
+import com.devalr.domain.enums.ThemeType
 import com.devalr.framework.AppTracer
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.framework.components.snackbar.SnackBarType

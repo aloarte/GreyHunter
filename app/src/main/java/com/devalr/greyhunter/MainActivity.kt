@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.devalr.domain.enum.ThemeType
+import com.devalr.domain.enums.ThemeType
 import com.devalr.framework.components.progress.ProvideProgressColors
 import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.theme.GreyHunterTheme

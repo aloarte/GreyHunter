@@ -1,4 +1,4 @@
-package com.devalr.domain.repository
+package com.devalr.data.repository
 
 import android.content.ContentResolver
 import android.net.Uri
@@ -6,8 +6,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import com.devalr.domain.ProjectRepository
-import com.devalr.domain.SettingsRepositoryImpl
-import com.devalr.domain.enum.ThemeType
+import com.devalr.domain.enums.ThemeType
 import com.devalr.domain.file.CSVManager
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.stormlightArchiveProject

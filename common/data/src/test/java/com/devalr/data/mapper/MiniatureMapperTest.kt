@@ -1,7 +1,7 @@
-package com.devalr.domain.mapper
+package com.devalr.data.mapper
 
 import com.devalr.data.database.miniature.MiniatureEntity
-import com.devalr.domain.mappers.MiniatureMapper
+import com.devalr.data.mappers.MiniatureMapper
 import com.devalr.domain.model.MiniCompletionBo
 import com.devalr.domain.model.MiniatureBo
 import org.junit.Assert.assertEquals

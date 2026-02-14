@@ -1,4 +1,4 @@
-package com.devalr.domain
+package com.devalr.data.repository
 
 import android.content.ContentResolver
 import android.net.Uri
@@ -6,8 +6,10 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.devalr.domain.enum.ProgressColorType
-import com.devalr.domain.enum.ThemeType
+import com.devalr.domain.ProjectRepository
+import com.devalr.domain.SettingsRepository
+import com.devalr.domain.enums.ProgressColorType
+import com.devalr.domain.enums.ThemeType
 import com.devalr.domain.file.CSVManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first

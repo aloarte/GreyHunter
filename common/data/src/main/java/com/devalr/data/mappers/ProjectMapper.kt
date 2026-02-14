@@ -1,10 +1,11 @@
-package com.devalr.domain.mappers
+package com.devalr.data.mappers
 
 import com.devalr.data.database.miniature.MiniatureEntity
 import com.devalr.data.database.project.ProjectEntity
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
-import com.devalr.domain.model.ProjectEntityData
+import com.devalr.data.database.ProjectEntityData
+import com.devalr.domain.mappers.Mapper
 
 class ProjectMapper(val miniatureMapper: Mapper<MiniatureEntity, MiniatureBo>) :
     Mapper<ProjectEntityData, ProjectBo>() {
@@ -31,6 +32,5 @@ class ProjectMapper(val miniatureMapper: Mapper<MiniatureEntity, MiniatureBo>) :
         miniatureEntities = data.minis.map { miniatureBo ->
             miniatureMapper.transformReverse(miniatureBo)
         }
-
     )
 }

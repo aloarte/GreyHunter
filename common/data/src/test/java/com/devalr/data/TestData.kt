@@ -1,14 +1,13 @@
-package com.devalr.domain
+package com.devalr.data
 
+import com.devalr.data.database.ProjectEntityData
 import com.devalr.data.database.miniature.MiniatureEntity
 import com.devalr.data.database.project.ProjectEntity
 import com.devalr.domain.model.MiniCompletionBo
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
-import com.devalr.domain.model.ProjectEntityData
 
 object TestData {
-
 
     private const val MINI_NAME = "Space marine"
     private const val MINI_COMPLETION_PERCENTAGE = 0.5f

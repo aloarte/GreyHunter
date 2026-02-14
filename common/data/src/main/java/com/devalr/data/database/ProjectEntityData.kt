@@ -1,4 +1,4 @@
-package com.devalr.domain.model
+package com.devalr.data.database
 
 import com.devalr.data.database.miniature.MiniatureEntity
 import com.devalr.data.database.project.ProjectEntity
