@@ -3,7 +3,7 @@ package com.devalr.minidetail
 import androidx.lifecycle.viewModelScope
 import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.ProjectRepository
-import com.devalr.domain.enum.MilestoneType
+import com.devalr.domain.enums.MilestoneType
 import com.devalr.domain.extension.isMilestoneAchievable
 import com.devalr.domain.extension.recalculateProgress
 import com.devalr.domain.extension.toggle
@@ -24,10 +24,8 @@ import com.devalr.minidetail.interactions.State
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 
 class MiniatureDetailViewModel(

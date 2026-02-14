@@ -66,6 +66,7 @@ dependencies {
     implementation(project(":feature:settings"))
     implementation(project(":common:domain"))
     implementation(project(":common:framework"))
+    implementation(project(":common:data"))
     //Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)

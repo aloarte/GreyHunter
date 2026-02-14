@@ -1,4 +1,4 @@
-package com.devalr.domain.enum
+package com.devalr.domain.enums
 
 enum class MilestoneType {
     Assembled,

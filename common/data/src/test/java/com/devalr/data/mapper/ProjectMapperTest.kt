@@ -1,19 +1,21 @@
-package com.devalr.domain.mapper
+package com.devalr.data.mapper
 
+import com.devalr.data.TestData.mini1Bo
+import com.devalr.data.TestData.mini1Entity
+import com.devalr.data.TestData.mini2Bo
+import com.devalr.data.TestData.mini2Entity
+import com.devalr.data.database.ProjectEntityData
 import com.devalr.data.database.project.ProjectEntity
-import com.devalr.domain.TestData.mini1Bo
-import com.devalr.domain.TestData.mini1Entity
-import com.devalr.domain.TestData.mini2Bo
-import com.devalr.domain.TestData.mini2Entity
-import com.devalr.domain.mappers.MiniatureMapper
-import com.devalr.domain.mappers.ProjectMapper
+import com.devalr.data.mappers.MiniatureMapper
+import com.devalr.data.mappers.ProjectMapper
 import com.devalr.domain.model.ProjectBo
-import com.devalr.domain.model.ProjectEntityData
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import kotlin.collections.get
 
 class ProjectMapperTest {
 
@@ -55,8 +57,8 @@ class ProjectMapperTest {
         assertEquals(IMAGE_URI, bo.imageUri)
         assertEquals(PERCENTAGE, bo.progress, 0.0f)
         assertEquals(2, bo.minis.size)
-        assertEquals(mini1Bo, bo.minis[0])
-        assertEquals(mini2Bo, bo.minis[1])
+        Assert.assertEquals(mini1Bo, bo.minis[0])
+        Assert.assertEquals(mini2Bo, bo.minis[1])
     }
 
     @Test

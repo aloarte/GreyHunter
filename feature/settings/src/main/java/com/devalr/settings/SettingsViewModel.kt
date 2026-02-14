@@ -3,8 +3,8 @@ package com.devalr.settings
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.devalr.domain.SettingsRepository
-import com.devalr.domain.enum.ProgressColorType
-import com.devalr.domain.enum.ThemeType
+import com.devalr.domain.enums.ProgressColorType
+import com.devalr.domain.enums.ThemeType
 import com.devalr.framework.AppTracer
 import com.devalr.framework.base.BaseViewModel
 import com.devalr.framework.components.snackbar.SnackBarType
@@ -70,7 +70,7 @@ class SettingsViewModel(
 
     private fun importProjects(uri: Uri) =
         viewModelScope.launch {
-            if (settingsRepository.importData(uri)) {
+            if (settingsRepository.importData(uri.toString())) {
                 sendEvent(
                     LaunchSnackBar(type = SnackBarType.SUCCESS, operation = OperationType.Import)
                 )
@@ -80,7 +80,7 @@ class SettingsViewModel(
         }
 
     private fun exportProjects(uri: Uri) = viewModelScope.launch {
-        if (settingsRepository.exportData(uri)) {
+        if (settingsRepository.exportData(uri.toString())) {
             sendEvent(LaunchSnackBar(type = SnackBarType.SUCCESS, operation = OperationType.Export))
         } else {
             submitError(Exception("exportProjects $uri error"), ErrorType.Export)

@@ -34,6 +34,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":common:domain"))
+
     // Koin
     implementation(libs.koin.android)
 
@@ -47,6 +49,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.androidx.core)
     testImplementation(libs.core.ktx)
+    testImplementation(libs.mockk)
     testImplementation(libs.androidx.junit.ktx)
     testImplementation(libs.robolectric)
     testImplementation(libs.kotlinx.coroutines.test)

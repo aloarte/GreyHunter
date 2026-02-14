@@ -1,4 +1,4 @@
-package com.devalr.domain.repository
+package com.devalr.data.repository
 
 import android.content.ContentResolver
 import android.net.Uri
@@ -6,9 +6,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import com.devalr.domain.ProjectRepository
-import com.devalr.domain.SettingsRepositoryImpl
-import com.devalr.domain.enum.ThemeType
-import com.devalr.domain.file.CSVManager
+import com.devalr.domain.enums.ThemeType
+import com.devalr.data.file.CSVManager
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.stormlightArchiveProject
 import io.mockk.coEvery
@@ -115,10 +114,9 @@ class SettingsRepositoryTest {
             coEvery { projectRepository.getAllProjects() } returns flowOf(projects)
             every { contentResolver.openOutputStream(any()) } returns ByteArrayOutputStream()
             val outputFile = File(temporaryFolder.root, "export.csv")
-            val uri = Uri.fromFile(outputFile)
 
             // WHEN
-            val result = repository.exportData(uri)
+            val result = repository.exportData(outputFile.toString())
 
             // THEN
             coVerify(exactly = 1) { csvManager.writeProjectsToCSV(any(), projects) }
@@ -134,10 +132,8 @@ class SettingsRepositoryTest {
             coEvery { projectRepository.getAllProjects() } returns flowOf(projects)
             every { contentResolver.openOutputStream(any()) } returns ByteArrayOutputStream()
             val outputFile = File(temporaryFolder.root, "export.csv")
-            val uri = Uri.fromFile(outputFile)
-
             // WHEN
-            val result = repository.exportData(uri)
+            val result = repository.exportData(outputFile.toString())
 
             // THEN
             coVerify(exactly = 1) { csvManager.writeProjectsToCSV(any(), any()) }
@@ -155,7 +151,7 @@ class SettingsRepositoryTest {
             val uri = Uri.fromFile(outputFile)
 
             // WHEN
-            val result = repository.exportData(uri)
+            val result = repository.exportData(outputFile.toString())
 
             // THEN
             coVerify(exactly = 1) { projectRepository.getAllProjects() }
@@ -171,10 +167,9 @@ class SettingsRepositoryTest {
             coEvery { csvManager.readProjectsFromCSV(any()) } returns projects
             coEvery { projectRepository.addAllProjects(projects, true) } returns true
             val inputFile = File(temporaryFolder.root, "import.csv")
-            val uri = Uri.fromFile(inputFile)
 
             // WHEN
-            val result = repository.importData(uri)
+            val result = repository.importData(inputFile.toString())
 
             // THEN
             assertTrue(result)
@@ -188,10 +183,9 @@ class SettingsRepositoryTest {
             // GIVEN
             every { contentResolver.openInputStream(any()) } returns null
             val inputFile = File(temporaryFolder.root, "import.csv")
-            val uri = Uri.fromFile(inputFile)
 
             // WHEN
-            val result = repository.importData(uri)
+            val result = repository.importData(inputFile.toString())
 
             // THEN
             assertFalse(result)
@@ -206,10 +200,9 @@ class SettingsRepositoryTest {
             coEvery { csvManager.readProjectsFromCSV(any()) } returns emptyList()
             every { contentResolver.openInputStream(any()) } returns ByteArrayInputStream("test".toByteArray())
             val inputFile = File(temporaryFolder.root, "import.csv")
-            val uri = Uri.fromFile(inputFile)
 
             // WHEN
-            val result = repository.importData(uri)
+            val result = repository.importData(inputFile.toString())
 
             // THEN
             assertFalse(result)

@@ -1,6 +1,6 @@
 package com.devalr.minidetail.interactions
 
-import com.devalr.domain.enum.MilestoneType
+import com.devalr.domain.enums.MilestoneType
 
 
 sealed interface Action {

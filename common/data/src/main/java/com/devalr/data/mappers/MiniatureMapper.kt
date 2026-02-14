@@ -1,6 +1,7 @@
-package com.devalr.domain.mappers
+package com.devalr.data.mappers
 
 import com.devalr.data.database.miniature.MiniatureEntity
+import com.devalr.domain.mappers.Mapper
 import com.devalr.domain.model.MiniCompletionBo
 import com.devalr.domain.model.MiniatureBo
 

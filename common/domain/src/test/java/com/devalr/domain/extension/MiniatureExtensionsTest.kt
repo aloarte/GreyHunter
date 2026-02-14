@@ -1,12 +1,12 @@
 package com.devalr.domain.extension
 
 
-import com.devalr.domain.enum.MilestoneType
-import com.devalr.domain.enum.MilestoneType.Assembled
-import com.devalr.domain.enum.MilestoneType.Base
-import com.devalr.domain.enum.MilestoneType.BaseColored
-import com.devalr.domain.enum.MilestoneType.Details
-import com.devalr.domain.enum.MilestoneType.Primed
+import com.devalr.domain.enums.MilestoneType
+import com.devalr.domain.enums.MilestoneType.Assembled
+import com.devalr.domain.enums.MilestoneType.Base
+import com.devalr.domain.enums.MilestoneType.BaseColored
+import com.devalr.domain.enums.MilestoneType.Details
+import com.devalr.domain.enums.MilestoneType.Primed
 import com.devalr.domain.model.MiniCompletionBo
 import com.devalr.domain.model.MiniatureBo
 import org.junit.Assert.assertEquals

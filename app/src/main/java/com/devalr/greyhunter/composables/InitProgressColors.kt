@@ -2,7 +2,7 @@ package com.devalr.greyhunter.composables
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import com.devalr.domain.enum.ProgressColorType
+import com.devalr.domain.enums.ProgressColorType
 import com.devalr.framework.components.progress.ProgressColorStore
 import com.devalr.framework.theme.ProgressGreen
 import com.devalr.framework.theme.ProgressRed

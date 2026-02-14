@@ -3,7 +3,7 @@ package com.devalr.minidetail
 import app.cash.turbine.test
 import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.ProjectRepository
-import com.devalr.domain.enum.MilestoneType
+import com.devalr.domain.enums.MilestoneType
 import com.devalr.domain.model.MiniCompletionBo
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo

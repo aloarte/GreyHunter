@@ -3,11 +3,9 @@ package com.devalr.settings
 import android.net.Uri
 import app.cash.turbine.test
 import com.devalr.domain.SettingsRepository
-import com.devalr.domain.enum.ProgressColorType.TrafficLight
-import com.devalr.domain.enum.ThemeType.Dark
-import com.devalr.domain.model.ProjectBo
+import com.devalr.domain.enums.ProgressColorType.TrafficLight
+import com.devalr.domain.enums.ThemeType.Dark
 import com.devalr.framework.AppTracer
-import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarType.ERROR
 import com.devalr.framework.components.snackbar.SnackBarType.SUCCESS
 import com.devalr.settings.interactions.Action
@@ -17,7 +15,6 @@ import com.devalr.settings.interactions.Action.ImportProjects
 import com.devalr.settings.interactions.Action.Load
 import com.devalr.settings.interactions.Action.Return
 import com.devalr.settings.interactions.ErrorType
-import com.devalr.settings.interactions.Event
 import com.devalr.settings.interactions.Event.LaunchSnackBar
 import com.devalr.settings.interactions.Event.NavigateBack
 import com.devalr.settings.interactions.OperationType
@@ -30,16 +27,13 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -52,12 +46,15 @@ class SettingsViewModelTest {
     private val uri: Uri = mockk()
     private lateinit var viewModel: SettingsViewModel
 
+    private val fakeUri = "content://fake-uri"
+
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         every { tracer.log(any()) } just Runs
+        every { uri.toString() } returns fakeUri
         viewModel = SettingsViewModel(tracer, repository)
     }
 
@@ -137,7 +134,7 @@ class SettingsViewModelTest {
         runTest {
             // GIVEN
             every { tracer.recordError(any()) } just Runs
-            coEvery { repository.importData(uri) } returns true
+            coEvery { repository.importData(fakeUri) } returns true
 
             viewModel.events.test {
                 // WHEN
@@ -149,7 +146,7 @@ class SettingsViewModelTest {
             }
 
             // THEN
-            coVerify(exactly = 1) { repository.importData(uri) }
+            coVerify(exactly = 1) { repository.importData(fakeUri) }
         }
 
     @Test
@@ -157,7 +154,7 @@ class SettingsViewModelTest {
         runTest {
             // GIVEN
             every { tracer.recordError(any()) } just Runs
-            coEvery { repository.importData(uri) } returns false
+            coEvery { repository.importData(fakeUri) } returns false
 
             viewModel.events.test {
                 // WHEN
@@ -169,7 +166,7 @@ class SettingsViewModelTest {
             }
 
             // THEN
-            coVerify(exactly = 1) { repository.importData(uri) }
+            coVerify(exactly = 1) { repository.importData(fakeUri) }
         }
 
     @Test
@@ -177,7 +174,7 @@ class SettingsViewModelTest {
         runTest {
             // GIVEN
             every { tracer.recordError(any()) } just Runs
-            coEvery { repository.exportData(uri) } returns true
+            coEvery { repository.exportData(fakeUri) } returns true
 
             viewModel.events.test {
                 // WHEN
@@ -189,7 +186,7 @@ class SettingsViewModelTest {
             }
 
             // THEN
-            coVerify(exactly = 1) { repository.exportData(uri) }
+            coVerify(exactly = 1) { repository.exportData(fakeUri) }
         }
 
     @Test
@@ -197,7 +194,7 @@ class SettingsViewModelTest {
         runTest {
             // GIVEN
             every { tracer.recordError(any()) } just Runs
-            coEvery { repository.exportData(uri) } returns false
+            coEvery { repository.exportData(fakeUri) } returns false
 
             viewModel.events.test {
                 // WHEN
@@ -209,6 +206,6 @@ class SettingsViewModelTest {
             }
 
             // THEN
-            coVerify(exactly = 1) { repository.exportData(uri) }
+            coVerify(exactly = 1) { repository.exportData(fakeUri) }
         }
 }

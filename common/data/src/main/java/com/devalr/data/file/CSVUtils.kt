@@ -1,4 +1,6 @@
-package com.devalr.domain.file
+package com.devalr.data.file
+
+import kotlin.text.iterator
 
 fun String?.escapeCsv(): String {
     if (this == null) return ""

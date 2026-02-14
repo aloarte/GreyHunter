@@ -3,6 +3,7 @@ package com.devalr.greyhunter
 import android.app.Application
 import com.devalr.createminiature.di.featureAddMiniatureModules
 import com.devalr.createproject.di.featureAddProjectModules
+import com.devalr.data.di.dataModules
 import com.devalr.greyhunter.di.appModule
 import com.devalr.home.di.featureHomeModules
 import com.devalr.minidetail.di.featureMiniDetailModules
@@ -10,7 +11,6 @@ import com.devalr.painting.di.featurePaintingModules
 import com.devalr.projectdetail.di.featureProjectDetailModules
 import com.devalr.settings.di.featureSettingsModules
 import com.devalr.startpainting.di.featureStartPaintingModules
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -26,6 +26,7 @@ class GreyHunterApplication : Application() {
             // Load modules
             modules(
                 appModule,
+                dataModules,
                 featureHomeModules,
                 featureProjectDetailModules,
                 featureMiniDetailModules,

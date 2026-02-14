@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devalr.domain.SettingsRepository
-import com.devalr.domain.enum.ProgressColorType
-import com.devalr.domain.enum.ProgressColorType.Brand
-import com.devalr.domain.enum.ThemeType
-import com.devalr.domain.enum.ThemeType.System
+import com.devalr.domain.enums.ProgressColorType
+import com.devalr.domain.enums.ProgressColorType.Brand
+import com.devalr.domain.enums.ThemeType
+import com.devalr.domain.enums.ThemeType.System
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
