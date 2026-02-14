@@ -10,10 +10,11 @@ import com.devalr.domain.ProjectRepository
 import com.devalr.domain.SettingsRepository
 import com.devalr.domain.enums.ProgressColorType
 import com.devalr.domain.enums.ThemeType
-import com.devalr.domain.file.CSVManager
+import com.devalr.data.file.CSVManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import java.io.File
 
 class SettingsRepositoryImpl(
     private val dataStore: DataStore<Preferences>,
@@ -67,7 +68,8 @@ class SettingsRepositoryImpl(
         }
     }
 
-    override suspend fun exportData(uri: Uri): Boolean = try {
+    override suspend fun exportData(filePath: String): Boolean = try {
+        val uri: Uri = stringToUri(filePath)
         val projects = projectRepository.getAllProjects().first()
         contentResolver.openOutputStream(uri)?.let { outputStream ->
             csvManager.writeProjectsToCSV(outputStream, projects)
@@ -77,7 +79,8 @@ class SettingsRepositoryImpl(
     }
 
 
-    override suspend fun importData(uri: Uri): Boolean = try {
+    override suspend fun importData(filePath: String): Boolean = try {
+        val uri: Uri = stringToUri(filePath)
         contentResolver.openInputStream(uri)?.let { inputStream ->
             val projectsWithMinis = csvManager.readProjectsFromCSV(inputStream)
             if (projectsWithMinis.isNotEmpty()) {
@@ -88,5 +91,13 @@ class SettingsRepositoryImpl(
     } catch (e: Exception) {
         false
     }
+
+
+    private fun stringToUri(filePath: String): Uri =
+        if (filePath.startsWith("content://") || filePath.startsWith("file://")) {
+            Uri.parse(filePath)
+        } else {
+            Uri.fromFile(File(filePath))
+        }
 
 }

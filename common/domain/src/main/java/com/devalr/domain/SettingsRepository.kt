@@ -1,6 +1,5 @@
 package com.devalr.domain
 
-import android.net.Uri
 import com.devalr.domain.enums.ProgressColorType
 import com.devalr.domain.enums.ThemeType
 import kotlinx.coroutines.flow.Flow
@@ -18,8 +17,8 @@ interface SettingsRepository {
 
     suspend fun setAppVersion(appVersion: String)
 
-    suspend fun exportData(uri: Uri) : Boolean
+    suspend fun exportData(filePath: String) : Boolean
 
-    suspend fun importData(uri: Uri) : Boolean
+    suspend fun importData(filePath: String) : Boolean
 
 }

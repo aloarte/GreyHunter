@@ -1,16 +1,17 @@
 package com.devalr.data.di
 
 import android.app.Application
+import android.content.ContentResolver
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.devalr.data.database.GreyHunterDatabase
+import com.devalr.data.database.ProjectEntityData
 import com.devalr.data.database.miniature.MiniatureDao
 import com.devalr.data.database.miniature.MiniatureEntity
 import com.devalr.data.database.project.ProjectDao
-import com.devalr.domain.mappers.Mapper
 import com.devalr.data.mappers.MiniatureMapper
 import com.devalr.data.mappers.ProjectMapper
 import com.devalr.data.repository.MiniatureRepositoryImpl
@@ -19,9 +20,10 @@ import com.devalr.data.repository.SettingsRepositoryImpl
 import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.SettingsRepository
+import com.devalr.data.file.CSVManager
+import com.devalr.domain.mappers.Mapper
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
-import com.devalr.data.database.ProjectEntityData
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
@@ -89,11 +91,18 @@ private fun provideMiniaturesDao(dataBase: GreyHunterDatabase): MiniatureDao =
 
 private val Context.dataStore by preferencesDataStore(name = "settings")
 
-private val dataFrameworkModule = module {
+
+private val external = module {
     single<DataStore<Preferences>> {
         androidContext().dataStore
     }
+    single { provideCSVManager() }
+    single { provideContentResolver(get()) }
 }
+
+private fun provideContentResolver(context: Context): ContentResolver = context.contentResolver
+
+private fun provideCSVManager(): CSVManager = CSVManager()
 val dataModules = module {
-    includes(repositoriesModules, mapperModules, databaseModule, dataSourcesModule, dataFrameworkModule)
+    includes(repositoriesModules, mapperModules, databaseModule, dataSourcesModule, external)
 }

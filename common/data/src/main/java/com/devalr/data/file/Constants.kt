@@ -1,4 +1,4 @@
-package com.devalr.domain.file
+package com.devalr.data.file
 
 const val CSV_TITLE_PROJECT = "#PROJECTS"
 const val CSV_TITLE_MINIATURES = "#MINIATURES"

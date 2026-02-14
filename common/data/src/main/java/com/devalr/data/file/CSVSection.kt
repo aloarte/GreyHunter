@@ -1,4 +1,4 @@
-package com.devalr.domain.file
+package com.devalr.data.file
 
 enum class CSVSection {
     PROJECTS,

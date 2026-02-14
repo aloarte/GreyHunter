@@ -1,4 +1,4 @@
-package com.devalr.domain.file
+package com.devalr.data.file
 
 import com.devalr.domain.model.MiniCompletionBo
 import com.devalr.domain.model.MiniatureBo

@@ -1,6 +1,5 @@
 package com.devalr.startpainting.di
 
-import com.devalr.domain.di.domainModules
 import com.devalr.domain.mappers.Mapper
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
@@ -33,5 +32,5 @@ private val mapperVoModules = module {
     }
 }
 val featureStartPaintingModules = module {
-    includes(domainModules, viewModelModules, mapperVoModules)
+    includes(viewModelModules, mapperVoModules)
 }

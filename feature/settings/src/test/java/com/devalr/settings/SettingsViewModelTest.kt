@@ -46,12 +46,15 @@ class SettingsViewModelTest {
     private val uri: Uri = mockk()
     private lateinit var viewModel: SettingsViewModel
 
+    private val fakeUri = "content://fake-uri"
+
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         every { tracer.log(any()) } just Runs
+        every { uri.toString() } returns fakeUri
         viewModel = SettingsViewModel(tracer, repository)
     }
 
@@ -131,7 +134,7 @@ class SettingsViewModelTest {
         runTest {
             // GIVEN
             every { tracer.recordError(any()) } just Runs
-            coEvery { repository.importData(uri) } returns true
+            coEvery { repository.importData(fakeUri) } returns true
 
             viewModel.events.test {
                 // WHEN
@@ -143,7 +146,7 @@ class SettingsViewModelTest {
             }
 
             // THEN
-            coVerify(exactly = 1) { repository.importData(uri) }
+            coVerify(exactly = 1) { repository.importData(fakeUri) }
         }
 
     @Test
@@ -151,7 +154,7 @@ class SettingsViewModelTest {
         runTest {
             // GIVEN
             every { tracer.recordError(any()) } just Runs
-            coEvery { repository.importData(uri) } returns false
+            coEvery { repository.importData(fakeUri) } returns false
 
             viewModel.events.test {
                 // WHEN
@@ -163,7 +166,7 @@ class SettingsViewModelTest {
             }
 
             // THEN
-            coVerify(exactly = 1) { repository.importData(uri) }
+            coVerify(exactly = 1) { repository.importData(fakeUri) }
         }
 
     @Test
@@ -171,7 +174,7 @@ class SettingsViewModelTest {
         runTest {
             // GIVEN
             every { tracer.recordError(any()) } just Runs
-            coEvery { repository.exportData(uri) } returns true
+            coEvery { repository.exportData(fakeUri) } returns true
 
             viewModel.events.test {
                 // WHEN
@@ -183,7 +186,7 @@ class SettingsViewModelTest {
             }
 
             // THEN
-            coVerify(exactly = 1) { repository.exportData(uri) }
+            coVerify(exactly = 1) { repository.exportData(fakeUri) }
         }
 
     @Test
@@ -191,7 +194,7 @@ class SettingsViewModelTest {
         runTest {
             // GIVEN
             every { tracer.recordError(any()) } just Runs
-            coEvery { repository.exportData(uri) } returns false
+            coEvery { repository.exportData(fakeUri) } returns false
 
             viewModel.events.test {
                 // WHEN
@@ -203,6 +206,6 @@ class SettingsViewModelTest {
             }
 
             // THEN
-            coVerify(exactly = 1) { repository.exportData(uri) }
+            coVerify(exactly = 1) { repository.exportData(fakeUri) }
         }
 }
