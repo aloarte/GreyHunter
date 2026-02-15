@@ -20,10 +20,10 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -117,6 +117,49 @@ class ProjectRepositoryTest {
         }
 
     @Test
+    fun `GIVEN list of projects WHEN getAlmostDoneProjects is called THEN returns mapped list flow`() =
+        runTest {
+            // GIVEN
+            val entityData = ProjectEntityData(projectEntity, emptyList())
+            coEvery { projectDao.getAlmostDoneProjects(1) } returns flowOf(listOf(projectEntity))
+            every { mapper.transform(entityData) } returns projectBo
+
+            // WHEN
+            val resultFlow = repository.getAlmostDoneProjects(1)
+            val resultList = resultFlow.first()
+
+            // THEN
+            coVerify(exactly = 1) { projectDao.getAlmostDoneProjects(1) }
+            verify(exactly = 1) { mapper.transform(entityData) }
+            assertEquals(2, projectBo.minis.size)
+            assertEquals(projectBo, resultList[0])
+        }
+
+
+    @Test
+    fun `GIVEN list of projects WHEN getLastUpdatedProject is called THEN returns the last updated project`() =
+        runTest {
+            // GIVEN
+            coEvery { projectDao.getLastUpdatedProject() } returns flowOf(projectEntity)
+            coEvery { miniatureDao.getMiniaturesByProject(projectEntity.id) } returns flowOf(
+                listOf(mini1Entity, mini2Entity)
+            )
+            every { mapper.transform(projectEntityData) } returns projectBo
+
+            // WHEN
+            val resultFlow = repository.getLastUpdatedProject()
+            val resultList = resultFlow.first()
+
+            // THEN
+            coVerify(exactly = 1) { projectDao.getLastUpdatedProject() }
+            coVerify(exactly = 1) { miniatureDao.getMiniaturesByProject(PROJECT_ID) }
+            verify(exactly = 1) { mapper.transform(projectEntityData) }
+            assertEquals(2, projectBo.minis.size)
+            assertEquals(projectBo, resultList)
+        }
+
+
+    @Test
     fun `GIVEN project inserted WHEN updateProject is called and updates the project THEN returns true`() =
         runTest {
             // GIVEN
@@ -171,4 +214,134 @@ class ProjectRepositoryTest {
         coVerify(exactly = 1) { projectDao.deleteProject(1L) }
         assertFalse(result)
     }
+
+    @Test
+    fun `GIVEN resetDatabase true WHEN addAllProjects is called THEN database is cleared and all projects are added`() =
+        runTest {
+            // GIVEN
+            val projects = listOf(projectBo)
+
+            coEvery { projectDao.deleteAllProjects() } returns 1
+            coEvery { miniatureDao.deleteMiniatures() } returns 1
+            coEvery { projectDao.insertProject(any()) } returns PROJECT_ID
+            coEvery { miniatureDao.insertMiniature(any()) } returns 1L
+            every { minisMapper.transformReverse(any()) } returns mini1Entity
+
+            // WHEN
+            val result = repository.addAllProjects(projects, resetDatabase = true)
+
+            // THEN
+            coVerify(exactly = 1) { projectDao.deleteAllProjects() }
+            coVerify(exactly = 1) { miniatureDao.deleteMiniatures() }
+            assertTrue(result)
+        }
+
+    @Test
+    fun `GIVEN resetDatabase false WHEN addAllProjects is called THEN database is not cleared`() =
+        runTest {
+            // GIVEN
+            val projects = listOf(projectBo)
+
+            coEvery { projectDao.insertProject(any()) } returns PROJECT_ID
+            coEvery { miniatureDao.insertMiniature(any()) } returns 1L
+            every { minisMapper.transformReverse(any()) } returns mini1Entity
+
+            // WHEN
+            val result = repository.addAllProjects(projects, resetDatabase = false)
+
+            // THEN
+            coVerify(exactly = 0) { projectDao.deleteAllProjects() }
+            coVerify(exactly = 0) { miniatureDao.deleteMiniatures() }
+            assertTrue(result)
+        }
+
+    @Test
+    fun `GIVEN avoidLastUpdate true WHEN updateProject is called THEN lastUpdate is set to 0`() =
+        runTest {
+            // GIVEN
+            val entity = projectEntity.copy(lastUpdate = 0)
+            every { mapper.transformReverse(projectBo) } returns projectEntityData
+            coEvery { projectDao.updateProject(entity) } returns 1
+
+            // WHEN
+            val result = repository.updateProject(projectBo, avoidLastUpdate = true)
+
+            // THEN
+            coVerify(exactly = 1) {
+                projectDao.updateProject(projectEntity.copy(lastUpdate = 0))
+            }
+            assertTrue(result)
+        }
+
+    @Test
+    fun `GIVEN avoidLastUpdate false WHEN updateProject is called THEN lastUpdate uses clock millis`() =
+        runTest {
+            // GIVEN
+            every { mapper.transformReverse(projectBo) } returns projectEntityData
+            coEvery { projectDao.updateProject(projectEntity.copy(lastUpdate = date)) } returns 1
+
+            // WHEN
+            val result = repository.updateProject(projectBo, avoidLastUpdate = false)
+
+            // THEN
+            coVerify(exactly = 1) {
+                projectDao.updateProject(projectEntity.copy(lastUpdate = date))
+            }
+            assertTrue(result)
+        }
+
+    @Test
+    fun `GIVEN project with minis WHEN updateProjectProgress is called THEN updates project with averaged progress`() =
+        runTest {
+            // GIVEN
+            coEvery { projectDao.getProjectById(PROJECT_ID) } returns flowOf(projectEntity)
+            coEvery { miniatureDao.getMiniaturesByProject(PROJECT_ID) } returns
+                    flowOf(listOf(mini1Entity, mini2Entity))
+
+            every { mapper.transform(projectEntityData) } returns projectBo
+            every { mapper.transformReverse(any()) } returns projectEntityData
+            coEvery { projectDao.updateProject(projectEntity.copy(lastUpdate = date)) } returns 1
+
+            // WHEN
+            val result = repository.updateProjectProgress(PROJECT_ID, avoidLastUpdate = false)
+
+            // THEN
+            assertTrue(result)
+        }
+
+    @Test
+    fun `GIVEN project without minis WHEN updateProjectProgress is called THEN updates project with 0 progress`() =
+        runTest {
+            // GIVEN
+            val emptyProjectBo = projectBo.copy(minis = emptyList())
+            val emptyEntityData = ProjectEntityData(projectEntity, emptyList())
+
+            coEvery { projectDao.getProjectById(PROJECT_ID) } returns flowOf(projectEntity)
+            coEvery { miniatureDao.getMiniaturesByProject(PROJECT_ID) } returns
+                    flowOf(emptyList())
+
+            every { mapper.transform(emptyEntityData) } returns emptyProjectBo
+            every { mapper.transformReverse(any()) } returns emptyEntityData
+            coEvery { projectDao.updateProject(projectEntity.copy(lastUpdate = date)) } returns 1
+
+            // WHEN
+            val result = repository.updateProjectProgress(PROJECT_ID, avoidLastUpdate = false)
+
+            // THEN
+            assertTrue(result)
+        }
+
+    @Test
+    fun `GIVEN project does not exist WHEN updateProjectProgress is called THEN returns false`() =
+        runTest {
+            // GIVEN
+            coEvery { projectDao.getProjectById(PROJECT_ID) } returns emptyFlow()
+
+            // WHEN
+            val result = repository.updateProjectProgress(PROJECT_ID, avoidLastUpdate = false)
+
+            // THEN
+            assertFalse(result)
+        }
+
 }

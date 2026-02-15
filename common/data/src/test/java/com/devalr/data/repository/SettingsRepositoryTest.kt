@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.Preferences
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.enums.ThemeType
 import com.devalr.data.file.CSVManager
+import com.devalr.domain.enums.ProgressColorType
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.stormlightArchiveProject
 import io.mockk.coEvery
@@ -107,6 +108,29 @@ class SettingsRepositoryTest {
         }
 
     @Test
+    fun `GIVEN empty datastore WHEN getProgressColorConfiguration is called THEN default value is returned`() =
+        runBlocking {
+            // GIVEN & WHEN
+            val result = repository.getProgressColorConfiguration().first()
+
+            // THEN
+            assertEquals(ProgressColorType.Brand, result)
+        }
+
+    @Test
+    fun `GIVEN not empty datastore WHEN getProgressColorConfiguration is called THEN value is returned`() =
+        runBlocking {
+            // GIVEN
+            repository.setProgressColorConfiguration(ProgressColorType.TrafficLight)
+
+            // WHEN
+            val result = repository.getProgressColorConfiguration().first()
+
+            // THEN
+            assertEquals(ProgressColorType.TrafficLight, result)
+        }
+
+    @Test
     fun `GIVEN projects WHEN exportData THEN csv file is created`() =
         runBlocking {
             // GIVEN
@@ -148,7 +172,6 @@ class SettingsRepositoryTest {
             coEvery { projectRepository.getAllProjects() } returns flowOf(projects)
             every { contentResolver.openOutputStream(any()) } returns null
             val outputFile = File(temporaryFolder.root, "export.csv")
-            val uri = Uri.fromFile(outputFile)
 
             // WHEN
             val result = repository.exportData(outputFile.toString())
@@ -166,10 +189,9 @@ class SettingsRepositoryTest {
             every { contentResolver.openInputStream(any()) } returns ByteArrayInputStream("test".toByteArray())
             coEvery { csvManager.readProjectsFromCSV(any()) } returns projects
             coEvery { projectRepository.addAllProjects(projects, true) } returns true
-            val inputFile = File(temporaryFolder.root, "import.csv")
 
             // WHEN
-            val result = repository.importData(inputFile.toString())
+            val result = repository.importData("content:///storage/emulated/0/Download/import.csv")
 
             // THEN
             assertTrue(result)
@@ -182,10 +204,9 @@ class SettingsRepositoryTest {
         runBlocking {
             // GIVEN
             every { contentResolver.openInputStream(any()) } returns null
-            val inputFile = File(temporaryFolder.root, "import.csv")
 
             // WHEN
-            val result = repository.importData(inputFile.toString())
+            val result = repository.importData("file:///storage/emulated/0/Download/import.csv")
 
             // THEN
             assertFalse(result)
@@ -209,6 +230,4 @@ class SettingsRepositoryTest {
             coVerify(exactly = 1) { csvManager.readProjectsFromCSV(any()) }
             coVerify(exactly = 0) { projectRepository.addAllProjects(projects, any()) }
         }
-
-
 }

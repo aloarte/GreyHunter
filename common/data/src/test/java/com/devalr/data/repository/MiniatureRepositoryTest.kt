@@ -138,6 +138,25 @@ class MiniatureRepositoryTest {
         }
 
     @Test
+    fun `GIVEN miniatures inserted WHEN getLastUpdatedMiniatures is called THEN list of 2 miniatures are returned`() =
+        runTest {
+            // GIVEN
+            coEvery { miniatureDao.getLastUpdatedMiniatures(2) } returns
+                    flowOf(listOf(mini1Entity, mini2Entity))
+
+            // WHEN
+            val resultFlow = repository.getLastUpdatedMiniatures(2)
+            val miniBoList = resultFlow.first()
+
+            // THEN
+            coVerify(exactly = 1) { miniatureDao.getLastUpdatedMiniatures(2) }
+            verify(exactly = 1) { mapper.transform(mini1Entity) }
+            verify(exactly = 1) { mapper.transform(mini2Entity) }
+            assertEquals(listOf(mini1Bo, mini2Bo), miniBoList)
+        }
+
+
+    @Test
     fun `GIVEN miniature inserted WHEN updateMiniature is called and update the miniature THEN returns 1 row affected`() =
         runTest {
             // GIVEN
