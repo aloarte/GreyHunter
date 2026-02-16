@@ -12,8 +12,10 @@ import com.devalr.createminiature.interactions.Action.Load
 import com.devalr.createminiature.interactions.Action.Return
 import com.devalr.createminiature.interactions.ErrorType.AddDatabase
 import com.devalr.createminiature.interactions.ErrorType.BadId
+import com.devalr.createminiature.interactions.ErrorType.EditDatabase
 import com.devalr.createminiature.interactions.ErrorType.EmptyName
 import com.devalr.createminiature.interactions.ErrorType.ErrorUpdatingProgress
+import com.devalr.createminiature.interactions.ErrorType.ImportImage
 import com.devalr.createminiature.interactions.Event.LaunchSnackBarError
 import com.devalr.createminiature.interactions.Event.NavigateBack
 import com.devalr.domain.MiniatureRepository
@@ -132,6 +134,37 @@ class AddMiniatureViewModelTest {
             assertEquals(MINI_IMAGE, state.miniatureImage)
             assertEquals(existentMini, state.miniatureToUpdate)
             assertTrue(state.editMode)
+
+            coVerify(exactly = 1) { projectRepository.getProject(PROJECT_ID) }
+            coVerify(exactly = 1) { miniatureRepository.getMiniature(MINI_ID) }
+        }
+
+    @Test
+    fun `GIVEN a projectId and miniId WHEN OnAppear is triggered THEN error is received and message is raised`() =
+        runTest {
+            // GIVEN
+            val error = Exception("Mini fetch error")
+            coEvery { miniatureRepository.getMiniature(MINI_ID) } returns flow { throw error }
+            every { tracer.recordError(any()) } just Runs
+
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(Load(projectId = PROJECT_ID, miniatureId = MINI_ID))
+                advanceUntilIdle()
+
+                // THEN
+                verify(exactly = 1) { tracer.recordError(any()) }
+                coVerify(exactly = 0) { miniatureRepository.addMiniature(any()) }
+                assertEquals(
+                    LaunchSnackBarError(BadId),
+                    awaitItem()
+                )
+                cancelAndIgnoreRemainingEvents()
+            }
+
+            // THEN
+            val state = viewModel.uiState.value
+            assertTrue(state.error)
 
             coVerify(exactly = 1) { projectRepository.getProject(PROJECT_ID) }
             coVerify(exactly = 1) { miniatureRepository.getMiniature(MINI_ID) }
@@ -340,6 +373,37 @@ class AddMiniatureViewModelTest {
         }
 
     @Test
+    fun `GIVEN successful edit and progress update WHEN OnAddMiniature is triggered THEN database returned an error`() =
+        runTest {
+            // GIVEN
+            coEvery { miniatureRepository.getMiniature(MINI_ID) } returns flow { emit(existentMini) }
+            coEvery { miniatureRepository.updateMiniature(any()) } returns false
+            every { tracer.recordError(any()) } just Runs
+
+            viewModel.onAction(Load(projectId = PROJECT_ID, miniatureId = MINI_ID))
+            advanceUntilIdle()
+            viewModel.onAction(ChangeName(NEW_MINI_NAME))
+            viewModel.onAction(ChangeName(NEW_MINI_IMAGE))
+            advanceUntilIdle()
+
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(AddMiniature)
+                advanceUntilIdle()
+
+                // THEN
+                coVerify(exactly = 1) { miniatureRepository.getMiniature(MINI_ID) }
+                coVerify(exactly = 1) { projectRepository.getProject(PROJECT_ID) }
+                coVerify(exactly = 0) { miniatureRepository.addMiniature(any()) }
+                coVerify(exactly = 1) { miniatureRepository.updateMiniature(any()) }
+                coVerify(exactly = 0) { projectRepository.updateProjectProgress(any()) }
+                verify(exactly = 1) { tracer.recordError(any()) }
+                assertEquals(LaunchSnackBarError(EditDatabase), awaitItem())
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+    @Test
     fun `GIVEN a gallery URI WHEN OnImageChanged is triggered THEN persistable permission is taken`() =
         runTest {
             // GIVEN
@@ -385,6 +449,33 @@ class AddMiniatureViewModelTest {
             val state = viewModel.uiState.value
             assertEquals(cameraUriString, state.miniatureImage)
         }
+
+    @Test
+    fun `GIVEN a camera URI WHEN OnImageChanged is triggered THEN exception is thrown`() =
+        runTest {
+            // GIVEN
+            val galleryUriString = "content://com.android/document/image%3A123"
+            val galleryUri: Uri = mockk()
+            val error = SecurityException("Permission denied")
+            every { galleryUri.toString() } returns galleryUriString
+            every { contentResolver.takePersistableUriPermission(any(), any()) } throws error
+            every { tracer.recordError(error) } just Runs
+
+            // WHEN
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(ChangeImage(galleryUri))
+
+                // THEN
+                assertEquals(LaunchSnackBarError(ImportImage), awaitItem())
+                cancelAndIgnoreRemainingEvents()
+            }
+
+            // THEN
+            verify(exactly = 1) { contentResolver.takePersistableUriPermission(any(), any()) }
+            verify(exactly = 1) { tracer.recordError(error) }
+        }
+
 
     @Test
     fun `WHEN Return action is triggered THEN NavigateBack event is raised`() =

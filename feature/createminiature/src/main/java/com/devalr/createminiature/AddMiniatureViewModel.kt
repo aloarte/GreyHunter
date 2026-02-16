@@ -52,21 +52,6 @@ class AddMiniatureViewModel(
         }
     }
 
-    private fun updateImage(imageUri: Uri) {
-        try {
-            if (!imageUri.toString().contains(".fileprovider")) {
-                val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                application.contentResolver.takePersistableUriPermission(
-                    imageUri,
-                    flags
-                )
-            }
-            updateState { copy(miniatureImage = imageUri.toString()) }
-        } catch (e: SecurityException) {
-            submitError(e, ImportImage)
-        }
-    }
-
     private fun onLoadScreen(projectId: Long, miniatureId: Long?) {
         if (miniatureId != null) {
             viewModelScope.launch {
@@ -105,6 +90,21 @@ class AddMiniatureViewModel(
                     }
                 }
             }
+        }
+    }
+
+    private fun updateImage(imageUri: Uri) {
+        try {
+            if (!imageUri.toString().contains(".fileprovider")) {
+                val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                application.contentResolver.takePersistableUriPermission(
+                    imageUri,
+                    flags
+                )
+            }
+            updateState { copy(miniatureImage = imageUri.toString()) }
+        } catch (e: SecurityException) {
+            submitError(e, ImportImage)
         }
     }
 
@@ -184,7 +184,7 @@ class AddMiniatureViewModel(
                 submitError(Exception("editMiniature database update error"), EditDatabase)
             }
         } ?: run {
-            submitError(Exception("editMiniature null miniature to updater"), BadId)
+            submitError(Exception("editMiniature null miniature to update"), BadId)
         }
     }
 

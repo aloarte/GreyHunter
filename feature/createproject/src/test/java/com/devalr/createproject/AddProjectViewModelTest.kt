@@ -14,6 +14,7 @@ import com.devalr.createproject.interactions.Action.Return
 import com.devalr.createproject.interactions.ErrorType.AddDatabase
 import com.devalr.createproject.interactions.ErrorType.EditDatabase
 import com.devalr.createproject.interactions.ErrorType.EmptyTitle
+import com.devalr.createproject.interactions.ErrorType.ImportImage
 import com.devalr.createproject.interactions.Event.LaunchSnackBarError
 import com.devalr.createproject.interactions.Event.NavigateBack
 import com.devalr.domain.ProjectRepository
@@ -310,6 +311,32 @@ class AddProjectViewModelTest {
             verify(exactly = 0) { contentResolver.takePersistableUriPermission(any(), any()) }
             val state = viewModel.uiState.value
             assertEquals(cameraUriString, state.projectImage)
+        }
+
+    @Test
+    fun `GIVEN a camera URI WHEN OnImageChanged is triggered THEN exception is thrown`() =
+        runTest {
+            // GIVEN
+            val cameraUriString =
+                "content://com.devalr.greyhunter.fileprovider/shared_images/photo.jpg"
+            val cameraUri: Uri = mockk()
+            val error = SecurityException("Permission denied")
+            every { Uri.parse(cameraUriString) } returns cameraUri
+            every { contentResolver.takePersistableUriPermission(any(), any()) } throws error
+            every { tracer.recordError(error) } just Runs
+
+            // WHEN
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(ChangeImage(cameraUri))
+
+                // THEN
+                assertEquals(LaunchSnackBarError(ImportImage), awaitItem())
+                cancelAndIgnoreRemainingEvents()
+            }
+
+            // THEN
+            verify(exactly = 1) { contentResolver.takePersistableUriPermission(any(), any()) }
         }
 
     @Test
