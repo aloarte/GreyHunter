@@ -34,6 +34,8 @@ subprojects {
                     classes("*.navigation.*")
                     classes("*.domain.model.helpers.*")
                     classes("**/*_Impl")
+                    classes("*.MainActivity")
+                    classes("*.GreyHunterApplication")
 
                 }
             }
@@ -54,6 +56,9 @@ extensions.configure<KoverProjectExtension> {
                 classes("*.framework.theme.*")
                 classes("*.domain.model.helpers.*")
                 classes("**/*_Impl")
+                classes("*.MainActivity")
+                classes("*.GreyHunterApplication")
+
             }
         }
     }
