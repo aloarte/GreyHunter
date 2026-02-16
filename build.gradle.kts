@@ -32,8 +32,10 @@ subprojects {
                     classes("*_Impl")
                     classes("*.framework.theme.*")
                     classes("*.navigation.*")
-                    classes("*.domain.model.helpers.*")
+                    classes("**.*PreviewData*")
                     classes("**/*_Impl")
+                    classes("**.MainActivity")
+                    classes("**.GreyHunterApplication")
 
                 }
             }
@@ -43,6 +45,7 @@ subprojects {
     pluginManager.withPlugin("com.android.base") {
     }
 }
+
 extensions.configure<KoverProjectExtension> {
     reports {
         filters {
@@ -50,10 +53,12 @@ extensions.configure<KoverProjectExtension> {
                 classes("*.di.*")
                 classes("*.BuildConfig")
                 classes("*_Impl")
-                classes("*.navigation.*")
                 classes("*.framework.theme.*")
-                classes("*.domain.model.helpers.*")
+                classes("*.navigation.*")
+                classes("**.*PreviewData*")
                 classes("**/*_Impl")
+                classes("**.MainActivity*")
+                classes("**.GreyHunterApplication*")
             }
         }
     }

@@ -58,8 +58,8 @@ class HomeViewModel(
         }
     }
 
-    private fun initHomeData(bigScreen:Boolean) = viewModelScope.launch {
-        val columnNumber = if(bigScreen) 3 else 2
+    private fun initHomeData(bigScreen: Boolean) = viewModelScope.launch {
+        val columnNumber = if (bigScreen) 3 else 2
         combine(
             projectRepository.getAllProjects(),
             projectRepository.getAlmostDoneProjects(columnNumber),
@@ -103,7 +103,6 @@ class HomeViewModel(
             AlmostDone(almostDoneProjects.first().name)
         } else if (projects.isNotEmpty()) {
             val progressAverage = projects
-                //.removeOutliers()
                 .map { it.progress }
                 .average()
                 .toFloat()
@@ -121,11 +120,5 @@ class HomeViewModel(
             None
         }
         updateState { copy(gamificationSentence = gamificationMessage) }
-    }
-
-    fun List<ProjectBo>.removeOutliers(): List<ProjectBo> {
-        val sorted = this.map { it.progress }.sorted()
-        val median = sorted[sorted.size / 2]
-        return filter { it.progress >= median * 0.5f }
     }
 }

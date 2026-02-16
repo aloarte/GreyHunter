@@ -30,9 +30,6 @@ class ProjectRepositoryImpl(
 
     override suspend fun getAllProjects(): Flow<List<ProjectBo>> =
         projectDao.getAllProjects().filterNotNull().flatMapLatest { projectEntities ->
-            if (projectEntities.isEmpty()) {
-                return@flatMapLatest flowOf(emptyList())
-            }
             val miniatureFlows: List<Flow<List<MiniatureEntity>>> = projectEntities.map { project ->
                 miniatureDao.getMiniaturesByProject(project.id)
             }
@@ -54,9 +51,6 @@ class ProjectRepositoryImpl(
         projectDao.getProjectById(projectId)
             .filterNotNull()
             .flatMapLatest { projectEntity ->
-                if (projectEntity == null) {
-                    return@flatMapLatest flowOf(null)
-                }
                 miniatureDao.getMiniaturesByProject(projectEntity.id)
                     .filterNotNull()
                     .map { miniatureList ->
@@ -70,10 +64,7 @@ class ProjectRepositoryImpl(
             }
 
     override suspend fun getLastUpdatedProject(): Flow<ProjectBo?> =
-        projectDao.getLastUpdatedProject().flatMapLatest { projectEntity ->
-            if (projectEntity == null) {
-                return@flatMapLatest flowOf(null)
-            }
+        projectDao.getLastUpdatedProject().filterNotNull().flatMapLatest { projectEntity ->
             miniatureDao.getMiniaturesByProject(projectEntity.id)
                 .filterNotNull()
                 .map { miniatureList ->
