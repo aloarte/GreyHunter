@@ -1,4 +1,4 @@
-package com.devalr.greyhunter.composables
+package com.devalr.greyhunter.components
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable

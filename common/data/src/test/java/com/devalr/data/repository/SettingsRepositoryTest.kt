@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.Preferences
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.enums.ThemeType
 import com.devalr.data.file.CSVManager
+import com.devalr.domain.SettingsRepository
 import com.devalr.domain.enums.ProgressColorType
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.stormlightArchiveProject
@@ -42,7 +43,7 @@ class SettingsRepositoryTest {
     val temporaryFolder = TemporaryFolder()
 
     private lateinit var dataStore: DataStore<Preferences>
-    private lateinit var repository: SettingsRepositoryImpl
+    private lateinit var repository: SettingsRepository
     private var csvManager: CSVManager = mockk()
     val contentResolver: ContentResolver = mockk()
     private var projectRepository: ProjectRepository = mockk()

@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,7 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.devalr.framework.components.empty.EmptyScreen
 import com.devalr.framework.components.snackbar.SnackBarType
 import com.devalr.framework.components.snackbar.SnackBarVisualsCustom
-import com.devalr.settings.composables.SettingsScreenContent
+import com.devalr.settings.components.SettingsScreenContent
 import com.devalr.settings.interactions.Action.ChangeAppearance
 import com.devalr.settings.interactions.Action.ChangeProgressColors
 import com.devalr.settings.interactions.Action.ExportProjects

@@ -46,7 +46,12 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.androidx.compose.material3.window.size)
     api("androidx.compose.material:material-icons-extended")
+
+
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.test.manifest)
     testImplementation(libs.junit)
+    testImplementation(libs.androidx.junit.ktx)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     debugImplementation(libs.ui.tooling)

@@ -8,6 +8,7 @@ import com.devalr.data.TestData.mini2Bo
 import com.devalr.data.TestData.mini2Entity
 import com.devalr.data.database.miniature.MiniatureDao
 import com.devalr.data.database.miniature.MiniatureEntity
+import com.devalr.domain.MiniatureRepository
 import com.devalr.domain.mappers.Mapper
 import com.devalr.domain.model.MiniatureBo
 import io.mockk.coEvery
@@ -37,7 +38,7 @@ class MiniatureRepositoryTest {
     private val fixedClock = Clock.fixed(Instant.parse("2022-01-01T00:00:00Z"), ZoneId.of("UTC"))
     private val date = 1640995200000L
 
-    private lateinit var repository: MiniatureRepositoryImpl
+    private lateinit var repository: MiniatureRepository
 
     @Before
     fun setUp() {

@@ -1,4 +1,4 @@
-package com.devalr.settings.composables
+package com.devalr.settings.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

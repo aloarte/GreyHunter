@@ -22,7 +22,7 @@ import com.devalr.framework.AppTracer
 import com.devalr.framework.components.progress.ProvideProgressColors
 import com.devalr.framework.components.snackbar.GHSnackBar
 import com.devalr.framework.theme.GreyHunterTheme
-import com.devalr.greyhunter.composables.InitProgressColors
+import com.devalr.greyhunter.components.InitProgressColors
 import com.devalr.greyhunter.navigation.NavHost
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.koin.android.ext.android.inject

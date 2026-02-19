@@ -1,6 +1,5 @@
 package com.devalr.createproject.interactions
 
-import com.devalr.createproject.model.MiniatureVo
 import com.devalr.domain.model.ProjectBo
 
 enum class ErrorType {
@@ -13,7 +12,6 @@ enum class ErrorType {
 
 data class State(
     val error: Boolean = false,
-    val projectMinis: List<MiniatureVo>? = null,
     val projectName: String? = null,
     val projectDescription: String? = null,
     val projectImage: String? = null,
