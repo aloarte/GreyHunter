@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "label": "coverage",
-  "message": "25%",
-  "color": "#e0882e"
+  "label": "Unit test coverage",
+  "message": "91%",
+  "color": "#67be13"
 }
