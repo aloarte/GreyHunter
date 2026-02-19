@@ -25,6 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.enums.MilestoneType
@@ -33,6 +35,7 @@ import com.devalr.domain.enums.MilestoneType.Base
 import com.devalr.domain.enums.MilestoneType.BaseColored
 import com.devalr.domain.enums.MilestoneType.Details
 import com.devalr.domain.enums.MilestoneType.Primed
+import com.devalr.framework.DETAIL_MINIATURE_MILESTONE
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
 import com.devalr.framework.theme.GreyHunterTheme
@@ -87,6 +90,7 @@ fun MilestoneSection(
 
             GHText(text = getMiniatureMilestoneText(type), type = TextType.LabelM)
             Checkbox(
+                modifier = Modifier.semantics{ contentDescription = "$DETAIL_MINIATURE_MILESTONE${type.name}"},
                 checked = milestoneAchieved,
                 onCheckedChange = { updateMilestone(type, it) }
             )

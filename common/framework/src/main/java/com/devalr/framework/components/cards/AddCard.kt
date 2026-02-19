@@ -21,8 +21,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.devalr.framework.FRAMEWORK_ADD_CARD
 import com.devalr.framework.R
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
@@ -33,6 +36,9 @@ import com.devalr.framework.theme.GreyHunterTheme
 fun AddCard(modifier: Modifier = Modifier, type: CardType, onCreate: () -> Unit) {
     Card(
         modifier = modifier
+            .semantics{
+                contentDescription = FRAMEWORK_ADD_CARD
+            }
             .width(cardWidthFor(type))
             .aspectRatio(1.6f),
         onClick = { onCreate() }

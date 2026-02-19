@@ -1,0 +1,44 @@
+appId: com.devalr.greyhunter
+---
+- launchApp:
+    clearState: true
+
+- waitForAnimationToEnd:
+    timeout: 5000
+# Navigate to createproject screen
+- tapOn: framework_add_card
+
+# Create a project (this will cause a back)
+- tapOn: "Project name"
+- inputText: "Test project 1"
+- tapOn: create_projects_submit_button
+
+# Enter on the created project called Test project 1
+- tapOn: "Test project 1"
+# And navigate to createminiature screen
+- tapOn: detail_project_create_mini_fab
+
+# Create a miniature
+- tapOn: "Miniature name"
+- inputText: "Test miniature 1"
+- tapOn: create_miniature_submit_button
+
+# Enter on the created miniature called Test miniature 1
+- tapOn: "Test miniature 1"
+
+- tapOn: detail_miniature_milestone_Assembled
+- tapOn: detail_miniature_milestone_Primed
+- tapOn: detail_miniature_milestone_BaseColored
+- tapOn: detail_miniature_milestone_Details
+
+- back
+- back
+
+- scrollUntilVisible:
+    element: home_recent_minis
+    direction: DOWN
+
+- assertVisible: home_nearly_completed_projects
+- assertVisible: home_recent_minis
+
+- back

@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.helpers.chronomancer
 import com.devalr.domain.model.helpers.immortal
+import com.devalr.framework.HOME_RECENT_MINIS
 import com.devalr.framework.components.markedtext.MarkedText
 import com.devalr.framework.components.row.ResponsiveRow
 import com.devalr.framework.theme.GreyHunterTheme
@@ -28,7 +29,11 @@ fun LastUpdatedMiniatures(
 ) {
     if (miniatures.isNotEmpty()) {
         Column(modifier = Modifier.padding(25.dp)) {
-            MarkedText(text = stringResource(R.string.title_last_updated_miniatures), title = true)
+            MarkedText(
+                testTag = HOME_RECENT_MINIS,
+                text = stringResource(R.string.title_last_updated_miniatures),
+                title = true
+            )
             Spacer(modifier = Modifier.height(20.dp))
             ResponsiveRow(items = miniatures) { miniature ->
                 MiniatureCard(

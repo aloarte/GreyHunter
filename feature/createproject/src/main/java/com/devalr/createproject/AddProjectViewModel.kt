@@ -144,7 +144,6 @@ class AddProjectViewModel(
     }
 
     private fun submitError(error: Throwable, errorType: ErrorType? = null) {
-        updateState { copy(error = true) }
         tracer.recordError(error)
         errorType?.let { sendEvent(LaunchSnackBarError(errorType)) }
     }
