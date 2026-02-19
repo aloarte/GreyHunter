@@ -12,6 +12,7 @@ import com.devalr.data.database.ProjectEntityData
 import com.devalr.data.database.miniature.MiniatureDao
 import com.devalr.data.database.miniature.MiniatureEntity
 import com.devalr.data.database.project.ProjectDao
+import com.devalr.domain.ProjectRepository
 import com.devalr.domain.mappers.Mapper
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.domain.model.ProjectBo
@@ -42,7 +43,7 @@ class ProjectRepositoryTest {
     private val fixedClock = Clock.fixed(Instant.parse("2022-01-01T00:00:00Z"), ZoneId.of("UTC"))
     private val date = 1640995200000L
 
-    private lateinit var repository: ProjectRepositoryImpl
+    private lateinit var repository: ProjectRepository
 
 
     @Before

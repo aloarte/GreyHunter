@@ -96,7 +96,7 @@ jobs:
           cat <<EOF > badges/coverage.json
           {
             "schemaVersion": 1,
-            "label": "coverage",
+            "label": "Unit test coverage",
             "message": "${COVERAGE}%",
             "color": "${COLOR}"
           }

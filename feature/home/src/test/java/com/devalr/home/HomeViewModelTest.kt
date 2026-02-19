@@ -9,11 +9,15 @@ import com.devalr.domain.model.ProjectBo
 import com.devalr.framework.AppTracer
 import com.devalr.home.interactions.Action.AddProject
 import com.devalr.home.interactions.Action.Load
+import com.devalr.home.interactions.Action.OpenMiniatureDetail
 import com.devalr.home.interactions.Action.OpenProjectDetail
+import com.devalr.home.interactions.Action.OpenSettings
 import com.devalr.home.interactions.Action.StartPainting
 import com.devalr.home.interactions.Action.UpdateGamificationMessage
 import com.devalr.home.interactions.Event.NavigateToAddProject
+import com.devalr.home.interactions.Event.NavigateToMiniature
 import com.devalr.home.interactions.Event.NavigateToProject
+import com.devalr.home.interactions.Event.NavigateToSettings
 import com.devalr.home.interactions.Event.NavigateToStartPaint
 import com.devalr.home.model.GamificationMessageType.AlmostDone
 import com.devalr.home.model.GamificationMessageType.EmptyProjects
@@ -98,7 +102,7 @@ class HomeViewModelTest {
             coEvery { projectRepository.getAllProjects() } returns flowOf(projects)
             coEvery { projectRepository.getAlmostDoneProjects(3) } returns flowOf(listOf(projects[1]))
             coEvery { miniatureRepository.getLastUpdatedMiniatures(3) } returns flowOf(
-                listOf(                    miniature)
+                listOf(miniature)
             )
 
             // WHEN
@@ -121,7 +125,7 @@ class HomeViewModelTest {
             assertEquals(expectedProjects, state.projects)
             assertEquals(listOf(miniature), state.lastUpdatedMinis)
             assertEquals(listOf(projects[1]), state.almostDoneProjects)
-            assertEquals(ProjectsStats(75,0,0,1,2), state.stats)
+            assertEquals(ProjectsStats(75, 0, 0, 1, 2), state.stats)
             assertFalse(state.error)
         }
 
@@ -177,8 +181,8 @@ class HomeViewModelTest {
             advanceUntilIdle()
 
             // THEN
-            coVerify(exactly = 1){ projectRepository.getAlmostDoneProjects(3) }
-            coVerify(exactly = 1){ miniatureRepository.getLastUpdatedMiniatures(3) }
+            coVerify(exactly = 1) { projectRepository.getAlmostDoneProjects(3) }
+            coVerify(exactly = 1) { miniatureRepository.getLastUpdatedMiniatures(3) }
             val state = viewModel.uiState.value
             assertTrue(state.error)
         }
@@ -232,6 +236,50 @@ class HomeViewModelTest {
                     awaitItem()
                 )
 
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+
+    @Test
+    fun `GIVEN recent miniatures loaded on home WHEN OpenMiniatureDetail is triggered THEN NavigateToMiniature event is sent`() =
+        runTest {
+            // GIVEN
+            coEvery { projectRepository.getAllProjects() } returns flowOf(emptyList())
+            coEvery { projectRepository.getAlmostDoneProjects(3) } returns flowOf(emptyList())
+            coEvery { miniatureRepository.getLastUpdatedMiniatures(3) } returns flowOf(
+                listOf(miniature)
+            )
+            viewModel.onAction(Load(true))
+            advanceUntilIdle()
+
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(OpenMiniatureDetail(miniature.id))
+
+                // THEN
+                assertEquals(
+                    NavigateToMiniature(miniature.id),
+                    awaitItem()
+                )
+                cancelAndIgnoreRemainingEvents()
+            }
+
+            // THEN
+            coVerify(exactly = 1) { projectRepository.getAllProjects() }
+            coVerify(exactly = 1) { projectRepository.getAlmostDoneProjects(3) }
+            coVerify(exactly = 1) { miniatureRepository.getLastUpdatedMiniatures(3) }
+        }
+
+    @Test
+    fun `WHEN OpenSettings is triggered THEN NavigateToSettings event is sent`() =
+        runTest {
+            viewModel.events.test {
+                // WHEN
+                viewModel.onAction(OpenSettings)
+
+                // THEN
+                assertEquals(NavigateToSettings, awaitItem())
                 cancelAndIgnoreRemainingEvents()
             }
         }

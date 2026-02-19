@@ -34,9 +34,14 @@ subprojects {
                     classes("*.navigation.*")
                     classes("**.*PreviewData*")
                     classes("**/*_Impl")
-                    classes("**.MainActivity")
+                    classes("*MainActivity*")
                     classes("**.GreyHunterApplication")
-
+                    classes("*ScreenKt*")
+                    classes("*Screen*")
+                    classes("*.components.*")
+                    classes("*.enum.*")
+                    classes("*.domain.*Repository")
+                    classes("*.domain.*RepositoryKt")
                 }
             }
         }
@@ -57,8 +62,15 @@ extensions.configure<KoverProjectExtension> {
                 classes("*.navigation.*")
                 classes("**.*PreviewData*")
                 classes("**/*_Impl")
-                classes("**.MainActivity*")
-                classes("**.GreyHunterApplication*")
+                classes("*MainActivity*")
+                classes("**.GreyHunterApplication")
+                classes("*ScreenKt*")
+                classes("*Screen*")
+                classes("*.components.*")
+                classes("*.enum.*")
+                classes("*.domain.*Repository")
+                classes("*.domain.*RepositoryKt")
+
             }
         }
     }
