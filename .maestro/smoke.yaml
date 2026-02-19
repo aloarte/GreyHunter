@@ -5,6 +5,7 @@ appId: com.devalr.greyhunter
 
 - waitForAnimationToEnd:
     timeout: 5000
+
 # Navigate to createproject screen
 - tapOn: framework_add_card
 
@@ -25,20 +26,43 @@ appId: com.devalr.greyhunter
 
 # Enter on the created miniature called Test miniature 1
 - tapOn: "Test miniature 1"
-
+# And update some of its milestones
 - tapOn: detail_miniature_milestone_Assembled
 - tapOn: detail_miniature_milestone_Primed
 - tapOn: detail_miniature_milestone_BaseColored
 - tapOn: detail_miniature_milestone_Details
 
+# Go back to home screen
 - back
 - back
 
+# Now we should have an almost finished project and an updated miniature
 - scrollUntilVisible:
     element: home_recent_minis
     direction: DOWN
-
 - assertVisible: home_nearly_completed_projects
 - assertVisible: home_recent_minis
 
+# Navigate to the start paint feature
+- tapOn: Start Painting
+- tapOn: "Test miniature 1"
+- tapOn: start_painting_button
+- tapOn: finish_painting_button
+# Scroll until button is visible and click on it to get out back to home
+- scrollUntilVisible:
+    element: detail_miniature_update_button
+    direction: DOWN
+- tapOn: detail_miniature_update_button
+
+# Navigate to settings
+- tapOn: framework_top_button_settings
+- assertVisible: settings_title
 - back
+
+# Press back to display the exit dialog from home
+- back
+- assertVisible: bottom_sheet_positive
+
+
+
+

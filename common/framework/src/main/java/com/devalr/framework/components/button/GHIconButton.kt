@@ -42,7 +42,7 @@ fun GHIconButton(
             Icon(
                 modifier = Modifier.size(20.dp),
                 imageVector = icon,
-                contentDescription = "Icon in a button",
+                contentDescription = null,
                 tint = if (enabled) MaterialTheme.colorScheme.onSurface
                 else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
             )
@@ -50,7 +50,7 @@ fun GHIconButton(
             Icon(
                 modifier = Modifier.size(20.dp),
                 painter = painter,
-                contentDescription = "Icon in a button",
+                contentDescription = null,
                 tint = if (enabled) MaterialTheme.colorScheme.onSurface
                 else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
             )
