@@ -87,3 +87,10 @@ jobs:
         with:
           commit_message: "chore: update smoke badge"
           file_pattern: badges/smoke.json
+
+      - name: Upload Maestro artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-debug
+          path: ~/.maestro/tests

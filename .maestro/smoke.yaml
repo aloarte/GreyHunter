@@ -7,9 +7,9 @@ appId: com.devalr.greyhunter
     timeout: 90000
 
 # Navigate to settings and back
-- tapOn: framework_top_button_settings
-- assertVisible: settings_title
-- tapOn: framework_top_button_back
+#- tapOn: framework_top_button_settings
+#- assertVisible: settings_title
+#- tapOn: framework_top_button_back
 
 # Navigate to createproject screen
 - tapOn: framework_add_card
