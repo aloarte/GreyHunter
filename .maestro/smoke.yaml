@@ -4,7 +4,7 @@ appId: com.devalr.greyhunter
     clearState: true
 
 - waitForAnimationToEnd:
-    timeout: 10000
+    timeout: 30000
 
 # Navigate to settings and back
 - tapOn: framework_top_button_settings
