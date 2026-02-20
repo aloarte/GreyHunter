@@ -45,20 +45,24 @@ jobs:
         with:
           api-level: 26
           target: google_apis
-          arch: x86
+          arch: arm64
           profile: Nexus 6
           script: |
+            echo "Run Android 1"
+
             adb start-server
+            echo "Run Android 2"
+
             adb wait-for-device
-        
+
             echo "Waiting for boot..."
             
-            timeout 300 bash -c '
+            timeout 600 bash -c '  # ARM arranca más lento, damos 10 minutos
             until adb shell getprop sys.boot_completed 2>/dev/null | grep -m 1 "1"; do
-            sleep 5
+              sleep 5
             done
             '
-          
+            
             adb install app/build/outputs/apk/debug/app-debug.apk
             maestro test .maestro/smoke.yaml
 
