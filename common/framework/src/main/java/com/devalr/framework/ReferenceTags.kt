@@ -1,7 +1,7 @@
 package com.devalr.framework
 
 const val FRAMEWORK_ADD_CARD = "framework_add_card"
-const val FRAMEWORK_TOP_BUTTON_DELETE = "framework_top_button_delete"
+const val FRAMEWORK_TOP_BUTTON_BACK = "framework_top_button_back"
 const val FRAMEWORK_TOP_BUTTON_SETTINGS = "framework_top_button_settings"
 
 const val HOME_NEARLY_COMPLETED_PROJECTS = "home_nearly_completed_projects"

@@ -6,6 +6,11 @@ appId: com.devalr.greyhunter
 - waitForAnimationToEnd:
     timeout: 5000
 
+# Navigate to settings and back
+- tapOn: framework_top_button_settings
+- assertVisible: settings_title
+- tapOn: framework_top_button_back
+
 # Navigate to createproject screen
 - tapOn: framework_add_card
 
@@ -62,7 +67,3 @@ appId: com.devalr.greyhunter
 # Press back to display the exit dialog from home
 - back
 - assertVisible: bottom_sheet_positive
-
-
-
-

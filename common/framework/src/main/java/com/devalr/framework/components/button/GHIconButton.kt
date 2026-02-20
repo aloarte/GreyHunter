@@ -17,6 +17,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.framework.theme.GreyHunterTheme
@@ -27,11 +29,13 @@ fun GHIconButton(
     enabled: Boolean = true,
     icon: ImageVector? = null,
     painter: Painter? = null,
+    testTag: String = "",
     onButtonClicked: () -> Unit
 ) {
     Box(
         modifier = modifier
             .size(35.dp)
+            .semantics { contentDescription = testTag }
             .shadow(elevation = 6.dp, shape = CircleShape)
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.surface)
@@ -40,7 +44,8 @@ fun GHIconButton(
     ) {
         icon?.let {
             Icon(
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier
+                    .size(20.dp),
                 imageVector = icon,
                 contentDescription = null,
                 tint = if (enabled) MaterialTheme.colorScheme.onSurface
@@ -48,7 +53,8 @@ fun GHIconButton(
             )
         } ?: painter?.let {
             Icon(
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier
+                    .size(20.dp),
                 painter = painter,
                 contentDescription = null,
                 tint = if (enabled) MaterialTheme.colorScheme.onSurface

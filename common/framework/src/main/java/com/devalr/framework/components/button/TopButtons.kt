@@ -10,12 +10,9 @@ import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.devalr.framework.FRAMEWORK_TOP_BUTTON_DELETE
-import com.devalr.framework.FRAMEWORK_TOP_BUTTON_SETTINGS
+import com.devalr.framework.FRAMEWORK_TOP_BUTTON_BACK
 import com.devalr.framework.R
 import com.devalr.framework.theme.GreyHunterTheme
 
@@ -28,6 +25,7 @@ fun TopButtons(
 ) {
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         GHIconButton(
+            testTag = FRAMEWORK_TOP_BUTTON_BACK,
             icon = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
             onButtonClicked = onNavigateBack
         )
@@ -35,9 +33,6 @@ fun TopButtons(
             if (onEdit != null) {
                 Spacer(modifier = Modifier.width(10.dp))
                 GHIconButton(
-                    modifier = Modifier.semantics {
-                        contentDescription = FRAMEWORK_TOP_BUTTON_SETTINGS
-                    },
                     painter = painterResource(R.drawable.ic_edit),
                     onButtonClicked = onEdit
                 )
@@ -45,9 +40,6 @@ fun TopButtons(
             if (onDelete != null) {
                 Spacer(modifier = Modifier.width(10.dp))
                 GHIconButton(
-                    modifier = Modifier.semantics {
-                        contentDescription = FRAMEWORK_TOP_BUTTON_DELETE
-                    },
                     painter = painterResource(R.drawable.ic_delete),
                     onButtonClicked = onDelete
                 )
