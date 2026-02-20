@@ -43,7 +43,7 @@ jobs:
       - name: Run Android Emulator and execute smoke flow
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 26
+          api-level: 28
           target: google_apis
           arch: x86
           profile: Nexus 6
