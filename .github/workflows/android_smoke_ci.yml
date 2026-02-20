@@ -43,11 +43,22 @@ jobs:
       - name: Run Android Emulator and execute smoke flow
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 26
           target: google_apis
           arch: x86
           profile: Nexus 6
           script: |
+            adb start-server
+            adb wait-for-device
+        
+            echo "Waiting for boot..."
+            
+            timeout 300 bash -c '
+            until adb shell getprop sys.boot_completed 2>/dev/null | grep -m 1 "1"; do
+            sleep 5
+            done
+            '
+          
             adb install app/build/outputs/apk/debug/app-debug.apk
             maestro test .maestro/smoke.yaml
 
