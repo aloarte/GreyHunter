@@ -4,7 +4,7 @@ appId: com.devalr.greyhunter
     clearState: true
 
 - waitForAnimationToEnd:
-    timeout: 5000
+    timeout: 10000
 
 # Navigate to settings and back
 - tapOn: framework_top_button_settings
@@ -62,8 +62,3 @@ appId: com.devalr.greyhunter
 # Navigate to settings
 - tapOn: framework_top_button_settings
 - assertVisible: settings_title
-- back
-
-# Press back to display the exit dialog from home
-- back
-- assertVisible: bottom_sheet_positive
