@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.ProjectBo
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.stormlightArchiveProject
+import com.devalr.framework.HOME_NEARLY_COMPLETED_PROJECTS
 import com.devalr.framework.components.markedtext.MarkedText
 import com.devalr.framework.components.row.ResponsiveRow
 import com.devalr.framework.enum.CardType
@@ -29,7 +30,11 @@ fun AlmostDoneProjects(
 ) {
     if (projects.isNotEmpty()) {
         Column(modifier = Modifier.padding(25.dp)) {
-            MarkedText(text = stringResource(R.string.title_almost_done_projects), title = true)
+            MarkedText(
+                testTag = HOME_NEARLY_COMPLETED_PROJECTS,
+                text = stringResource(R.string.title_almost_done_projects),
+                title = true
+            )
             Spacer(modifier = Modifier.height(20.dp))
             ResponsiveRow(items = projects) { project ->
                 ProjectCard(

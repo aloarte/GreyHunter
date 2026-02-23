@@ -22,9 +22,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
+import com.devalr.framework.DETAIL_PROJECT_CREATE_MINI_FAB
 import com.devalr.framework.components.gh.GHImage
 import com.devalr.framework.components.gh.GHText
 import com.devalr.framework.components.gh.TextType
@@ -93,13 +98,25 @@ fun ProjectMiniatures(
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
-        FloatingActionButton(
-            shape = CircleShape,
-            containerColor = MaterialTheme.colorScheme.primary,
-            onClick = onCreateMiniature
+        Box(modifier = Modifier
+            .background(Color.Transparent)
+            .semantics {
+                contentDescription = DETAIL_PROJECT_CREATE_MINI_FAB
+            }){
+            FloatingActionButton(
+                modifier = Modifier
+                    .testTag(DETAIL_PROJECT_CREATE_MINI_FAB)
+                    .semantics {
+                        contentDescription = DETAIL_PROJECT_CREATE_MINI_FAB
+                    },
+                shape = CircleShape,
+                containerColor = MaterialTheme.colorScheme.primary,
+                onClick = onCreateMiniature
 
-        ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "")
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "")
+            }
+
         }
         Spacer(modifier = Modifier.height(10.dp))
     }

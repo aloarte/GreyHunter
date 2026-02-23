@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -30,7 +32,8 @@ fun MarkedText(
     fillSpace: Boolean = false,
     color: Color = MaterialTheme.colorScheme.primary,
     doubleBars: Boolean = false,
-    barsSize: Dp = 25.dp
+    barsSize: Dp = 25.dp,
+    testTag: String = ""
 ) {
     Row(
         modifier = modifier.then(if (fillSpace) Modifier.fillMaxWidth() else Modifier),
@@ -40,11 +43,13 @@ fun MarkedText(
         GHVerticalShape(color = color, height = barsSize)
         if (!(fillSpace && doubleBars)) Spacer(modifier = Modifier.width(10.dp))
         GHText(
-            modifier = Modifier.then(
-                if (doubleBars && fillSpace) {
-                    Modifier.fillMaxWidth(0.9f)
-                } else Modifier
-            ),
+            modifier = Modifier
+                .then(
+                    if (doubleBars && fillSpace) {
+                        Modifier.fillMaxWidth(0.9f)
+                    } else Modifier
+                )
+                .semantics { contentDescription = testTag },
             textAlign = TextAlign.Start,
             textColor = textColor,
             text = text,

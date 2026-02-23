@@ -15,11 +15,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.createminiature.R
 import com.devalr.domain.model.helpers.hierotekCircleProject
 import com.devalr.domain.model.helpers.technomancer
+import com.devalr.framework.CREATE_MINIATURE_SUBMIT_BUTTON
 import com.devalr.framework.components.add.AddItemName
 import com.devalr.framework.components.button.GHButton
 import com.devalr.framework.components.button.TopButtons
@@ -87,6 +90,9 @@ fun AddMiniatureScreenContent(
             item { Spacer(modifier = Modifier.height(20.dp)) }
             item {
                 GHButton(
+                    modifier = Modifier.semantics {
+                        contentDescription = CREATE_MINIATURE_SUBMIT_BUTTON
+                    },
                     text = if (editMode) stringResource(R.string.button_edit_miniature) else stringResource(
                         R.string.button_add_miniature
                     ),
