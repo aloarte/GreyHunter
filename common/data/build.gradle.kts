@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.commons.csv)
 
     testImplementation(libs.junit)
     testImplementation(libs.androidx.core)

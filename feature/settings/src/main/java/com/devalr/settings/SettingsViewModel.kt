@@ -70,20 +70,37 @@ class SettingsViewModel(
 
     private fun importProjects(uri: Uri) =
         viewModelScope.launch {
-            if (settingsRepository.importData(uri.toString())) {
-                sendEvent(
-                    LaunchSnackBar(type = SnackBarType.SUCCESS, operation = OperationType.Import)
-                )
-            } else {
-                submitError(Exception("importProjects $uri error"), ErrorType.Import)
+            try {
+                if (settingsRepository.importData(uri.toString())) {
+                    sendEvent(
+                        LaunchSnackBar(
+                            type = SnackBarType.SUCCESS,
+                            operation = OperationType.Import
+                        )
+                    )
+                } else {
+                    submitError(Exception("importProjects $uri error"), ErrorType.Import)
+                }
+
+            } catch (e: Exception) {
+                submitError(e, ErrorType.Import)
             }
         }
 
     private fun exportProjects(uri: Uri) = viewModelScope.launch {
-        if (settingsRepository.exportData(uri.toString())) {
-            sendEvent(LaunchSnackBar(type = SnackBarType.SUCCESS, operation = OperationType.Export))
-        } else {
-            submitError(Exception("exportProjects $uri error"), ErrorType.Export)
+        try {
+            if (settingsRepository.exportData(uri.toString())) {
+                sendEvent(
+                    LaunchSnackBar(
+                        type = SnackBarType.SUCCESS,
+                        operation = OperationType.Export
+                    )
+                )
+            } else {
+                submitError(Exception("exportProjects $uri error"), ErrorType.Export)
+            }
+        } catch (e: Exception) {
+            submitError(e, ErrorType.Export)
         }
     }
 
