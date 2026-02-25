@@ -6,11 +6,11 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.devalr.data.file.CSVManager
 import com.devalr.domain.ProjectRepository
 import com.devalr.domain.SettingsRepository
 import com.devalr.domain.enums.ProgressColorType
 import com.devalr.domain.enums.ThemeType
-import com.devalr.data.file.CSVManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -75,7 +75,7 @@ class SettingsRepositoryImpl(
             csvManager.writeProjectsToCSV(outputStream, projects)
         } ?: false
     } catch (e: Exception) {
-        false
+        throw e
     }
 
 
@@ -89,7 +89,7 @@ class SettingsRepositoryImpl(
         } ?: false
 
     } catch (e: Exception) {
-        false
+        throw e
     }
 
 
