@@ -31,7 +31,9 @@
     <string name="label_settings_changelog">Changelog</string>
 
     <!-- Changelog -->
-    <string name="changelog_26_1_0">Initial release.</string>
+    <string name="changelog_26_2_1">Initial release.</string>
+    <string name="changelog_26_2_2">Stability fixes. Import improvements.</string>
+
 
     <!-- SnackBar -->
     <string name="snack_bar_datastore_retrieval_error">Preferences couldn’t be loaded. Please try again.</string>

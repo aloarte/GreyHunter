@@ -31,7 +31,8 @@
     <string name="label_settings_changelog">Registro de cambios</string>
 
     <!-- Changelog -->
-    <string name="changelog_26_1_0">Versión inicial.</string>
+    <string name="changelog_26_2_1">Versión inicial.</string>
+    <string name="changelog_26_2_2">Mejoras de estabilidad y optimización del proceso de importación.</string>
 
     <!-- SnackBar -->
     <string name="snack_bar_datastore_retrieval_error">No se pudieron cargar las preferencias. Inténtalo de nuevo.</string>
