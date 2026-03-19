@@ -33,6 +33,7 @@
     <!-- Changelog -->
     <string name="changelog_26_2_1">Versión inicial.</string>
     <string name="changelog_26_2_2">Mejoras de estabilidad y optimización del proceso de importación.</string>
+    <string name="changelog_26_3_1">Cambio de icono.</string>
 
     <!-- SnackBar -->
     <string name="snack_bar_datastore_retrieval_error">No se pudieron cargar las preferencias. Inténtalo de nuevo.</string>

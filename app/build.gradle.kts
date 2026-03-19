@@ -31,8 +31,8 @@ android {
         applicationId = "com.devalr.greyhunter"
         minSdk = 28
         targetSdk = 36
-        versionCode = 4
-        versionName = "26.2.2"
+        versionCode = 5
+        versionName = "26.3.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
