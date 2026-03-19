@@ -85,10 +85,10 @@ fun AppInfo(appVersion: String) {
 
 @Composable
 private fun getChangeLogContent(): Map<String, String> = mapOf(
+    "26.3.1" to stringResource(R.string.changelog_26_3_1),
     "26.2.2" to stringResource(R.string.changelog_26_2_2),
     "26.2.1" to stringResource(R.string.changelog_26_2_1)
 )
-
 
 @Preview(showBackground = true)
 @Composable
