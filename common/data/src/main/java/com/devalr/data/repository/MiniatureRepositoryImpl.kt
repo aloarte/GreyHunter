@@ -16,8 +16,9 @@ class MiniatureRepositoryImpl(
     private val clock: Clock = Clock.systemDefaultZone()
 ) : MiniatureRepository {
     override suspend fun addMiniature(miniature: MiniatureBo): Long {
+        val lastOrder = miniatureDao.getLastSortOrder(miniature.projectId) ?: 0
         val entityMiniature = miniatureDatabaseMapper.transformReverse(miniature)
-        return miniatureDao.insertMiniature(entityMiniature.copy(id = 0))
+        return miniatureDao.insertMiniature(entityMiniature.copy(id = 0, sortOrder = lastOrder+1))
     }
 
     override suspend fun getMiniature(miniatureId: Long): Flow<MiniatureBo?> =
