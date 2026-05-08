@@ -23,17 +23,20 @@ import com.devalr.domain.model.ProjectBo
 import com.devalr.framework.components.button.TopButtons
 import com.devalr.framework.components.gh.GHImage
 import com.devalr.framework.theme.GreyHunterTheme
+import com.devalr.projectdetail.model.SortDirection
 
 @Composable
 fun ProjectDetailScreenContent(
     modifier: Modifier = Modifier,
     innerPadding: PaddingValues = PaddingValues(0.dp),
     project: ProjectBo,
+    animatedMiniIds: Pair<Long, Long>? = null,
     onNavigateToMiniature: (Long) -> Unit,
     onNavigateBack: () -> Unit,
     onCreateMiniature: () -> Unit,
     onEditProject: () -> Unit,
-    onDeleteProject: () -> Unit
+    onDeleteProject: () -> Unit,
+    onSortMiniature: (SortDirection, Long) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -87,8 +90,10 @@ fun ProjectDetailScreenContent(
                         item {
                             ProjectMiniatures(
                                 miniatures = project.minis,
+                                animatedMiniIds = animatedMiniIds,
                                 onNavigateToMiniature = onNavigateToMiniature,
-                                onCreateMiniature = onCreateMiniature
+                                onCreateMiniature = onCreateMiniature,
+                                onSortMiniature = onSortMiniature
                             )
                         }
                     }
@@ -134,6 +139,9 @@ private fun ProjectDetailScreenContentPreviewLightTheme() {
                 },
                 onDeleteProject = {
                     // Do nothing
+                },
+                onSortMiniature = { _, _ ->
+                    // Do nothing
                 }
             )
         }
@@ -177,6 +185,9 @@ private fun ProjectDetailScreenContentPreviewDarkTheme() {
                     // Do nothing
                 },
                 onDeleteProject = {
+                    // Do nothing
+                },
+                onSortMiniature = { _, _ ->
                     // Do nothing
                 }
             )

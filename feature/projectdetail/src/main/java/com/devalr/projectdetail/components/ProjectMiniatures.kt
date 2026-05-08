@@ -4,18 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,18 +25,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.devalr.domain.model.MiniatureBo
 import com.devalr.framework.DETAIL_PROJECT_CREATE_MINI_FAB
-import com.devalr.framework.components.gh.GHImage
-import com.devalr.framework.components.gh.GHText
-import com.devalr.framework.components.gh.TextType
-import com.devalr.framework.components.progress.GHCircularProgress
-import com.devalr.framework.components.progress.LocalProgressColors
 import com.devalr.framework.theme.GreyHunterTheme
+import com.devalr.projectdetail.model.SortDirection
 
 @Composable
 fun ProjectMiniatures(
     miniatures: List<MiniatureBo>,
+    animatedMiniIds: Pair<Long, Long>? = null,
     onNavigateToMiniature: (Long) -> Unit,
-    onCreateMiniature: () -> Unit
+    onCreateMiniature: () -> Unit,
+    onSortMiniature: (SortDirection, Long) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -51,58 +44,22 @@ fun ProjectMiniatures(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         miniatures.forEach { miniature ->
-            Card(
-                modifier = Modifier,
-                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-                shape = RoundedCornerShape(5.dp),
-                onClick = { onNavigateToMiniature(miniature.id) }
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surface)
-                        .padding(end = 20.dp)
-                        .height(80.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    GHImage(
-                        modifier = Modifier,
-                        imageUri = miniature.imageUri,
-                        size = 80.dp,
-                        borderRadius = 0.dp
-                    )
-                    GHText(
-                        modifier = Modifier.fillMaxWidth(.5f),
-                        text = miniature.name.capitalize(),
-                        type = TextType.LabelL,
-                        singleLane = true
-                    )
-                    Box(
-                        modifier = Modifier.size(40.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        GHText(
-                            text = "${(miniature.percentage * 100).toInt()}%",
-                            type = TextType.LabelS,
-                            singleLane = true
-                        )
-                        GHCircularProgress(
-                            percentage = miniature.percentage,
-                            spectrum = LocalProgressColors.current
-                        )
-                    }
-
-                }
-            }
+            MiniatureCardRow(
+                miniature = miniature,
+                upDisabled = miniatures.indexOf(miniature) == 0,
+                downDisabled = miniatures.indexOf(miniature) == miniatures.size - 1,
+                animate = animatedMiniIds?.first == miniature.id || animatedMiniIds?.second == miniature.id,
+                onNavigateToMiniature = onNavigateToMiniature,
+                onSortMiniature = onSortMiniature
+            )
         }
         Spacer(modifier = Modifier.height(10.dp))
-        Box(modifier = Modifier
-            .background(Color.Transparent)
-            .semantics {
-                contentDescription = DETAIL_PROJECT_CREATE_MINI_FAB
-            }){
+        Box(
+            modifier = Modifier
+                .background(Color.Transparent)
+                .semantics {
+                    contentDescription = DETAIL_PROJECT_CREATE_MINI_FAB
+                }) {
             FloatingActionButton(
                 modifier = Modifier
                     .testTag(DETAIL_PROJECT_CREATE_MINI_FAB)
@@ -139,6 +96,9 @@ private fun ProjectMiniaturesLightModePreview() {
                 },
                 onNavigateToMiniature = {
                     // Do nothing
+                },
+                onSortMiniature = { _, _ ->
+                    // Do nothing
                 }
             )
         }
@@ -161,6 +121,9 @@ private fun ProjectMiniaturesDarkModePreview() {
                     // Do nothing
                 },
                 onNavigateToMiniature = {
+                    // Do nothing
+                },
+                onSortMiniature = { _, _ ->
                     // Do nothing
                 }
             )
