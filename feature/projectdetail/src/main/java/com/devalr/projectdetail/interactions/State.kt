@@ -6,8 +6,10 @@ enum class ErrorType {
     RetrievingDatabase,
     Delete
 }
+
 data class State(
     val error: Boolean = false,
     val projectLoaded: Boolean = false,
-    val project: ProjectBo? = null
+    val project: ProjectBo? = null,
+    var animatedMiniIds: Pair<Long,Long>? = null
 )

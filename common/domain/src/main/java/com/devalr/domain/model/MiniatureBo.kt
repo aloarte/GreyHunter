@@ -6,5 +6,6 @@ data class MiniatureBo(
     val name: String,
     val imageUri: String? = null,
     val percentage: Float = 0f,
+    val sortOrder: Int = 0,
     val completion: MiniCompletionBo = MiniCompletionBo()
 )

@@ -1,7 +1,6 @@
 package com.devalr.data.database.miniature
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -14,23 +13,29 @@ interface MiniatureDao {
     suspend fun insertMiniature(miniature: MiniatureEntity): Long
 
     @Update
-    suspend fun updateMiniature(miniature: MiniatureEntity) : Int
+    suspend fun updateMiniature(miniature: MiniatureEntity): Int
 
     @Query("DELETE FROM miniatures WHERE id = :miniatureId")
-    suspend fun deleteMiniature(miniatureId: Long) : Int
+    suspend fun deleteMiniature(miniatureId: Long): Int
 
     @Query("DELETE FROM miniatures")
     suspend fun deleteMiniatures(): Int
 
-    @Query("SELECT * FROM miniatures WHERE projectId = :projectId")
+    @Query("SELECT * FROM miniatures WHERE projectId = :projectId ORDER BY sortOrder ASC, id ASC")
     fun getMiniaturesByProject(projectId: Long): Flow<List<MiniatureEntity>>
 
     @Query("SELECT * FROM miniatures WHERE id = :miniatureId")
     fun getMiniatureById(miniatureId: Long): Flow<MiniatureEntity>
 
     @Query("SELECT * FROM miniatures WHERE lastUpdate > 0 ORDER BY lastUpdate DESC LIMIT :miniatureNumber")
-    fun getLastUpdatedMiniatures(miniatureNumber:Int): Flow<List<MiniatureEntity>>
+    fun getLastUpdatedMiniatures(miniatureNumber: Int): Flow<List<MiniatureEntity>>
 
     @Query("SELECT * FROM miniatures WHERE id IN (:miniatureIds)")
     fun getMiniaturesByIds(miniatureIds: List<Long>): Flow<List<MiniatureEntity>>
+
+    @Query("SELECT MAX(sortOrder) FROM miniatures WHERE projectId = :projectId")
+    suspend fun getLastSortOrder(projectId: Long): Int?
+
+    @Query(" UPDATE miniatures SET sortOrder = :sortOrder WHERE id = :miniatureId")
+    suspend fun updateSortOrder(miniatureId: Long, sortOrder: Int)
 }

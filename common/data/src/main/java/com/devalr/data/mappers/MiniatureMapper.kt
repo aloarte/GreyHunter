@@ -13,6 +13,7 @@ class MiniatureMapper : Mapper<MiniatureEntity, MiniatureBo>() {
         name = data.name,
         imageUri = data.imageUri,
         percentage = data.completionPercentage,
+        sortOrder = data.sortOrder,
         completion = MiniCompletionBo(
             isAssembled = data.isAssembled,
             isPrimed = data.isPrimed,
@@ -27,6 +28,7 @@ class MiniatureMapper : Mapper<MiniatureEntity, MiniatureBo>() {
         projectId = data.projectId,
         name = data.name,
         completionPercentage = data.percentage,
+        sortOrder = data.sortOrder,
         imageUri = data.imageUri,
         isAssembled = data.completion.isAssembled,
         isPrimed = data.completion.isPrimed,

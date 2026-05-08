@@ -7,6 +7,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
+import com.devalr.data.database.DatabaseMigrations
 import com.devalr.data.database.GreyHunterDatabase
 import com.devalr.data.database.ProjectEntityData
 import com.devalr.data.database.miniature.MiniatureDao
@@ -81,7 +82,9 @@ private fun provideDataBase(application: Application): GreyHunterDatabase =
         application,
         GreyHunterDatabase::class.java,
         "GreyHunterDatabase"
-    ).fallbackToDestructiveMigration().build()
+    ).addMigrations(
+        DatabaseMigrations.MIGRATION_1_2
+    ).build()
 
 
 private fun provideProjectsDao(dataBase: GreyHunterDatabase): ProjectDao = dataBase.projectDao()

@@ -5,7 +5,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +25,7 @@ import com.devalr.projectdetail.interactions.Action.DeleteProject
 import com.devalr.projectdetail.interactions.Action.EditProject
 import com.devalr.projectdetail.interactions.Action.Load
 import com.devalr.projectdetail.interactions.Action.Return
+import com.devalr.projectdetail.interactions.Action.SortMiniature
 import com.devalr.projectdetail.interactions.ErrorType
 import com.devalr.projectdetail.interactions.ErrorType.Delete
 import com.devalr.projectdetail.interactions.ErrorType.RetrievingDatabase
@@ -93,6 +93,7 @@ fun ProjectDetailScreen(
             ProjectDetailScreenContent(
                 innerPadding = innerPadding,
                 project = state.project,
+                animatedMiniIds = state.animatedMiniIds,
                 onNavigateToMiniature = onNavigateToMiniature,
                 onCreateMiniature = onCreateMiniature,
                 onNavigateBack = {
@@ -103,6 +104,9 @@ fun ProjectDetailScreen(
                 },
                 onDeleteProject = {
                     showConfirmDelete = true
+                },
+                onSortMiniature = { order, miniId ->
+                    viewModel.onAction(SortMiniature(order = order, miniId = miniId))
                 }
             )
         } else {

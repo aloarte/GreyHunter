@@ -30,5 +30,6 @@ data class MiniatureEntity(
     val isBaseColored: Boolean = false,
     val isDetailed: Boolean = false,
     val baseIsFinished: Boolean = false,
-    val lastUpdate: Long? = null
+    val lastUpdate: Long? = null,
+    val sortOrder: Int = 0
 )

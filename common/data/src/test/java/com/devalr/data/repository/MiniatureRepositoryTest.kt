@@ -57,14 +57,16 @@ class MiniatureRepositoryTest {
     @Test
     fun `GIVEN miniature WHEN addMiniature is THEN miniature is inserted on database`() = runTest {
         // GIVEN
-        coEvery { miniatureDao.insertMiniature(mini1Entity.copy(id = 0)) } returns MINI_1_ID
+        val lastOrder = 2
+        coEvery { miniatureDao.getLastSortOrder(PROJECT_ID) } returns lastOrder
+        coEvery { miniatureDao.insertMiniature(mini1Entity.copy(id = 0, sortOrder = lastOrder+1)) } returns MINI_1_ID
 
         // WHEN
         val result = repository.addMiniature(mini1Bo)
 
         // THEN
         verify(exactly = 1) { mapper.transformReverse(mini1Bo) }
-        coVerify(exactly = 1) { miniatureDao.insertMiniature(mini1Entity.copy(id = 0)) }
+        coVerify(exactly = 1) { miniatureDao.insertMiniature(any()) }
         assertEquals(MINI_1_ID, result)
     }
 
