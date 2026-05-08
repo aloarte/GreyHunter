@@ -34,6 +34,7 @@
     <string name="changelog_26_2_1">Versión inicial.</string>
     <string name="changelog_26_2_2">Mejoras de estabilidad y optimización del proceso de importación.</string>
     <string name="changelog_26_3_1">Cambio de icono.</string>
+    <string name="changelog_26_5_1">Nueva feature: ordenación de miniaturas en la vista de detalle del proyecto.\nArreglado bug en el diálogo de cierre de la app.</string>
 
     <!-- SnackBar -->
     <string name="snack_bar_datastore_retrieval_error">No se pudieron cargar las preferencias. Inténtalo de nuevo.</string>
