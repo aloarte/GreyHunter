@@ -60,12 +60,7 @@ class ProjectDetailViewModel(
                     submitError(error, RetrievingDatabase)
                 }
                 .collect { project ->
-                    updateState {
-                        copy(
-                            projectLoaded = true,
-                            project = project,
-                        )
-                    }
+                    updateState { copy(projectLoaded = true, project = project) }
                 }
         }
     }
