@@ -1,5 +1,6 @@
 package com.devalr.greyhunter.navigation
 
+import android.app.Activity
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
@@ -110,7 +111,9 @@ fun NavHost(
                         onNavigateToSettings = {
                             backStack.add(Settings)
                         },
-                        onExit = { backStack.popBackStackSafe() }
+                        onExit = {
+                            (context as? Activity)?.finishAffinity()
+                        }
                     )
                 }
 
