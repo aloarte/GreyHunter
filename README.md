@@ -1,7 +1,7 @@
 # GreyHunter
 
 ![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/aloarte/GreyHunter/main/badges/coverage.json)
-[![Playstore Downloads](https://playbadges.pavi2410.me/badge/downloads?id=com.devalr.greyhunter)](https://play.google.com/store/apps/details?id=com.devalr.greyhunter)
+[![Playstore Downloads](https://playbadges.pavi2410.me/badge/downloads?id=com.devalr.greyhunter&v=2)](https://play.google.com/store/apps/details?id=com.devalr.greyhunter)
 [![Tests](https://github.com/aloarte/GreyHunter/actions/workflows/android_ci.yml/badge.svg)](https://github.com/aloarte/GreyHunter/actions/workflows/android_ci.yml)
 
 
